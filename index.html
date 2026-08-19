@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The IRMAA Appeal Kit — Retirement Decoded</title>
+<meta name="description" content="Social Security may be setting your Medicare premium using income you earned two years ago. Form SSA-44 exists to fix that. A plain-English walkthrough, a completed example, letter templates, and an evidence checklist.">
+<style>
+  :root{
+    --navy:#1b2a4a;
+    --blue:#2f52c4;
+    --blue-dark:#22409c;
+    --gold:#a8801f;
+    --ink:#1f2733;
+    --muted:#48566b;
+    --line:#d3dae6;
+    --bg:#f6f8fc;
+    --warn-bg:#fff7e8;
+    --warn-line:#e0b559;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:20px;
+    line-height:1.65;
+    color:var(--ink);
+    background:#fff;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px}
+  header{background:var(--navy);color:#fff;padding:18px 0}
+  header .wrap{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline}
+  .brand{font-size:22px;font-weight:700;letter-spacing:.02em}
+  .brand-note{font-size:16px;color:#c3cee4}
+  h1{
+    font-size:40px;line-height:1.2;margin:38px 0 18px;color:var(--navy);
+    font-weight:700;letter-spacing:-.01em;
+  }
+  h2{font-size:29px;line-height:1.25;margin:44px 0 14px;color:var(--navy)}
+  h3{font-size:22px;margin:28px 0 8px;color:var(--navy)}
+  p{margin:0 0 18px}
+  .lede{font-size:23px;color:var(--muted)}
+  strong{color:var(--navy)}
+  a{color:var(--blue-dark)}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  hr{border:0;border-top:1px solid var(--line);margin:38px 0}
+
+  /* Call to action */
+  .cta{
+    background:var(--bg);border:1px solid var(--line);border-radius:10px;
+    padding:26px 24px;margin:30px 0;
+  }
+  .cta h2{margin-top:0}
+  .price{font-size:34px;font-weight:700;color:var(--navy);display:block;margin-bottom:4px}
+  .price small{font-size:19px;font-weight:400;color:var(--muted)}
+  .btn{
+    display:block;width:100%;text-align:center;
+    background:var(--blue);color:#fff;text-decoration:none;
+    font-family:Georgia,serif;font-size:23px;font-weight:700;
+    padding:20px 24px;border-radius:8px;border:2px solid var(--blue);
+    margin:18px 0 10px;
+  }
+  .btn:hover,.btn:focus{background:var(--blue-dark);border-color:var(--blue-dark)}
+  .btn-secondary{background:#fff;color:var(--blue-dark)}
+  .btn-secondary:hover,.btn-secondary:focus{background:var(--bg);color:var(--blue-dark)}
+  .btn-note{font-size:17px;color:var(--muted);text-align:center;margin:0}
+
+  /* Numbers table */
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:22px 0}
+  table{border-collapse:collapse;width:100%;font-size:18px}
+  caption{text-align:left;font-size:17px;color:var(--muted);padding-bottom:8px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left}
+  thead th{background:var(--navy);color:#fff;font-weight:700}
+  tbody tr:nth-child(even){background:var(--bg)}
+  td.num{white-space:nowrap;font-weight:700;color:var(--navy)}
+
+  ul{margin:0 0 20px;padding-left:26px}
+  li{margin-bottom:10px}
+  .files li strong{display:block}
+  .files li span{color:var(--muted);font-size:18px}
+
+  .callout{
+    background:var(--warn-bg);border-left:6px solid var(--warn-line);
+    padding:18px 20px;margin:26px 0;border-radius:0 8px 8px 0;
+  }
+  .callout p:last-child{margin-bottom:0}
+
+  .honest{border:2px solid var(--line);border-radius:10px;padding:22px 24px;margin:30px 0}
+  .honest h2{margin-top:0}
+
+  details{border-bottom:1px solid var(--line);padding:14px 0}
+  summary{font-size:21px;font-weight:700;color:var(--navy);cursor:pointer}
+  details p{margin:12px 0 4px}
+
+  footer{background:var(--bg);border-top:1px solid var(--line);margin-top:50px;padding:34px 0 46px}
+  footer p{font-size:16px;color:var(--muted);margin-bottom:14px}
+  .skip{position:absolute;left:-9999px}
+  .skip:focus{left:12px;top:12px;background:#fff;padding:12px;z-index:10}
+  @media (max-width:640px){
+    body{font-size:19px}
+    h1{font-size:32px}
+    h2{font-size:25px}
+    .lede{font-size:21px}
+    table{font-size:16px}
+    th,td{padding:8px 9px}
+    td.num{white-space:normal}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <div class="wrap">
+    <span class="brand">Retirement Decoded</span>
+    <span class="brand-note">The financial stuff nobody else will explain</span>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+
+  <h1>Medicare is billing you for a year you no longer live in.</h1>
+
+  <p class="lede">Social Security sets your Medicare premium using your tax return from <strong>two years ago</strong> &mdash; for 2026 premiums, generally your 2024 return. If you were still working then, you are being charged on income you no longer earn.</p>
+
+  <p>The surcharge is called <strong>IRMAA</strong>. In 2026 the standard Part B premium is <strong>$202.90</strong> a month. Above an income threshold, that jumps to $284.10, $405.80, $527.50, $649.20, or $689.90 &mdash; plus a separate surcharge on your drug plan.</p>
+
+  <div class="table-wrap">
+  <table>
+    <caption>2026 Part B monthly premium, by the income on your 2024 return</caption>
+    <thead>
+      <tr><th scope="col">Individual return</th><th scope="col">Joint return</th><th scope="col">You pay</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>$109,000 or less</td><td>$218,000 or less</td><td class="num">$202.90</td></tr>
+      <tr><td>Over $109,000&ndash;$137,000</td><td>Over $218,000&ndash;$274,000</td><td class="num">$284.10</td></tr>
+      <tr><td>Over $137,000&ndash;$171,000</td><td>Over $274,000&ndash;$342,000</td><td class="num">$405.80</td></tr>
+      <tr><td>Over $171,000&ndash;$205,000</td><td>Over $342,000&ndash;$410,000</td><td class="num">$527.50</td></tr>
+      <tr><td>Over $205,000&ndash;under $500,000</td><td>Over $410,000&ndash;under $750,000</td><td class="num">$649.20</td></tr>
+      <tr><td>$500,000 or more</td><td>$750,000 or more</td><td class="num">$689.90</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>For a married couple placed in the middle bracket, that is an extra <strong>$4,869 in a single year</strong> &mdash; on money that stopped arriving when they retired.</p>
+
+  <div class="callout">
+    <p><strong>Here is the part most people never hear.</strong> If your income dropped because of a qualifying life event &mdash; you retired, you cut your hours, you lost a pension, your spouse died, you divorced &mdash; Social Security has an official process to recalculate your premium using your <em>current</em> income instead.</p>
+    <p>The form is called <strong>SSA-44</strong>. It is free. It is also confusing enough that most people never file it and quietly overpay for years.</p>
+  </div>
+
+  <h2>The IRMAA Appeal Kit</h2>
+
+  <p>The plain-English walkthrough of that form, with everything you need to send alongside it. Eight files, 40 pages, built to be finished at your kitchen table in about an hour.</p>
+
+  <ul class="files">
+    <li><strong>The IRMAA Appeal Guide &mdash; 12 pages</strong>
+      <span>How IRMAA works, all 2026 brackets for Part B and Part D, the eight qualifying life events, the situations that do <em>not</em> qualify, the 7-step filing process, deadlines, what to do if you are denied, and 15 FAQs.</span></li>
+    <li><strong>Form SSA-44, Line by Line &mdash; 7 pages</strong>
+      <span>Every step of the form explained, plus a completed example to hold beside your own, and a 17-point check before you send it.</span></li>
+    <li><strong>Ten Cover Letter Templates &mdash; 9 pages</strong>
+      <span>One letter for each qualifying event, plus a follow-up letter for when the agency goes quiet. Editable Word file included.</span></li>
+    <li><strong>Evidence Checklist &amp; Tracker &mdash; 7 pages</strong>
+      <span>Exactly which documents to attach for your event type, an income worksheet, and a submission tracker. Editable Word file included.</span></li>
+    <li><strong>2026 IRMAA Cheat Sheet &mdash; 3 pages</strong>
+      <span>Every bracket, threshold, and phone number, printable.</span></li>
+  </ul>
+
+  <div class="cta">
+    <h2>Not on sale yet</h2>
+    <span class="price">$19 <small>one-time, when it opens</small></span>
+    <p>The kit is finished. I am opening it to a small group first. Leave your email and you will hear the day it goes live &mdash; nothing else, and no charge to be on the list.</p>
+    <a class="btn" href="PASTE_WAITLIST_FORM_URL_HERE">Tell me when it opens</a>
+    <p class="btn-note">No payment now. Unsubscribe any time.</p>
+  </div>
+
+  <hr>
+
+  <h2>In the meantime, here is something free</h2>
+
+  <p>The <strong>Age-65 Medicare Checklist</strong> &mdash; one page covering the enrollment windows, the deadlines, and the penalties that attach to your premium for life if you miss them. Including the six-month Medigap window, which is the most valuable and least-known deadline in Medicare.</p>
+
+  <div class="cta">
+    <a class="btn btn-secondary" href="PASTE_CHECKLIST_FORM_URL_HERE">Send me the free checklist</a>
+    <p class="btn-note">A PDF, sent right away. No cost, now or later.</p>
+  </div>
+
+  <div class="honest">
+    <h2>Be clear on what this is</h2>
+    <p>Form SSA-44 is <strong>free</strong> from Social Security at <a href="https://www.ssa.gov/medicare/lower-irmaa">ssa.gov/medicare/lower-irmaa</a>. I am not selling a government form and would never pretend to.</p>
+    <p>What the kit provides is the part that is not free: the plain-English explanation, a completed example, the letter templates, and the event-by-event evidence checklist &mdash; organised so the paperwork takes an hour instead of a week.</p>
+    <p>Free help exists too, and you should know about it. Social Security answers questions at <strong>1-800-772-1213</strong>, and your State Health Insurance Assistance Program gives free one-on-one Medicare counseling at <a href="https://www.shiphelp.org">shiphelp.org</a>. I would rather you get this filed than get it filed through me.</p>
+  </div>
+
+  <h2>Questions people ask</h2>
+
+  <details>
+    <summary>Does this work if I sold a house or converted to a Roth?</summary>
+    <p>Generally no, and the kit says so plainly. A sale or conversion you chose to make is not one of the eight qualifying events. That surcharge usually applies for one year and then drops off once the IRS supplies a return showing lower income. The kit explains how to make sure it actually does.</p>
+  </details>
+  <details>
+    <summary>Will filing guarantee my premium goes down?</summary>
+    <p>No, and nobody can promise that. Social Security makes the final determination on every request. What the kit does is make sure your request is complete, dated correctly, and supported by the right evidence &mdash; the three things that cause most requests to come back.</p>
+  </details>
+  <details>
+    <summary>Is this financial advice?</summary>
+    <p>No. It is educational material. For your own situation, talk to a licensed tax professional or financial advisor, or a free SHIP counselor.</p>
+  </details>
+  <details>
+    <summary>Do I need a computer to use it?</summary>
+    <p>The files are PDFs that open on any phone, tablet, or computer, and they print cleanly on standard letter paper. Most people print the checklist and work through it with a pen.</p>
+  </details>
+  <details>
+    <summary>What happens when the brackets change next year?</summary>
+    <p>Buyers get the updated version free, in the same download. IRMAA is decided one year at a time, so the kit is built to be reused.</p>
+  </details>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Educational information only.</strong> This page and the materials described on it are not legal, tax, financial, insurance, or Medicare advice, and are not a substitute for professional guidance.</p>
+    <p><strong>Retirement Decoded is not affiliated with, endorsed by, or connected to</strong> the Social Security Administration, the Centers for Medicare &amp; Medicaid Services, Medicare, or any other government agency. All official forms are available free of charge directly from those agencies.</p>
+    <p>Dollar amounts and income brackets on this page reflect published 2026 figures and are subject to change. Verify current figures at <a href="https://www.ssa.gov">ssa.gov</a>, <a href="https://www.medicare.gov">medicare.gov</a>, and <a href="https://www.cms.gov">cms.gov</a>. Social Security makes the final determination on every request, and no outcome or amount of savings is guaranteed.</p>
+    <p>&copy; Retirement Decoded</p>
+  </div>
+</footer>
+
+</body>
+</html>
