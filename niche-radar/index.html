@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YouTube Ниши — Niche Radar</title>
+<meta name="description" content="Молодые YouTube-каналы (до 30 роликов), которые растут прямо сейчас: RPM, стиль производства, прогноз монетизации.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar__inner">
+    <a class="logo" href="./">Niche<span>Radar</span></a>
+    <div class="topbar__right">
+      <span class="muted" id="generatedAt">данные обновляются…</span>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero">
+    <div>
+      <h1>YouTube Ниши</h1>
+      <p class="lead">Каналы до 30 роликов, которые растут прямо сейчас. Смотри ролики-аутлаеры, ставку RPM, стиль производства и прогноз выхода на монетизацию — и забирай нишу себе.</p>
+    </div>
+    <div class="hero__actions">
+      <div class="counter"><b id="savedCount">0</b><span>сохранено</span></div>
+      <button class="btn btn--primary" id="submitBtn">Подать нишу на разбор</button>
+    </div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab" data-tab="new">Новые за неделю</button>
+    <button class="tab is-active" data-tab="cards">Карточки каналов</button>
+    <button class="tab" data-tab="niches">Ниши</button>
+    <button class="tab" data-tab="saved">★ Сохранённые (<span id="savedTabCount">0</span>)</button>
+  </nav>
+
+  <div class="toolbar">
+    <button class="btn btn--primary btn--sm" id="filtersToggle">Фильтры ▾</button>
+    <button class="chip chip--toggle" data-quick="liked">♥ Нравится</button>
+    <button class="chip chip--toggle" data-quick="saved">★ В закладках</button>
+    <button class="chip chip--toggle" data-quick="unseen">Непросмотренные</button>
+    <select class="select" id="sort">
+      <option value="new">Сначала новые</option>
+      <option value="score">По Score</option>
+      <option value="rpm">По RPM</option>
+      <option value="velocity">По просмотрам первых роликов</option>
+      <option value="monetization">Ближе к монетизации</option>
+    </select>
+    <label class="search"><input id="search" type="search" placeholder="Поиск по нишам и каналам…"></label>
+  </div>
+
+  <div class="quick">
+    <span class="muted">Быстрый подбор:</span>
+    <button class="chip chip--toggle" data-preset="beginner">Старт без опыта</button>
+    <button class="chip chip--toggle" data-preset="rpm10">RPM от $10</button>
+    <button class="chip chip--toggle" data-preset="noai">Без нейросетей</button>
+    <button class="chip chip--toggle" data-preset="ai">Только ИИ-ролики</button>
+    <button class="chip chip--toggle" data-preset="small">Каналы до 10K</button>
+    <button class="chip chip--toggle" data-preset="solo">Можно делать одному</button>
+    <button class="chip chip--toggle" data-preset="monetized">Уже монетизирован</button>
+    <button class="chip chip--toggle" data-preset="soon">Монетизация ≤ 90 дн.</button>
+  </div>
+
+  <section class="filters" id="filters" hidden>
+    <label>Ниша<select id="fNiche"><option value="">Любая</option></select></label>
+    <label>Язык<select id="fLang"><option value="">Любой</option></select></label>
+    <label>Стиль производства<select id="fStyle"><option value="">Любой</option></select></label>
+    <label>Ставка RPM<select id="fRpm"><option value="0">Любая</option><option value="5">от $5</option><option value="8">от $8</option><option value="10">от $10</option><option value="15">от $15</option></select></label>
+    <label>Монетизация YouTube<select id="fMon"><option value="">Любая</option><option value="yes">Да</option><option value="soon">Прогноз ≤ 90 дн.</option><option value="no">Нет / неясно</option></select></label>
+    <label>Использование нейросетей<select id="fAi"><option value="">Любое</option><option value="yes">Да</option><option value="no">Нет</option></select></label>
+    <label>Подписчиков<select id="fSubs"><option value="">Любое</option><option value="0-1000">до 1K</option><option value="1000-10000">1K–10K</option><option value="10000-100000">10K–100K</option><option value="100000-">100K+</option></select></label>
+    <label>Кол-во видео<select id="fVideos"><option value="30">до 30</option><option value="20">до 20</option><option value="10">до 10</option></select></label>
+    <label>Возраст канала<select id="fAge"><option value="">Любой</option><option value="90">до 3 мес.</option><option value="180">до 6 мес.</option><option value="365">до 12 мес.</option></select></label>
+    <label>Сложность<select id="fDiff"><option value="">Любая</option><option value="low">Низкая</option><option value="medium">Средняя</option><option value="high">Высокая</option></select></label>
+    <button class="btn btn--ghost btn--sm" id="resetFilters">Сбросить</button>
+  </section>
+
+  <p class="results-info muted" id="resultsInfo"></p>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" hidden>
+    <h3>Пока пусто</h3>
+    <p>Данные появятся после первого запуска сборщика (GitHub Actions → «Collect niches»). Или измени фильтры.</p>
+  </div>
+</main>
+
+<!-- Детальная страница -->
+<div class="drawer" id="drawer" hidden>
+  <div class="drawer__backdrop" data-close></div>
+  <aside class="drawer__panel" id="drawerPanel"></aside>
+</div>
+
+<!-- Подать нишу -->
+<div class="modal" id="submitModal" hidden>
+  <div class="drawer__backdrop" data-close></div>
+  <div class="modal__box">
+    <h3>Подать нишу на разбор</h3>
+    <p class="muted">Вставь ссылку на канал. Заявка сохранится локально и попадёт в список «Свои заявки»; сборщик проверит канал при следующем запуске, если его ID добавить в <code>collector/manual_channels.json</code>.</p>
+    <input id="submitUrl" type="url" placeholder="https://youtube.com/@handle">
+    <textarea id="submitNote" placeholder="Почему интересна эта ниша (необязательно)"></textarea>
+    <div class="row-end">
+      <button class="btn btn--ghost" data-close>Отмена</button>
+      <button class="btn btn--primary" id="submitSave">Сохранить заявку</button>
+    </div>
+    <ul id="submitList" class="submit-list"></ul>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
