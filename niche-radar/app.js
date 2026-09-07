@@ -170,7 +170,7 @@
       <div class="added ${daysAgo(c.added_at) === 0 ? 'is-today' : ''}">Добавлено ${ago(c.added_at)}${c.stale ? ' · не найден в последнем сборе' : ''}</div>
       <div class="card__actions">
         <button class="btn btn--primary btn--sm" data-act="open">Разбор канала</button>
-        <button class="btn btn--sm" data-act="curator">🤖 Куратор</button>
+        <button class="btn btn--sm" data-act="curator">Куратор</button>
         <a class="btn btn--sm btn--yt" href="${ytUrl(c)}" target="_blank" rel="noopener">▶ YouTube</a>
         <button class="like btn--sm ${state.liked.has(c.id) ? 'is-on' : ''}" data-act="like">❤</button>
       </div>
@@ -210,8 +210,8 @@
       <div class="d-actions">
         <a class="btn btn--primary" href="${ytUrl(c)}" target="_blank" rel="noopener">▶ Открыть канал</a>
         <button class="btn ${state.saved.has(c.id) ? 'is-on' : ''}" data-act="save" data-id="${esc(c.id)}">${state.saved.has(c.id) ? '★ Сохранено' : '☆ Сохранить'}</button>
-        <button class="btn" data-act="curator" data-id="${esc(c.id)}">🤖 Спросить куратора</button>
-        <a class="btn" href="https://www.youtube.com/results?search_query=${encodeURIComponent((c.found_by_queries || [])[0] || c.title)}" target="_blank" rel="noopener">🔍 Похожие на YouTube</a>
+        <button class="btn" data-act="curator" data-id="${esc(c.id)}">Спросить куратора</button>
+        <a class="btn" href="https://www.youtube.com/results?search_query=${encodeURIComponent((c.found_by_queries || [])[0] || c.title)}" target="_blank" rel="noopener">Похожие на YouTube</a>
       </div>
       <h1 class="d-title">${esc(c.niche_ru || c.niche)}</h1>
       <p class="d-sub">${esc(describe(c))}</p>
@@ -234,7 +234,7 @@
       <div class="section"><h3>Все длинные ролики</h3><div class="d-videos">${videoList(c, 'new').map(videoHtml).join('')}</div></div>
       <div class="section howto"><h3>Как повторить формат</h3><ol>${howTo(c).map(s => `<li>${esc(s)}</li>`).join('')}</ol></div>
       <div class="section"><h3>Мои заметки</h3><textarea class="note" data-note="${esc(c.id)}" placeholder="Идеи, что взять из этого канала…">${esc(state.notes[c.id] || '')}</textarea></div>
-      <div class="section" id="curatorBox" hidden><h3>🤖 Куратор</h3><div id="curatorText"></div></div>`;
+      <div class="section" id="curatorBox" hidden><h3>Куратор</h3><div id="curatorText"></div></div>`;
     $('#drawer').hidden = false; document.body.style.overflow = 'hidden';
   }
   function closeDrawer() { $('#drawer').hidden = true; $('#submitModal').hidden = true; document.body.style.overflow = ''; render(); }
