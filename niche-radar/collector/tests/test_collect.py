@@ -10,6 +10,11 @@ sys.path.insert(0, COLLECTOR_DIR)
 spec = importlib.util.spec_from_file_location("collect", os.path.join(COLLECTOR_DIR, "collect.py"))
 collect = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(collect)
+seed_spec = importlib.util.spec_from_file_location(
+    "seed_from_nexlev", os.path.join(COLLECTOR_DIR, "seed_from_nexlev.py")
+)
+seed = importlib.util.module_from_spec(seed_spec)
+seed_spec.loader.exec_module(seed)
 
 
 class CollectTests(unittest.TestCase):
@@ -82,6 +87,16 @@ class CollectTests(unittest.TestCase):
         self.assertEqual(by_id["same"]["added_at"], "2025-01-01")
         self.assertTrue(by_id["recent"]["stale"])
         self.assertNotIn("expired", by_id)
+
+    def test_rotate_queries_changes_daily_start(self):
+        queries = [{"text": str(index)} for index in range(40)]
+        first = collect.rotate_queries(queries, dt.datetime(2025, 1, 1, tzinfo=dt.timezone.utc))
+        second = collect.rotate_queries(queries, dt.datetime(2025, 1, 2, tzinfo=dt.timezone.utc))
+        self.assertNotEqual(first[0]["text"], second[0]["text"])
+
+    def test_parse_nexlev_length_text(self):
+        self.assertEqual(seed.parse_length_text("23:22"), 1402)
+        self.assertEqual(seed.parse_length_text("1:02:03"), 3723)
 
 
 if __name__ == "__main__":

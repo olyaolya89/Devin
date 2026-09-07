@@ -1,0 +1,2589 @@
+{
+ "UCs9Nbq5c7sxH2iNN6HE9Yaw": {
+  "rpm": 2.1298,
+  "rpm_base": 2.9,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "ES",
+  "category": "pets",
+  "format": "educational",
+  "tags": [
+   "pets",
+   "animal sports",
+   "lifestyle",
+   "humor & comedy"
+  ],
+  "outlier_score": 0.04,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCvoMALBgxXbqCmb1qP40anA": {
+  "rpm": 1.4688,
+  "rpm_base": 2,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "ES",
+  "category": "pets",
+  "format": "tutorial",
+  "tags": [
+   "pets",
+   "animal training",
+   "animal behavior",
+   "canine behavior"
+  ],
+  "outlier_score": 0.36,
+  "monthly_revenue": 2.2,
+  "fetched_at": "2026-09-07"
+ },
+ "UCTeQ-IjCkBcDd9klWwB4dag": {
+  "rpm": 1.3824,
+  "rpm_base": 2,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "pets",
+  "format": "documentary",
+  "tags": [
+   "pets",
+   "pets rescue",
+   "animal sports",
+   "documentary"
+  ],
+  "outlier_score": 258.42,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC0elx1WHB39ct7lnARLNEyQ": {
+  "rpm": 1.2384,
+  "rpm_base": 2,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "pets",
+  "format": "educational",
+  "tags": [
+   "pets",
+   "education",
+   "lifestyle",
+   "humor & comedy"
+  ],
+  "outlier_score": 11.89,
+  "monthly_revenue": 9.11,
+  "fetched_at": "2026-09-07"
+ },
+ "UCpy7pP744VnY0zMMl6GQhIA": {
+  "rpm": 2.1298,
+  "rpm_base": 2.9,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "GB",
+  "category": "pets",
+  "format": "educational",
+  "tags": [
+   "pets",
+   "animal care",
+   "lifestyle",
+   "education"
+  ],
+  "outlier_score": 0.03,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCVwjnb5HvzoWHK4hk3D_GYw": {
+  "rpm": 1.836,
+  "rpm_base": 2.5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "wildlife",
+  "format": "animation",
+  "tags": [
+   "wildlife",
+   "nature",
+   "education",
+   "animation"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCnrxPifx3lT4Aw2YYcr6wbg": {
+  "rpm": 1.4688,
+  "rpm_base": 2,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "AT",
+  "category": "pets",
+  "format": "educational",
+  "tags": [
+   "pets",
+   "lifestyle",
+   "education",
+   "animal sports"
+  ],
+  "outlier_score": 0.63,
+  "monthly_revenue": 354.13,
+  "fetched_at": "2026-09-07"
+ },
+ "UCxkYhVammFjlmo4B3hdYYYA": {
+  "rpm": 2.1298,
+  "rpm_base": 2.9,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "pets",
+  "format": "stories",
+  "tags": [
+   "pets",
+   "pets rescue",
+   "stories",
+   "lifestyle"
+  ],
+  "outlier_score": 0.01,
+  "monthly_revenue": 2.89,
+  "fetched_at": "2026-09-07"
+ },
+ "UCFF5K02aTupswEhj28Dd6pg": {
+  "rpm": 1.2384,
+  "rpm_base": 2,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "pets",
+  "format": "compilation",
+  "tags": [
+   "pets",
+   "humor & comedy",
+   "satisfying videos",
+   "viral videos"
+  ],
+  "outlier_score": 0.03,
+  "monthly_revenue": 0.19,
+  "fetched_at": "2026-09-07"
+ },
+ "UCxJ8kDYmhZQSx75cr7Ptm_Q": {
+  "rpm": 1.4688,
+  "rpm_base": 2,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "pets",
+  "format": "educational",
+  "tags": [
+   "pets",
+   "animal behavior",
+   "education",
+   "lifestyle"
+  ],
+  "outlier_score": 0.13,
+  "monthly_revenue": 0.82,
+  "fetched_at": "2026-09-07"
+ },
+ "UCSmhwbKFMdOf_fwCx31lnDg": {
+  "rpm": 1.836,
+  "rpm_base": 2.5,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "wildlife",
+  "format": "educational",
+  "tags": [
+   "wildlife",
+   "nature documentary",
+   "science",
+   "education"
+  ],
+  "outlier_score": 0.53,
+  "monthly_revenue": 15.5,
+  "fetched_at": "2026-09-07"
+ },
+ "UCkUHlJ-jk836DbpeH1OAFqA": {
+  "rpm": 1.4256,
+  "rpm_base": 2,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "pets",
+  "format": "compilation",
+  "tags": [
+   "pets",
+   "animal rescue",
+   "vlogs",
+   "viral videos"
+  ],
+  "outlier_score": 0.92,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC0Ya1jAs49BqwA-XAFcEQNQ": {
+  "rpm": 1.321,
+  "rpm_base": 2,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "AU",
+  "category": "pets",
+  "format": "vlogs",
+  "tags": [
+   "pets",
+   "pets rescue",
+   "lifestyle",
+   "vlogs"
+  ],
+  "outlier_score": 2.17,
+  "monthly_revenue": 118.92,
+  "fetched_at": "2026-09-07"
+ },
+ "UCzuDjknDODepiYwvR-BugNw": {
+  "rpm": 1.3824,
+  "rpm_base": 2,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "CA",
+  "category": "pets",
+  "format": "educational",
+  "tags": [
+   "pets",
+   "animal behavior",
+   "family",
+   "self-improvement"
+  ],
+  "outlier_score": 0.37,
+  "monthly_revenue": 266.83,
+  "fetched_at": "2026-09-07"
+ },
+ "UCFeRmX1SZBfsF6wARx-tQBg": {
+  "rpm": 1.4688,
+  "rpm_base": 2,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "GB",
+  "category": "pets",
+  "format": "educational",
+  "tags": [
+   "pets",
+   "education",
+   "lifestyle",
+   "pets rescue"
+  ],
+  "outlier_score": 0.03,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCa2mx3pZ8pH755bHmbfBa2w": {
+  "rpm": 6.4152,
+  "rpm_base": 9,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "christianity",
+  "format": "challenge videos",
+  "tags": [
+   "christianity",
+   "spirituality",
+   "religion",
+   "motivational videos"
+  ],
+  "outlier_score": 0.31,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC27OEg3gdP5k1BFmPTCL3yw": {
+  "rpm": 3.456,
+  "rpm_base": 5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": null,
+  "category": "religion",
+  "format": "documentary",
+  "tags": [
+   "religion",
+   "history",
+   "myths and folktales",
+   "animation"
+  ],
+  "outlier_score": 1.14,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCB6qblU6JoRGKNMyaGWTtqg": {
+  "rpm": 2.8512,
+  "rpm_base": 4,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "religion",
+  "format": "educational",
+  "tags": [
+   "religion",
+   "mythology",
+   "digital art",
+   "education"
+  ],
+  "outlier_score": 0.69,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCC31PSVnQNkjhkXSGcecrJQ": {
+  "rpm": 6.6096,
+  "rpm_base": 9,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": null,
+  "category": "christianity",
+  "format": "stories",
+  "tags": [
+   "christianity",
+   "religion",
+   "stories",
+   "myths and folktales"
+  ],
+  "outlier_score": 0.85,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC5xsFyM_3W3SmILTvOj7iZg": {
+  "rpm": 3.672,
+  "rpm_base": 5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "BR",
+  "category": "myths and folktales",
+  "format": "documentary",
+  "tags": [
+   "myths and folktales",
+   "religion",
+   "paranormal",
+   "philosophy"
+  ],
+  "outlier_score": 7.89,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCW3f1KjokLV0aANwhvxzQJQ": {
+  "rpm": 5.1408,
+  "rpm_base": 7,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "christian end of time",
+  "format": "educational",
+  "tags": [
+   "religion",
+   "christianity",
+   "christian end of time",
+   "spirituality"
+  ],
+  "outlier_score": 0.28,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCPQy3GDWuVqOGKQRdaaghWw": {
+  "rpm": 6.6096,
+  "rpm_base": 9,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": null,
+  "category": "christianity",
+  "format": "educational",
+  "tags": [
+   "christianity",
+   "religion",
+   "mythology",
+   "history"
+  ],
+  "outlier_score": 1.46,
+  "monthly_revenue": 392.77,
+  "fetched_at": "2026-09-07"
+ },
+ "UCjTUIoAYa6sOIGZOffhKy_Q": {
+  "rpm": 6.6096,
+  "rpm_base": 8.5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "christianity",
+  "format": "documentary",
+  "tags": [
+   "christianity",
+   "religion",
+   "myths and folktales",
+   "animation"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCyio2N3Acur_JN40gZ8C-gQ": {
+  "rpm": 6.6096,
+  "rpm_base": 9,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": null,
+  "category": "christianity",
+  "format": "educational",
+  "tags": [
+   "religion",
+   "christianity",
+   "christian end of time",
+   "spirituality"
+  ],
+  "outlier_score": 0.01,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC7ioVotZT4tK1duMw710tSw": {
+  "rpm": 6.2208,
+  "rpm_base": 9,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "christianity",
+  "format": "educational",
+  "tags": [
+   "christianity",
+   "religion",
+   "spirituality",
+   "self improvement"
+  ],
+  "outlier_score": 14.1,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCfJXXnxADbHBpr659WrmfVg": {
+  "rpm": 8.0784,
+  "rpm_base": 11,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "christianity",
+  "format": "educational",
+  "tags": [
+   "christianity",
+   "religion",
+   "spirituality",
+   "philosophy"
+  ],
+  "outlier_score": 0.49,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCep-ycGQYe6FpVwJ-B2R0Ow": {
+  "rpm": 6.6096,
+  "rpm_base": 9,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "christianity",
+  "format": "educational",
+  "tags": [
+   "religion",
+   "christianity",
+   "myths and folktales",
+   "spirituality"
+  ],
+  "outlier_score": 2.23,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC9v746yIwVgaPtV6b3PEdfw": {
+  "rpm": 3.564,
+  "rpm_base": 5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "GB",
+  "category": "religion",
+  "format": "animation",
+  "tags": [
+   "religion",
+   "ancient history",
+   "myths and folktales",
+   "animated videos for children"
+  ],
+  "outlier_score": 2.78,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCQaH2VRmpKQMhDV0Ecb1trg": {
+  "rpm": 3.672,
+  "rpm_base": 5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "religion",
+  "format": "documentary",
+  "tags": [
+   "religion",
+   "myths and folktales",
+   "spirituality",
+   "history"
+  ],
+  "outlier_score": 0.66,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCJZFvrg3xOEUb4W7DQNKKyg": {
+  "rpm": 3.672,
+  "rpm_base": 5,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "religion",
+  "format": "animation",
+  "tags": [
+   "religion",
+   "christianity",
+   "animation",
+   "stories"
+  ],
+  "outlier_score": 0.44,
+  "monthly_revenue": 223.06,
+  "fetched_at": "2026-09-07"
+ },
+ "UCO_biEUmMGgKOYvTUfCu4Dw": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "CH",
+  "category": "travel",
+  "format": "educational",
+  "tags": [
+   "maps",
+   "travel",
+   "education",
+   "anomalies and alternative science"
+  ],
+  "outlier_score": 2.71,
+  "monthly_revenue": 12.67,
+  "fetched_at": "2026-09-07"
+ },
+ "UC5FkNF3FwNdfmuJKEcxBLEw": {
+  "rpm": 2.7648,
+  "rpm_base": 4,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "earth sciences",
+  "format": "educational",
+  "tags": [
+   "earth sciences",
+   "education",
+   "travel documentary",
+   "exploration"
+  ],
+  "outlier_score": 0.41,
+  "monthly_revenue": 998.35,
+  "fetched_at": "2026-09-07"
+ },
+ "UCoPKODwQFwZQEIBWvTMdPjA": {
+  "rpm": 4.0392,
+  "rpm_base": 5.5,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "science",
+  "format": "documentary",
+  "tags": [
+   "science",
+   "geography",
+   "travel documentary",
+   "environment"
+  ],
+  "outlier_score": 0.96,
+  "monthly_revenue": 1031.32,
+  "fetched_at": "2026-09-07"
+ },
+ "UCSt2qok-JJLVi_jOdn-AjGw": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "history",
+  "format": "documentary",
+  "tags": [
+   "history",
+   "society",
+   "travel documentary",
+   "geography"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCcSvzCp3G7ZFjlm4xqvwryQ": {
+  "rpm": 2.8339,
+  "rpm_base": 4.1,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "GB",
+  "category": "science",
+  "format": "educational",
+  "tags": [
+   "education",
+   "science",
+   "earth sciences",
+   "environment"
+  ],
+  "outlier_score": 3.76,
+  "monthly_revenue": 68.3,
+  "fetched_at": "2026-09-07"
+ },
+ "UCJQB0cNRnL7y5GXZuHvTBSQ": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "history",
+  "format": "educational",
+  "tags": [
+   "history",
+   "education",
+   "culture",
+   "geography"
+  ],
+  "outlier_score": 2.4,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCwT-usD24TcF7KoFJQANJ2A": {
+  "rpm": 5.4432,
+  "rpm_base": 7,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "history",
+  "format": "documentary",
+  "tags": [
+   "history",
+   "geography",
+   "society",
+   "future & discoveries"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCKoL3B2xbBnTTVR3OJFFhCg": {
+  "rpm": 4.847,
+  "rpm_base": 6.6,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "future & discoveries",
+  "format": "documentary",
+  "tags": [
+   "future & discoveries",
+   "geography",
+   "history",
+   "society"
+  ],
+  "outlier_score": 0.47,
+  "monthly_revenue": 645.37,
+  "fetched_at": "2026-09-07"
+ },
+ "UCtobg2cGzwAZE6xZiIfDPJA": {
+  "rpm": 4.0392,
+  "rpm_base": 5.5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": null,
+  "category": "science",
+  "format": "educational",
+  "tags": [
+   "science",
+   "education",
+   "history",
+   "earth sciences"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCWOUNcllqaWfXagtTK6PF2A": {
+  "rpm": 4.8384,
+  "rpm_base": 7,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "NL",
+  "category": "history",
+  "format": "documentary",
+  "tags": [
+   "history",
+   "education",
+   "documentaries",
+   "geography"
+  ],
+  "outlier_score": 1.28,
+  "monthly_revenue": 53.27,
+  "fetched_at": "2026-09-07"
+ },
+ "UCInfdX6B8ej4f2zge4fVuWw": {
+  "rpm": 4.9896,
+  "rpm_base": 7,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "RO",
+  "category": "history",
+  "format": "documentary",
+  "tags": [
+   "history",
+   "culture",
+   "education",
+   "future & discoveries"
+  ],
+  "outlier_score": 1.04,
+  "monthly_revenue": 626.78,
+  "fetched_at": "2026-09-07"
+ },
+ "UCmpznnOcJxta635y6cgcJsA": {
+  "rpm": 4.9896,
+  "rpm_base": 7,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "travel",
+  "format": "educational",
+  "tags": [
+   "maps",
+   "travel documentary",
+   "animation",
+   "education"
+  ],
+  "outlier_score": 0.78,
+  "monthly_revenue": 16.61,
+  "fetched_at": "2026-09-07"
+ },
+ "UCOPyBi52v8aKZoRHtM8BQjw": {
+  "rpm": 3.672,
+  "rpm_base": 5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "architecture",
+  "format": "educational",
+  "tags": [
+   "architecture",
+   "urban living",
+   "society",
+   "history"
+  ],
+  "outlier_score": 0.59,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCmS1Y_9fxDcFCLNFcGKpsaQ": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "CA",
+  "category": "history",
+  "format": "educational",
+  "tags": [
+   "history",
+   "politics",
+   "travel",
+   "society"
+  ],
+  "outlier_score": 0.81,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCvDazGRBjWWnahjAX8niszg": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "LT",
+  "category": "history",
+  "format": "educational",
+  "tags": [
+   "history",
+   "mapping",
+   "military",
+   "educational"
+  ],
+  "outlier_score": 2.32,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCNzAmghcr6v0_81-Cg_1zcw": {
+  "rpm": 2.2032,
+  "rpm_base": 3,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "do it yourself",
+  "format": "tutorial",
+  "tags": [
+   "do it yourself",
+   "cooking",
+   "gardening",
+   "rural living"
+  ],
+  "outlier_score": 8.99,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCRA65ilwVSb5p1SvzVzODaQ": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": null,
+  "category": "retail business",
+  "format": "reviews",
+  "tags": [
+   "retail business",
+   "personal finance",
+   "lifestyle",
+   "e-commerce"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCgOcbgltlAHSCW6t_2CaNJg": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "retail business",
+  "format": "tutorial",
+  "tags": [
+   "retail business",
+   "consumer tips",
+   "frugal living",
+   "lifestyle"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCI5HcaHzH1qDDZXYJDRIgiw": {
+  "rpm": 4.9205,
+  "rpm_base": 6.7,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "GB",
+  "category": "cooking",
+  "format": "educational",
+  "tags": [
+   "cooking",
+   "lifestyle",
+   "family",
+   "nostalgia"
+  ],
+  "outlier_score": 0.24,
+  "monthly_revenue": 4.48,
+  "fetched_at": "2026-09-07"
+ },
+ "UC3rhuTQCzYwQeIV_l3lHyJQ": {
+  "rpm": 2.9376,
+  "rpm_base": 4,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "CA",
+  "category": "collecting",
+  "format": "educational",
+  "tags": [
+   "collecting",
+   "antiques",
+   "retail business",
+   "personal finance"
+  ],
+  "outlier_score": 0.11,
+  "monthly_revenue": 671.29,
+  "fetched_at": "2026-09-07"
+ },
+ "UCjjSRNgF4mAcB5LehzqD__A": {
+  "rpm": 3.9917,
+  "rpm_base": 5.6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "automotive business",
+  "format": "tutorial",
+  "tags": [
+   "automotive business",
+   "do it yourself",
+   "tech gadgets",
+   "retail business"
+  ],
+  "outlier_score": 0.17,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCS-BL8vLWIHwjW3ticBCSqA": {
+  "rpm": 10.1088,
+  "rpm_base": 13,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "personal finance",
+  "format": "educational",
+  "tags": [
+   "personal finance",
+   "insurance",
+   "government",
+   "retail business"
+  ],
+  "outlier_score": 0.04,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCVaHUhSGhul7J7wZPAMnV8Q": {
+  "rpm": 4.32,
+  "rpm_base": 5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": null,
+  "category": "horror stories",
+  "format": "animation",
+  "tags": [
+   "horror stories",
+   "animated videos for children",
+   "viral videos",
+   "internet culture"
+  ],
+  "outlier_score": 0.02,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCMD3MUhQWYvWgoRoSETzgVw": {
+  "rpm": 6.0955,
+  "rpm_base": 8.3,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "AU",
+  "category": "personal finance",
+  "format": "educational",
+  "tags": [
+   "personal finance",
+   "investing",
+   "real estate",
+   "business"
+  ],
+  "outlier_score": 0.28,
+  "monthly_revenue": 354.94,
+  "fetched_at": "2026-09-07"
+ },
+ "UCCPCEUtao-g9_iWYyfF-B1w": {
+  "rpm": 2.2032,
+  "rpm_base": 3,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "do it yourself",
+  "format": "tutorial",
+  "tags": [
+   "technology",
+   "do it yourself",
+   "reviews",
+   "educational"
+  ],
+  "outlier_score": 0.75,
+  "monthly_revenue": 635.13,
+  "fetched_at": "2026-09-07"
+ },
+ "UCsWt7wkjBQoSMgVJ3kRjOnA": {
+  "rpm": 2.255,
+  "rpm_base": 2.9,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "rural living",
+  "format": "tutorial",
+  "tags": [
+   "do it yourself",
+   "rural living",
+   "gardening",
+   "self improvement"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCSjQSArqywtbrYjhxzqRsIQ": {
+  "rpm": 5.1408,
+  "rpm_base": 7,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "ES",
+  "category": "history",
+  "format": "documentary",
+  "tags": [
+   "history",
+   "rural living",
+   "prepping",
+   "culture"
+  ],
+  "outlier_score": 0.15,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC5_CAuwHN9auyoMMaAlyQoA": {
+  "rpm": 9.5472,
+  "rpm_base": 13,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "personal finance",
+  "format": "educational",
+  "tags": [
+   "personal finance",
+   "investing",
+   "business",
+   "self improvement"
+  ],
+  "outlier_score": 0.3,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCbjgf9PwtrWne1ZxNMPj9gw": {
+  "rpm": 5.1408,
+  "rpm_base": 7,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "CR",
+  "category": "architecture",
+  "format": "educational",
+  "tags": [
+   "architecture",
+   "engineering",
+   "do it yourself",
+   "science"
+  ],
+  "outlier_score": 0.12,
+  "monthly_revenue": 92.51,
+  "fetched_at": "2026-09-07"
+ },
+ "UCefg0UkME-2WgV_j231Sf0w": {
+  "rpm": 2.2032,
+  "rpm_base": 3,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "FR",
+  "category": "do it yourself",
+  "format": "tutorial",
+  "tags": [
+   "do it yourself",
+   "lifestyle",
+   "education",
+   "crafts"
+  ],
+  "outlier_score": 0.98,
+  "monthly_revenue": 690.15,
+  "fetched_at": "2026-09-07"
+ },
+ "UCY_KApmnGvfxVixT27uv9oA": {
+  "rpm": 5.4432,
+  "rpm_base": 7,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "history",
+  "format": "documentary",
+  "tags": [
+   "history",
+   "military",
+   "engineering",
+   "documentary"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 2.01,
+  "fetched_at": "2026-09-07"
+ },
+ "UCbSt6jM9XhloWFAF4QubaeQ": {
+  "rpm": 5.2877,
+  "rpm_base": 7.2,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "engineering",
+  "format": "tutorial",
+  "tags": [
+   "engineering",
+   "DIY/crafts",
+   "technology",
+   "humor & comedy"
+  ],
+  "outlier_score": 2.34,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCKSh3pwZFbBMb9aFrZgv5lQ": {
+  "rpm": 5.2877,
+  "rpm_base": 7.2,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "CA",
+  "category": "engineering",
+  "format": "tutorial",
+  "tags": [
+   "engineering",
+   "tech",
+   "tutorials",
+   "education"
+  ],
+  "outlier_score": 0.89,
+  "monthly_revenue": 29.44,
+  "fetched_at": "2026-09-07"
+ },
+ "UCEhdZ4HsXZjJdqrYAOK3-6g": {
+  "rpm": 5.5987,
+  "rpm_base": 7.2,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "engineering",
+  "format": "educational",
+  "tags": [
+   "engineering",
+   "science",
+   "tech",
+   "do it yourself"
+  ],
+  "outlier_score": 2.56,
+  "monthly_revenue": 0.69,
+  "fetched_at": "2026-09-07"
+ },
+ "UCP9KrG7JLfe4cMdGfJmZM_A": {
+  "rpm": 7.128,
+  "rpm_base": 10,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "tech",
+  "format": "educational",
+  "tags": [
+   "tech",
+   "engineering",
+   "design",
+   "innovation"
+  ],
+  "outlier_score": 95.58,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCtrNrW5RTVzL7Tj07EExLKg": {
+  "rpm": 4.76,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "engineering",
+  "format": "documentary",
+  "fetched_at": "2026-09-07"
+ },
+ "UChcOu7J_AH5wOZuzpzUhQ3A": {
+  "rpm": 4.9939,
+  "rpm_base": 6.8,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "SG",
+  "category": "engineering",
+  "format": "documentary",
+  "tags": [
+   "engineering",
+   "science",
+   "tech",
+   "business"
+  ],
+  "outlier_score": 0.26,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCNAs1k4g0a5mgb92-Aqv2qw": {
+  "rpm": 4.9939,
+  "rpm_base": 6.8,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "engineering",
+  "format": "documentary",
+  "tags": [
+   "engineering",
+   "science",
+   "tech",
+   "future & discoveries"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCmy-F_stfgy76DM2FIxITlA": {
+  "rpm": 5.1322,
+  "rpm_base": 7.2,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "FR",
+  "category": "engineering",
+  "format": "educational",
+  "tags": [
+   "engineering",
+   "science",
+   "aviation",
+   "travel documentary"
+  ],
+  "outlier_score": 0.26,
+  "monthly_revenue": 3732.37,
+  "fetched_at": "2026-09-07"
+ },
+ "UCTtkvdpsod3as7dgC9eHmkA": {
+  "rpm": 4.847,
+  "rpm_base": 6.8,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "engineering",
+  "format": "documentary",
+  "tags": [
+   "engineering",
+   "automotive business",
+   "tech & coding",
+   "history"
+  ],
+  "outlier_score": 1.34,
+  "monthly_revenue": 30.23,
+  "fetched_at": "2026-09-07"
+ },
+ "UC6Iy6MUrQNqlBiYgK4ulAUA": {
+  "rpm": 2.1384,
+  "rpm_base": 3,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "investigative documentaries",
+  "format": "educational",
+  "tags": [
+   "history",
+   "business",
+   "crime",
+   "investigative documentaries"
+  ],
+  "outlier_score": 0.47,
+  "monthly_revenue": 3.5,
+  "fetched_at": "2026-09-07"
+ },
+ "UC2wq7dGF8Nl2f9TlXfobNhw": {
+  "rpm": 5.2877,
+  "rpm_base": 6.8,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": null,
+  "category": "engineering",
+  "format": "documentary",
+  "tags": [
+   "engineering",
+   "history",
+   "travel documentary",
+   "science"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCPVn06OnDVhy_nwHyIhrlmw": {
+  "rpm": 4.4913,
+  "rpm_base": 6.8,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "AU",
+  "category": "engineering",
+  "format": "educational",
+  "tags": [
+   "engineering",
+   "automotive business",
+   "tech",
+   "animation"
+  ],
+  "outlier_score": 19.77,
+  "monthly_revenue": 204.89,
+  "fetched_at": "2026-09-07"
+ },
+ "UCTZkbDng2ylR_GcTMSiDvAQ": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "history",
+  "format": "documentary",
+  "tags": [
+   "history",
+   "science",
+   "future & discoveries",
+   "engineering"
+  ],
+  "outlier_score": 4.62,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC6zxBWcZ60W8dNc_qKsuyDw": {
+  "rpm": 4.9939,
+  "rpm_base": 6.8,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "engineering",
+  "format": "documentary",
+  "tags": [
+   "engineering",
+   "industrial work",
+   "tech",
+   "gaming"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCUa6QMnGs48Efme4yqZ65jQ": {
+  "rpm": 4.4064,
+  "rpm_base": 6.8,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "engineering",
+  "format": "educational",
+  "tags": [
+   "engineering",
+   "automotive business",
+   "tech gadgets",
+   "science"
+  ],
+  "outlier_score": 0.65,
+  "monthly_revenue": 2.94,
+  "fetched_at": "2026-09-07"
+ },
+ "UCzTtc5y0B3kf18WglaMprvQ": {
+  "rpm": 4.7002,
+  "rpm_base": 6.8,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "NP",
+  "category": "engineering",
+  "format": "educational",
+  "tags": [
+   "engineering",
+   "military",
+   "aviation",
+   "technology"
+  ],
+  "outlier_score": 0.19,
+  "monthly_revenue": 6.93,
+  "fetched_at": "2026-09-07"
+ },
+ "UC8JhCwVutK3QdM_evjP_KQA": {
+  "rpm": 4.9766,
+  "rpm_base": 7.2,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "engineering",
+  "format": "tutorial",
+  "tags": [
+   "engineering",
+   "tech gadgets",
+   "do it yourself",
+   "crafts"
+  ],
+  "outlier_score": 3.35,
+  "monthly_revenue": 182.03,
+  "fetched_at": "2026-09-07"
+ },
+ "UCZXuk5t0Ew-g4aa74f3dODg": {
+  "rpm": 2.3328,
+  "rpm_base": 3,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "military",
+  "format": "documentary",
+  "tags": [
+   "military",
+   "engineering",
+   "history",
+   "autos"
+  ],
+  "outlier_score": 0.06,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC4ZQl7PdPFtIr0VnGM44ezg": {
+  "rpm": 9.5472,
+  "rpm_base": 13,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "real estate",
+  "format": "documentary",
+  "tags": [
+   "real estate",
+   "travel",
+   "lifestyle",
+   "retirement"
+  ],
+  "outlier_score": 2.18,
+  "monthly_revenue": 1974,
+  "fetched_at": "2026-09-07"
+ },
+ "UCupSrka--V9sBa8DfrVyYVg": {
+  "rpm": 5.1408,
+  "rpm_base": 7,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "GB",
+  "category": "travel documentary",
+  "format": "documentary",
+  "tags": [
+   "travel documentary",
+   "history",
+   "lifestyle",
+   "geography"
+  ],
+  "outlier_score": 0.54,
+  "monthly_revenue": 133.62,
+  "fetched_at": "2026-09-07"
+ },
+ "UCWZlBfglZJDUbR-5mkUaZYw": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "travel",
+  "format": "documentary",
+  "tags": [
+   "travel",
+   "real estate",
+   "lifestyle",
+   "financial advice"
+  ],
+  "outlier_score": 0.25,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCVPKH1SKRLGkV5P9cNwqVAw": {
+  "rpm": 5.184,
+  "rpm_base": 7.5,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "luxury",
+  "format": "documentary",
+  "tags": [
+   "luxury",
+   "society",
+   "future & discoveries",
+   "celebrity"
+  ],
+  "outlier_score": 0.99,
+  "monthly_revenue": 460.51,
+  "fetched_at": "2026-09-07"
+ },
+ "UCSO-DpH7okeVTGWiQBO0tCQ": {
+  "rpm": 3.456,
+  "rpm_base": 5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "politics",
+  "format": "documentary",
+  "tags": [
+   "politics",
+   "culture",
+   "history",
+   "trave documentary"
+  ],
+  "outlier_score": 0.8,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCfdKjx8zIhZa5koijY_5y6w": {
+  "rpm": 2.1298,
+  "rpm_base": 2.9,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "urban living",
+  "format": "educational",
+  "tags": [
+   "urban living",
+   "real estate",
+   "travel documentary",
+   "lifestyle"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCarhEwIqdYAmLTFamSTYbNg": {
+  "rpm": 4.8384,
+  "rpm_base": 7,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "travel",
+  "format": "documentary",
+  "tags": [
+   "travel",
+   "culture",
+   "society",
+   "history"
+  ],
+  "outlier_score": 27.42,
+  "monthly_revenue": 15520.89,
+  "fetched_at": "2026-09-07"
+ },
+ "UCrs8AmQ_vAUCURyDPBa1p9g": {
+  "rpm": 9.5472,
+  "rpm_base": 13,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "real estate",
+  "format": "commentary",
+  "tags": [
+   "real estate",
+   "lifestyle",
+   "travel",
+   "retail business"
+  ],
+  "outlier_score": 1.41,
+  "monthly_revenue": 2234.14,
+  "fetched_at": "2026-09-07"
+ },
+ "UCfK5-pfANzKdmb0Umwyd2rg": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "travel",
+  "format": "vlogs",
+  "tags": [
+   "travel",
+   "lifestyle",
+   "real estate",
+   "vlogs"
+  ],
+  "outlier_score": 1.19,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCi4ojIFxhaRaVBEyMkWVQgg": {
+  "rpm": 5.2877,
+  "rpm_base": 7.2,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "online business",
+  "format": "educational",
+  "tags": [
+   "online business",
+   "travel",
+   "personal finance",
+   "lifestyle"
+  ],
+  "outlier_score": 0.71,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCap8lVAvdQu-HlTi-jj1r1Q": {
+  "rpm": 1.4256,
+  "rpm_base": 2,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "GB",
+  "category": "animation",
+  "format": "animation",
+  "tags": [
+   "animation",
+   "geopolitics",
+   "history",
+   "educational"
+  ],
+  "outlier_score": 0.66,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCUUjPENVuyaRRxb-DN8FTwA": {
+  "rpm": 9.2664,
+  "rpm_base": 13,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "CA",
+  "category": "real estate",
+  "format": "educational",
+  "tags": [
+   "real estate",
+   "lifestyle",
+   "travel",
+   "urban living"
+  ],
+  "outlier_score": 0.42,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCxk_Fu5ksjRVnloP67Ih8uw": {
+  "rpm": 4.847,
+  "rpm_base": 6.6,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "business",
+  "format": "commentary",
+  "tags": [
+   "business",
+   "geo politics",
+   "society",
+   "news"
+  ],
+  "outlier_score": 0.25,
+  "monthly_revenue": 0.71,
+  "fetched_at": "2026-09-07"
+ },
+ "UCePjmj8ikoLqknc8bF0YP4A": {
+  "rpm": 8.9856,
+  "rpm_base": 13,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "AT",
+  "category": "real estate",
+  "format": "documentary",
+  "tags": [
+   "travel",
+   "real estate",
+   "travel documentary",
+   "history"
+  ],
+  "outlier_score": 1.86,
+  "monthly_revenue": 9295.94,
+  "fetched_at": "2026-09-07"
+ },
+ "UCJW25cmhlS0xr_RJ_atjwXQ": {
+  "rpm": 3.672,
+  "rpm_base": 5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "ZA",
+  "category": "travel documentary",
+  "format": "documentary",
+  "tags": [
+   "travel documentary",
+   "tourism",
+   "lifestyle",
+   "real estate"
+  ],
+  "outlier_score": 1.93,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCeFoC7D3yug1HSNJLc_mt0Q": {
+  "rpm": 4.2768,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "history",
+  "format": "animation",
+  "tags": [
+   "history",
+   "religion",
+   "education",
+   "animation"
+  ],
+  "outlier_score": 1.57,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC-O7ZGhbIq0v3-CuG-yI0GQ": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "AT",
+  "category": "history",
+  "format": "educational",
+  "tags": [
+   "history",
+   "education",
+   "animation",
+   "anomalies and alternative science"
+  ],
+  "outlier_score": 0.72,
+  "monthly_revenue": 7.33,
+  "fetched_at": "2026-09-07"
+ },
+ "UCv1ulnrecU29kjtIlJfWaIQ": {
+  "rpm": 2.6957,
+  "rpm_base": 3.9,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "CA",
+  "category": "self improvement",
+  "format": "educational",
+  "tags": [
+   "self improvement",
+   "animation",
+   "motivational videos",
+   "educational"
+  ],
+  "outlier_score": 0.8,
+  "monthly_revenue": 1168.27,
+  "fetched_at": "2026-09-07"
+ },
+ "UCI_V1m6_qLJi4D4R-vJ_biQ": {
+  "rpm": 4.9896,
+  "rpm_base": 7,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "CA",
+  "category": "history",
+  "format": "animation",
+  "tags": [
+   "animation",
+   "history",
+   "storytelling",
+   "culture"
+  ],
+  "outlier_score": 3.23,
+  "monthly_revenue": 4.73,
+  "fetched_at": "2026-09-07"
+ },
+ "UC1g2IYOUOw2wKEvekPsJLAA": {
+  "rpm": 1.8576,
+  "rpm_base": 3,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "animation",
+  "format": "animation",
+  "tags": [
+   "animation",
+   "humor & comedy",
+   "video games",
+   "cartoon"
+  ],
+  "outlier_score": 21.16,
+  "monthly_revenue": 498.95,
+  "fetched_at": "2026-09-07"
+ },
+ "UCgr30ZIk7SN5K4X7pl2pA1g": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "DE",
+  "category": "history",
+  "format": "animation",
+  "tags": [
+   "history",
+   "science",
+   "education",
+   "animation"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC3l6ot2f6E6hxOOfMA3uIPQ": {
+  "rpm": 4.8384,
+  "rpm_base": 7,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "history",
+  "format": "animation",
+  "tags": [
+   "animation",
+   "history",
+   "comedy",
+   "education"
+  ],
+  "outlier_score": 7.1,
+  "monthly_revenue": 956.98,
+  "fetched_at": "2026-09-07"
+ },
+ "UC5ifnzjExzMigqvbr7YYiQw": {
+  "rpm": 3.672,
+  "rpm_base": 5,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "JM",
+  "category": "horror stories",
+  "format": "animation",
+  "tags": [
+   "horror stories",
+   "myths and folktales",
+   "history",
+   "life stories"
+  ],
+  "outlier_score": 0.18,
+  "monthly_revenue": 104.16,
+  "fetched_at": "2026-09-07"
+ },
+ "UCLuIudjbquBATgqkIJxQi6A": {
+  "rpm": 4.8384,
+  "rpm_base": 7,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "NL",
+  "category": "history",
+  "format": "animation",
+  "tags": [
+   "history",
+   "animation",
+   "education",
+   "documentary"
+  ],
+  "outlier_score": 23.63,
+  "monthly_revenue": 9903.6,
+  "fetched_at": "2026-09-07"
+ },
+ "UCIC0GYS-Jq5UcVh137G6ktA": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "FR",
+  "category": "history",
+  "format": "animation",
+  "tags": [
+   "history",
+   "science",
+   "animation",
+   "myths and folktales"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC9m7oWbW9uxdvBgHHbRjBjQ": {
+  "rpm": 5.1408,
+  "rpm_base": 7,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "history",
+  "format": "documentary",
+  "tags": [
+   "history",
+   "military",
+   "engineering",
+   "science"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCYT3JSRTXxqzDros6G4Ureg": {
+  "rpm": 2.1384,
+  "rpm_base": 3,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "animation",
+  "format": "commentary",
+  "tags": [
+   "animation",
+   "movies",
+   "myths and folktales",
+   "cartoon"
+  ],
+  "outlier_score": 0.69,
+  "monthly_revenue": 6.06,
+  "fetched_at": "2026-09-07"
+ },
+ "UC8F3exATFAYgcI2ehNnYDUw": {
+  "rpm": 1.4688,
+  "rpm_base": 2,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "animation",
+  "format": "animation",
+  "tags": [
+   "education",
+   "animation",
+   "commentary",
+   "internet culture"
+  ],
+  "outlier_score": 8.26,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCZg7hZc23PNufzxnX8mCaCw": {
+  "rpm": 2.3328,
+  "rpm_base": 3,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "animation",
+  "format": "tutorial",
+  "tags": [
+   "animation",
+   "tutorial",
+   "tech",
+   "software"
+  ],
+  "outlier_score": 0.42,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCpWgjwFcJ3DDFuslWs0V3QA": {
+  "rpm": 3.888,
+  "rpm_base": 5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "NZ",
+  "category": "nostalgia",
+  "format": "documentary",
+  "tags": [
+   "nostalgia",
+   "history",
+   "culture",
+   "television"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCj1ZoQya3hoOX2t7D0ZCNFg": {
+  "rpm": 5.1408,
+  "rpm_base": 7,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": null,
+  "category": "history",
+  "format": "documentary",
+  "tags": [
+   "history",
+   "nostalgia",
+   "culture",
+   "society"
+  ],
+  "outlier_score": 0.28,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCRk4bBGZxWWOcqn_MPqo-gQ": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "GB",
+  "category": "history",
+  "format": "documentary",
+  "tags": [
+   "history",
+   "culture",
+   "society",
+   "nostalgia"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCcCps6jFTYceJ813K68HJLg": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "GB",
+  "category": "television",
+  "format": "commentary",
+  "tags": [
+   "television",
+   "nostalgia",
+   "culture",
+   "comedy"
+  ],
+  "outlier_score": 0.25,
+  "monthly_revenue": 317.6,
+  "fetched_at": "2026-09-07"
+ },
+ "UCZbpsDZGSSwkGUMqqZWGm4w": {
+  "rpm": 3.564,
+  "rpm_base": 5,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "HR",
+  "category": "nostalgia",
+  "format": "compilation",
+  "tags": [
+   "television",
+   "nostalgia",
+   "uk culture",
+   "history"
+  ],
+  "outlier_score": 4.33,
+  "monthly_revenue": 316.92,
+  "fetched_at": "2026-09-07"
+ },
+ "UCFdWHjJBEPdBKhtaB6GtlmQ": {
+  "rpm": 5.1408,
+  "rpm_base": 7,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "ES",
+  "category": "television",
+  "format": "documentary",
+  "tags": [
+   "television",
+   "nostalgia",
+   "culture",
+   "entertainment"
+  ],
+  "outlier_score": 0.39,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCs-QFr6u4hvqYuNrhxLmM2g": {
+  "rpm": 4.2768,
+  "rpm_base": 6,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "GB",
+  "category": "nostalgia",
+  "format": "commentary",
+  "tags": [
+   "nostalgia",
+   "history",
+   "pop culture",
+   "television"
+  ],
+  "outlier_score": 0.12,
+  "monthly_revenue": 276.82,
+  "fetched_at": "2026-09-07"
+ },
+ "UCNhADazdvJlfYV4TA_KLsLg": {
+  "rpm": 3.672,
+  "rpm_base": 5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "architecture",
+  "format": "documentary",
+  "tags": [
+   "architecture",
+   "history",
+   "design",
+   "nostalgia"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCAmL2tBO8Kc-TlmLVf8-sdA": {
+  "rpm": 4.2768,
+  "rpm_base": 6,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "nostalgia",
+  "format": "documentary",
+  "tags": [
+   "nostalgia",
+   "history",
+   "culture",
+   "lifestyle"
+  ],
+  "outlier_score": 0.1,
+  "monthly_revenue": 175.13,
+  "fetched_at": "2026-09-07"
+ },
+ "UCmx0N2ZmFPGJJdx7Ieoonzg": {
+  "rpm": 4.6656,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "history",
+  "format": "documentary",
+  "tags": [
+   "history",
+   "culture",
+   "television",
+   "music"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC9rgMeuEDQN6xqDt9fDdlPg": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "nostalgia",
+  "format": "documentary",
+  "tags": [
+   "history",
+   "nostalgia",
+   "culture",
+   "travel documentary"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCzcLOHSS82eTNN8voB5c32w": {
+  "rpm": 4.4064,
+  "rpm_base": 6,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "GB",
+  "category": "nostalgia",
+  "format": "documentary",
+  "tags": [
+   "nostalgia",
+   "british culture",
+   "history",
+   "lifestyle"
+  ],
+  "outlier_score": 1.13,
+  "monthly_revenue": 12.88,
+  "fetched_at": "2026-09-07"
+ },
+ "UCfYPEnwpGWLxj9aBM436PaQ": {
+  "rpm": 3.672,
+  "rpm_base": 5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "nostalgia",
+  "format": "documentary",
+  "tags": [
+   "nostalgia",
+   "history",
+   "lifestyle",
+   "vintage photography"
+  ],
+  "outlier_score": 0.23,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC8gbQUXDqxpJxeHV1FvwDOQ": {
+  "rpm": 3.24,
+  "rpm_base": 5,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "nostalgia",
+  "format": "commentary",
+  "tags": [
+   "70",
+   "80",
+   "90's celebrity news & gossip",
+   "pop news & gossip",
+   "nostalgia",
+   "television"
+  ],
+  "outlier_score": 0.31,
+  "monthly_revenue": 3.38,
+  "fetched_at": "2026-09-07"
+ },
+ "UCv7mY6CXR9MY912cRKR_y7Q": {
+  "rpm": 2.8512,
+  "rpm_base": 4,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": null,
+  "category": "collecting",
+  "format": "reviews",
+  "tags": [
+   "collecting",
+   "antiques",
+   "luxury",
+   "reviews"
+  ],
+  "outlier_score": 0.94,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCod39S9ddhGBudChsPnbNig": {
+  "rpm": 6.9034,
+  "rpm_base": 9.4,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "NO",
+  "category": "business",
+  "format": "documentary",
+  "tags": [
+   "business",
+   "luxury",
+   "investing",
+   "commodity investing"
+  ],
+  "outlier_score": 0.23,
+  "monthly_revenue": 24.36,
+  "fetched_at": "2026-09-07"
+ },
+ "UCbJabCmOGVnD7zejw40S08Q": {
+  "rpm": 4.0392,
+  "rpm_base": 5.5,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "science",
+  "format": "documentary",
+  "tags": [
+   "science",
+   "education",
+   "crafts",
+   "rural living"
+  ],
+  "outlier_score": 0.65,
+  "monthly_revenue": 1248.42,
+  "fetched_at": "2026-09-07"
+ },
+ "UCDgN0elf8aXD7MXTEe2RoSA": {
+  "rpm": 1.6891,
+  "rpm_base": 2.3,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "antiques",
+  "format": "educational",
+  "tags": [
+   "antiques",
+   "collecting",
+   "history",
+   "military history"
+  ],
+  "outlier_score": 0.25,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCH-d0_tHhH_yXwKOFHvAL9Q": {
+  "rpm": 2.2032,
+  "rpm_base": 3,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "earth sciences",
+  "format": "educational",
+  "tags": [
+   "science",
+   "earth sciences",
+   "education",
+   "collecting"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCSybbiXhUe5wL6o1hT_y_Zg": {
+  "rpm": 2.0434,
+  "rpm_base": 3,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "collecting",
+  "format": "educational",
+  "tags": [
+   "collecting",
+   "antiques",
+   "finance",
+   "history"
+  ],
+  "outlier_score": 3.02,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCkNb6vrBZAEjxxS25X7j4VA": {
+  "rpm": 2.5704,
+  "rpm_base": 3.5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": true,
+  "country_top": "US",
+  "category": "royalty",
+  "format": "documentary",
+  "tags": [
+   "royalty",
+   "celebrity",
+   "culture",
+   "history"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCj3vrTAkDSfHkUZhduHKTPw": {
+  "rpm": 4.2854,
+  "rpm_base": 6.2,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "CZ",
+  "category": "antiques",
+  "format": "tutorial",
+  "tags": [
+   "restoration",
+   "vintage photography",
+   "craftsmanship",
+   "collectibles"
+  ],
+  "outlier_score": 2.94,
+  "monthly_revenue": 25,
+  "fetched_at": "2026-09-07"
+ },
+ "UC-Uq1_UuZflVAvl8Bk-hL2w": {
+  "rpm": 2.4883,
+  "rpm_base": 3.6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "antiques",
+  "format": "compilation",
+  "tags": [
+   "antiques",
+   "collecting",
+   "reality tv",
+   "television"
+  ],
+  "outlier_score": 66.5,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCDyQ_v1Ch7VHiOFRM2egYGA": {
+  "rpm": 2.9376,
+  "rpm_base": 4,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "collecting",
+  "format": "reviews",
+  "tags": [
+   "collecting",
+   "luxury",
+   "reviews",
+   "commentary"
+  ],
+  "outlier_score": 0.24,
+  "monthly_revenue": 113.99,
+  "fetched_at": "2026-09-07"
+ },
+ "UCYa5R8cB61GteNw-X7a1EXA": {
+  "rpm": 2.6438,
+  "rpm_base": 3.6,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "antiques",
+  "format": "documentary",
+  "tags": [
+   "antiques",
+   "crafts",
+   "vintage photography",
+   "design"
+  ],
+  "outlier_score": 1.75,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UC_yTjHNMJxfXyHjtTHRH68Q": {
+  "rpm": 2.2032,
+  "rpm_base": 3,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "collecting",
+  "format": "commentary",
+  "tags": [
+   "collecting",
+   "luxury",
+   "fashion for men",
+   "culture"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCS_v-qjnCz4nwanymm-tiWA": {
+  "rpm": 1.3824,
+  "rpm_base": 2,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "crafts",
+  "format": "tutorial",
+  "tags": [
+   "crafts",
+   "do it yourself",
+   "design",
+   "fashion for women"
+  ],
+  "outlier_score": 0.18,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCtQWW2AT1wVE1wjOBRXmeUQ": {
+  "rpm": 4.2768,
+  "rpm_base": 5.5,
+  "is_monetized": false,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": null,
+  "category": "luxury",
+  "format": "documentary",
+  "tags": [
+   "luxury",
+   "collecting",
+   "fashion for men",
+   "reviews"
+  ],
+  "outlier_score": 0,
+  "monthly_revenue": 0,
+  "fetched_at": "2026-09-07"
+ },
+ "UCSZY6N_fKVbHJXakR-Lscyg": {
+  "rpm": 7.46,
+  "is_monetized": true,
+  "is_faceless": true,
+  "is_ai": false,
+  "country_top": "US",
+  "category": "earth sciences",
+  "format": "documentary",
+  "fetched_at": "2026-09-07"
+ }
+}

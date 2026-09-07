@@ -130,6 +130,14 @@ def _number(value: Any, default: int = 0) -> int:
         return default
 
 
+def rotate_queries(queries: list[dict[str, Any]], now: dt.datetime) -> list[dict[str, Any]]:
+    """Rotate the daily query start so the search budget covers all seeds."""
+    if not queries:
+        return []
+    offset = (now.timetuple().tm_yday * 25) % len(queries)
+    return queries[offset:] + queries[:offset]
+
+
 def _api_item_video(item: dict[str, Any]) -> dict[str, Any]:
     snippet = item.get("snippet", {})
     statistics = item.get("statistics", {})
@@ -452,9 +460,12 @@ def _channel_output(
 ) -> dict[str, Any] | None:
     statistics = channel.get("statistics", {})
     video_count = _number(statistics.get("videoCount"))
-    if video_count < 3 or _number(statistics.get("subscriberCount")) < 200:
-        return None
-    if statistics.get("hiddenSubscriberCount"):
+    if (
+        video_count < 3
+        or video_count > 30
+        or _number(statistics.get("subscriberCount")) < 200
+        or statistics.get("hiddenSubscriberCount")
+    ):
         return None
     long_videos = [video for video in videos if _number(video.get("duration_sec")) >= 90]
     first = min((_parse_time(video.get("published_at")) for video in long_videos), default=None)
@@ -589,7 +600,7 @@ def main(argv: list[str] | None = None) -> int:
     state = _new_state()
     cache = _load_json(CACHE_PATH, {})
     rpm_data = _load_json(RPM_PATH, {})
-    queries = queries_data.get("queries", [])
+    queries = rotate_queries(queries_data.get("queries", []), now)
     if args.max_queries is not None:
         queries = queries[: max(0, args.max_queries)]
     candidates: dict[str, tuple[dict[str, Any], dict[str, Any]]] = {}
@@ -614,12 +625,24 @@ def main(argv: list[str] | None = None) -> int:
             _log("Enrichment quota exhausted while fetching channel metadata")
     current: list[dict[str, Any]] = []
     for channel_id, channel in channels.items():
+        statistics = channel.get("statistics", {})
+        if (
+            _number(statistics.get("videoCount")) < 3
+            or _number(statistics.get("videoCount")) > 30
+            or _number(statistics.get("subscriberCount")) < 200
+            or statistics.get("hiddenSubscriberCount")
+        ):
+            _log(f"Skipping ineligible channel {channel_id}")
+            continue
         try:
             videos = fetch_videos(channel, state)
             query = candidates[channel_id][0]
             result = _channel_output(channel, videos, query, rpm_data, cache, now)
             if result:
                 current.append(result)
+        except QuotaExhausted:
+            _log(f"Enrichment quota exhausted at channel {channel_id}; stopping channel fetch")
+            break
         except Exception as error:  # a malformed channel must not stop the run
             _log(f"Skipping channel {channel_id}: {error}")
     output = {

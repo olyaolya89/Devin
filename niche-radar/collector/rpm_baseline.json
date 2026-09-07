@@ -1,0 +1,29 @@
+{
+  "_comment": "Базовый RPM (USD за 1000 просмотров) по нише × региону. Используется, когда нет данных NexLev. region: us (US/UK/CA/AU), eu (DE/FR/NL/…), latam (ES/PT-BR), ru, other.",
+  "niches": {
+    "finance":           {"ru_name": "Финансы и пенсия",        "us": 14.0, "eu": 9.0,  "latam": 4.0, "ru": 3.0, "other": 3.0},
+    "nostalgia_finance": {"ru_name": "Ностальгия и экономия",   "us": 12.0, "eu": 8.0,  "latam": 3.5, "ru": 2.5, "other": 2.5},
+    "nostalgia":         {"ru_name": "Ностальгия",              "us": 9.0,  "eu": 6.0,  "latam": 3.0, "ru": 2.0, "other": 2.0},
+    "relocation":        {"ru_name": "Travel и релокация",      "us": 11.0, "eu": 8.0,  "latam": 4.0, "ru": 2.5, "other": 3.0},
+    "engineering":       {"ru_name": "Инженерия",               "us": 7.0,  "eu": 5.0,  "latam": 3.0, "ru": 2.0, "other": 2.0},
+    "science":           {"ru_name": "Наука",                   "us": 6.0,  "eu": 4.5,  "latam": 3.0, "ru": 2.0, "other": 2.0},
+    "geography":         {"ru_name": "География",               "us": 8.0,  "eu": 5.5,  "latam": 3.0, "ru": 2.0, "other": 2.0},
+    "history":           {"ru_name": "История и геополитика",   "us": 6.0,  "eu": 4.5,  "latam": 3.0, "ru": 2.0, "other": 2.0},
+    "religion":          {"ru_name": "Религия",                 "us": 6.0,  "eu": 4.0,  "latam": 5.0, "ru": 1.5, "other": 2.0},
+    "psychology":        {"ru_name": "Психология и саморазвитие","us": 8.0, "eu": 5.5,  "latam": 3.5, "ru": 2.5, "other": 2.5},
+    "animals":           {"ru_name": "Животные",                "us": 4.5,  "eu": 3.5,  "latam": 4.0, "ru": 1.5, "other": 1.5},
+    "pov_stories":       {"ru_name": "POV-истории",             "us": 6.5,  "eu": 4.5,  "latam": 3.0, "ru": 2.0, "other": 2.0},
+    "auto":              {"ru_name": "Авто и техника",          "us": 8.0,  "eu": 6.0,  "latam": 3.0, "ru": 2.5, "other": 2.5},
+    "collectibles":      {"ru_name": "Коллекционирование",      "us": 9.0,  "eu": 6.0,  "latam": 3.0, "ru": 2.0, "other": 2.5},
+    "true_crime":        {"ru_name": "True crime",              "us": 5.0,  "eu": 3.5,  "latam": 2.5, "ru": 1.5, "other": 1.5},
+    "other":             {"ru_name": "Другое",                  "us": 5.0,  "eu": 3.5,  "latam": 2.5, "ru": 1.5, "other": 1.5}
+  },
+  "country_to_region": {
+    "US": "us", "GB": "us", "CA": "us", "AU": "us", "NZ": "us", "IE": "us",
+    "DE": "eu", "FR": "eu", "NL": "eu", "SE": "eu", "NO": "eu", "DK": "eu", "FI": "eu", "CH": "eu", "AT": "eu", "BE": "eu", "IT": "eu", "ES": "eu", "PL": "eu", "PT": "eu", "JP": "eu", "KR": "eu",
+    "MX": "latam", "AR": "latam", "CO": "latam", "CL": "latam", "PE": "latam", "BR": "latam", "VE": "latam", "EC": "latam",
+    "RU": "ru", "UA": "ru", "BY": "ru", "KZ": "ru"
+  },
+  "lang_to_region": {"en": "us", "de": "eu", "fr": "eu", "es": "latam", "pt": "latam", "ru": "ru"},
+  "region_ru": {"us": "США/UK", "eu": "Европа", "latam": "Латам", "ru": "Россия/СНГ", "other": "Другое"}
+}
