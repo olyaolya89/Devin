@@ -1,5 +1,7 @@
+import { getConfig } from '../settings.js';
+
 export async function search(query) {
-  const key = process.env.PEXELS_API_KEY;
+  const { pexelsApiKey: key } = await getConfig();
   if (!key) return [];
   const headers = { Authorization: key };
   const [images, videos] = await Promise.all([

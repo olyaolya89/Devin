@@ -4,6 +4,8 @@ import { normalize } from '../server/pipeline/normalize.js';
 import { heuristicQueries } from '../server/llm.js';
 import { rankScene } from '../server/pipeline/rank.js';
 import { holdDuration, wrapText } from '../server/pipeline/render.js';
+import fs from 'node:fs/promises';
+import { getConfig, maskKey, readSettings, writeSettings, SETTINGS_FILE } from '../server/settings.js';
 
 test('normalize keeps every sentence verbatim', () => {
   const project = { id: 'test', scriptText: "One thing. Children lined up! Dessert?" };
@@ -47,4 +49,23 @@ test('render text wraps at 48 characters without flattening newlines', () => {
   const wrapped = wrapText('A very long sentence about British school dinners that should wrap across several subtitle lines for readability. Next line stays separate.', 48);
   assert.ok(wrapped.split('\n').every(line => line.length <= 48));
   assert.ok(wrapped.includes('\n'));
+});
+
+test('settings take precedence over env and empty values fall back', async () => {
+  const originalFile = await fs.readFile(SETTINGS_FILE).catch(() => null);
+  const originalEnv = process.env.PEXELS_API_KEY;
+  try {
+    process.env.PEXELS_API_KEY = 'env-key';
+    await writeSettings({ ...(await readSettings()), pexelsApiKey: 'file-key' });
+    assert.equal((await getConfig()).pexelsApiKey, 'file-key');
+    await writeSettings({ ...(await readSettings()), pexelsApiKey: '' });
+    assert.equal((await getConfig()).pexelsApiKey, 'env-key');
+    assert.equal(maskKey('abcdefgh'), '••••efgh');
+    assert.equal(maskKey(''), '');
+  } finally {
+    if (originalEnv === undefined) delete process.env.PEXELS_API_KEY;
+    else process.env.PEXELS_API_KEY = originalEnv;
+    if (originalFile) await fs.writeFile(SETTINGS_FILE, originalFile);
+    else await fs.rm(SETTINGS_FILE, { force: true });
+  }
 });

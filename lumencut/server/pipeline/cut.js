@@ -1,9 +1,10 @@
 import path from 'node:path';
 import { run, duration } from '../ffmpeg.js';
 import { log } from '../store.js';
+import { getConfig } from '../settings.js';
 
 export async function cut(project, dir) {
-  const max = Number(process.env.MAX_CLIP_SECONDS || 5);
+  const { maxClipSeconds: max } = await getConfig();
   for (const scene of project.scenes) {
     const seconds = Math.max(0.3, (scene.endMs - scene.startMs) / 1000);
     if (scene.mediaPath && scene.pick?.kind === 'video') {

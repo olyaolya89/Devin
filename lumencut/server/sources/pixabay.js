@@ -1,5 +1,7 @@
+import { getConfig } from '../settings.js';
+
 export async function search(query) {
-  const key = process.env.PIXABAY_API_KEY;
+  const { pixabayApiKey: key } = await getConfig();
   if (!key) return [];
   const imageUrl = 'https://pixabay.com/api/?' + new URLSearchParams({ key, q: query, image_type: 'photo', orientation: 'horizontal', min_width: '1280' });
   const videoUrl = 'https://pixabay.com/api/videos/?' + new URLSearchParams({ key, q: query });

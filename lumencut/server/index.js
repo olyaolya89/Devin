@@ -8,6 +8,9 @@ import { VOICES } from './tts.js';
 import { enqueue } from './queue.js';
 import { runPipeline } from './pipeline/run.js';
 import { spawn } from 'node:child_process';
+import { getConfig, publicSettings, updateSettings } from './settings.js';
+import { search as searchPexels } from './sources/pexels.js';
+import { search as searchPixabay } from './sources/pixabay.js';
 
 const app = express();
 const port = Number(process.env.PORT || 8787);
@@ -16,10 +19,24 @@ app.use(express.json({ limit: '2mb' }));
 
 function publicProject(project) { return project; }
 
-app.get('/api/health', (_req, res) => {
+app.get('/api/health', async (_req, res) => {
+  const config = await getConfig();
   const ffmpeg = spawn(process.env.FFMPEG_PATH || 'ffmpeg', ['-version']);
-  ffmpeg.on('error', () => res.json({ version: '1.0.0', ffmpeg: false, llmProvider: process.env.LLM_PROVIDER || 'none', pexels: Boolean(process.env.PEXELS_API_KEY), pixabay: Boolean(process.env.PIXABAY_API_KEY) }));
-  ffmpeg.on('close', code => res.json({ version: '1.0.0', ffmpeg: code === 0, llmProvider: process.env.LLM_PROVIDER || 'none', pexels: Boolean(process.env.PEXELS_API_KEY), pixabay: Boolean(process.env.PIXABAY_API_KEY) }));
+  ffmpeg.on('error', () => res.json({ version: '1.0.0', ffmpeg: false, llmProvider: config.llmProvider, pexels: Boolean(config.pexelsApiKey), pixabay: Boolean(config.pixabayApiKey) }));
+  ffmpeg.on('close', code => res.json({ version: '1.0.0', ffmpeg: code === 0, llmProvider: config.llmProvider, pexels: Boolean(config.pexelsApiKey), pixabay: Boolean(config.pixabayApiKey) }));
+});
+app.get('/api/settings', async (_req, res) => res.json(await publicSettings()));
+app.put('/api/settings', async (req, res) => res.json(await updateSettings(req.body)));
+app.post('/api/settings/test', async (_req, res) => {
+  const testSource = async search => {
+    try {
+      const results = await search('school dinner');
+      return { ok: true, count: results.length };
+    } catch (error) {
+      return { ok: false, error: error.message };
+    }
+  };
+  res.json({ pexels: await testSource(searchPexels), pixabay: await testSource(searchPixabay) });
 });
 app.get('/api/voices', (_req, res) => res.json(VOICES));
 app.get('/api/projects', async (_req, res) => res.json((await listProjects()).map(p => ({ id: p.id, title: p.title, status: p.status, durationMs: p.durationMs, createdAt: p.createdAt, updatedAt: p.updatedAt }))));

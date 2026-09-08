@@ -1,3 +1,5 @@
+import { getConfig } from './settings.js';
+
 const STOP = new Set('the a an and or but in on at to for of with from by was were is are as this that these those daily lined up with children their about into over very'.split(' '));
 
 function significant(text) {
@@ -15,9 +17,10 @@ export function heuristicQueries(text) {
 }
 
 async function askGemini(scenes) {
-  const key = process.env.GEMINI_API_KEY;
+  const config = await getConfig();
+  const key = config.geminiApiKey;
   if (!key) throw new Error('GEMINI_API_KEY is not set');
-  const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const model = config.geminiModel;
   const prompt = `Для каждой фразы дай 3 коротких английских стоковых запроса (2–4 слова), JSON-массив массивов.\n${JSON.stringify(scenes.map(s => s.text))}`;
   const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
     method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
@@ -28,9 +31,10 @@ async function askGemini(scenes) {
 }
 
 async function askOllama(scenes) {
+  const config = await getConfig();
   const res = await fetch('http://localhost:11434/api/generate', {
     method: 'POST', headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ model: process.env.OLLAMA_MODEL || 'llama3.1', prompt: `Return JSON array of arrays of 3 English stock queries for these phrases:\n${scenes.map(s => s.text).join('\n')}`, stream: false })
+    body: JSON.stringify({ model: config.ollamaModel, prompt: `Return JSON array of arrays of 3 English stock queries for these phrases:\n${scenes.map(s => s.text).join('\n')}`, stream: false })
   });
   if (!res.ok) throw new Error(`Ollama HTTP ${res.status}`);
   const data = await res.json();
@@ -38,7 +42,7 @@ async function askOllama(scenes) {
 }
 
 export async function makeQueries(scenes) {
-  const provider = process.env.LLM_PROVIDER || 'none';
+  const { llmProvider: provider } = await getConfig();
   if (provider === 'gemini') return askGemini(scenes);
   if (provider === 'ollama') return askOllama(scenes);
   return scenes.map(s => heuristicQueries(s.text));
