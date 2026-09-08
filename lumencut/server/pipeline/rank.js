@@ -4,8 +4,9 @@ export function rankScene(scene, used = new Set()) {
   scene.candidates = (scene.candidates || []).map(candidate => {
     const hay = new Set(tokens(`${candidate.title} ${candidate.description}`));
     const overlap = [...target].filter(x => hay.has(x)).length;
-    return { ...candidate, score: overlap + (candidate.kind === 'video' ? 2 : 0) + (candidate.width >= 1920 ? 1 : 0) + (candidate.source === 'pexels' || candidate.source === 'pixabay' ? 1 : 0) - (used.has(candidate.url) ? 5 : 0) };
-  }).sort((a, b) => b.score - a.score).slice(0, 12);
+    const score = overlap + (overlap > 0 && candidate.kind === 'video' ? 2 : 0) + (candidate.width >= 1920 ? 1 : 0) + (candidate.source === 'pexels' || candidate.source === 'pixabay' ? 1 : 0) - (used.has(candidate.url) ? 5 : 0);
+    return { ...candidate, overlap, score };
+  }).sort((a, b) => b.overlap - a.overlap || b.score - a.score).slice(0, 12);
   scene.pick = scene.candidates[0] || null;
   return scene.pick;
 }

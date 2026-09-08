@@ -29,6 +29,14 @@ test('rank boosts video and avoids reused URLs', () => {
   assert.equal(rankScene(scene, new Set(['video'])).url, 'image');
 });
 
+test('rank keeps zero-overlap videos below relevant candidates', () => {
+  const scene = { text: 'metal trays shepherd pie', queries: ['metal trays shepherd'], candidates: [
+    { url: 'watch', kind: 'video', source: 'wikimedia', width: 1920, title: 'pocket watch', description: '' },
+    { url: 'trays', kind: 'image', source: 'wikimedia', width: 1200, title: 'metal trays shepherd pie', description: '' }
+  ] };
+  assert.equal(rankScene(scene, new Set()).url, 'trays');
+});
+
 test('scene timing allocation sums to audio duration', () => {
   const durationMs = 6000;
   const texts = ['Short.', 'A considerably longer sentence.'];

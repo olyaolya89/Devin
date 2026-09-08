@@ -41,7 +41,7 @@ export default function Settings() {
       </div>
       <div className="settings-section"><h2>Видео</h2><label className="settings-field short-field">Макс. длина клипа (с)<input type="number" min="1" max="60" step="1" value={settings.maxClipSeconds || 5} onChange={e => update('maxClipSeconds', Number(e.target.value))} /></label></div>
       <div className="settings-actions"><button className="primary" onClick={save} disabled={busy}>Сохранить</button><button className="ghost" onClick={testKeys} disabled={busy}>Проверить ключи</button>{message && <span className="settings-message">{message}</span>}</div>
-      {result && <div className="settings-results"><b>Результат проверки</b><span className={result.pexels.ok ? 'ok' : 'bad'}>Pexels: {result.pexels.ok ? `доступен, найдено ${result.pexels.count}` : result.pexels.error}</span><span className={result.pixabay.ok ? 'ok' : 'bad'}>Pixabay: {result.pixabay.ok ? `доступен, найдено ${result.pixabay.count}` : result.pixabay.error}</span></div>}
+      {result && <div className="settings-results"><b>Результат проверки</b><span className={result.pexels.ok ? 'ok' : result.pexels.error === 'ключ не задан' ? 'neutral' : 'bad'}>Pexels: {result.pexels.ok ? `доступен, найдено ${result.pexels.count}` : result.pexels.error}</span><span className={result.pixabay.ok ? 'ok' : result.pixabay.error === 'ключ не задан' ? 'neutral' : 'bad'}>Pixabay: {result.pixabay.ok ? `доступен, найдено ${result.pixabay.count}` : result.pixabay.error}</span></div>}
     </section>
   </div>;
 }

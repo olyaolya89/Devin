@@ -12,6 +12,6 @@ export async function search(query) {
   const v = Object.values((await videos.json()).hits || {});
   return [
     ...i.map(x => ({ source: 'pixabay', kind: 'image', url: x.largeImageURL, thumbUrl: x.webformatURL, width: x.imageWidth, height: x.imageHeight, durationSec: null, title: x.tags || '', description: x.tags || '', author: x.user, license: 'Pixabay', pageUrl: x.pageURL })),
-    ...v.map(x => { const f = x.videos?.large || x.videos?.medium; return { source: 'pixabay', kind: 'video', url: f?.url, thumbUrl: x.picture_id ? `https://i.vimeocdn.com/video/${x.picture_id}_640x360.jpg` : '', width: f?.width || 0, height: f?.height || 0, durationSec: x.duration, title: x.tags || '', description: x.tags || '', author: x.user, license: 'Pixabay', pageUrl: `https://pixabay.com/videos/id-${x.id}/` }; })
+    ...v.map(x => { const medium = x.videos?.medium; const tiny = x.videos?.tiny; const f = x.videos?.large || medium || tiny; const thumbUrl = medium?.thumbnail || tiny?.thumbnail || (x.picture_id ? `https://i.vimeocdn.com/video/${x.picture_id}_640x360.jpg` : ''); return { source: 'pixabay', kind: 'video', url: f?.url, thumbUrl, width: f?.width || 0, height: f?.height || 0, durationSec: x.duration, title: x.tags || '', description: x.tags || '', author: x.user, license: 'Pixabay', pageUrl: `https://pixabay.com/videos/id-${x.id}/` }; })
   ].filter(x => x.url && x.width >= 1000 && x.height <= x.width);
 }

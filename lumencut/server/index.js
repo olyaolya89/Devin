@@ -28,6 +28,7 @@ app.get('/api/health', async (_req, res) => {
 app.get('/api/settings', async (_req, res) => res.json(await publicSettings()));
 app.put('/api/settings', async (req, res) => res.json(await updateSettings(req.body)));
 app.post('/api/settings/test', async (_req, res) => {
+  const config = await getConfig();
   const testSource = async search => {
     try {
       const results = await search('school dinner');
@@ -36,7 +37,9 @@ app.post('/api/settings/test', async (_req, res) => {
       return { ok: false, error: error.message };
     }
   };
-  res.json({ pexels: await testSource(searchPexels), pixabay: await testSource(searchPixabay) });
+  const pexels = config.pexelsApiKey ? await testSource(searchPexels) : { ok: false, error: 'ключ не задан' };
+  const pixabay = config.pixabayApiKey ? await testSource(searchPixabay) : { ok: false, error: 'ключ не задан' };
+  res.json({ pexels, pixabay });
 });
 app.get('/api/voices', (_req, res) => res.json(VOICES));
 app.get('/api/projects', async (_req, res) => res.json((await listProjects()).map(p => ({ id: p.id, title: p.title, status: p.status, durationMs: p.durationMs, createdAt: p.createdAt, updatedAt: p.updatedAt }))));
