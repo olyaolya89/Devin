@@ -130,6 +130,18 @@ textarea.note{width:100%;min-height:80px;border:1px solid var(--line);border-rad
 .niches th,.niches td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}
 .niches th{color:var(--muted);font-weight:600;font-size:12px}
 .niches tr:hover td{background:#fafafa;cursor:pointer}
+/* competitors / prospects tables */
+.rpm--income{margin-top:8px}
+.rpm--income .rpm__val{font-size:20px;color:#1a7f37}
+.avatar--xs{width:22px;height:22px;vertical-align:middle;margin-right:6px}
+.comp{overflow-x:auto}
+.comp table{width:100%;border-collapse:collapse;font-size:13px;white-space:nowrap}
+.comp th,.comp td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
+.comp th{color:var(--muted);font-weight:600;font-size:12px}
+.comp td a{color:inherit;font-weight:600;text-decoration:none}
+.comp td a:hover{text-decoration:underline}
+.comp .chip{padding:2px 8px;font-size:11px;margin-left:4px}
+.comp tr.is-current td{background:#fff7f7}
 @media (max-width:900px){
   .grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.hero{flex-direction:column}
   .hero h1{font-size:30px}.search{min-width:0;width:100%;margin-left:0}.prop{grid-template-columns:1fr}.d-title{font-size:28px}
