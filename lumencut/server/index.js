@@ -21,9 +21,10 @@ function publicProject(project) { return project; }
 
 app.get('/api/health', async (_req, res) => {
   const config = await getConfig();
+  const reply = ok => { if (!res.headersSent) res.json({ version: '1.0.0', ffmpeg: ok, llmProvider: config.llmProvider, pexels: Boolean(config.pexelsApiKey), pixabay: Boolean(config.pixabayApiKey) }); };
   const ffmpeg = spawn(process.env.FFMPEG_PATH || 'ffmpeg', ['-version']);
-  ffmpeg.on('error', () => res.json({ version: '1.0.0', ffmpeg: false, llmProvider: config.llmProvider, pexels: Boolean(config.pexelsApiKey), pixabay: Boolean(config.pixabayApiKey) }));
-  ffmpeg.on('close', code => res.json({ version: '1.0.0', ffmpeg: code === 0, llmProvider: config.llmProvider, pexels: Boolean(config.pexelsApiKey), pixabay: Boolean(config.pixabayApiKey) }));
+  ffmpeg.on('error', () => reply(false));
+  ffmpeg.on('close', code => reply(code === 0));
 });
 app.get('/api/settings', async (_req, res) => res.json(await publicSettings()));
 app.put('/api/settings', async (req, res) => res.json(await updateSettings(req.body)));
