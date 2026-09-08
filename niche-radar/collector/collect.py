@@ -380,6 +380,7 @@ def metrics(
     subs_per_day = subs / age_days
     views_per_day = sum(views) / age_days
     watch_hours_per_day = watch_hours / age_days
+    monthly_views_est = round(views_per_day * 30)
     days_subs = max(0, 1000 - subs) / max(subs_per_day, 0.5)
     days_hours = max(0, 4000 - watch_hours) / max(watch_hours_per_day, 0.5)
     days_monetization = max(days_subs, days_hours)
@@ -406,6 +407,7 @@ def metrics(
         "avg_views_first_5": round(avg_first, 2),
         "avg_duration_sec": round(sum(durations) / len(durations), 2) if durations else 0,
         "views_per_day": round(views_per_day, 2),
+        "monthly_views_est": monthly_views_est,
         "subs_per_day": round(subs_per_day, 2),
         "watch_hours_est": round(watch_hours, 2),
         "days_to_monetization": round(0 if is_monetized else days_monetization, 2),
@@ -480,6 +482,7 @@ def _channel_output(
     rpm, rpm_source, region, region_ru = _region_data(
         niche, channel.get("snippet", {}).get("country"), classification["language"], rpm_data, cache_entry
     )
+    monthly_income_est = round(calculated["monthly_views_est"] / 1000 * rpm, 2)
     result = {
         "id": channel.get("id"),
         "handle": channel.get("snippet", {}).get("customUrl", ""),
@@ -501,12 +504,13 @@ def _channel_output(
         **{key: calculated[key] for key in (
             "videos_count_long", "first_video_at", "channel_age_days", "avg_views",
             "median_views", "avg_views_first_5", "avg_duration_sec", "views_per_day",
-            "subs_per_day", "watch_hours_est", "days_to_monetization",
+            "monthly_views_est", "subs_per_day", "watch_hours_est", "days_to_monetization",
             "monetization_forecast",
         )},
         "is_monetized": monetized,
         "rpm": rpm,
         "rpm_source": rpm_source,
+        "monthly_income_est": monthly_income_est,
         "region": region,
         "region_ru": region_ru,
         "found_by_queries": [found_query.get("text")],
