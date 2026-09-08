@@ -3,13 +3,38 @@ import path from 'node:path';
 import { run, probe } from '../ffmpeg.js';
 import { log } from '../store.js';
 
-async function fetchFile(url, target) {
+let lastWikimediaDownloadAt = 0;
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+async function waitForWikimediaSlot() {
+  const wait = Math.max(0, 700 - (Date.now() - lastWikimediaDownloadAt));
+  if (wait) await sleep(wait);
+  lastWikimediaDownloadAt = Date.now();
+}
+
+function retryAfterMs(value) {
+  if (!value) return 0;
+  const seconds = Number(value);
+  if (Number.isFinite(seconds)) return Math.min(5000, Math.max(0, seconds * 1000));
+  const timestamp = Date.parse(value);
+  return Number.isFinite(timestamp) ? Math.min(5000, Math.max(0, timestamp - Date.now())) : 0;
+}
+
+async function fetchFile(url, target, source) {
+  let retryAfterUsed = false;
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
+      if (source === 'wikimedia') await waitForWikimediaSlot();
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 30000);
       const response = await fetch(url, { signal: controller.signal, headers: { 'User-Agent': 'LumenCut/1.0 (personal tool)' } });
       clearTimeout(timer);
+      if (response.status === 429 && !retryAfterUsed) {
+        retryAfterUsed = true;
+        await sleep(retryAfterMs(response.headers.get('retry-after')));
+        continue;
+      }
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       await fs.writeFile(target, Buffer.from(await response.arrayBuffer()));
       return;
@@ -31,7 +56,7 @@ export async function download(project, dir) {
     for (const candidate of choices) {
       const source = path.join(dir, 'media', `${scene.index}.source`);
       try {
-        await fetchFile(candidate.url, source);
+        await fetchFile(candidate.url, source, candidate.source);
         const metadata = await probe(source);
         const stream = metadata.streams?.find(x => x.width && x.height);
         if (!stream) throw new Error('ffprobe returned no width/height');
