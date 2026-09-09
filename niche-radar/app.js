@@ -311,7 +311,7 @@
       <div class="section" id="curatorBox" hidden><h3>Куратор</h3><div id="curatorText"></div></div>`;
     $('#drawer').hidden = false; document.body.style.overflow = 'hidden';
   }
-  function closeDrawer() { $('#drawer').hidden = true; $('#submitModal').hidden = true; document.body.style.overflow = ''; render(); }
+  function closeDrawer() { $('#drawer').hidden = true; $('#submitModal').hidden = true; $('#refreshModal').hidden = true; document.body.style.overflow = ''; render(); }
 
   /* Curator: rule-based answer until Gemini is connected */
   function curator(c) {
