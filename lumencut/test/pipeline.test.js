@@ -5,7 +5,8 @@ import { heuristicQueries } from '../server/llm.js';
 import { rankScene } from '../server/pipeline/rank.js';
 import { holdDuration, wrapText } from '../server/pipeline/render.js';
 import fs from 'node:fs/promises';
-import { getConfig, maskKey, readSettings, writeSettings, SETTINGS_FILE } from '../server/settings.js';
+import { getConfig, maskKey, readSettings, writeSettings, updateSettings, SETTINGS_FILE } from '../server/settings.js';
+import { mapLibraryVoices } from '../server/sources/lumean.js';
 
 test('normalize keeps every sentence verbatim', () => {
   const project = { id: 'test', scriptText: "One thing. Children lined up! Dessert?" };
@@ -70,10 +71,22 @@ test('settings take precedence over env and empty values fall back', async () =>
     assert.equal((await getConfig()).pexelsApiKey, 'env-key');
     assert.equal(maskKey('abcdefgh'), '••••efgh');
     assert.equal(maskKey(''), '');
+    await writeSettings({ ...(await readSettings()), ttsProvider: 'edge' });
+    await updateSettings({ ttsProvider: 'bogus' });
+    assert.equal((await readSettings()).ttsProvider, 'edge');
   } finally {
     if (originalEnv === undefined) delete process.env.PEXELS_API_KEY;
     else process.env.PEXELS_API_KEY = originalEnv;
     if (originalFile) await fs.writeFile(SETTINGS_FILE, originalFile);
     else await fs.rm(SETTINGS_FILE, { force: true });
   }
+});
+
+test('library voice mapping keeps only available ready voices with ids', () => {
+  assert.deepEqual(mapLibraryVoices([
+    { voice_id: 'ready-id', nickname: 'Ready voice', available: true, voice: { voice_status: 'ready', default_language_code: 'ru' } },
+    { voice_id: 'unavailable-id', available: false, voice: { voice_status: 'ready' } },
+    { available: true, voice: { voice_status: 'ready' } },
+    { voice_id: 'cloning-id', available: true, voice: { voice_status: 'cloning' } }
+  ]), [{ value: 'ready-id', label: 'Ready voice', language: 'ru' }]);
 });

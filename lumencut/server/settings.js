@@ -11,7 +11,10 @@ const DEFAULTS = {
   geminiApiKey: '',
   geminiModel: 'gemini-1.5-flash',
   ollamaModel: 'llama3.1',
-  maxClipSeconds: 5
+  maxClipSeconds: 5,
+  ttsProvider: 'edge',
+  lumeanApiKey: '',
+  lumeanTemplateId: ''
 };
 
 const FIELDS = Object.keys(DEFAULTS);
@@ -44,6 +47,7 @@ function settingOrEnv(settings, field, envField, fallback) {
 export async function getConfig() {
   const settings = await readStoredSettings();
   const provider = settingOrEnv(settings, 'llmProvider', 'LLM_PROVIDER', 'none');
+  const ttsProvider = settingOrEnv(settings, 'ttsProvider', 'TTS_PROVIDER', 'edge');
   return {
     pexelsApiKey: settingOrEnv(settings, 'pexelsApiKey', 'PEXELS_API_KEY', ''),
     pixabayApiKey: settingOrEnv(settings, 'pixabayApiKey', 'PIXABAY_API_KEY', ''),
@@ -51,7 +55,10 @@ export async function getConfig() {
     geminiApiKey: settingOrEnv(settings, 'geminiApiKey', 'GEMINI_API_KEY', ''),
     geminiModel: settingOrEnv(settings, 'geminiModel', 'GEMINI_MODEL', 'gemini-1.5-flash'),
     ollamaModel: settingOrEnv(settings, 'ollamaModel', 'OLLAMA_MODEL', 'llama3.1'),
-    maxClipSeconds: Number(settingOrEnv(settings, 'maxClipSeconds', 'MAX_CLIP_SECONDS', 5)) || 5
+    maxClipSeconds: Number(settingOrEnv(settings, 'maxClipSeconds', 'MAX_CLIP_SECONDS', 5)) || 5,
+    ttsProvider: ['edge', 'lumean'].includes(ttsProvider) ? ttsProvider : 'edge',
+    lumeanApiKey: settingOrEnv(settings, 'lumeanApiKey', 'LUMEAN_API_KEY', ''),
+    lumeanTemplateId: settingOrEnv(settings, 'lumeanTemplateId', 'LUMEAN_TEMPLATE_ID', '')
   };
 }
 
@@ -69,9 +76,13 @@ export async function publicSettings() {
     geminiModel: config.geminiModel,
     ollamaModel: config.ollamaModel,
     maxClipSeconds: config.maxClipSeconds,
+    ttsProvider: config.ttsProvider,
+    lumeanApiKey: maskKey(config.lumeanApiKey),
+    lumeanTemplateId: config.lumeanTemplateId,
     hasPexels: Boolean(config.pexelsApiKey),
     hasPixabay: Boolean(config.pixabayApiKey),
-    hasGemini: Boolean(config.geminiApiKey)
+    hasGemini: Boolean(config.geminiApiKey),
+    hasLumean: Boolean(config.lumeanApiKey)
   };
 }
 
@@ -86,6 +97,8 @@ export async function updateSettings(input = {}) {
       if (Number.isFinite(number) && number > 0) next[field] = number;
     } else if (field === 'llmProvider') {
       if (['none', 'gemini', 'ollama'].includes(value)) next[field] = value;
+    } else if (field === 'ttsProvider') {
+      if (['edge', 'lumean'].includes(value)) next[field] = value;
     } else if (typeof value === 'string') {
       next[field] = value;
     }

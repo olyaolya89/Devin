@@ -11,6 +11,7 @@ import { spawn } from 'node:child_process';
 import { getConfig, publicSettings, updateSettings } from './settings.js';
 import { search as searchPexels } from './sources/pexels.js';
 import { search as searchPixabay } from './sources/pixabay.js';
+import { listVoices, testKey } from './sources/lumean.js';
 
 const app = express();
 const port = Number(process.env.PORT || 8787);
@@ -40,9 +41,22 @@ app.post('/api/settings/test', async (_req, res) => {
   };
   const pexels = config.pexelsApiKey ? await testSource(searchPexels) : { ok: false, error: 'ключ не задан' };
   const pixabay = config.pixabayApiKey ? await testSource(searchPixabay) : { ok: false, error: 'ключ не задан' };
-  res.json({ pexels, pixabay });
+  const lumean = config.lumeanApiKey
+    ? await testKey(config.lumeanApiKey).catch(error => ({ ok: false, error: error.message }))
+    : { ok: false, error: 'ключ не задан' };
+  res.json({ pexels, pixabay, lumean });
 });
-app.get('/api/voices', (_req, res) => res.json(VOICES));
+app.get('/api/voices', async (_req, res) => {
+  const config = await getConfig();
+  const edgeVoices = VOICES.map(voice => ({ ...voice, provider: 'edge' }));
+  if (config.ttsProvider === 'lumean' && config.lumeanApiKey) {
+    try {
+      const lumeanVoices = (await listVoices(config.lumeanApiKey)).map(voice => ({ ...voice, provider: 'lumean' }));
+      return res.json([...lumeanVoices, ...edgeVoices]);
+    } catch {}
+  }
+  return res.json(edgeVoices);
+});
 app.get('/api/projects', async (_req, res) => res.json((await listProjects()).map(p => ({ id: p.id, title: p.title, status: p.status, durationMs: p.durationMs, createdAt: p.createdAt, updatedAt: p.updatedAt }))));
 app.post('/api/projects', async (req, res) => {
   const scriptText = String(req.body.scriptText || '').trim();

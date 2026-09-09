@@ -46,6 +46,10 @@ npm run dev
 
 Wikimedia Commons и Openverse работают без ключей. Ключи хранятся только в `data/settings.json` на вашем компьютере.
 
+### Озвучка Lumean (опционально)
+
+Откройте **Настройки → Озвучка → Lumean**, вставьте ключ из кабинета Lumean → API, укажите **ID шаблона TTS**, нажмите «Сохранить» и «Проверить ключи». После этого голоса появятся в списке на Столе. Edge TTS остаётся провайдером по умолчанию и используется как fallback, если Lumean недоступен.
+
 ## Как пользоваться
 
 1. **Стол** — вставьте сценарий, выберите голос, нажмите «Собрать видео».
@@ -56,7 +60,7 @@ Wikimedia Commons и Openverse работают без ключей. Ключи 
 
 ## Переменные окружения (необязательно)
 
-Всё то же самое можно задать в `.env` (см. `.env.example`): `PIXABAY_API_KEY`, `PEXELS_API_KEY`, `LLM_PROVIDER=none|gemini|ollama`, `GEMINI_API_KEY`, `MAX_CLIP_SECONDS`, `FFMPEG_PATH`. Значения со страницы «Настройки» имеют приоритет.
+Всё то же самое можно задать в `.env` (см. `.env.example`): `PIXABAY_API_KEY`, `PEXELS_API_KEY`, `LLM_PROVIDER=none|gemini|ollama`, `GEMINI_API_KEY`, `TTS_PROVIDER=edge|lumean`, `LUMEAN_API_KEY`, `LUMEAN_TEMPLATE_ID`, `MAX_CLIP_SECONDS`, `FFMPEG_PATH`. Значения со страницы «Настройки» имеют приоритет.
 
 ## Проверка
 

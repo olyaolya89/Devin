@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api.js';
 
-const initial = { pexelsApiKey: '', pixabayApiKey: '', llmProvider: 'none', geminiApiKey: '', geminiModel: 'gemini-1.5-flash', ollamaModel: 'llama3.1', maxClipSeconds: 5 };
+const initial = { pexelsApiKey: '', pixabayApiKey: '', llmProvider: 'none', geminiApiKey: '', geminiModel: 'gemini-1.5-flash', ollamaModel: 'llama3.1', maxClipSeconds: 5, ttsProvider: 'edge', lumeanApiKey: '', lumeanTemplateId: '' };
 
 export default function Settings() {
   const [settings, setSettings] = useState(initial);
@@ -39,9 +39,14 @@ export default function Settings() {
         <label className="settings-field">Gemini модель<input value={settings.geminiModel || ''} onChange={e => update('geminiModel', e.target.value)} /></label>
         <label className="settings-field">Ollama модель<input value={settings.ollamaModel || ''} onChange={e => update('ollamaModel', e.target.value)} /></label>
       </div>
+      <div className="settings-section"><h2>Озвучка</h2><p className="section-note">Edge TTS остаётся бесплатным провайдером по умолчанию. Lumean подключается по API.</p>
+        <label className="settings-field">Провайдер озвучки<select value={settings.ttsProvider || 'edge'} onChange={e => update('ttsProvider', e.target.value)}><option value="edge">Edge TTS — бесплатно</option><option value="lumean">Lumean</option></select></label>
+        <label className="settings-field">Lumean API-ключ<input value={settings.lumeanApiKey || ''} onChange={e => update('lumeanApiKey', e.target.value)} placeholder="Введите ключ Lumean" type="password" /><small>Ключ из кабинета Lumean → API · <a href="https://lumean.app" target="_blank" rel="noreferrer">lumean.app</a></small></label>
+        <label className="settings-field">Lumean ID шаблона TTS<input value={settings.lumeanTemplateId || ''} onChange={e => update('lumeanTemplateId', e.target.value)} placeholder="UUID шаблона TTS" /><small>ID шаблона TTS из кабинета Lumean (lumean.app/template)</small></label>
+      </div>
       <div className="settings-section"><h2>Видео</h2><label className="settings-field short-field">Макс. длина клипа (с)<input type="number" min="1" max="60" step="1" value={settings.maxClipSeconds || 5} onChange={e => update('maxClipSeconds', Number(e.target.value))} /></label></div>
       <div className="settings-actions"><button className="primary" onClick={save} disabled={busy}>Сохранить</button><button className="ghost" onClick={testKeys} disabled={busy}>Проверить ключи</button>{message && <span className="settings-message">{message}</span>}</div>
-      {result && <div className="settings-results"><b>Результат проверки</b><span className={result.pexels.ok ? 'ok' : result.pexels.error === 'ключ не задан' ? 'neutral' : 'bad'}>Pexels: {result.pexels.ok ? `доступен, найдено ${result.pexels.count}` : result.pexels.error}</span><span className={result.pixabay.ok ? 'ok' : result.pixabay.error === 'ключ не задан' ? 'neutral' : 'bad'}>Pixabay: {result.pixabay.ok ? `доступен, найдено ${result.pixabay.count}` : result.pixabay.error}</span></div>}
+      {result && <div className="settings-results"><b>Результат проверки</b><span className={result.pexels.ok ? 'ok' : result.pexels.error === 'ключ не задан' ? 'neutral' : 'bad'}>Pexels: {result.pexels.ok ? `доступен, найдено ${result.pexels.count}` : result.pexels.error}</span><span className={result.pixabay.ok ? 'ok' : result.pixabay.error === 'ключ не задан' ? 'neutral' : 'bad'}>Pixabay: {result.pixabay.ok ? `доступен, найдено ${result.pixabay.count}` : result.pixabay.error}</span>{result.lumean && <span className={result.lumean.ok ? 'ok' : result.lumean.error === 'ключ не задан' ? 'neutral' : 'bad'}>Lumean: {result.lumean.ok ? 'доступен' : result.lumean.error}</span>}</div>}
     </section>
   </div>;
 }
