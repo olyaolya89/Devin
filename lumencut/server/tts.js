@@ -41,7 +41,8 @@ function edgeVoice(voice, text) {
 
 export async function synthesize(text, voice, dir, onLog = () => {}) {
   const config = await getConfig();
-  if (config.ttsProvider === 'lumean' && config.lumeanApiKey && config.lumeanTemplateId) {
+  const isEdgeVoice = /^[a-z]{2}-[A-Z]{2}-/.test(voice || '');
+  if (config.ttsProvider === 'lumean' && config.lumeanApiKey && config.lumeanTemplateId && !isEdgeVoice) {
     const target = path.join(dir, 'narration.mp3');
     try {
       await lumean.synthesize(config.lumeanApiKey, config.lumeanTemplateId, text, voice, target, onLog);
