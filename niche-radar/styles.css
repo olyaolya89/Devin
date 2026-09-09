@@ -130,6 +130,14 @@ textarea.note{width:100%;min-height:80px;border:1px solid var(--line);border-rad
 .niches th,.niches td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}
 .niches th{color:var(--muted);font-weight:600;font-size:12px}
 .niches tr:hover td{background:#fafafa;cursor:pointer}
+/* live refresh */
+.topbar__right{display:flex;align-items:center;gap:12px}
+.progress{height:8px;background:var(--gray-bg);border-radius:6px;overflow:hidden;margin:10px 0 6px}
+.progress__bar{height:100%;width:0;background:var(--red);transition:width .3s}
+#refreshLog{font-size:13px;min-height:18px;word-break:break-word}
+.modal__box input[type=range]{padding:0;border:0}
+.modal__box label{display:block;margin-top:6px;font-size:13px}
+.card.is-live .added{color:#1a7f37}
 /* competitors / prospects tables */
 .rpm--income{margin-top:8px}
 .rpm--income .rpm__val{font-size:20px;color:#1a7f37}

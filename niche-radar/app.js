@@ -84,17 +84,49 @@
       state.channels = (d.channels || []).filter(c => !c.graduated);
       try { state.rpm = await (await fetch('collector/rpm_baseline.json', { cache: 'no-store' })).json(); } catch { state.rpm = null; }
       $('#generatedAt').textContent = d.generated_at ? `Обновлено ${ago(d.generated_at)} · ${state.channels.length} каналов` : `${state.channels.length} каналов`;
+      mergeLive();
     } catch (e) {
       $('#generatedAt').textContent = 'data/channels.json не найден';
     }
     fillSelects(); render();
   }
+  /* Live (browser-side) collection results, stored locally */
+  function mergeLive() {
+    const live = LS.get('live', { channels: [], at: null });
+    const byId = new Map(state.channels.map(c => [c.id, c]));
+    live.channels.forEach(c => { const prev = byId.get(c.id); if (prev) c.added_at = prev.added_at; byId.set(c.id, c); });
+    state.channels = [...byId.values()];
+    if (live.at) $('#generatedAt').textContent = `Обновлено ${ago(live.at)} · ${state.channels.length} каналов (из них ${live.channels.length} найдено кнопкой)`;
+  }
+  async function runLive() {
+    const key = $('#apiKey').value.trim();
+    if (!key) { $('#refreshLog').textContent = 'Введите ключ YouTube Data API v3.'; return; }
+    LS.set('apiKey', key);
+    const btn = $('#refreshRun'); btn.disabled = true; $('#refreshProgress').hidden = false;
+    const log = (t, f) => { $('#refreshLog').textContent = t; if (f != null) $('#refreshBar').style.width = Math.round(f * 100) + '%'; };
+    try {
+      const res = await window.NR_LIVE.run({ key, niche: state.filters.niche || '', lang: state.filters.lang || '', maxQueries: +$('#maxQueries').value }, log);
+      const live = LS.get('live', { channels: [], at: null });
+      const byId = new Map(live.channels.map(c => [c.id, c]));
+      res.channels.forEach(c => { const prev = byId.get(c.id); if (prev) c.added_at = prev.added_at; byId.set(c.id, c); });
+      LS.set('live', { channels: [...byId.values()], at: new Date().toISOString() });
+      mergeLive(); fillSelects(); state.tab = 'new'; state.sort = 'new'; $('#sort').value = 'new';
+      $$('.tab').forEach(b => b.classList.toggle('is-active', b.dataset.tab === 'new')); render();
+      log(`Готово: найдено ${res.channels.length} каналов за ${res.queries} запросов (${res.units} ед. квоты). Они показаны во вкладке «Новые за неделю».${res.stopped ? ' ' + res.stopped : ''}`, 1);
+    } catch (e) {
+      const enable = 'https://console.cloud.google.com/apis/library/youtube.googleapis.com';
+      $('#refreshLog').innerHTML = e instanceof window.NR_LIVE.ApiDisabled
+        ? `${esc(e.message.replace(/\.$/, ""))}. <a href="${enable}" target="_blank" rel="noopener">Включить YouTube Data API v3</a> в проекте ключа и повторить.`
+        : `Ошибка: ${esc(e.message)}`;
+    } finally { btn.disabled = false; }
+  }
   function fillSelects() {
-    const opt = (sel, vals) => { const s = $(sel); vals.forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; s.appendChild(o); }); };
+    const opt = (sel, vals) => { const s = $(sel); [...s.options].slice(1).forEach(o => o.remove()); vals.forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; s.appendChild(o); }); };
     const uniq = f => [...new Map(state.channels.map(f).filter(x => x[0])).entries()].sort((a, b) => a[1].localeCompare(b[1], 'ru'));
     opt('#fNiche', uniq(c => [c.niche, c.niche_ru || c.niche]));
     opt('#fLang', uniq(c => [c.language, lang(c)]));
     opt('#fStyle', uniq(c => [c.production_style, c.style_ru || c.production_style]));
+    $('#fNiche').value = state.filters.niche || ''; $('#fLang').value = state.filters.lang || ''; $('#fStyle').value = state.filters.style || '';
   }
 
   /* ---------- filtering ---------- */
@@ -194,7 +226,7 @@
         <span class="badge badge--blue">Score ${c.score}</span>
         <span class="badge">${c.channel_age_days} дн. каналу</span>
       </div>
-      <div class="added ${daysAgo(c.added_at) === 0 ? 'is-today' : ''}">Добавлено ${ago(c.added_at)}${c.stale ? ' · не найден в последнем сборе' : ''}</div>
+      <div class="added ${daysAgo(c.added_at) === 0 ? 'is-today' : ''}">Добавлено ${ago(c.added_at)}${c.live ? ' · найдено кнопкой' : ''}${c.stale ? ' · не найден в последнем сборе' : ''}</div>
       <div class="card__actions">
         <button class="btn btn--primary btn--sm" data-act="open">Разбор канала</button>
         <button class="btn btn--sm" data-act="curator">Куратор</button>
@@ -304,7 +336,7 @@
 
   /* ---------- events ---------- */
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-tab],[data-quick],[data-preset],[data-act],[data-close],[data-niche],[data-del-sub],#filtersToggle,#resetFilters,#submitBtn,#submitSave');
+    const t = e.target.closest('[data-tab],[data-quick],[data-preset],[data-act],[data-close],[data-niche],[data-del-sub],#filtersToggle,#resetFilters,#submitBtn,#submitSave,#refreshBtn,#refreshRun,#liveClear');
     if (!t) return;
     if (t.dataset.tab) { state.tab = t.dataset.tab; $$('.tab').forEach(b => b.classList.toggle('is-active', b === t)); render(); }
     else if (t.dataset.quick) { t.classList.toggle('is-active'); state.quick.has(t.dataset.quick) ? state.quick.delete(t.dataset.quick) : state.quick.add(t.dataset.quick); render(); }
@@ -312,6 +344,9 @@
     else if (t.id === 'filtersToggle') { $('#filters').hidden = !$('#filters').hidden; }
     else if (t.id === 'resetFilters') { state.filters = {}; $$('#filters select').forEach(s => s.selectedIndex = 0); render(); }
     else if (t.id === 'submitBtn') { renderSubmissions(); $('#submitModal').hidden = false; }
+    else if (t.id === 'refreshBtn') { $('#apiKey').value = LS.get('apiKey', ''); $('#refreshLog').textContent = ''; $('#refreshBar').style.width = '0'; $('#refreshProgress').hidden = true; $('#refreshModal').hidden = false; }
+    else if (t.id === 'refreshRun') runLive();
+    else if (t.id === 'liveClear') { localStorage.removeItem('nr:live'); load(); $('#refreshLog').textContent = 'Найденные кнопкой каналы убраны.'; }
     else if (t.id === 'submitSave') { const url = $('#submitUrl').value.trim(); if (!url) return; state.submissions.unshift({ url, note: $('#submitNote').value.trim(), at: new Date().toISOString() }); persist(); $('#submitUrl').value = ''; $('#submitNote').value = ''; renderSubmissions(); }
     else if (t.dataset.delSub != null) { state.submissions.splice(+t.dataset.delSub, 1); persist(); renderSubmissions(); }
     else if (t.hasAttribute('data-close')) closeDrawer();
@@ -330,6 +365,7 @@
   document.addEventListener('input', e => {
     if (e.target.id === 'search') { state.q = e.target.value; render(); }
     if (e.target.dataset.note != null) { state.notes[e.target.dataset.note] = e.target.value; persist(); }
+    if (e.target.id === 'maxQueries') $('#maxQueriesVal').textContent = e.target.value;
   });
   document.addEventListener('change', e => {
     if (e.target.id === 'sort') { state.sort = e.target.value; render(); }
