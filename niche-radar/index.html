@@ -13,6 +13,7 @@
     <a class="logo" href="./">Niche<span>Radar</span></a>
     <div class="topbar__right">
       <span class="muted" id="generatedAt">данные обновляются…</span>
+      <button class="btn btn--primary btn--sm" id="refreshBtn">Обновить каналы</button>
     </div>
   </div>
 </header>
@@ -45,6 +46,7 @@
       <option value="new">Сначала новые</option>
       <option value="score">По Score</option>
       <option value="rpm">По RPM</option>
+      <option value="income">По доходу/мес.</option>
       <option value="velocity">По просмотрам первых роликов</option>
       <option value="monetization">Ближе к монетизации</option>
     </select>
@@ -107,6 +109,26 @@
   </div>
 </div>
 
+<div class="modal" id="refreshModal" hidden>
+  <div class="drawer__backdrop" data-close></div>
+  <div class="modal__box">
+    <h3>Обновить список каналов</h3>
+    <p class="muted">Сайт сам опросит YouTube по поисковым запросам (с учётом выбранных фильтров «Ниша» и «Язык») и добавит найденные молодые каналы: 3–30 роликов, от 200 подписчиков, первый ролик не старше года. Ключ хранится только в вашем браузере.</p>
+    <label class="muted" for="apiKey">Ключ YouTube Data API v3</label>
+    <input id="apiKey" type="password" placeholder="AIza…" autocomplete="off">
+    <label class="muted" for="maxQueries">Поисковых запросов за раз: <b id="maxQueriesVal">8</b> <span class="muted">(~100 ед. квоты каждый; лимит 10 000/день)</span></label>
+    <input id="maxQueries" type="range" min="1" max="40" value="8">
+    <div class="progress" id="refreshProgress" hidden><div class="progress__bar" id="refreshBar"></div></div>
+    <div class="muted" id="refreshLog"></div>
+    <div class="row-end">
+      <button class="btn btn--ghost" id="liveClear">Убрать найденные</button>
+      <button class="btn btn--ghost" data-close>Закрыть</button>
+      <button class="btn btn--primary" id="refreshRun">Запустить поиск</button>
+    </div>
+  </div>
+</div>
+
+<script src="live.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

@@ -62,8 +62,28 @@ class CollectTests(unittest.TestCase):
         )
         self.assertEqual(result["avg_views_first_5"], 3000)
         self.assertEqual(result["videos_count_long"], 5)
+        self.assertEqual(result["monthly_views_est"], 15000)
         self.assertEqual(result["days_to_monetization"], 1.58)
         self.assertEqual(result["monetization_forecast"], "≤30 дн.")
+
+        output = collect._channel_output(
+            {
+                "id": "synthetic",
+                "snippet": {"title": "Synthetic", "country": "US"},
+                "statistics": {
+                    "subscriberCount": "950",
+                    "viewCount": "15000",
+                    "videoCount": "5",
+                },
+            },
+            videos,
+            {"text": "engineering", "niche": "engineering", "lang": "en"},
+            collect._load_json(collect.RPM_PATH, {}),
+            {},
+            now,
+        )
+        self.assertEqual(output["monthly_views_est"], 15000)
+        self.assertEqual(output["monthly_income_est"], 105.0)
 
         result = collect.metrics(
             {"statistics": {"subscriberCount": "0", "viewCount": "15000"}},

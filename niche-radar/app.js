@@ -26,6 +26,10 @@
     : c.monetization_forecast === '≤30 дн.' ? ['badge--green', 'Монетизация ≤ 30 дн.']
     : c.monetization_forecast === '≤90 дн.' ? ['badge--amber', 'Монетизация ≤ 90 дн.']
     : ['badge', 'Монетизация неясна'];
+  const monthlyViews = c => c.monthly_views_est ?? Math.round((c.views_per_day || 0) * 30);
+  const monthlyIncome = c => c.monthly_income_est ?? Math.round(monthlyViews(c) / 1000 * (c.rpm || 0) * 100) / 100;
+  const REGION_LANGS = { us: ['en'], eu: ['de', 'fr', 'it', 'pl', 'es'], latam: ['es', 'pt'], ru: ['ru'], other: ['hi', 'id', 'tr', 'ar', 'ja', 'ko'] };
+  const competitors = c => state.channels.filter(x => x.id !== c.id && x.niche === c.niche).sort((a, b) => b.subs - a.subs);
   const isSoon = c => c.is_monetized === true || ['уже', '≤30 дн.', '≤90 дн.'].includes(c.monetization_forecast);
   const diffColor = d => d === 'low' ? 'badge--green' : d === 'medium' ? 'badge--amber' : 'badge--red';
 
@@ -39,6 +43,23 @@
     const out = (c.videos || []).filter(v => v.is_outlier).length;
     const outTxt = out ? ` ${out} ${out === 1 ? 'ролик-аутлаер' : 'ролика-аутлаера'} — есть форматы, которые «выстреливают».` : '';
     return `Молодой канал в нише «${niche}»: ${c.videos_count_long || c.videos_count} длинных роликов за ${c.channel_age_days} дней, стиль — ${style}, ${ai}. ${first5}${outTxt}`;
+  }
+  /* Prospects: same niche in other languages/regions */
+  function prospects(c) {
+    if (!state.rpm) return [];
+    const nicheRpm = state.rpm.niches[c.niche] || state.rpm.niches.other;
+    const byLang = {};
+    state.channels.filter(x => x.niche === c.niche).forEach(x => { byLang[x.language] = (byLang[x.language] || 0) + 1; });
+    const rows = [];
+    Object.entries(REGION_LANGS).forEach(([region, langs]) => langs.forEach(l => {
+      const rpm = nicheRpm[region] ?? nicheRpm.other;
+      const n = byLang[l] || 0;
+      const mv = monthlyViews(c);
+      const income = Math.round(mv / 1000 * rpm);
+      const verdict = n === 0 && rpm >= 5 ? ['badge--green', 'Свободно, высокий RPM'] : n === 0 ? ['badge--amber', 'Свободно, низкий RPM'] : n < 3 ? ['badge--amber', `Мало конкурентов (${n})`] : ['badge--red', `Конкурентно (${n})`];
+      rows.push({ lang: l, region, region_ru: state.rpm.region_ru[region], rpm, n, income, verdict, isCurrent: l === c.language });
+    }));
+    return rows.sort((a, b) => (a.n - b.n) || (b.rpm - a.rpm));
   }
   function howTo(c) {
     const s = c.production_style;
@@ -61,18 +82,51 @@
       const r = await fetch('data/channels.json', { cache: 'no-store' });
       const d = await r.json();
       state.channels = (d.channels || []).filter(c => !c.graduated);
+      try { state.rpm = await (await fetch('collector/rpm_baseline.json', { cache: 'no-store' })).json(); } catch { state.rpm = null; }
       $('#generatedAt').textContent = d.generated_at ? `Обновлено ${ago(d.generated_at)} · ${state.channels.length} каналов` : `${state.channels.length} каналов`;
+      mergeLive();
     } catch (e) {
       $('#generatedAt').textContent = 'data/channels.json не найден';
     }
     fillSelects(); render();
   }
+  /* Live (browser-side) collection results, stored locally */
+  function mergeLive() {
+    const live = LS.get('live', { channels: [], at: null });
+    const byId = new Map(state.channels.map(c => [c.id, c]));
+    live.channels.forEach(c => { const prev = byId.get(c.id); if (prev) c.added_at = prev.added_at; byId.set(c.id, c); });
+    state.channels = [...byId.values()];
+    if (live.at) $('#generatedAt').textContent = `Обновлено ${ago(live.at)} · ${state.channels.length} каналов (из них ${live.channels.length} найдено кнопкой)`;
+  }
+  async function runLive() {
+    const key = $('#apiKey').value.trim();
+    if (!key) { $('#refreshLog').textContent = 'Введите ключ YouTube Data API v3.'; return; }
+    LS.set('apiKey', key);
+    const btn = $('#refreshRun'); btn.disabled = true; $('#refreshProgress').hidden = false;
+    const log = (t, f) => { $('#refreshLog').textContent = t; if (f != null) $('#refreshBar').style.width = Math.round(f * 100) + '%'; };
+    try {
+      const res = await window.NR_LIVE.run({ key, niche: state.filters.niche || '', lang: state.filters.lang || '', maxQueries: +$('#maxQueries').value }, log);
+      const live = LS.get('live', { channels: [], at: null });
+      const byId = new Map(live.channels.map(c => [c.id, c]));
+      res.channels.forEach(c => { const prev = byId.get(c.id); if (prev) c.added_at = prev.added_at; byId.set(c.id, c); });
+      LS.set('live', { channels: [...byId.values()], at: new Date().toISOString() });
+      mergeLive(); fillSelects(); state.tab = 'new'; state.sort = 'new'; $('#sort').value = 'new';
+      $$('.tab').forEach(b => b.classList.toggle('is-active', b.dataset.tab === 'new')); render();
+      log(`Готово: найдено ${res.channels.length} каналов за ${res.queries} запросов (${res.units} ед. квоты). Они показаны во вкладке «Новые за неделю».${res.stopped ? ' ' + res.stopped : ''}`, 1);
+    } catch (e) {
+      const enable = 'https://console.cloud.google.com/apis/library/youtube.googleapis.com';
+      $('#refreshLog').innerHTML = e instanceof window.NR_LIVE.ApiDisabled
+        ? `${esc(e.message.replace(/\.$/, ""))}. <a href="${enable}" target="_blank" rel="noopener">Включить YouTube Data API v3</a> в проекте ключа и повторить.`
+        : `Ошибка: ${esc(e.message)}`;
+    } finally { btn.disabled = false; }
+  }
   function fillSelects() {
-    const opt = (sel, vals) => { const s = $(sel); vals.forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; s.appendChild(o); }); };
+    const opt = (sel, vals) => { const s = $(sel); [...s.options].slice(1).forEach(o => o.remove()); vals.forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; s.appendChild(o); }); };
     const uniq = f => [...new Map(state.channels.map(f).filter(x => x[0])).entries()].sort((a, b) => a[1].localeCompare(b[1], 'ru'));
     opt('#fNiche', uniq(c => [c.niche, c.niche_ru || c.niche]));
     opt('#fLang', uniq(c => [c.language, lang(c)]));
     opt('#fStyle', uniq(c => [c.production_style, c.style_ru || c.production_style]));
+    $('#fNiche').value = state.filters.niche || ''; $('#fLang').value = state.filters.lang || ''; $('#fStyle').value = state.filters.style || '';
   }
 
   /* ---------- filtering ---------- */
@@ -117,6 +171,7 @@
       new: (a, b) => new Date(b.added_at) - new Date(a.added_at) || b.score - a.score,
       score: (a, b) => b.score - a.score,
       rpm: (a, b) => (b.rpm || 0) - (a.rpm || 0),
+      income: (a, b) => monthlyIncome(b) - monthlyIncome(a),
       velocity: (a, b) => (b.avg_views_first_5 || 0) - (a.avg_views_first_5 || 0),
       monetization: (a, b) => (MON[a.monetization_forecast] ?? 3) - (MON[b.monetization_forecast] ?? 3) || b.score - a.score,
     }[state.sort];
@@ -161,13 +216,17 @@
         <div><div class="rpm__label">Ставка RPM · ${rpmSrc}</div><div class="rpm__val">${money(c.rpm)} <small>за 1000 просм. · ${esc(c.region_ru || '')}</small></div></div>
         <div class="rpm__right"><div class="rpm__label">Первые 5 роликов</div><b>${fmt(c.avg_views_first_5)}</b> <span class="muted">просм./ролик</span></div>
       </div>
+      <div class="rpm rpm--income">
+        <div><div class="rpm__label">Доход в месяц ${c.is_monetized ? '(монетизация подключена)' : '(если подключить монетизацию)'}</div><div class="rpm__val">~${money(monthlyIncome(c))}<small>/мес. · ${fmt(monthlyViews(c))} просм./мес.${c.monthly_revenue_nexlev ? ` · NexLev: ${money(c.monthly_revenue_nexlev)}` : ''}</small></div></div>
+        <div class="rpm__right"><div class="rpm__label">Конкуренты в нише</div><b>${competitors(c).length}</b> <span class="muted">каналов</span></div>
+      </div>
       <div class="badges">
         <span class="badge ${mcls}">${mtxt}</span>
         <span class="badge ${diffColor(c.difficulty)}">Сложность: ${esc(c.difficulty_ru || c.difficulty)}</span>
         <span class="badge badge--blue">Score ${c.score}</span>
         <span class="badge">${c.channel_age_days} дн. каналу</span>
       </div>
-      <div class="added ${daysAgo(c.added_at) === 0 ? 'is-today' : ''}">Добавлено ${ago(c.added_at)}${c.stale ? ' · не найден в последнем сборе' : ''}</div>
+      <div class="added ${daysAgo(c.added_at) === 0 ? 'is-today' : ''}">Добавлено ${ago(c.added_at)}${c.live ? ' · найдено кнопкой' : ''}${c.stale ? ' · не найден в последнем сборе' : ''}</div>
       <div class="card__actions">
         <button class="btn btn--primary btn--sm" data-act="open">Разбор канала</button>
         <button class="btn btn--sm" data-act="curator">Куратор</button>
@@ -228,6 +287,21 @@
         ${prop('Score', `<b class="big">${c.score}</b> <span class="muted">/ 100</span>`)}
         ${prop('Найден по запросам', (c.found_by_queries || []).map(q => `<span class="chip chip--tag">${esc(q)}</span>`).join(' ') || '—')}
       </div>
+      <div class="section"><h3>Доход</h3>
+        <div class="kv">
+          <div><small>Просмотров в месяц</small><b>${fmt(monthlyViews(c))}</b></div>
+          <div><small>RPM</small><b>${money(c.rpm)}</b></div>
+          <div><small>Оценка дохода/мес.</small><b>~${money(monthlyIncome(c))}</b></div>
+          <div><small>Год при том же темпе</small><b>~${money(monthlyIncome(c) * 12)}</b></div>
+          ${c.monthly_revenue_nexlev != null ? `<div><small>Оценка NexLev/мес.</small><b>${money(c.monthly_revenue_nexlev)}</b></div>` : ''}
+        </div>
+        <p class="muted" style="margin:8px 0 0;font-size:12px">${c.is_monetized ? 'Монетизация подключена — доход реальный по ставке RPM.' : 'Монетизация не подключена: столько канал получал бы при текущих просмотрах и RPM ниши.'}</p></div>
+      <div class="section"><h3>Конкуренты в нише «${esc(c.niche_ru || c.niche)}» (${competitors(c).length})</h3>
+        ${competitors(c).length ? `<div class="comp"><table><thead><tr><th>Канал</th><th>Подп.</th><th>Видео</th><th>Просм. всего</th><th>Ср. просм.</th><th>RPM</th><th>Язык</th><th>Монетиз.</th><th>Score</th></tr></thead><tbody>${competitors(c).map(x => `<tr><td><a href="${ytUrl(x)}" target="_blank" rel="noopener"><img class="avatar avatar--xs" src="${esc(x.thumbnail || '')}" alt="">${esc(x.title)}</a> <button class="chip" data-act="open" data-id="${esc(x.id)}">разбор</button></td><td>${fmt(x.subs)}</td><td>${x.videos_count}</td><td>${fmt(x.total_views)}</td><td>${fmt(x.avg_views)}</td><td>${money(x.rpm)}</td><td>${lang(x)}</td><td>${isSoon(x) ? '<span class="badge badge--green">да/скоро</span>' : '<span class="badge">нет</span>'}</td><td><span class="badge badge--blue">${x.score}</span></td></tr>`).join('')}</tbody></table></div>` : '<p class="muted">В базе других молодых каналов этой ниши нет — ниша свободна.</p>'}
+        <p style="margin:10px 0 0"><a class="btn btn--sm" href="https://www.youtube.com/results?search_query=${encodeURIComponent((c.found_by_queries || [])[0]?.replace(/^nexlev: /, '') || c.niche_ru || c.title)}&sp=EgIQAg%253D%253D" target="_blank" rel="noopener">Все каналы по запросу на YouTube</a></p></div>
+      <div class="section"><h3>Перспективы: повторить нишу на другом языке</h3>
+        ${prospects(c).length ? `<div class="comp"><table><thead><tr><th>Язык</th><th>Регион</th><th>RPM ниши</th><th>Конкурентов в базе</th><th>Доход при ${fmt(monthlyViews(c))} просм./мес.</th><th>Вердикт</th></tr></thead><tbody>${prospects(c).map(p => `<tr class="${p.isCurrent ? 'is-current' : ''}"><td><b>${LANG_RU[p.lang] || p.lang}</b>${p.isCurrent ? ' <span class="muted">(этот канал)</span>' : ''}</td><td>${esc(p.region_ru)}</td><td>${money(p.rpm)}</td><td>${p.n}</td><td>~${money(p.income)}/мес.</td><td><span class="badge ${p.verdict[0]}">${p.verdict[1]}</span></td></tr>`).join('')}</tbody></table></div>` : '<p class="muted">Таблица RPM не загрузилась.</p>'}
+        <p class="muted" style="margin:8px 0 0;font-size:12px">RPM берётся из таблицы ниша × регион; конкуренты — молодые каналы этой ниши в нашей базе на данном языке. «Свободно + высокий RPM» — лучший кандидат для клона с переводом сценариев.</p></div>
       <div class="section"><h3>Просмотры по роликам (хронологически)</h3>
         <div class="bars">${chrono.map(v => `<div class="bar ${v.is_outlier ? 'is-out' : ''}" style="height:${Math.max(2, v.views / max * 100)}%" data-tip="${esc(v.title.slice(0, 50))} — ${fmt(v.views)}"></div>`).join('')}</div>
         <p class="muted" style="margin:8px 0 0;font-size:12px">Красные — ролики-аутлаеры (значительно выше медианы канала). Наведи на столбик.</p></div>
@@ -237,7 +311,7 @@
       <div class="section" id="curatorBox" hidden><h3>Куратор</h3><div id="curatorText"></div></div>`;
     $('#drawer').hidden = false; document.body.style.overflow = 'hidden';
   }
-  function closeDrawer() { $('#drawer').hidden = true; $('#submitModal').hidden = true; document.body.style.overflow = ''; render(); }
+  function closeDrawer() { $('#drawer').hidden = true; $('#submitModal').hidden = true; $('#refreshModal').hidden = true; document.body.style.overflow = ''; render(); }
 
   /* Curator: rule-based answer until Gemini is connected */
   function curator(c) {
@@ -262,7 +336,7 @@
 
   /* ---------- events ---------- */
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-tab],[data-quick],[data-preset],[data-act],[data-close],[data-niche],[data-del-sub],#filtersToggle,#resetFilters,#submitBtn,#submitSave');
+    const t = e.target.closest('[data-tab],[data-quick],[data-preset],[data-act],[data-close],[data-niche],[data-del-sub],#filtersToggle,#resetFilters,#submitBtn,#submitSave,#refreshBtn,#refreshRun,#liveClear');
     if (!t) return;
     if (t.dataset.tab) { state.tab = t.dataset.tab; $$('.tab').forEach(b => b.classList.toggle('is-active', b === t)); render(); }
     else if (t.dataset.quick) { t.classList.toggle('is-active'); state.quick.has(t.dataset.quick) ? state.quick.delete(t.dataset.quick) : state.quick.add(t.dataset.quick); render(); }
@@ -270,6 +344,9 @@
     else if (t.id === 'filtersToggle') { $('#filters').hidden = !$('#filters').hidden; }
     else if (t.id === 'resetFilters') { state.filters = {}; $$('#filters select').forEach(s => s.selectedIndex = 0); render(); }
     else if (t.id === 'submitBtn') { renderSubmissions(); $('#submitModal').hidden = false; }
+    else if (t.id === 'refreshBtn') { $('#apiKey').value = LS.get('apiKey', ''); $('#refreshLog').textContent = ''; $('#refreshBar').style.width = '0'; $('#refreshProgress').hidden = true; $('#refreshModal').hidden = false; }
+    else if (t.id === 'refreshRun') runLive();
+    else if (t.id === 'liveClear') { localStorage.removeItem('nr:live'); load(); $('#refreshLog').textContent = 'Найденные кнопкой каналы убраны.'; }
     else if (t.id === 'submitSave') { const url = $('#submitUrl').value.trim(); if (!url) return; state.submissions.unshift({ url, note: $('#submitNote').value.trim(), at: new Date().toISOString() }); persist(); $('#submitUrl').value = ''; $('#submitNote').value = ''; renderSubmissions(); }
     else if (t.dataset.delSub != null) { state.submissions.splice(+t.dataset.delSub, 1); persist(); renderSubmissions(); }
     else if (t.hasAttribute('data-close')) closeDrawer();
@@ -277,6 +354,7 @@
     else if (t.dataset.act) {
       const id = t.dataset.id || t.closest('.card')?.dataset.id; const c = state.channels.find(x => x.id === id); if (!c) return;
       const act = t.dataset.act;
+      if (act === 'open' && !$('#drawer').hidden) { $('#drawerPanel').scrollTop = 0; }
       if (act === 'save') { state.saved.has(id) ? state.saved.delete(id) : state.saved.add(id); persist(); if ($('#drawer').hidden) render(); else openDetail(c); }
       else if (act === 'like') { state.liked.has(id) ? state.liked.delete(id) : state.liked.add(id); persist(); render(); }
       else if (act === 'vtab') { state.videoTab[id] = t.dataset.mode; render(); }
@@ -287,6 +365,7 @@
   document.addEventListener('input', e => {
     if (e.target.id === 'search') { state.q = e.target.value; render(); }
     if (e.target.dataset.note != null) { state.notes[e.target.dataset.note] = e.target.value; persist(); }
+    if (e.target.id === 'maxQueries') $('#maxQueriesVal').textContent = e.target.value;
   });
   document.addEventListener('change', e => {
     if (e.target.id === 'sort') { state.sort = e.target.value; render(); }
