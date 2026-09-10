@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>YouTube-каналы — Niche Radar</title>
-<meta name="description" content="Каталог молодых YouTube-каналов: ниша, стиль, монетизация и рост.">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,7 +20,7 @@
   <section class="hero">
     <div>
       <h1>YouTube-каналы</h1>
-      <p class="lead">Каталог YouTube-каналов: ниша, стиль производства, монетизация и рост — чтобы быстрее найти идею для своего канала.</p>
+      <p class="lead">Каталог YouTube-каналов: ниша, стиль производства, монетизация и рост.</p>
     </div>
     <div class="hero__actions">
       <div class="counter"><b id="savedCount">0</b><span>сохранено</span></div>
@@ -37,7 +36,7 @@
     <button class="btn btn--primary btn--sm" id="filtersToggle">Фильтры</button>
     <select class="select" id="sort">
       <option value="rpm">По RPM</option>
-      <option value="new">Сначала новые</option>
+      <option value="new" selected>Сначала новые</option>
       <option value="score">По Score</option>
       <option value="velocity">По просмотрам</option>
       <option value="monetization">Ближе к монетизации</option>
@@ -47,18 +46,18 @@
   <section class="filters" id="filters" hidden>
     <label>Ниша<select id="fNiche"><option value="">Любая</option></select></label>
     <label>Язык<select id="fLang"><option value="">Любой</option></select></label>
-    <label>Стиль производства<select id="fStyle"><option value="">Любой</option></select></label>
-    <label>RPM<select id="fRpm"><option value="0">Любая</option><option value="5">от $5</option><option value="8">от $8</option><option value="10">от $10</option></select></label>
+    <label>Стиль<select id="fStyle"><option value="">Любой</option></select></label>
+    <label>RPM<select id="fRpm"><option value="0">Любая</option><option value="5">от $5</option><option value="10">от $10</option></select></label>
     <label>Монетизация<select id="fMon"><option value="">Любая</option><option value="yes">Да</option><option value="soon">≤ 90 дн.</option><option value="no">Нет</option></select></label>
     <label>Нейросети<select id="fAi"><option value="">Любое</option><option value="yes">Да</option><option value="no">Нет</option></select></label>
-    <label>Подписчиков<select id="fSubs"><option value="">Любое</option><option value="0-1000">до 1K</option><option value="1000-10000">1K–10K</option></select></label>
-    <label>Видео<select id="fVideos"><option value="30">до 30</option><option value="20">до 20</option><option value="10">до 10</option></select></label>
+    <label>Подписчики<select id="fSubs"><option value="">Любое</option><option value="0-1000">до 1K</option><option value="1000-10000">1K–10K</option></select></label>
+    <label>Видео<select id="fVideos"><option value="30">до 30</option><option value="20">до 20</option></select></label>
     <label>Сложность<select id="fDiff"><option value="">Любая</option><option value="low">Низкая</option><option value="medium">Средняя</option><option value="high">Высокая</option></select></label>
     <button class="btn btn--ghost btn--sm" id="resetFilters">Сбросить</button>
   </section>
   <p class="results-info muted" id="resultsInfo"></p>
   <div class="grid" id="grid"></div>
-  <div class="empty" id="empty" hidden><h3>Пока пусто</h3><p>Нажми «Обновить каналы» и вставь ключ YouTube API.</p></div>
+  <div class="empty" id="empty" hidden><h3>Пока пусто</h3><p>Нажми «Обновить каналы».</p></div>
 </main>
 <div class="drawer" id="drawer" hidden><div class="drawer__backdrop" data-close></div><aside class="drawer__panel" id="drawerPanel"></aside></div>
 <div class="modal" id="submitModal" hidden>
@@ -66,7 +65,7 @@
   <div class="modal__box">
     <h3>Подать нишу</h3>
     <input id="submitUrl" type="url" placeholder="https://youtube.com/@handle">
-    <textarea id="submitNote" placeholder="Почему интересна"></textarea>
+    <textarea id="submitNote"></textarea>
     <div class="row-end"><button class="btn btn--ghost" data-close>Отмена</button><button class="btn btn--primary" id="submitSave">Сохранить</button></div>
     <ul id="submitList" class="submit-list"></ul>
   </div>
@@ -75,7 +74,7 @@
   <div class="drawer__backdrop" data-close></div>
   <div class="modal__box">
     <h3>Обновить список каналов</h3>
-    <p class="muted">Ключ остаётся в браузере, в GitHub не пишется.</p>
+    <p class="muted">Ключ остаётся только в браузере.</p>
     <label class="muted" for="apiKey">YouTube Data API v3</label>
     <input id="apiKey" type="password" placeholder="AIza…" autocomplete="off">
     <label class="muted" for="maxQueries">Запросов: <b id="maxQueriesVal">6</b></label>
@@ -89,7 +88,7 @@
     </div>
   </div>
 </div>
-<script src="live.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/olyaolya89/Devin@devin/1788859371-niche-radar-competitors/niche-radar/live.js"></script>
 <script src="app.js"></script>
 <script src="refresh-ui.js"></script>
 </body>
