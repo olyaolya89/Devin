@@ -3,93 +3,105 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>YouTube-каналы — Niche Radar</title>
+<title>YouTube-каналы</title>
+<meta name="description" content="Каталог YouTube-каналов: ниша, стиль производства, монетизация и рост.">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header class="topbar">
-  <div class="topbar__inner">
-    <a class="logo" href="./">Niche<span>Radar</span></a>
-    <div class="topbar__right">
-      <span class="muted" id="generatedAt">данные обновляются…</span>
-      <button class="btn btn--primary btn--sm" id="refreshBtn">Обновить каналы</button>
+<header class="page-head">
+  <div class="wrap">
+    <div>
+      <h1>YouTube-каналы</h1>
+      <p class="lede">Каталог YouTube-каналов, отобранных куратором: ниша, стиль производства, монетизация и рост — чтобы быстрее найти идею для своего канала.</p>
+    </div>
+    <div class="head-meta">
+      <span class="muted" id="generatedAt"></span>
+      <button type="button" class="btn btn-red" id="refreshBtn">Обновить каналы</button>
     </div>
   </div>
 </header>
-<main class="page">
-  <section class="hero">
-    <div>
-      <h1>YouTube-каналы</h1>
-      <p class="lead">Каталог YouTube-каналов: ниша, стиль производства, монетизация и рост.</p>
-    </div>
-    <div class="hero__actions">
-      <div class="counter"><b id="savedCount">0</b><span>сохранено</span></div>
-      <button class="btn btn--primary" id="submitBtn">Подать нишу на разбор</button>
-    </div>
-  </section>
+<div class="wrap">
   <nav class="tabs" id="tabs">
-    <button class="tab" data-tab="new">Недавно добавленные</button>
-    <button class="tab is-active" data-tab="cards">Все каналы</button>
-    <button class="tab" data-tab="saved">Сохранённые (<span id="savedTabCount">0</span>)</button>
+    <button type="button" class="tab" data-tab="new">Недавно добавленные</button>
+    <button type="button" class="tab is-on" data-tab="all">Все каналы</button>
+    <button type="button" class="tab" data-tab="saved">Сохранённые</button>
+    <button type="button" class="tab" data-tab="liked">Нравится</button>
   </nav>
   <div class="toolbar">
-    <button class="btn btn--primary btn--sm" id="filtersToggle">Фильтры</button>
-    <select class="select" id="sort">
+    <select id="sort" class="sel">
       <option value="rpm">По RPM</option>
-      <option value="new" selected>Сначала новые</option>
+      <option value="new">Сначала новые</option>
+      <option value="subs">По подписчикам</option>
+      <option value="views">По просмотрам</option>
       <option value="score">По Score</option>
-      <option value="velocity">По просмотрам</option>
       <option value="monetization">Ближе к монетизации</option>
     </select>
-    <label class="search"><input id="search" type="search" placeholder="Поиск по названию или юзернейму"></label>
+    <button type="button" class="btn btn-red" id="filtersToggle">Фильтры</button>
+    <label class="search"><input id="search" type="search" placeholder="Поиск по названию или юзернейму" autocomplete="off"></label>
   </div>
   <section class="filters" id="filters" hidden>
-    <label>Ниша<select id="fNiche"><option value="">Любая</option></select></label>
-    <label>Язык<select id="fLang"><option value="">Любой</option></select></label>
-    <label>Стиль<select id="fStyle"><option value="">Любой</option></select></label>
-    <label>RPM<select id="fRpm"><option value="0">Любая</option><option value="5">от $5</option><option value="10">от $10</option></select></label>
-    <label>Монетизация<select id="fMon"><option value="">Любая</option><option value="yes">Да</option><option value="soon">≤ 90 дн.</option><option value="no">Нет</option></select></label>
-    <label>Нейросети<select id="fAi"><option value="">Любое</option><option value="yes">Да</option><option value="no">Нет</option></select></label>
-    <label>Подписчики<select id="fSubs"><option value="">Любое</option><option value="0-1000">до 1K</option><option value="1000-10000">1K–10K</option></select></label>
-    <label>Видео<select id="fVideos"><option value="30">до 30</option><option value="20">до 20</option></select></label>
-    <label>Сложность<select id="fDiff"><option value="">Любая</option><option value="low">Низкая</option><option value="medium">Средняя</option><option value="high">Высокая</option></select></label>
-    <button class="btn btn--ghost btn--sm" id="resetFilters">Сбросить</button>
+    <div class="f-grid">
+      <label>Теги<select id="fTag"><option value="">Теги</option></select></label>
+      <label>Ниша<select id="fNiche"><option value="">Ниша</option></select></label>
+      <label>Подниша<select id="fSub"><option value="">Подниша</option></select></label>
+      <label>Категории<select id="fCat"><option value="">Категории</option></select></label>
+      <label>Язык<select id="fLang"><option value="">Язык</option></select></label>
+      <label>Формат контента<select id="fFormat"><option value="">Формат контента</option></select></label>
+      <label>Стиль производства<select id="fStyle"><option value="">Стиль производства</option></select></label>
+      <label>Сложность производства<select id="fDiff"><option value="">Любое</option><option value="low">Низкая</option><option value="medium">Средняя</option><option value="high">Высокая</option></select></label>
+      <label>Использование нейросети<select id="fAi"><option value="">Любое</option><option value="yes">Да</option><option value="no">Нет</option></select></label>
+      <label>Без лица в кадре<select id="fFace"><option value="">Любое</option><option value="yes">Без лица</option><option value="no">С лицом</option></select></label>
+      <label>Монетизация YouTube<select id="fMon"><option value="">Любое</option><option value="yes">Да</option><option value="soon">Прогноз ≤ 90 дн.</option><option value="no">Нет</option></select></label>
+      <label>Дни до монетизации<select id="fDays"><option value="">Дни до монетизации</option><option value="30">≤ 30 дн.</option><option value="90">≤ 90 дн.</option></select></label>
+    </div>
+    <div class="sliders">
+      <label>Подписчики <span id="subsLab">0 — max</span><div class="dual"><input id="subsMin" type="range" min="0" max="200000" value="0"><input id="subsMax" type="range" min="0" max="200000" value="200000"></div></label>
+      <label>Всего просмотров <span id="viewsLab">0 — max</span><div class="dual"><input id="viewsMin" type="range" min="0" max="10000000" value="0"><input id="viewsMax" type="range" min="0" max="10000000" value="10000000"></div></label>
+      <label>Средние просмотры на видео <span id="avgLab">0 — max</span><div class="dual"><input id="avgMin" type="range" min="0" max="500000" value="0"><input id="avgMax" type="range" min="0" max="500000" value="500000"></div></label>
+      <label>RPM <span id="rpmLab">$0 — $30</span><div class="dual"><input id="rpmMin" type="range" min="0" max="30" step="0.1" value="0"><input id="rpmMax" type="range" min="0" max="30" step="0.1" value="30"></div></label>
+    </div>
+    <div class="f-row">
+      <label class="chk"><input type="checkbox" id="onlyNew3"> Только новые за 3 дня</label>
+      <label class="chk"><input type="checkbox" id="onlyUnseen"> Только непросмотренные</label>
+      <button type="button" class="btn" id="resetFilters">Сбросить</button>
+    </div>
   </section>
-  <p class="results-info muted" id="resultsInfo"></p>
+  <p class="muted" id="resultsInfo"></p>
   <div class="grid" id="grid"></div>
-  <div class="empty" id="empty" hidden><h3>Пока пусто</h3><p>Нажми «Обновить каналы».</p></div>
-</main>
-<div class="drawer" id="drawer" hidden><div class="drawer__backdrop" data-close></div><aside class="drawer__panel" id="drawerPanel"></aside></div>
-<div class="modal" id="submitModal" hidden>
-  <div class="drawer__backdrop" data-close></div>
-  <div class="modal__box">
-    <h3>Подать нишу</h3>
-    <input id="submitUrl" type="url" placeholder="https://youtube.com/@handle">
-    <textarea id="submitNote"></textarea>
-    <div class="row-end"><button class="btn btn--ghost" data-close>Отмена</button><button class="btn btn--primary" id="submitSave">Сохранить</button></div>
-    <ul id="submitList" class="submit-list"></ul>
+  <div class="empty" id="empty" hidden><h3>Ничего не найдено</h3><p>Сбрось фильтры или нажми «Обновить каналы».</p></div>
+</div>
+<button type="button" class="support" id="supportBtn">Поддержка</button>
+<div class="overlay" id="drawer" hidden><div class="overlay-bg" data-close></div><aside class="sheet" id="drawerPanel"></aside></div>
+<div class="overlay" id="refreshModal" hidden>
+  <div class="overlay-bg" data-close></div>
+  <div class="box">
+    <h3>Обновить список каналов</h3>
+    <p class="muted">Ключ хранится только в браузере.</p>
+    <label>Ключ YouTube Data API v3<input id="apiKey" type="password" placeholder="AIza…" autocomplete="off"></label>
+    <label>Поисковых запросов: <b id="maxQueriesVal">6</b><input id="maxQueries" type="range" min="1" max="20" value="6"></label>
+    <div class="progress" id="refreshProgress" hidden><i id="refreshBar"></i></div>
+    <p class="muted" id="refreshLog"></p>
+    <div class="row-end">
+      <button type="button" class="btn" id="liveClear">Убрать найденные</button>
+      <button type="button" class="btn" data-close>Закрыть</button>
+      <button type="button" class="btn btn-red" id="refreshRun">Запустить поиск</button>
+    </div>
   </div>
 </div>
-<div class="modal" id="refreshModal" hidden>
-  <div class="drawer__backdrop" data-close></div>
-  <div class="modal__box">
-    <h3>Обновить список каналов</h3>
-    <p class="muted">Ключ остаётся только в браузере.</p>
-    <label class="muted" for="apiKey">YouTube Data API v3</label>
-    <input id="apiKey" type="password" placeholder="AIza…" autocomplete="off">
-    <label class="muted" for="maxQueries">Запросов: <b id="maxQueriesVal">6</b></label>
-    <input id="maxQueries" type="range" min="1" max="20" value="6">
-    <div class="progress" id="refreshProgress" hidden><div class="progress__bar" id="refreshBar"></div></div>
-    <div class="muted" id="refreshLog"></div>
+<div class="overlay" id="supportModal" hidden>
+  <div class="overlay-bg" data-close></div>
+  <div class="box">
+    <h3>Поддержка</h3>
+    <p class="muted">Сообщение сохранится в этом браузере.</p>
+    <textarea id="supportText" rows="5" placeholder="Опиши проблему"></textarea>
     <div class="row-end">
-      <button class="btn btn--ghost" id="liveClear">Убрать найденные</button>
-      <button class="btn btn--ghost" data-close>Закрыть</button>
-      <button class="btn btn--primary" id="refreshRun">Запустить поиск</button>
+      <button type="button" class="btn" data-close>Закрыть</button>
+      <button type="button" class="btn btn-red" id="supportSend">Отправить</button>
     </div>
+    <p class="muted" id="supportOk" hidden>Сообщение сохранено.</p>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/gh/olyaolya89/Devin@devin/1788859371-niche-radar-competitors/niche-radar/live.js"></script>
 <script src="app.js"></script>
-<script src="refresh-ui.js"></script>
 </body>
 </html>
