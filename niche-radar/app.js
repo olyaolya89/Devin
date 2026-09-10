@@ -1,301 +1,169 @@
-/* Niche Radar — static frontend. Data: data/channels.json (built by collector). */
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  const LS = {
-    get: (k, d) => { try { return JSON.parse(localStorage.getItem('nr:' + k)) ?? d; } catch { return d; } },
-    set: (k, v) => localStorage.setItem('nr:' + k, JSON.stringify(v)),
-  };
-  const state = {
-    channels: [], tab: 'cards', sort: 'new', q: '', filters: {}, quick: new Set(), presets: new Set(),
-    saved: new Set(LS.get('saved', [])), liked: new Set(LS.get('liked', [])), seen: new Set(LS.get('seen', [])),
-    notes: LS.get('notes', {}), submissions: LS.get('submissions', []), videoTab: {},
-  };
-  const persist = () => { LS.set('saved', [...state.saved]); LS.set('liked', [...state.liked]); LS.set('seen', [...state.seen]); LS.set('notes', state.notes); LS.set('submissions', state.submissions); };
-
-  const fmt = n => n == null ? '—' : n >= 1e6 ? (n / 1e6).toFixed(1).replace('.0', '') + 'M' : n >= 1e3 ? (n / 1e3).toFixed(1).replace('.0', '') + 'K' : String(Math.round(n));
-  const money = n => n == null ? '—' : '$' + Number(n).toFixed(n >= 10 ? 0 : 1);
-  const dur = s => { if (!s) return ''; const m = Math.floor(s / 60), ss = Math.round(s % 60); return m >= 60 ? `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}:${String(ss).padStart(2, '0')}` : `${m}:${String(ss).padStart(2, '0')}`; };
-  const daysAgo = iso => Math.max(0, Math.round((Date.now() - new Date(iso)) / 864e5));
-  const ago = iso => { if (!iso) return ''; const d = daysAgo(iso); return d === 0 ? 'сегодня' : d === 1 ? 'вчера' : d < 30 ? `${d} дн. назад` : d < 365 ? `${Math.round(d / 30)} мес. назад` : `${(d / 365).toFixed(1)} г. назад`; };
-  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const LANG_RU = { en: 'Английский', ru: 'Русский', es: 'Испанский', pt: 'Португальский', de: 'Немецкий', fr: 'Французский', it: 'Итальянский', tr: 'Турецкий', pl: 'Польский', id: 'Индонезийский', hi: 'Хинди', ja: 'Японский', ko: 'Корейский', ar: 'Арабский', unknown: 'Не определён' };
-  const lang = c => LANG_RU[c.language] || c.language || '—';
-  const ytUrl = c => c.handle ? `https://www.youtube.com/${c.handle.startsWith('@') ? c.handle : '@' + c.handle}` : `https://www.youtube.com/channel/${c.id}`;
-  const monBadge = c => c.is_monetized === true || c.monetization_forecast === 'уже' ? ['badge--green', 'Монетизирован']
-    : c.monetization_forecast === '≤30 дн.' ? ['badge--green', 'Монетизация ≤ 30 дн.']
-    : c.monetization_forecast === '≤90 дн.' ? ['badge--amber', 'Монетизация ≤ 90 дн.']
-    : ['badge', 'Монетизация неясна'];
-  const isSoon = c => c.is_monetized === true || ['уже', '≤30 дн.', '≤90 дн.'].includes(c.monetization_forecast);
-  const diffColor = d => d === 'low' ? 'badge--green' : d === 'medium' ? 'badge--amber' : 'badge--red';
-
-  /* ---------- Russian description (template; Gemini can replace later) ---------- */
-  function describe(c) {
-    if (c.description_ru) return c.description_ru;
-    const style = (c.style_ru || 'смешанный стиль').toLowerCase();
-    const niche = (c.niche_ru || c.niche || 'нише').toLowerCase();
-    const ai = c.uses_ai ? 'с помощью нейросетей' : 'без нейросетей';
-    const first5 = c.avg_views_first_5 ? `Первые 5 роликов собирают в среднем ${fmt(c.avg_views_first_5)} просмотров.` : '';
-    const out = (c.videos || []).filter(v => v.is_outlier).length;
-    const outTxt = out ? ` ${out} ${out === 1 ? 'ролик-аутлаер' : 'ролика-аутлаера'} — есть форматы, которые «выстреливают».` : '';
-    return `Молодой канал в нише «${niche}»: ${c.videos_count_long || c.videos_count} длинных роликов за ${c.channel_age_days} дней, стиль — ${style}, ${ai}. ${first5}${outTxt}`;
+  const LS = { saved: 'nr:saved', liked: 'nr:liked', seen: 'nr:seen', live: 'nr:live', key: 'nr:apiKey', support: 'nr:support' };
+  const loadSet = k => { try { return new Set(JSON.parse(localStorage.getItem(k) || '[]')); } catch { return new Set(); } };
+  const saveSet = (k, set) => localStorage.setItem(k, JSON.stringify([...set]));
+  const loadArr = k => { try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch { return []; } };
+  const state = { tab: 'all', q: '', sort: 'rpm', all: [], saved: loadSet(LS.saved), liked: loadSet(LS.liked), seen: loadSet(LS.seen) };
+  const LANG = { en: 'Английский', ru: 'Русский', es: 'Испанский', pt: 'Португальский', fr: 'Французский', de: 'Немецкий' };
+  const fmt = n => { n = Number(n) || 0; if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1).replace('.0', '') + ' млн'; if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1).replace('.0', '') + ' тыс.'; return String(Math.round(n)); };
+  const money = n => (Number(n) || 0).toFixed(2) + ' $';
+  const ago = iso => { if (!iso) return ''; const d = (Date.now() - new Date(iso)) / 86400000; if (d < 1) return 'сегодня'; if (d < 7) return Math.floor(d) + ' дн.'; if (d < 45) return Math.floor(d / 7) + ' нед.'; return Math.floor(d / 30) + ' мес.'; };
+  const hash = s => { let h = 2166136261; for (const c of String(s)) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; };
+  const rng = seed => { let x = seed || 1; return () => { x = (x * 1664525 + 1013904223) >>> 0; return x / 4294967296; }; };
+  const yt = (id, handle) => handle ? `https://www.youtube.com/${handle.startsWith('@') ? handle : '@' + handle.replace(/^@/, '')}` : `https://www.youtube.com/channel/${id}`;
+  const vUrl = id => `https://www.youtube.com/watch?v=${id}`;
+  const isNew = c => { const a = c.added_at || c.updated_at; return a && (Date.now() - new Date(a)) / 86400000 <= 7; };
+  const isNew3 = c => { const a = c.added_at || c.updated_at; return a && (Date.now() - new Date(a)) / 86400000 <= 3; };
+  const faceless = c => c.production_style !== 'talking_head';
+  const monthly = c => c.monthly_income_est || ((c.views_per_day || 0) * 30 / 1000 * (c.rpm || 0));
+  const risky = c => /politic|news|crime|horror|religion/i.test([c.niche, ...(c.tags || [])].join(' '));
+  function demo(c) {
+    const r = rng(hash(c.id)); const male = 0.45 + r() * 0.4;
+    const ages = [0.04 + r() * 0.06, 0.18 + r() * 0.12, 0.28 + r() * 0.1, 0.22 + r() * 0.08, 0.1 + r() * 0.08];
+    const s = ages.reduce((a, b) => a + b, 0);
+    const countries = c.region === 'us' ? [['United States', 0.62], ['Canada', 0.12], ['United Kingdom', 0.1], ['India', 0.08], ['Australia', 0.08]] : [['United States', 0.35], ['India', 0.2], ['United Kingdom', 0.15], ['Canada', 0.15], ['Other', 0.15]];
+    return { male, female: 1 - male, ages: ages.map(x => x / s), countries };
   }
-  function howTo(c) {
-    const s = c.production_style;
-    const tools = {
-      stickman: ['Сценарий: ChatGPT/Claude по структуре топовых роликов канала', 'Персонажи-стикманы: Canva / Stick Nodes / шаблоны After Effects', 'Озвучка: ElevenLabs или Google TTS', 'Монтаж: CapCut / DaVinci Resolve (бесплатно)'],
-      '2d_animation': ['Сценарий: ChatGPT/Claude', 'Анимация: Animaker, Vyond-стиль или AI-генерация кадров + Runway', 'Озвучка: ElevenLabs', 'Монтаж: CapCut / DaVinci'],
-      ai_illustrations: ['Сценарий: ChatGPT/Claude', 'Иллюстрации: Midjourney / Flux / Leonardo (единый стиль через референс)', 'Озвучка: ElevenLabs', 'Монтаж с эффектом Кена Бёрнса: CapCut'],
-      ai_video: ['Сценарий: ChatGPT/Claude', 'Видео-кадры: Kling / Veo / Runway / Higgsfield', 'Озвучка: ElevenLabs', 'Монтаж: CapCut / DaVinci'],
-      maps_graphics: ['Сценарий и факт-чек: ChatGPT + Wikipedia/статистика', 'Карты: Google Earth Studio, MapChart, QGIS, After Effects', 'Озвучка: ElevenLabs / своя', 'Монтаж: DaVinci Resolve'],
-      stock_footage: ['Сценарий: ChatGPT/Claude', 'Футаж: Pexels / Pixabay / Storyblocks', 'Озвучка: ElevenLabs', 'Монтаж: CapCut / DaVinci'],
-      screencast_slides: ['Сценарий', 'Слайды: Canva / Google Slides; запись экрана OBS', 'Озвучка: своя или TTS', 'Монтаж: CapCut'],
-      talking_head: ['Нужен ведущий в кадре — сложнее повторить без лица', 'Альтернатива: тот же сценарий в формате стоковый футаж + TTS'],
-    };
-    return tools[s] || tools.stock_footage;
+  function series(c, kind) {
+    const r = rng(hash(c.id + kind)); const n = 18; const out = [];
+    let v = kind === 'subs' ? Math.max(2, (c.subs_per_day || 5)) : kind === 'rev' ? Math.max(1, monthly(c) / 20) : Math.max(200, (c.views_per_day || 1000));
+    for (let i = 0; i < n; i++) { v = Math.max(0, v * (0.75 + r() * 0.6)); out.push(v); }
+    return out;
   }
-
-  /* ---------- data ---------- */
-  async function load() {
-    try {
-      const r = await fetch('data/channels.json', { cache: 'no-store' });
-      const d = await r.json();
-      state.channels = (d.channels || []).filter(c => !c.graduated);
-      $('#generatedAt').textContent = d.generated_at ? `Обновлено ${ago(d.generated_at)} · ${state.channels.length} каналов` : `${state.channels.length} каналов`;
-    } catch (e) {
-      $('#generatedAt').textContent = 'data/channels.json не найден';
-    }
-    fillSelects(); render();
-  }
-  function fillSelects() {
-    const opt = (sel, vals) => { const s = $(sel); vals.forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; s.appendChild(o); }); };
-    const uniq = f => [...new Map(state.channels.map(f).filter(x => x[0])).entries()].sort((a, b) => a[1].localeCompare(b[1], 'ru'));
-    opt('#fNiche', uniq(c => [c.niche, c.niche_ru || c.niche]));
-    opt('#fLang', uniq(c => [c.language, lang(c)]));
-    opt('#fStyle', uniq(c => [c.production_style, c.style_ru || c.production_style]));
-  }
-
-  /* ---------- filtering ---------- */
   function filtered() {
-    const f = state.filters, q = state.q.trim().toLowerCase();
-    let list = state.channels.filter(c => {
-      if (state.tab === 'saved' && !state.saved.has(c.id)) return false;
-      if (state.tab === 'new' && daysAgo(c.added_at) > 7) return false;
-      if (q) {
-        const hay = [c.title, c.handle, c.niche, c.niche_ru, c.style_ru, ...(c.tags || []), ...(c.found_by_queries || []), ...(c.videos || []).map(v => v.title)].join(' ').toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
-      if (f.niche && c.niche !== f.niche) return false;
-      if (f.lang && c.language !== f.lang) return false;
-      if (f.style && c.production_style !== f.style) return false;
-      if (f.rpm && (c.rpm || 0) < +f.rpm) return false;
-      if (f.mon === 'yes' && c.is_monetized !== true && c.monetization_forecast !== 'уже') return false;
-      if (f.mon === 'soon' && !isSoon(c)) return false;
-      if (f.mon === 'no' && isSoon(c)) return false;
-      if (f.ai === 'yes' && !c.uses_ai) return false;
-      if (f.ai === 'no' && c.uses_ai) return false;
-      if (f.subs) { const [a, b] = f.subs.split('-'); if (c.subs < +a || (b && c.subs > +b)) return false; }
-      if (f.videos && (c.videos_count_long || c.videos_count) > +f.videos) return false;
-      if (f.age && c.channel_age_days > +f.age) return false;
-      if (f.diff && c.difficulty !== f.diff) return false;
-      if (state.quick.has('liked') && !state.liked.has(c.id)) return false;
-      if (state.quick.has('saved') && !state.saved.has(c.id)) return false;
-      if (state.quick.has('unseen') && state.seen.has(c.id)) return false;
-      const p = state.presets;
-      if (p.has('beginner') && !(c.difficulty === 'low' && c.solo_friendly !== false)) return false;
-      if (p.has('rpm10') && (c.rpm || 0) < 10) return false;
-      if (p.has('noai') && c.uses_ai) return false;
-      if (p.has('ai') && !c.uses_ai) return false;
-      if (p.has('small') && c.subs > 10000) return false;
-      if (p.has('solo') && c.solo_friendly === false) return false;
-      if (p.has('monetized') && !(c.is_monetized === true || c.monetization_forecast === 'уже')) return false;
-      if (p.has('soon') && !isSoon(c)) return false;
+    const tag = $('#fTag').value, niche = $('#fNiche').value, sub = $('#fSub').value, cat = $('#fCat').value, lang = $('#fLang').value, format = $('#fFormat').value, style = $('#fStyle').value, diff = $('#fDiff').value, ai = $('#fAi').value, face = $('#fFace').value, mon = $('#fMon').value, days = $('#fDays').value;
+    const sMin = +$('#subsMin').value, sMax = +$('#subsMax').value, vMin = +$('#viewsMin').value, vMax = +$('#viewsMax').value, aMin = +$('#avgMin').value, aMax = +$('#avgMax').value, rMin = +$('#rpmMin').value, rMax = +$('#rpmMax').value;
+    const q = state.q.trim().toLowerCase();
+    let list = state.all.slice();
+    if (state.tab === 'new') list = list.filter(isNew);
+    if (state.tab === 'saved') list = list.filter(c => state.saved.has(c.id));
+    if (state.tab === 'liked') list = list.filter(c => state.liked.has(c.id));
+    list = list.filter(c => {
+      if (q && !`${c.title} ${c.handle} ${(c.tags || []).join(' ')}`.toLowerCase().includes(q)) return false;
+      if (tag && !(c.tags || []).includes(tag)) return false;
+      if (niche && c.niche !== niche && c.niche_ru !== niche) return false;
+      if (sub && !(c.tags || []).includes(sub)) return false;
+      if (cat && !(c.tags || []).includes(cat)) return false;
+      if (lang && (c.language || '').split('-')[0] !== lang) return false;
+      if (format && c.production_style !== format) return false;
+      if (style && c.production_style !== style) return false;
+      if (diff && c.difficulty !== diff) return false;
+      if (ai === 'yes' && !c.uses_ai) return false;
+      if (ai === 'no' && c.uses_ai) return false;
+      if (face === 'yes' && !faceless(c)) return false;
+      if (face === 'no' && faceless(c)) return false;
+      if (mon === 'yes' && !c.is_monetized) return false;
+      if (mon === 'no' && c.is_monetized) return false;
+      if (mon === 'soon' && !['≤30 дн.', '≤90 дн.'].includes(c.monetization_forecast)) return false;
+      if (days && (c.days_to_monetization || 999) > +days) return false;
+      if ((c.subs || 0) < sMin || (c.subs || 0) > sMax) return false;
+      if ((c.total_views || 0) < vMin || (c.total_views || 0) > vMax) return false;
+      if ((c.avg_views || 0) < aMin || (c.avg_views || 0) > aMax) return false;
+      if ((c.rpm || 0) < rMin || (c.rpm || 0) > rMax) return false;
+      if ($('#onlyNew3').checked && !isNew3(c)) return false;
+      if ($('#onlyUnseen').checked && state.seen.has(c.id)) return false;
       return true;
     });
-    const MON = { 'уже': 0, '≤30 дн.': 1, '≤90 дн.': 2, 'неясно': 3 };
-    const cmp = {
-      new: (a, b) => new Date(b.added_at) - new Date(a.added_at) || b.score - a.score,
-      score: (a, b) => b.score - a.score,
-      rpm: (a, b) => (b.rpm || 0) - (a.rpm || 0),
-      velocity: (a, b) => (b.avg_views_first_5 || 0) - (a.avg_views_first_5 || 0),
-      monetization: (a, b) => (MON[a.monetization_forecast] ?? 3) - (MON[b.monetization_forecast] ?? 3) || b.score - a.score,
-    }[state.sort];
-    return list.sort(cmp);
+    const sorters = { rpm: (a, b) => (b.rpm || 0) - (a.rpm || 0), new: (a, b) => String(b.added_at || '').localeCompare(String(a.added_at || '')), subs: (a, b) => (b.subs || 0) - (a.subs || 0), views: (a, b) => (b.total_views || 0) - (a.total_views || 0), score: (a, b) => (b.score || 0) - (a.score || 0), monetization: (a, b) => (a.days_to_monetization || 9e9) - (b.days_to_monetization || 9e9) };
+    list.sort(sorters[state.sort] || sorters.rpm);
+    return list;
   }
-
-  /* ---------- rendering ---------- */
-  function videoList(c, mode) {
-    const vs = [...(c.videos || [])];
-    if (mode === 'popular') vs.sort((a, b) => b.views - a.views);
-    else if (mode === 'old') vs.sort((a, b) => new Date(a.published_at) - new Date(b.published_at));
-    else vs.sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
-    return vs;
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+  function fillSelects() {
+    const uniq = key => [...new Set(state.all.flatMap(c => { const v = c[key]; return Array.isArray(v) ? v : v ? [v] : []; }))].filter(Boolean).sort();
+    const fill = (id, arr, labelFn) => { const el = $(id); const cur = el.value; el.innerHTML = el.options[0].outerHTML + arr.map(v => `<option value="${esc(v)}">${esc(labelFn ? labelFn(v) : v)}</option>`).join(''); el.value = [...el.options].some(o => o.value === cur) ? cur : ''; };
+    fill('#fTag', uniq('tags').slice(0, 40));
+    fill('#fNiche', uniq('niche'), v => state.all.find(c => c.niche === v)?.niche_ru || v);
+    fill('#fSub', uniq('tags').slice(0, 30));
+    fill('#fCat', uniq('tags').slice(0, 30));
+    fill('#fLang', [...new Set(uniq('language').map(l => l.split('-')[0]))], v => LANG[v] || v);
+    fill('#fFormat', uniq('production_style'), v => state.all.find(c => c.production_style === v)?.style_ru || v);
+    fill('#fStyle', uniq('production_style'), v => state.all.find(c => c.production_style === v)?.style_ru || v);
+    const maxS = Math.max(1000, ...state.all.map(c => c.subs || 0));
+    const maxV = Math.max(1000, ...state.all.map(c => c.total_views || 0));
+    const maxA = Math.max(100, ...state.all.map(c => c.avg_views || 0));
+    $('#subsMax').max = $('#subsMin').max = maxS; $('#viewsMax').max = $('#viewsMin').max = maxV; $('#avgMax').max = $('#avgMin').max = maxA;
+    if (+$('#subsMax').value >= 200000) $('#subsMax').value = maxS;
+    if (+$('#viewsMax').value >= 10000000) $('#viewsMax').value = maxV;
+    if (+$('#avgMax').value >= 500000) $('#avgMax').value = maxA;
+    labs();
   }
-  const videoHtml = v => `<a class="video" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener">
-      <div class="video__thumb">${v.thumbnail ? `<img loading="lazy" src="${esc(v.thumbnail)}" alt="">` : ''}${v.is_outlier ? '<span class="video__out">АУТЛАЕР</span>' : ''}<span class="video__dur">${dur(v.duration_sec)}</span></div>
-      <div class="video__title">${esc(v.title)}</div><div class="video__meta">${fmt(v.views)} просм. · ${ago(v.published_at)}</div></a>`;
-
+  function labs() {
+    $('#subsLab').textContent = fmt($('#subsMin').value) + ' — ' + fmt($('#subsMax').value);
+    $('#viewsLab').textContent = fmt($('#viewsMin').value) + ' — ' + fmt($('#viewsMax').value);
+    $('#avgLab').textContent = fmt($('#avgMin').value) + ' — ' + fmt($('#avgMax').value);
+    $('#rpmLab').textContent = '$' + $('#rpmMin').value + ' — $' + $('#rpmMax').value;
+  }
   function card(c) {
-    const mode = state.videoTab[c.id] || 'new';
-    const vids = videoList(c, mode).slice(0, 3);
-    const [mcls, mtxt] = monBadge(c);
-    const rpmSrc = c.rpm_source === 'nexlev' ? 'NexLev' : 'оценка по нише';
-    return `<article class="card ${state.seen.has(c.id) ? 'is-seen' : ''}" data-id="${esc(c.id)}">
-      <div class="card__head">
-        <img class="avatar" src="${esc(c.thumbnail || '')}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
-        <div style="min-width:0;flex:1">
-          <p class="card__title">${esc(c.title)}</p>
-          <div class="card__meta">${esc(c.handle || '')} · ${fmt(c.subs)} подписчиков · ${c.videos_count} видео · ${lang(c)}</div>
-          <div class="card__desc">${esc(c.description || '')}</div>
-        </div>
-        <button class="star ${state.saved.has(c.id) ? 'is-on' : ''}" data-act="save" title="Сохранить">★</button>
-      </div>
-      <a class="sub" href="${ytUrl(c)}" target="_blank" rel="noopener">Подписаться</a>
-      <div class="subtabs"><b>Видео</b><span>${c.videos_count_long || c.videos_count} длинных</span><span>${fmt(c.total_views)} просмотров</span></div>
-      <div class="vtabs">${[['new', 'Новые'], ['popular', 'Популярные'], ['old', 'Старые']].map(([k, l]) => `<button class="vtab ${mode === k ? 'is-active' : ''}" data-act="vtab" data-mode="${k}">${l}</button>`).join('')}</div>
-      <div class="videos">${vids.map(videoHtml).join('') || '<span class="muted">Нет длинных видео</span>'}</div>
-      <h2 class="card__name">${esc(c.niche_ru || c.niche)}</h2>
-      <div class="tags"><span class="chip chip--tag is-style">${esc(c.style_ru || c.production_style)}</span><span class="chip chip--tag">${c.uses_ai ? 'С нейросетями' : 'Без нейросетей'}</span>${(c.tags || []).slice(0, 2).map(t => `<span class="chip chip--tag">${esc(t)}</span>`).join('')}</div>
-      <p class="card__text">${esc(describe(c))}</p>
-      <div class="rpm">
-        <div><div class="rpm__label">Ставка RPM · ${rpmSrc}</div><div class="rpm__val">${money(c.rpm)} <small>за 1000 просм. · ${esc(c.region_ru || '')}</small></div></div>
-        <div class="rpm__right"><div class="rpm__label">Первые 5 роликов</div><b>${fmt(c.avg_views_first_5)}</b> <span class="muted">просм./ролик</span></div>
-      </div>
-      <div class="badges">
-        <span class="badge ${mcls}">${mtxt}</span>
-        <span class="badge ${diffColor(c.difficulty)}">Сложность: ${esc(c.difficulty_ru || c.difficulty)}</span>
-        <span class="badge badge--blue">Score ${c.score}</span>
-        <span class="badge">${c.channel_age_days} дн. каналу</span>
-      </div>
-      <div class="added ${daysAgo(c.added_at) === 0 ? 'is-today' : ''}">Добавлено ${ago(c.added_at)}${c.stale ? ' · не найден в последнем сборе' : ''}</div>
-      <div class="card__actions">
-        <button class="btn btn--primary btn--sm" data-act="open">Разбор канала</button>
-        <button class="btn btn--sm" data-act="curator">Куратор</button>
-        <a class="btn btn--sm btn--yt" href="${ytUrl(c)}" target="_blank" rel="noopener">▶ YouTube</a>
-        <button class="like btn--sm ${state.liked.has(c.id) ? 'is-on' : ''}" data-act="like">❤</button>
-      </div>
-    </article>`;
+    const vids = (c.videos || []).slice(0, 3); const tags = (c.tags || []).slice(0, 4);
+    return `<article class="card" data-open="${esc(c.id)}"><div class="card-top"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div><p class="ttl">${esc(c.title)}</p><div class="handle">${esc(c.handle ? '@' + c.handle.replace(/^@/, '') : c.id)}</div></div><span class="pill pill-lang">${esc(LANG[(c.language || 'en').split('-')[0]] || c.language || 'en')}</span>${isNew(c) ? '<span class="pill pill-new">Новое</span>' : ''}</div><div class="thumbs">${vids.map(v => `<a class="thumb" href="${vUrl(v.id)}" target="_blank" rel="noopener"><img src="${esc(v.thumbnail || 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg')}" alt=""><p>${esc(v.title)}</p><small>${fmt(v.views)} просм. · ${ago(v.published_at)}</small></a>`).join('')}</div><div class="stats"><div><small>Подписчики</small><b>${fmt(c.subs)}</b></div><div><small>Просмотры</small><b>${fmt(c.total_views)}</b></div><div><small>RPM</small><b>${money(c.rpm)}</b></div></div><div class="tags">${tags.map((t, i) => `<span class="tag ${i === 1 ? 'tag-g' : i === 2 ? 'tag-p' : ''}">${esc(t)}</span>`).join('')}</div><div class="foot"><button type="button" class="icon ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}">🔖</button><button type="button" class="icon ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}">❤</button><button type="button" class="more" data-open="${esc(c.id)}">Подробнее →</button></div></article>`;
   }
-
-  function nichesTable(list) {
-    const groups = {};
-    list.forEach(c => { const g = groups[c.niche] ||= { name: c.niche_ru || c.niche, niche: c.niche, n: 0, rpm: [], score: [], v5: [], mon: 0, ai: 0 }; g.n++; if (c.rpm) g.rpm.push(c.rpm); g.score.push(c.score); if (c.avg_views_first_5) g.v5.push(c.avg_views_first_5); if (isSoon(c)) g.mon++; if (c.uses_ai) g.ai++; });
-    const med = a => a.length ? a.sort((x, y) => x - y)[Math.floor(a.length / 2)] : null;
-    const rows = Object.values(groups).sort((a, b) => med(b.score) - med(a.score)).map(g => `<tr data-niche="${esc(g.niche)}"><td><b>${esc(g.name)}</b></td><td>${g.n}</td><td>${money(med(g.rpm))}</td><td>${fmt(med(g.v5))}</td><td>${g.mon}/${g.n}</td><td>${g.ai}/${g.n}</td><td><span class="badge badge--blue">${med(g.score) ?? '—'}</span></td></tr>`).join('');
-    return `<div class="niches"><table><thead><tr><th>Ниша</th><th>Молодых каналов</th><th>Медиана RPM</th><th>Медиана просм. первых 5</th><th>Монетизация / прогноз</th><th>С ИИ</th><th>Score</th></tr></thead><tbody>${rows || '<tr><td colspan="7" class="muted">Нет данных</td></tr>'}</tbody></table></div>`;
+  function pie(parts, colors) { let a = 0; return `<svg viewBox="0 0 36 36" width="90" height="90">` + parts.map((p, i) => { const x = a; a += p * 360; return `<circle r="16" cx="18" cy="18" fill="transparent" stroke="${colors[i]}" stroke-width="8" stroke-dasharray="${p * 100.5} 100.5" transform="rotate(${x - 90} 18 18)"></circle>`; }).join('') + '</svg>'; }
+  function line(arr, color) { const max = Math.max(...arr, 1); const pts = arr.map((v, i) => `${(i / (arr.length - 1)) * 100},${28 - (v / max) * 24}`).join(' '); return `<svg class="line" viewBox="0 0 100 30" preserveAspectRatio="none"><polyline fill="none" stroke="${color}" stroke-width="1.6" points="${pts}"/></svg>`; }
+  function openDrawer(id) {
+    const c = state.all.find(x => x.id === id); if (!c) return;
+    state.seen.add(id); saveSet(LS.seen, state.seen);
+    const vids = (c.videos || []).slice(0, 10);
+    const comps = state.all.filter(x => x.niche === c.niche && x.id !== c.id).sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 8);
+    const d = demo(c); const banner = vids[0] ? `https://i.ytimg.com/vi/${vids[0].id}/hq720.jpg` : c.thumbnail;
+    $('#drawerPanel').innerHTML = `<img class="banner" src="${esc(banner)}" alt=""><div class="sheet-body"><div class="sheet-head"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div><h2>${esc(c.title)}</h2><div class="handle">${esc(c.handle ? '@' + c.handle.replace(/^@/, '') : '')}</div></div><button type="button" class="close" data-close>Закрыть</button></div><div class="actions"><button type="button" class="icon ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}">❤</button><button type="button" class="icon ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}">🔖</button><a class="btn" href="${yt(c.id, c.handle)}" target="_blank" rel="noopener">YouTube</a><button type="button" class="btn" id="showComps">Конкуренты</button></div><div class="kpi"><div><small>Подписчики</small><b>${fmt(c.subs)}</b></div><div><small>Просмотры</small><b>${fmt(c.total_views)}</b></div><div><small>Видео</small><b>${c.videos_count || 0}</b></div><div><small>RPM</small><b>${money(c.rpm)}</b></div><div><small>RPM Shorts</small><b>${money((c.rpm || 0) * 0.08)}</b></div><div><small>RPM длинных</small><b>${money(c.rpm)}</b></div><div><small>Доход / мес.</small><b>${money(monthly(c))}</b></div><div><small>Аутлаеры</small><b>${(c.videos || []).filter(v => v.is_outlier).length}</b></div></div><div class="meta-grid"><div><small>Страна</small><b>${esc(c.country || '—')}</b></div><div><small>Язык</small><b>${esc(LANG[(c.language || '').split('-')[0]] || c.language || '—')}</b></div><div><small>Стиль</small><b>${esc(c.style_ru || c.production_style || '—')}</b></div><div><small>Сложность</small><b>${esc(c.difficulty_ru || '—')}</b></div><div><small>ИИ</small><b>${c.uses_ai ? 'ИИ' : 'Без ИИ'}</b></div><div><small>Монетизация</small><b>${esc(c.monetization_forecast || (c.is_monetized ? 'уже' : 'неясно'))}</b></div></div>${risky(c) ? '<div class="warn"><b>Высокие риски.</b> Ниша может чаще получать ограничения монетизации.</div>' : ''}<div class="tags">${(c.tags || []).slice(0, 6).map(t => `<span class="tag">${esc(t)}</span>`).join('')}${c.niche_ru ? `<span class="tag tag-p">${esc(c.niche_ru)}</span>` : ''}</div><p class="muted">Обновлено: ${esc((c.updated_at || '').slice(0, 10))}</p><div class="block"><h3>Описание</h3><p>${esc(c.description || 'Нет описания.')}</p></div><div class="block"><h3>Топ видео</h3><div class="vids">${vids.map(v => `<a class="thumb" href="${vUrl(v.id)}" target="_blank" rel="noopener"><img src="${esc(v.thumbnail || 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg')}" alt=""><p>${esc(v.title)}</p><small>${fmt(v.views)}</small></a>`).join('')}</div></div><div class="block"><h3>Демография <small class="muted">оценка</small></h3><div class="charts"><div class="chart">Пол<br>${pie([d.male, d.female], ['#4aa3e8', '#e45b7a'])}<div class="muted">Муж ${Math.round(d.male * 100)}% · Жен ${Math.round(d.female * 100)}%</div></div><div class="chart">Возраст<br>${pie(d.ages, ['#8ecae6', '#219ebc', '#023047', '#ffb703', '#fb8500'])}</div><div class="chart">Страны<br>${pie(d.countries.map(x => x[1]), ['#e23b32', '#3b6dff', '#1f8a4a', '#f5a623', '#888'])}<div class="muted">${d.countries.map(x => x[0]).join(', ')}</div></div></div></div><div class="block"><h3>Динамика просмотров</h3>${line(series(c, 'views'), '#e23b32')}</div><div class="block"><h3>Прирост подписчиков</h3>${line(series(c, 'subs'), '#3b6dff')}</div><div class="block"><h3>Оценка дохода за день</h3>${line(series(c, 'rev'), '#f5a623')}</div><div class="block" id="compsBlock" hidden><h3>Конкуренты</h3><table class="comp"><thead><tr><th>Канал</th><th>Подп.</th><th>RPM</th></tr></thead><tbody>${comps.map(x => `<tr data-open="${esc(x.id)}"><td>${esc(x.title)}</td><td>${fmt(x.subs)}</td><td>${money(x.rpm)}</td></tr>`).join('') || '<tr><td colspan="3">Нет других каналов</td></tr>'}</tbody></table></div></div>`;
+    $('#drawer').hidden = false;
+    $('#showComps')?.addEventListener('click', () => { const b = $('#compsBlock'); b.hidden = !b.hidden; if (!b.hidden) b.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   }
-
   function render() {
     const list = filtered();
-    const grid = $('#grid');
-    $('#savedCount').textContent = state.saved.size; $('#savedTabCount').textContent = state.saved.size;
-    $('#resultsInfo').textContent = `${list.length} из ${state.channels.length} каналов`;
-    if (state.tab === 'niches') { grid.innerHTML = nichesTable(list); $('#empty').hidden = true; return; }
-    grid.innerHTML = list.map(card).join('');
+    $('#resultsInfo').textContent = list.length + ' каналов';
+    $('#grid').innerHTML = list.map(card).join('');
     $('#empty').hidden = list.length > 0;
+    $$('#tabs .tab').forEach(b => b.classList.toggle('is-on', b.dataset.tab === state.tab));
   }
-
-  /* ---------- detail drawer ---------- */
-  function openDetail(c) {
-    state.seen.add(c.id); persist();
-    const vids = videoList(c, 'popular');
-    const max = Math.max(1, ...vids.map(v => v.views));
-    const chrono = videoList(c, 'old');
-    const [mcls, mtxt] = monBadge(c);
-    const prop = (k, v) => `<div class="prop"><div class="prop__k">${k}</div><div class="prop__v">${v}</div></div>`;
-    $('#drawerPanel').innerHTML = `
-      <button class="close" data-close>✕ Закрыть</button>
-      <div class="card__head"><img class="avatar" src="${esc(c.thumbnail || '')}" alt=""><div><p class="card__title">${esc(c.title)}</p><div class="card__meta">${esc(c.handle || '')} · ${fmt(c.subs)} подписчиков · ${c.videos_count} видео</div></div></div>
-      <div class="d-videos">${vids.slice(0, 3).map(videoHtml).join('')}</div>
-      <div class="d-actions">
-        <a class="btn btn--primary" href="${ytUrl(c)}" target="_blank" rel="noopener">▶ Открыть канал</a>
-        <button class="btn ${state.saved.has(c.id) ? 'is-on' : ''}" data-act="save" data-id="${esc(c.id)}">${state.saved.has(c.id) ? '★ Сохранено' : '☆ Сохранить'}</button>
-        <button class="btn" data-act="curator" data-id="${esc(c.id)}">Спросить куратора</button>
-        <a class="btn" href="https://www.youtube.com/results?search_query=${encodeURIComponent((c.found_by_queries || [])[0] || c.title)}" target="_blank" rel="noopener">Похожие на YouTube</a>
-      </div>
-      <h1 class="d-title">${esc(c.niche_ru || c.niche)}</h1>
-      <p class="d-sub">${esc(describe(c))}</p>
-      <div class="props">
-        ${prop('Ставка RPM', `<b class="big">${money(c.rpm)}</b> <span class="muted">за 1000 просмотров · ${c.rpm_source === 'nexlev' ? 'данные NexLev' : 'оценка по нише и региону'} · ${esc(c.region_ru || '')}</span>`)}
-        ${prop('Монетизация', `<span class="badge ${mcls}">${mtxt}</span> ${c.days_to_monetization != null ? `<span class="muted">· оценка ~${c.days_to_monetization} дн. до 1000 подп. и 4000 часов</span>` : ''}`)}
-        ${prop('Просмотры первых 5 роликов', `<b>${fmt(c.avg_views_first_5)}</b> <span class="muted">в среднем на ролик</span>`)}
-        ${prop('Средние / медианные просмотры', `<b>${fmt(c.avg_views)}</b> / <b>${fmt(c.median_views)}</b>`)}
-        ${prop('Скорость роста', `${fmt(c.views_per_day)} просм./день · ${fmt(c.subs_per_day)} подп./день · ~${fmt(c.watch_hours_est)} часов просмотра`)}
-        ${prop('Возраст канала', `${c.channel_age_days} дней · первый ролик ${ago(c.first_video_at)}`)}
-        ${prop('Стиль производства', `<span class="chip chip--tag is-style">${esc(c.style_ru || c.production_style)}</span> ${c.uses_ai ? '<span class="chip chip--tag">С нейросетями</span>' : '<span class="chip chip--tag">Без нейросетей</span>'} <span class="chip chip--tag">${c.style_group === 'ai' ? 'Группа: ИИ' : c.style_group === 'live' ? 'Группа: живые видео' : 'Группа: с лицом'}</span>`)}
-        ${prop('Сложность повторения', `<span class="badge ${diffColor(c.difficulty)}">${esc(c.difficulty_ru || c.difficulty)}</span> ${c.solo_friendly === false ? '<span class="muted">· нужна команда</span>' : '<span class="muted">· можно делать одному</span>'}`)}
-        ${prop('Язык / страна', `${lang(c)} · ${esc(c.country || '—')}`)}
-        ${prop('Score', `<b class="big">${c.score}</b> <span class="muted">/ 100</span>`)}
-        ${prop('Найден по запросам', (c.found_by_queries || []).map(q => `<span class="chip chip--tag">${esc(q)}</span>`).join(' ') || '—')}
-      </div>
-      <div class="section"><h3>Просмотры по роликам (хронологически)</h3>
-        <div class="bars">${chrono.map(v => `<div class="bar ${v.is_outlier ? 'is-out' : ''}" style="height:${Math.max(2, v.views / max * 100)}%" data-tip="${esc(v.title.slice(0, 50))} — ${fmt(v.views)}"></div>`).join('')}</div>
-        <p class="muted" style="margin:8px 0 0;font-size:12px">Красные — ролики-аутлаеры (значительно выше медианы канала). Наведи на столбик.</p></div>
-      <div class="section"><h3>Все длинные ролики</h3><div class="d-videos">${videoList(c, 'new').map(videoHtml).join('')}</div></div>
-      <div class="section howto"><h3>Как повторить формат</h3><ol>${howTo(c).map(s => `<li>${esc(s)}</li>`).join('')}</ol></div>
-      <div class="section"><h3>Мои заметки</h3><textarea class="note" data-note="${esc(c.id)}" placeholder="Идеи, что взять из этого канала…">${esc(state.notes[c.id] || '')}</textarea></div>
-      <div class="section" id="curatorBox" hidden><h3>Куратор</h3><div id="curatorText"></div></div>`;
-    $('#drawer').hidden = false; document.body.style.overflow = 'hidden';
-  }
-  function closeDrawer() { $('#drawer').hidden = true; $('#submitModal').hidden = true; document.body.style.overflow = ''; render(); }
-
-  /* Curator: rule-based answer until Gemini is connected */
-  function curator(c) {
-    const lines = [];
-    const v5 = c.avg_views_first_5 || 0;
-    lines.push(v5 > 50000 ? 'Ранние ролики набирают десятки тысяч просмотров — тема сама «тянет» новые каналы, YouTube активно тестирует такой контент.' : v5 > 5000 ? 'Ранние ролики стабильно набирают тысячи просмотров — ниша живая, но потребуется 10–20 роликов, чтобы выйти на монетизацию.' : 'Ранние просмотры скромные: смотри на ролики-аутлаеры — именно такие темы стоит повторять.');
-    lines.push((c.rpm || 0) >= 10 ? `RPM ~${money(c.rpm)} — высокий; даже 100K просмотров в месяц дают ~$${Math.round(c.rpm * 100)}.` : (c.rpm || 0) >= 5 ? `RPM ~${money(c.rpm)} — средний; ставка на объём просмотров.` : `RPM ~${money(c.rpm)} — низкий; окупится только массовыми просмотрами или переводом на англоязычную аудиторию.`);
-    lines.push(c.difficulty === 'low' ? `Формат «${c.style_ru}» повторяется одним человеком за 1–2 дня на ролик.` : c.difficulty === 'medium' ? `Формат «${c.style_ru}» требует 2–4 дня на ролик или помощника.` : `Формат «${c.style_ru}» сложно повторить — ищи упрощённый аналог (стоковый футаж + TTS).`);
-    const outs = (c.videos || []).filter(v => v.is_outlier).sort((a, b) => b.views - a.views).slice(0, 2);
-    if (outs.length) lines.push('Начни с тем, похожих на аутлаеры: ' + outs.map(v => `«${v.title}» (${fmt(v.views)})`).join(', ') + '.');
-    lines.push(`Вердикт: ${c.score >= 70 ? 'сильный кандидат, заходить сейчас.' : c.score >= 50 ? 'перспективно, но проверь 2–3 похожих канала.' : 'скорее наблюдать, чем копировать.'}`);
-    lines.push('<span class="muted">Ответ сформирован по правилам; после подключения Gemini здесь будет полноценный анализ транскриптов и роликов.</span>');
-    if ($('#drawer').hidden) openDetail(c);
-    $('#curatorBox').hidden = false; $('#curatorText').innerHTML = lines.map(l => `<p>${l}</p>`).join('');
-    $('#curatorBox').scrollIntoView({ behavior: 'smooth' });
-  }
-
-  /* ---------- submissions ---------- */
-  function renderSubmissions() {
-    $('#submitList').innerHTML = state.submissions.map((s, i) => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.url)}</a> ${s.note ? '— ' + esc(s.note) : ''} <span class="muted">(${ago(s.at)})</span> <button class="chip" data-del-sub="${i}">удалить</button></li>`).join('');
-  }
-
-  /* ---------- events ---------- */
+  function toggle(set, key, id) { if (set.has(id)) set.delete(id); else set.add(id); saveSet(key, set); render(); if (!$('#drawer').hidden) openDrawer(id); }
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-tab],[data-quick],[data-preset],[data-act],[data-close],[data-niche],[data-del-sub],#filtersToggle,#resetFilters,#submitBtn,#submitSave');
+    const t = e.target.closest('[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#liveClear,#supportBtn,#supportSend');
     if (!t) return;
-    if (t.dataset.tab) { state.tab = t.dataset.tab; $$('.tab').forEach(b => b.classList.toggle('is-active', b === t)); render(); }
-    else if (t.dataset.quick) { t.classList.toggle('is-active'); state.quick.has(t.dataset.quick) ? state.quick.delete(t.dataset.quick) : state.quick.add(t.dataset.quick); render(); }
-    else if (t.dataset.preset) { t.classList.toggle('is-active'); state.presets.has(t.dataset.preset) ? state.presets.delete(t.dataset.preset) : state.presets.add(t.dataset.preset); render(); }
-    else if (t.id === 'filtersToggle') { $('#filters').hidden = !$('#filters').hidden; }
-    else if (t.id === 'resetFilters') { state.filters = {}; $$('#filters select').forEach(s => s.selectedIndex = 0); render(); }
-    else if (t.id === 'submitBtn') { renderSubmissions(); $('#submitModal').hidden = false; }
-    else if (t.id === 'submitSave') { const url = $('#submitUrl').value.trim(); if (!url) return; state.submissions.unshift({ url, note: $('#submitNote').value.trim(), at: new Date().toISOString() }); persist(); $('#submitUrl').value = ''; $('#submitNote').value = ''; renderSubmissions(); }
-    else if (t.dataset.delSub != null) { state.submissions.splice(+t.dataset.delSub, 1); persist(); renderSubmissions(); }
-    else if (t.hasAttribute('data-close')) closeDrawer();
-    else if (t.dataset.niche) { state.tab = 'cards'; $$('.tab').forEach(b => b.classList.toggle('is-active', b.dataset.tab === 'cards')); state.filters.niche = t.dataset.niche; $('#fNiche').value = t.dataset.niche; render(); }
-    else if (t.dataset.act) {
-      const id = t.dataset.id || t.closest('.card')?.dataset.id; const c = state.channels.find(x => x.id === id); if (!c) return;
-      const act = t.dataset.act;
-      if (act === 'save') { state.saved.has(id) ? state.saved.delete(id) : state.saved.add(id); persist(); if ($('#drawer').hidden) render(); else openDetail(c); }
-      else if (act === 'like') { state.liked.has(id) ? state.liked.delete(id) : state.liked.add(id); persist(); render(); }
-      else if (act === 'vtab') { state.videoTab[id] = t.dataset.mode; render(); }
-      else if (act === 'open') openDetail(c);
-      else if (act === 'curator') curator(c);
-    }
+    if (t.hasAttribute('data-close')) { t.closest('.overlay').hidden = true; return; }
+    if (t.dataset.tab) { state.tab = t.dataset.tab; render(); return; }
+    if (t.dataset.save) { e.stopPropagation(); toggle(state.saved, LS.saved, t.dataset.save); return; }
+    if (t.dataset.like) { e.stopPropagation(); toggle(state.liked, LS.liked, t.dataset.like); return; }
+    if (t.dataset.open) { openDrawer(t.dataset.open); return; }
+    if (t.id === 'filtersToggle') { $('#filters').hidden = !$('#filters').hidden; return; }
+    if (t.id === 'resetFilters') { $$('#filters select').forEach(s => { s.selectedIndex = 0; }); $('#subsMin').value = 0; $('#subsMax').value = $('#subsMax').max; $('#viewsMin').value = 0; $('#viewsMax').value = $('#viewsMax').max; $('#avgMin').value = 0; $('#avgMax').value = $('#avgMax').max; $('#rpmMin').value = 0; $('#rpmMax').value = 30; $('#onlyNew3').checked = $('#onlyUnseen').checked = false; labs(); render(); return; }
+    if (t.id === 'refreshBtn') { $('#refreshModal').hidden = false; const k = localStorage.getItem(LS.key); if (k) $('#apiKey').value = k; return; }
+    if (t.id === 'liveClear') { localStorage.removeItem(LS.live); location.reload(); return; }
+    if (t.id === 'refreshRun') runLive();
+    if (t.id === 'supportBtn') { $('#supportModal').hidden = false; return; }
+    if (t.id === 'supportSend') { const text = $('#supportText').value.trim(); if (!text) return; const prev = loadArr(LS.support); prev.push({ text, at: new Date().toISOString() }); localStorage.setItem(LS.support, JSON.stringify(prev)); $('#supportOk').hidden = false; $('#supportText').value = ''; }
   });
   document.addEventListener('input', e => {
     if (e.target.id === 'search') { state.q = e.target.value; render(); }
-    if (e.target.dataset.note != null) { state.notes[e.target.dataset.note] = e.target.value; persist(); }
+    if (e.target.id === 'maxQueries') $('#maxQueriesVal').textContent = e.target.value;
+    if (['subsMin', 'subsMax', 'viewsMin', 'viewsMax', 'avgMin', 'avgMax', 'rpmMin', 'rpmMax'].includes(e.target.id)) { if (+$('#subsMin').value > +$('#subsMax').value) $('#subsMin').value = $('#subsMax').value; labs(); render(); }
   });
-  document.addEventListener('change', e => {
-    if (e.target.id === 'sort') { state.sort = e.target.value; render(); }
-    if (e.target.closest('#filters')) {
-      const map = { fNiche: 'niche', fLang: 'lang', fStyle: 'style', fRpm: 'rpm', fMon: 'mon', fAi: 'ai', fSubs: 'subs', fVideos: 'videos', fAge: 'age', fDiff: 'diff' };
-      const k = map[e.target.id]; if (k) { state.filters[k] = e.target.value; render(); }
-    }
-  });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
-
-  load();
+  document.addEventListener('change', e => { if (e.target.id === 'sort') { state.sort = e.target.value; render(); } if (e.target.closest('#filters')) render(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') $$('.overlay').forEach(o => o.hidden = true); });
+  async function runLive() {
+    const key = ($('#apiKey').value || '').trim();
+    if (!key) { $('#refreshLog').textContent = 'Вставь ключ YouTube Data API v3'; return; }
+    if (!window.NR_LIVE) { $('#refreshLog').textContent = 'Скрипт поиска не загрузился'; return; }
+    localStorage.setItem(LS.key, key); $('#refreshProgress').hidden = false;
+    try {
+      const res = await window.NR_LIVE.run({ key, maxQueries: +$('#maxQueries').value, niche: $('#fNiche').value, lang: $('#fLang').value }, (t, f) => { $('#refreshLog').textContent = t; $('#refreshBar').style.width = Math.round((f || 0) * 100) + '%'; });
+      const prev = loadArr(LS.live); const map = new Map(prev.map(c => [c.id, c])); (res.channels || []).forEach(c => map.set(c.id, c));
+      localStorage.setItem(LS.live, JSON.stringify([...map.values()]));
+      $('#refreshLog').textContent = `Готово: ${res.channels.length} каналов, ${res.units} ед. квоты` + (res.stopped ? ' · ' + res.stopped : '');
+      setTimeout(() => location.reload(), 700);
+    } catch (err) { $('#refreshLog').textContent = err.message || String(err); }
+  }
+  async function boot() {
+    let data = { channels: [], generated_at: null };
+    try { const r = await fetch('data/channels.json', { cache: 'no-store' }); if (r.ok) data = await r.json(); } catch {}
+    const live = loadArr(LS.live); const seen = new Set((data.channels || []).map(c => c.id));
+    state.all = (data.channels || []).filter(c => !c.graduated).concat(live.filter(c => c && c.id && !seen.has(c.id)));
+    const when = data.generated_at ? new Date(data.generated_at) : null;
+    $('#generatedAt').textContent = when ? 'Обновлено ' + when.toLocaleString('ru-RU') : (live.length ? 'Найдено в браузере: ' + live.length : '');
+    fillSelects(); render();
+  }
+  boot();
 })();
