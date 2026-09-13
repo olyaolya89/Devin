@@ -6,7 +6,7 @@ import { rankScene } from '../server/pipeline/rank.js';
 import { holdDuration, wrapText } from '../server/pipeline/render.js';
 import fs from 'node:fs/promises';
 import { getConfig, maskKey, readSettings, writeSettings, updateSettings, SETTINGS_FILE } from '../server/settings.js';
-import { mapLibraryVoices } from '../server/sources/lumean.js';
+import { mapLibraryVoices, mapPublicVoices } from '../server/sources/lumean.js';
 
 test('normalize keeps every sentence verbatim', () => {
   const project = { id: 'test', scriptText: "One thing. Children lined up! Dessert?" };
@@ -132,4 +132,12 @@ test('library voice mapping keeps only available ready voices with ids', () => {
     { available: true, voice: { voice_status: 'ready' } },
     { voice_id: 'cloning-id', available: true, voice: { voice_status: 'cloning' } }
   ]), [{ value: 'ready-id', label: 'Ready voice', language: 'ru' }]);
+});
+
+test('public voice catalog mapping keeps ready voices allowed in orders', () => {
+  assert.deepEqual(mapPublicVoices([
+    { id: 'pub-1', display_name: 'Ava', voice_status: 'ready', allow_usage_in_orders: true, default_language_code: 'en' },
+    { id: 'pub-2', display_name: 'Blocked', voice_status: 'ready', allow_usage_in_orders: false },
+    { id: 'pub-3', display_name: 'Cloning', voice_status: 'cloning', allow_usage_in_orders: true }
+  ]), [{ value: 'pub-1', label: 'Ava', language: 'en' }]);
 });

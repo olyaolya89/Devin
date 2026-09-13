@@ -38,15 +38,36 @@ export function mapLibraryVoices(items = []) {
     .filter(Boolean);
 }
 
-export async function listVoices(key) {
-  let payload;
+export function mapPublicVoices(items = []) {
+  return items
+    .filter(item => item?.voice_status === 'ready' && item?.allow_usage_in_orders !== false)
+    .map(item => ({
+      value: item.id,
+      label: item.display_name || item.id,
+      language: item.default_language_code || ''
+    }));
+}
+
+async function requestList(key, route) {
   try {
-    payload = await request(key, '/voices/library?per_page=100');
+    return await request(key, `${route}?per_page=100`);
   } catch (error) {
     if (![400, 404, 422].includes(error.status)) throw error;
-    payload = await request(key, '/voices/library');
+    return request(key, route);
   }
-  return mapLibraryVoices(payload?.data?.items || []);
+}
+
+export async function listVoices(key) {
+  const [library, publicCatalog] = await Promise.all([
+    requestList(key, '/voices/library'),
+    requestList(key, '/voices/public').catch(() => null)
+  ]);
+  const voices = mapLibraryVoices(library?.data?.items || []);
+  const seen = new Set(voices.map(voice => voice.value));
+  for (const voice of mapPublicVoices(publicCatalog?.data?.items || [])) {
+    if (!seen.has(voice.value)) { seen.add(voice.value); voices.push(voice); }
+  }
+  return voices;
 }
 
 export async function testKey(key) {

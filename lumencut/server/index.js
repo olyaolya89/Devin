@@ -22,7 +22,7 @@ function publicProject(project) { return project; }
 
 app.get('/api/health', async (_req, res) => {
   const config = await getConfig();
-  const reply = ok => { if (!res.headersSent) res.json({ version: '1.0.0', ffmpeg: ok, llmProvider: config.llmProvider, pexels: Boolean(config.pexelsApiKey), pixabay: Boolean(config.pixabayApiKey) }); };
+  const reply = ok => { if (!res.headersSent) res.json({ version: '1.0.0', ffmpeg: ok, llmProvider: config.llmProvider, ttsProvider: config.ttsProvider, pexels: Boolean(config.pexelsApiKey), pixabay: Boolean(config.pixabayApiKey) }); };
   const ffmpeg = spawn(process.env.FFMPEG_PATH || 'ffmpeg', ['-version']);
   ffmpeg.on('error', () => reply(false));
   ffmpeg.on('close', code => reply(code === 0));
@@ -53,7 +53,9 @@ app.get('/api/voices', async (_req, res) => {
     try {
       const lumeanVoices = (await listVoices(config.lumeanApiKey)).map(voice => ({ ...voice, provider: 'lumean' }));
       return res.json([...lumeanVoices, ...edgeVoices]);
-    } catch {}
+    } catch (error) {
+      console.error('Lumean voices:', error.message);
+    }
   }
   return res.json(edgeVoices);
 });
