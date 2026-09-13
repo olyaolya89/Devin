@@ -42,7 +42,9 @@ app.post('/api/settings/test', async (_req, res) => {
   const pexels = config.pexelsApiKey ? await testSource(searchPexels) : { ok: false, error: 'ключ не задан' };
   const pixabay = config.pixabayApiKey ? await testSource(searchPixabay) : { ok: false, error: 'ключ не задан' };
   const lumean = config.lumeanApiKey
-    ? await testKey(config.lumeanApiKey).catch(error => ({ ok: false, error: error.message }))
+    ? await testKey(config.lumeanApiKey)
+      .then(async result => ({ ...result, count: (await listVoices(config.lumeanApiKey)).length }))
+      .catch(error => ({ ok: false, error: error.message }))
     : { ok: false, error: 'ключ не задан' };
   res.json({ pexels, pixabay, lumean });
 });
