@@ -179,10 +179,10 @@ export function applyLlmKeep(scenes, keepLists) {
   return scenes;
 }
 
-export async function rerankWithLLM(scenes) {
+export async function rerankWithLLM(scenes, topic = '') {
   const config = await getConfig();
   if (!['gemini', 'ollama'].includes(config.llmProvider)) return scenes;
-  const topic = scenes.topic || scenes[0]?.topic || topicWords(scenes);
+  topic = topic || topicWords(scenes);
   const keepLists = [];
   for (let start = 0; start < scenes.length; start += 10) {
     const chunk = scenes.slice(start, start + 10);

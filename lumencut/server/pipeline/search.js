@@ -43,7 +43,7 @@ export async function search(project) {
   const config = await getConfig();
   if (config.llmProvider !== 'none') {
     try {
-      await rerankWithLLM(project.scenes);
+      await rerankWithLLM(project.scenes, project.topic);
     } catch (error) {
       log(project, 'search', `LLM rerank skipped: ${error.message}`);
     }
