@@ -117,6 +117,10 @@ test('settings take precedence over env and empty values fall back', async () =>
     await writeSettings({ ...(await readSettings()), ttsProvider: 'edge' });
     await updateSettings({ ttsProvider: 'bogus' });
     assert.equal((await readSettings()).ttsProvider, 'edge');
+    await updateSettings({ lumeanApiKey: '  abc123  ' });
+    assert.equal((await readSettings()).lumeanApiKey, 'abc123');
+    await assert.rejects(updateSettings({ lumeanApiKey: 'abc123 Ключ' }), /недопустимые символы/);
+    assert.equal((await readSettings()).lumeanApiKey, 'abc123');
   } finally {
     if (originalEnv === undefined) delete process.env.PEXELS_API_KEY;
     else process.env.PEXELS_API_KEY = originalEnv;

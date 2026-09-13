@@ -86,6 +86,8 @@ export async function publicSettings() {
   };
 }
 
+const KEY_FIELDS = new Set(['pexelsApiKey', 'pixabayApiKey', 'geminiApiKey', 'lumeanApiKey', 'lumeanTemplateId']);
+
 export async function updateSettings(input = {}) {
   const current = await readSettings();
   const next = { ...current };
@@ -100,7 +102,11 @@ export async function updateSettings(input = {}) {
     } else if (field === 'ttsProvider') {
       if (['edge', 'lumean'].includes(value)) next[field] = value;
     } else if (typeof value === 'string') {
-      next[field] = value;
+      const trimmed = value.trim();
+      if (KEY_FIELDS.has(field) && /[^\x21-\x7e]/.test(trimmed)) {
+        throw new Error(`${field}: ключ содержит недопустимые символы (пробелы или не латинские буквы) — скопируйте только сам ключ`);
+      }
+      next[field] = trimmed;
     }
   }
   await writeSettings(next);

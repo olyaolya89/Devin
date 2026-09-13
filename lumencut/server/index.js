@@ -28,7 +28,9 @@ app.get('/api/health', async (_req, res) => {
   ffmpeg.on('close', code => reply(code === 0));
 });
 app.get('/api/settings', async (_req, res) => res.json(await publicSettings()));
-app.put('/api/settings', async (req, res) => res.json(await updateSettings(req.body)));
+app.put('/api/settings', async (req, res) => {
+  try { res.json(await updateSettings(req.body)); } catch (error) { res.status(400).json({ error: error.message }); }
+});
 app.post('/api/settings/test', async (_req, res) => {
   const config = await getConfig();
   const testSource = async search => {
