@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api.js';
 
-const initial = { pexelsApiKey: '', pixabayApiKey: '', llmProvider: 'none', geminiApiKey: '', geminiModel: 'gemini-2.5-flash', ollamaModel: 'llama3.1', maxClipSeconds: 5, ttsProvider: 'edge', lumeanApiKey: '', lumeanTemplateId: '' };
+const initial = { pexelsApiKey: '', pixabayApiKey: '', llmProvider: 'none', geminiApiKey: '', geminiModel: 'gemini-3.6-flash', ollamaModel: 'llama3.1', maxClipSeconds: 5, ttsProvider: 'edge', lumeanApiKey: '', lumeanTemplateId: '' };
 
 export default function Settings() {
   const [settings, setSettings] = useState(initial);

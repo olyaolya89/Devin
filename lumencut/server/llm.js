@@ -40,8 +40,12 @@ export function heuristicQueries(text, topic = '') {
   return queries;
 }
 
-async function geminiJson(config, prompt) {
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${config.geminiModel}:generateContent?key=${config.geminiApiKey}`, {
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const GEMINI_FALLBACKS = ['gemini-3.6-flash', 'gemini-flash-latest', 'gemini-3.5-flash'];
+
+async function geminiJson(config, prompt, model = config.geminiModel, attempt = 0) {
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${config.geminiApiKey}`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
@@ -49,9 +53,17 @@ async function geminiJson(config, prompt) {
       generationConfig: { responseMimeType: 'application/json', temperature: 0.4 }
     })
   });
+  if ([429, 500, 503].includes(res.status) && attempt < 2) {
+    await sleep(2000 * (attempt + 1));
+    return geminiJson(config, prompt, model, attempt + 1);
+  }
+  if ([404, 429, 500, 503].includes(res.status)) {
+    const next = GEMINI_FALLBACKS.find(candidate => GEMINI_FALLBACKS.indexOf(candidate) > GEMINI_FALLBACKS.indexOf(model));
+    if (next) return geminiJson(config, prompt, next, 0);
+  }
   if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
   const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  const text = (data.candidates?.[0]?.content?.parts || []).filter(part => !part.thought).map(part => part.text || '').join('');
   if (!text) throw new Error('Gemini returned an empty response');
   return JSON.parse(text);
 }
