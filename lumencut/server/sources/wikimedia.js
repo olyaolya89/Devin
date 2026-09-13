@@ -4,7 +4,7 @@ const stripTags = value => String(value || '').replace(/<[^>]*>/g, '');
 export async function search(query) {
   const url = 'https://commons.wikimedia.org/w/api.php?' + new URLSearchParams({
     action: 'query', generator: 'search', gsrsearch: `filetype:bitmap|video ${query}`,
-    gsrnamespace: '6', gsrlimit: '20', prop: 'imageinfo', iiprop: 'url|size|mime|extmetadata',
+    gsrnamespace: '6', gsrlimit: '30', prop: 'imageinfo', iiprop: 'url|size|mime|extmetadata',
     iiurlwidth: '1920', format: 'json', origin: '*'
   });
   const res = await fetch(url, { headers: UA });

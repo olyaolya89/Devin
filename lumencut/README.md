@@ -44,6 +44,8 @@ npm run dev
 | Pexels | https://www.pexels.com/api/ → Get Started → Your API Key | качественные стоковые видео |
 | Gemini | https://aistudio.google.com/apikey | умные поисковые запросы по смыслу сцены (без ключа работает простая эвристика) |
 
+Без LLM подбор кадров идёт по ключевым словам и часто не в тему. Бесплатный ключ Gemini — самый большой прирост качества.
+
 Wikimedia Commons и Openverse работают без ключей. Ключи хранятся только в `data/settings.json` на вашем компьютере.
 
 ### Озвучка Lumean (опционально)

@@ -3,8 +3,8 @@ import { getConfig } from '../settings.js';
 export async function search(query) {
   const { pixabayApiKey: key } = await getConfig();
   if (!key) return [];
-  const imageUrl = 'https://pixabay.com/api/?' + new URLSearchParams({ key, q: query, image_type: 'photo', orientation: 'horizontal', min_width: '1280' });
-  const videoUrl = 'https://pixabay.com/api/videos/?' + new URLSearchParams({ key, q: query });
+  const imageUrl = 'https://pixabay.com/api/?' + new URLSearchParams({ key, q: query, image_type: 'photo', orientation: 'horizontal', min_width: '1280', per_page: '40' });
+  const videoUrl = 'https://pixabay.com/api/videos/?' + new URLSearchParams({ key, q: query, per_page: '20' });
   const [images, videos] = await Promise.all([fetch(imageUrl), fetch(videoUrl)]);
   if (!images.ok) throw new Error(`images HTTP ${images.status}`);
   if (!videos.ok) throw new Error(`videos HTTP ${videos.status}`);

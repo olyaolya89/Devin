@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { normalize } from '../server/pipeline/normalize.js';
-import { heuristicQueries } from '../server/llm.js';
+import { applyLlmKeep, heuristicQueries, topicWords } from '../server/llm.js';
 import { rankScene } from '../server/pipeline/rank.js';
 import { holdDuration, wrapText } from '../server/pipeline/render.js';
 import fs from 'node:fs/promises';
@@ -21,6 +21,21 @@ test('heuristic queries produce three useful queries', () => {
   assert.ok(queries.every(Boolean));
 });
 
+test('topicWords finds the most frequent school dinner words', () => {
+  const topic = topicWords([
+    { text: 'School dinners were served at noon.' },
+    { text: 'Children queued for school dinners.' },
+    { text: 'School dinners included pudding.' }
+  ]);
+  assert.deepEqual(new Set(topic.split(' ')), new Set(['school', 'dinners']));
+});
+
+test('heuristic queries append topic context to the second and third queries', () => {
+  const queries = heuristicQueries('Children queue beside metal trays.', 'school dinners');
+  assert.match(queries[1], /school dinners/);
+  assert.match(queries[2], /school dinners/);
+});
+
 test('rank boosts video and avoids reused URLs', () => {
   const scene = { text: 'school dinners', queries: ['school dinner'], candidates: [
     { url: 'image', kind: 'image', source: 'wikimedia', width: 1200, title: 'school dinner' },
@@ -36,6 +51,34 @@ test('rank keeps zero-overlap videos below relevant candidates', () => {
     { url: 'trays', kind: 'image', source: 'wikimedia', width: 1200, title: 'metal trays shepherd pie', description: '' }
   ] };
   assert.equal(rankScene(scene, new Set()).url, 'trays');
+});
+
+test('rank gates zero-overlap non-stock candidates but keeps first-query stock video', () => {
+  const scene = { text: 'school dinners', queries: ['school dinners'], candidates: [
+    { url: 'wiki', kind: 'image', source: 'wikimedia', title: 'pocket watch', description: '', queryRank: 0 },
+    { url: 'pixabay', kind: 'video', source: 'pixabay', title: 'cinema', description: '', queryRank: 0 }
+  ] };
+  assert.deepEqual(rankScene(scene, new Set()), scene.candidates[0]);
+  assert.equal(scene.pick.url, 'pixabay');
+  assert.equal(scene.candidates.some(candidate => candidate.url === 'wiki'), false);
+});
+
+test('LLM-ranked scenes keep only ranked candidates and prefer rank zero', () => {
+  const scene = { llmRanked: true, text: 'school dinners', queries: ['school dinners'], candidates: [
+    { url: 'low-overlap', kind: 'image', source: 'wikimedia', title: 'school', description: '', llmRank: 1 },
+    { url: 'best', kind: 'image', source: 'wikimedia', title: 'unrelated', description: '', llmRank: 0 },
+    { url: 'unranked', kind: 'video', source: 'pixabay', title: 'school dinners', description: '' }
+  ] };
+  assert.equal(rankScene(scene, new Set()).url, 'best');
+  assert.deepEqual(scene.candidates.map(candidate => candidate.url), ['best', 'low-overlap']);
+});
+
+test('applyLlmKeep ignores out-of-range indices and assigns ranks', () => {
+  const scenes = [{ candidates: [{ url: 'first' }, { url: 'second' }] }];
+  applyLlmKeep(scenes, [[1, 99, -1, 0]]);
+  assert.equal(scenes[0].llmRanked, true);
+  assert.equal(scenes[0].candidates[1].llmRank, 0);
+  assert.equal(scenes[0].candidates[0].llmRank, 1);
 });
 
 test('scene timing allocation sums to audio duration', () => {

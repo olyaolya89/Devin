@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api.js';
 
-const initial = { pexelsApiKey: '', pixabayApiKey: '', llmProvider: 'none', geminiApiKey: '', geminiModel: 'gemini-1.5-flash', ollamaModel: 'llama3.1', maxClipSeconds: 5, ttsProvider: 'edge', lumeanApiKey: '', lumeanTemplateId: '' };
+const initial = { pexelsApiKey: '', pixabayApiKey: '', llmProvider: 'none', geminiApiKey: '', geminiModel: 'gemini-2.5-flash', ollamaModel: 'llama3.1', maxClipSeconds: 5, ttsProvider: 'edge', lumeanApiKey: '', lumeanTemplateId: '' };
 
 export default function Settings() {
   const [settings, setSettings] = useState(initial);
@@ -34,7 +34,7 @@ export default function Settings() {
         <label className="settings-field">Pexels API-ключ<input value={settings.pexelsApiKey || ''} onChange={e => update('pexelsApiKey', e.target.value)} placeholder="Введите ключ Pexels" type="password" /><small>Get Started → Your API Key · <a href="https://www.pexels.com/api/" target="_blank" rel="noreferrer">pexels.com/api/</a></small></label>
       </div>
       <div className="settings-section"><h2>Поисковые запросы</h2><p className="section-note">LLM используется только для генерации поисковых запросов сцен.</p>
-        <label className="settings-field">Провайдер LLM<select value={settings.llmProvider || 'none'} onChange={e => update('llmProvider', e.target.value)}><option value="none">Не использовать</option><option value="gemini">Gemini</option><option value="ollama">Ollama</option></select></label>
+        <label className="settings-field">Провайдер LLM<select value={settings.llmProvider || 'none'} onChange={e => update('llmProvider', e.target.value)}><option value="none">Не использовать</option><option value="gemini">Gemini</option><option value="ollama">Ollama</option></select><small>Без LLM подбор кадров идёт по ключевым словам и часто не в тему. Бесплатный ключ Gemini — самый большой прирост качества.</small></label>
         <label className="settings-field">Gemini ключ<input value={settings.geminiApiKey || ''} onChange={e => update('geminiApiKey', e.target.value)} placeholder="Введите ключ Gemini" type="password" /><small><a href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer">Получить ключ на aistudio.google.com/apikey</a></small></label>
         <label className="settings-field">Gemini модель<input value={settings.geminiModel || ''} onChange={e => update('geminiModel', e.target.value)} /></label>
         <label className="settings-field">Ollama модель<input value={settings.ollamaModel || ''} onChange={e => update('ollamaModel', e.target.value)} /></label>

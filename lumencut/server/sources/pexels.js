@@ -5,8 +5,8 @@ export async function search(query) {
   if (!key) return [];
   const headers = { Authorization: key };
   const [images, videos] = await Promise.all([
-    fetch('https://api.pexels.com/v1/search?' + new URLSearchParams({ query, per_page: '15', orientation: 'landscape' }), { headers }),
-    fetch('https://api.pexels.com/videos/search?' + new URLSearchParams({ query, per_page: '10', orientation: 'landscape' }), { headers })
+    fetch('https://api.pexels.com/v1/search?' + new URLSearchParams({ query, per_page: '30', orientation: 'landscape' }), { headers }),
+    fetch('https://api.pexels.com/videos/search?' + new URLSearchParams({ query, per_page: '20', orientation: 'landscape' }), { headers })
   ]);
   if (!images.ok) throw new Error(`images HTTP ${images.status}`);
   if (!videos.ok) throw new Error(`videos HTTP ${videos.status}`);
