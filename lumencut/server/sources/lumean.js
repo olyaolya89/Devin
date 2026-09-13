@@ -57,14 +57,56 @@ async function requestList(key, route) {
   }
 }
 
-export async function listVoices(key) {
-  const [library, publicCatalog] = await Promise.all([
+export function mapTemplates(items = []) {
+  return items
+    .filter(item => item?.id && item?.config?.tts_settings)
+    .map(item => ({
+      value: `tpl:${item.id}`,
+      label: `${item.name || item.id} (шаблон)`,
+      language: item.config.tts_settings.language_code || '',
+      templateId: item.id
+    }));
+}
+
+export function mapElevenLabsVoices(items = []) {
+  return items
+    .filter(item => item?.voice_id)
+    .map(item => ({
+      value: `el:${item.voice_id}${item.public_owner_id ? `:${item.public_owner_id}` : ''}`,
+      label: `${item.name || item.voice_id}${item.language ? ` (${item.language}${item.gender ? `, ${item.gender}` : ''})` : ''}`,
+      language: item.language || ''
+    }));
+}
+
+export function parseVoice(voice, defaultTemplateId) {
+  const value = String(voice || '');
+  if (value.startsWith('tpl:')) return { templateId: value.slice(4) };
+  if (value.startsWith('el:')) {
+    const [, voiceId, publicOwnerId] = value.split(':');
+    return { templateId: defaultTemplateId, override: { voice_id: voiceId, ...(publicOwnerId ? { public_owner_id: publicOwnerId } : {}) } };
+  }
+  return { templateId: defaultTemplateId, override: value ? { voice_id: value } : null };
+}
+
+export async function listTemplates(key) {
+  const payload = await request(key, '/templates');
+  return mapTemplates(Array.isArray(payload?.data) ? payload.data : payload?.data?.items || []);
+}
+
+export async function listVoices(key, languages = ['en', 'ru']) {
+  const [templates, library, publicCatalog, ...elevenlabs] = await Promise.all([
+    listTemplates(key).catch(() => []),
     requestList(key, '/voices/library'),
-    requestList(key, '/voices/public').catch(() => null)
+    requestList(key, '/voices/public').catch(() => null),
+    ...languages.map(lang => request(key, `/voices/elevenlabs/library?page_size=50&required_languages=${lang}`).catch(() => null))
   ]);
-  const voices = mapLibraryVoices(library?.data?.items || []);
+  const voices = [...templates, ...mapLibraryVoices(library?.data?.items || [])];
   const seen = new Set(voices.map(voice => voice.value));
-  for (const voice of mapPublicVoices(publicCatalog?.data?.items || [])) {
+  const extra = [
+    ...mapPublicVoices(publicCatalog?.data?.items || []),
+    ...elevenlabs.flatMap(payload => mapElevenLabsVoices(payload?.data?.voices || []))
+  ];
+  for (const voice of extra) {
     if (!seen.has(voice.value)) { seen.add(voice.value); voices.push(voice); }
   }
   return voices;
@@ -77,13 +119,19 @@ export async function testKey(key) {
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-export async function synthesize(key, templateId, text, voiceId, outFile, onLog = () => {}) {
+export async function synthesize(key, configuredTemplateId, text, voice, outFile, onLog = () => {}) {
+  let defaultTemplateId = configuredTemplateId;
+  if (!defaultTemplateId && !String(voice || '').startsWith('tpl:')) {
+    defaultTemplateId = (await listTemplates(key))[0]?.templateId;
+  }
+  const { templateId, override } = parseVoice(voice, defaultTemplateId);
+  if (!templateId) throw new Error('Lumean: не задан ID шаблона TTS и в кабинете нет ни одного шаблона');
   const order = await request(key, '/orders', {
     method: 'POST',
     body: {
       template_id: templateId,
       input_text: text,
-      ...(voiceId ? { config_override: { tts_settings: { voice_id: voiceId } } } : {})
+      ...(override ? { config_override: { tts_settings: override } } : {})
     }
   });
   const orderId = order?.data?.id;

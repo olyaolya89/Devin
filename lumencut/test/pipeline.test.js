@@ -6,7 +6,7 @@ import { rankScene } from '../server/pipeline/rank.js';
 import { holdDuration, wrapText } from '../server/pipeline/render.js';
 import fs from 'node:fs/promises';
 import { getConfig, maskKey, readSettings, writeSettings, updateSettings, SETTINGS_FILE } from '../server/settings.js';
-import { mapLibraryVoices, mapPublicVoices } from '../server/sources/lumean.js';
+import { mapLibraryVoices, mapPublicVoices, mapTemplates, mapElevenLabsVoices, parseVoice } from '../server/sources/lumean.js';
 
 test('normalize keeps every sentence verbatim', () => {
   const project = { id: 'test', scriptText: "One thing. Children lined up! Dessert?" };
@@ -136,6 +136,17 @@ test('library voice mapping keeps only available ready voices with ids', () => {
     { available: true, voice: { voice_status: 'ready' } },
     { voice_id: 'cloning-id', available: true, voice: { voice_status: 'cloning' } }
   ]), [{ value: 'ready-id', label: 'Ready voice', language: 'ru' }]);
+});
+
+test('templates and ElevenLabs library voices map to prefixed values that parseVoice understands', () => {
+  const [tpl] = mapTemplates([{ id: 't-1', name: 'Charlie', config: { tts_settings: { voice_id: 'x' } } }, { id: 't-2', name: 'no tts', config: {} }]);
+  assert.deepEqual(tpl, { value: 'tpl:t-1', label: 'Charlie (шаблон)', language: '', templateId: 't-1' });
+  const [el] = mapElevenLabsVoices([{ voice_id: 'v-1', public_owner_id: 'own', name: 'Ayaan', language: 'en', gender: 'male' }]);
+  assert.deepEqual(el, { value: 'el:v-1:own', label: 'Ayaan (en, male)', language: 'en' });
+  assert.deepEqual(parseVoice('tpl:t-1', 'default'), { templateId: 't-1' });
+  assert.deepEqual(parseVoice('el:v-1:own', 'default'), { templateId: 'default', override: { voice_id: 'v-1', public_owner_id: 'own' } });
+  assert.deepEqual(parseVoice('lum-1', 'default'), { templateId: 'default', override: { voice_id: 'lum-1' } });
+  assert.deepEqual(parseVoice('', 'default'), { templateId: 'default', override: null });
 });
 
 test('public voice catalog mapping keeps ready voices allowed in orders', () => {
