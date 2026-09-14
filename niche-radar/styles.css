@@ -81,6 +81,8 @@ button{font:inherit;cursor:pointer}
 .badge--amber{background:var(--amber-bg);color:var(--amber)}
 .badge--blue{background:var(--blue-bg);color:var(--blue)}
 .badge--red{background:#fdecea;color:var(--red-dark)}
+.label-action.is-on{background:var(--blue-bg);color:var(--blue);border-color:var(--blue)}
+.label-role{font-size:11px;padding:2px 6px}
 .added{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
 .added::before{content:"";width:8px;height:8px;border-radius:50%;background:#c9c9cf}
 .added.is-today::before{background:var(--red)}

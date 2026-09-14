@@ -204,6 +204,7 @@
           found_by_queries: [q?.text].filter(Boolean), added_at: now.toISOString(), updated_at: now.toISOString(), live: true,
           videos: m.long.map(v => ({ id: v.id, title: v.title, thumbnail: v.thumbnail, views: v.views, published_at: v.published_at, duration_sec: v.duration_sec, is_outlier: outSet.has(v.id) })),
         };
+        rec.cluster = `${niche}|${rec.style_group}|${rec.language}`;
         rec.score = score(rec);
         out.push(rec);
       } catch (e) { if (e instanceof QuotaExhausted) stopped = e; else log(`Пропуск канала: ${e.message}`); }
