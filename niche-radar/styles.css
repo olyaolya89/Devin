@@ -153,7 +153,7 @@ textarea.note{width:100%;min-height:80px;border:1px solid var(--line);border-rad
 .comp .chip{padding:2px 8px;font-size:11px;margin-left:4px}
 .comp tr.is-current td{background:#fff7f7}
 @media (max-width:900px){
-  .grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.hero{flex-direction:column}
+  .grid{grid-template-columns:minmax(0,1fr)}.card,.card__head,.card__head>div{min-width:0}.card{padding:16px}.card__title{overflow-wrap:anywhere}.filters{grid-template-columns:1fr 1fr}.hero{flex-direction:column}
   .hero h1{font-size:30px}.search{min-width:0;width:100%;margin-left:0}.prop{grid-template-columns:1fr}.d-title{font-size:28px}
   .topbar__inner{padding:10px 12px;flex-wrap:wrap;gap:8px}.topbar__right{gap:8px}.card__actions .btn,.card__actions .like{font-size:12px;padding:6px 8px}
   .niches th,.niches td{padding:8px 10px;font-size:12px;white-space:nowrap}.row-end{flex-wrap:wrap}
