@@ -200,7 +200,7 @@
     const cluster = state.clusters[c.cluster];
     const verdictClass = c.entry_verdict === 'open' ? 'badge--green' : c.entry_verdict === 'filling' ? 'badge--amber' : c.entry_verdict === 'crowded' ? 'badge--red' : 'badge';
     const verdictTitle = cluster ? `Окно входа: ${cluster.n} новичков (${cluster.newcomers_30d} за 30 дн.), ${Math.round(cluster.share_growing * 100)}% растут, медиана ${fmt(cluster.median_vpv)} просм./видео` : '';
-    const label = state.labels[c.cluster];
+    const label = state.labels[c.cluster] || (cluster && cluster.label);
     const role = c.labeled_role === 'reference' ? '<span class="chip chip--tag label-role">референс</span>' : c.labeled_role === 'competitor' ? '<span class="chip chip--tag label-role">конкурент</span>' : '';
     return `<article class="card ${state.seen.has(c.id) ? 'is-seen' : ''}" data-id="${esc(c.id)}">
       <div class="card__head">
