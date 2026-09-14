@@ -239,8 +239,8 @@
         <button class="btn btn--primary btn--sm" data-act="open">Разбор канала</button>
         <button class="btn btn--sm" data-act="curator">Куратор</button>
         <a class="btn btn--sm btn--yt" href="${ytUrl(c)}" target="_blank" rel="noopener">▶ YouTube</a>
-        <button class="btn btn--sm label-action ${label === 'good' ? 'is-on' : ''}" data-act="labelGood">👍 ниша</button>
-        <button class="btn btn--sm label-action ${label === 'bad' ? 'is-on' : ''}" data-act="labelBad">👎 ниша</button>
+        <button class="btn btn--sm label-action ${label === 'good' ? 'is-on' : ''}" data-act="labelGood">👍 Хорошая ниша</button>
+        <button class="btn btn--sm label-action ${label === 'bad' ? 'is-on' : ''}" data-act="labelBad">👎 Плохая ниша</button>
         <button class="like btn--sm ${state.liked.has(c.id) ? 'is-on' : ''}" data-act="like">❤</button>
       </div>
     </article>`;
@@ -254,7 +254,7 @@
       const verdictClass = g.verdict === 'open' ? 'badge--green' : g.verdict === 'filling' ? 'badge--amber' : g.verdict === 'crowded' ? 'badge--red' : '';
       const verdictTitle = `Окно входа: ${g.n} новичков (${g.newcomers_30d} за 30 дн.), ${Math.round(g.share_growing * 100)}% растут, медиана ${fmt(g.median_vpv)} просм./видео`;
       const [niche, styleGroup, language] = key.split('|');
-      return `<tr data-niche="${esc(niche)}"><td><b>${esc(g.niche_ru || niche)}</b></td><td>${esc(styleNames[styleGroup] || styleGroup || '—')}</td><td>${esc(lang({ language }))}</td><td>${g.n}</td><td>${Math.round(g.share_growing * 100)}%</td><td>${fmt(g.median_vpv)}</td><td>${g.newcomers_30d}</td><td>${money(g.median_rpm)}</td><td><span class="badge badge--blue">${g.entry_score ?? '—'}</span></td><td><span class="badge ${verdictClass}" title="${esc(verdictTitle)}">${esc(g.verdict_ru || g.verdict || '—')}</span></td><td>${label === 'good' ? '👍' : label === 'bad' ? '👎' : '—'}</td></tr>`;
+      return `<tr data-niche="${esc(niche)}"><td><b>${esc(g.niche_ru || niche)}</b></td><td>${esc(styleNames[styleGroup] || styleGroup || '—')}</td><td>${esc(lang({ language }))}</td><td>${g.n}</td><td>${Math.round(g.share_growing * 100)}%</td><td>${fmt(g.median_vpv)}</td><td>${g.newcomers_30d}</td><td>${money(g.median_rpm)}</td><td><span class="badge badge--blue">${g.entry_score ?? '—'}</span></td><td><span class="badge ${verdictClass}" title="${esc(verdictTitle)}">${esc(g.verdict_ru || g.verdict || '—')}</span></td><td>${label === 'good' ? '👍 хорошая' : label === 'bad' ? '👎 плохая' : '—'}</td></tr>`;
     }).join('');
     return `<div class="niches"><table><thead><tr><th>Ниша</th><th>Формат</th><th>Язык</th><th>Новичков</th><th>Растут %</th><th>Медиана просм./видео</th><th>Новых за 30 дн.</th><th>Медиана RPM</th><th>Оценка входа</th><th>Вердикт</th><th>Разметка</th></tr></thead><tbody>${rows || '<tr><td colspan="11" class="muted">Нет данных</td></tr>'}</tbody></table></div>`;
   }
