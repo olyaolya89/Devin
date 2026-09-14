@@ -22,6 +22,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 QUERIES_PATH = os.path.join(BASE_DIR, "queries.json")
 RPM_PATH = os.path.join(BASE_DIR, "rpm_baseline.json")
 CACHE_PATH = os.path.join(BASE_DIR, "nexlev_cache.json")
+LABELS_PATH = os.path.join(BASE_DIR, "labels.json")
 API_URL = "https://www.googleapis.com/youtube/v3"
 SEARCH_LIMIT = 7500
 ENRICHMENT_LIMIT = 1500
@@ -136,6 +137,125 @@ def rotate_queries(queries: list[dict[str, Any]], now: dt.datetime) -> list[dict
         return []
     offset = (now.timetuple().tm_yday * 25) % len(queries)
     return queries[offset:] + queries[:offset]
+
+
+def cluster_key(channel: dict[str, Any]) -> str:
+    return f"{channel.get('niche', '')}|{channel.get('style_group', '')}|{channel.get('language', '')}"
+
+
+def entry_scores(
+    channels: list[dict[str, Any]],
+    *,
+    now: dt.datetime,
+    labels: dict[str, Any] | None = None,
+) -> dict[str, dict[str, Any]]:
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for channel in channels:
+        if channel.get("stale") or channel.get("graduated"):
+            continue
+        groups.setdefault(cluster_key(channel), []).append(channel)
+    labels_by_key = {
+        f"{item.get('niche')}|{item.get('style_group')}|{item.get('language')}": item.get("label")
+        for item in (labels or {}).get("niches", [])
+    }
+    result: dict[str, dict[str, Any]] = {}
+    for key, group in groups.items():
+        growing = [
+            float(channel.get("avg_views_first_5") or channel.get("avg_views") or 0)
+            for channel in group
+        ]
+        vpv = [float(channel.get("avg_views") or 0) for channel in group]
+        vps = [
+            float(channel.get("total_views") or 0) / max(_number(channel.get("subs")), 1)
+            for channel in group
+        ]
+        added = [_parse_time(channel.get("added_at")) for channel in group]
+        newcomers = sum(
+            1 for date in added if date is not None and (now - date).total_seconds() <= 30 * 86400
+        )
+        share_growing = sum(value >= 20000 for value in growing) / len(group)
+        median_vpv = float(median(vpv)) if vpv else 0
+        median_vps = float(median(vps)) if vps else 0
+        supply = 1 if 1 <= len(group) <= 5 else 0.5 if len(group) <= 8 else 0
+        score_value = round(
+            35 * share_growing
+            + 25 * _clamp(math.log10(max(median_vpv, 1)) / 5.5, 0, 1)
+            + 20 * _clamp(median_vps / 200, 0, 1)
+            + 20 * supply
+        )
+        if len(group) > 8:
+            verdict, verdict_ru = "crowded", "Переполнено"
+        elif share_growing < 0.4 or median_vpv < 10000:
+            verdict, verdict_ru = "unproven", "Спрос не доказан"
+        elif len(group) <= 5 and newcomers <= 2:
+            verdict, verdict_ru = "open", "Окно открыто"
+        else:
+            verdict, verdict_ru = "filling", "Заполняется"
+        result[key] = {
+            "n": len(group),
+            "share_growing": round(share_growing, 3),
+            "median_vpv": round(median_vpv, 2),
+            "median_vps": round(median_vps, 2),
+            "newcomers_30d": newcomers,
+            "median_rpm": round(float(median([float(c.get("rpm") or 0) for c in group])), 2),
+            "niche_ru": next((c.get("niche_ru") for c in group if c.get("niche_ru")), key.split("|")[0]),
+            "style_group": group[0].get("style_group"),
+            "language": group[0].get("language"),
+            "channel_ids": [c.get("id") for c in group],
+            "entry_score": max(0, min(100, score_value)),
+            "verdict": verdict,
+            "verdict_ru": verdict_ru,
+            "label": labels_by_key.get(key),
+        }
+    return result
+
+
+def _decorate_channels(channels: list[dict[str, Any]], clusters: dict[str, dict[str, Any]]) -> None:
+    for channel in channels:
+        key = cluster_key(channel)
+        channel["cluster"] = key
+        cluster = clusters.get(key)
+        if cluster and not channel.get("stale") and not channel.get("graduated"):
+            channel["entry_verdict"] = cluster["verdict"]
+            channel["entry_verdict_ru"] = cluster["verdict_ru"]
+            channel["entry_score"] = cluster["entry_score"]
+        else:
+            channel["entry_verdict"] = None
+            channel["entry_verdict_ru"] = None
+            channel["entry_score"] = None
+
+
+def write_history(history_dir: str, output: dict[str, Any], now: dt.datetime) -> str:
+    os.makedirs(history_dir, exist_ok=True)
+    path = os.path.join(history_dir, f"{now.date().isoformat()}.json")
+    history = {
+        "generated_at": output.get("generated_at") or now.isoformat().replace("+00:00", "Z"),
+        "channels": [
+            {
+                key: channel.get(key)
+                for key in (
+                    "id",
+                    "subs",
+                    "total_views",
+                    "videos_count",
+                    "score",
+                    "cluster",
+                    "is_monetized",
+                    "monetization_forecast",
+                )
+            }
+            for channel in output.get("channels", [])
+        ],
+        "clusters": {
+            key: {
+                field: cluster.get(field)
+                for field in ("n", "share_growing", "median_vpv", "entry_score", "verdict")
+            }
+            for key, cluster in output.get("clusters", {}).items()
+        },
+    }
+    _write_output(path, history)
+    return path
 
 
 def _api_item_video(item: dict[str, Any]) -> dict[str, Any]:
@@ -459,10 +579,12 @@ def _channel_output(
     rpm_data: dict[str, Any],
     cache: dict[str, Any],
     now: dt.datetime,
+    *,
+    force: bool = False,
 ) -> dict[str, Any] | None:
     statistics = channel.get("statistics", {})
     video_count = _number(statistics.get("videoCount"))
-    if (
+    if not force and (
         video_count < 3
         or video_count > 30
         or _number(statistics.get("subscriberCount")) < 200
@@ -537,16 +659,18 @@ def merge(
     current: list[dict[str, Any]] | dict[str, Any],
     *,
     now: dt.datetime | None = None,
+    keep_ids: set[str] | None = None,
 ) -> list[dict[str, Any]]:
     """Merge current channels with recent prior channels."""
     now = now or _utc_now()
+    keep_ids = keep_ids or set()
     previous_channels = previous.get("channels", []) if isinstance(previous, dict) else previous
     current_channels = current.get("channels", []) if isinstance(current, dict) else current
     current_by_id = {channel["id"]: channel for channel in current_channels if channel.get("id")}
     merged: list[dict[str, Any]] = []
     for channel in current_channels:
         old = next((item for item in previous_channels if item.get("id") == channel.get("id")), None)
-        if _number(channel.get("videos_count")) > 30:
+        if _number(channel.get("videos_count")) > 30 and channel.get("id") not in keep_ids:
             added = _parse_time(old.get("added_at")) if old else None
             if not old or not added or (now - added).days >= 90:
                 continue
@@ -586,19 +710,27 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", default=os.path.join(BASE_DIR, "..", "data", "channels.json"))
     parser.add_argument("--max-queries", type=int)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--history-dir")
     args = parser.parse_args(argv)
     queries_data = _load_json(QUERIES_PATH, {"queries": [], "modifiers": []})
     previous = _load_json(args.out, {"generated_at": None, "channels": []})
     now = _utc_now()
+    labels = _load_json(LABELS_PATH, {})
+    history_dir = args.history_dir or os.path.join(os.path.dirname(os.path.abspath(args.out)), "history")
     _load_cache()
     if args.dry_run:
+        channels = merge(previous, previous.get("channels", []), now=now)
+        clusters = entry_scores(channels, now=now, labels=labels)
+        _decorate_channels(channels, clusters)
         output = {
             "generated_at": None,
             "quota_units_used": 0,
             "queries_run": 0,
-            "channels": merge(previous, [], now=now),
+            "channels": channels,
+            "clusters": clusters,
         }
         _write_output(args.out, output)
+        write_history(history_dir, output, now)
         _log(f"Dry run: wrote {args.out}")
         return 0
     state = _new_state()
@@ -608,6 +740,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.max_queries is not None:
         queries = queries[: max(0, args.max_queries)]
     candidates: dict[str, tuple[dict[str, Any], dict[str, Any]]] = {}
+    forced_ids: set[str] = set()
+    forced_roles: dict[str, str] = {}
+    forced_channels: dict[str, dict[str, Any]] = {}
     queries_run = 0
     for index, query in enumerate(queries):
         try:
@@ -621,16 +756,58 @@ def main(argv: list[str] | None = None) -> int:
             if channel_id and channel_id not in candidates:
                 candidates[channel_id] = (query, item)
         _log(f"Search {queries_run}/{len(queries)}: {query['text']} ({len(candidates)} channels)")
+    label_niches = {item.get("niche"): item for item in labels.get("niches", [])}
+    for labeled in labels.get("channels", []):
+        niche = labeled.get("niche", "other")
+        label_niche = label_niches.get(niche, {})
+        query = {
+            "text": f"label: {niche}",
+            "niche": niche,
+            "lang": label_niche.get("language", "en"),
+        }
+        channel_id = labeled.get("id")
+        if channel_id:
+            forced_ids.add(channel_id)
+            forced_roles[channel_id] = labeled.get("role")
+            candidates[channel_id] = (query, {})
+            continue
+        handle = str(labeled.get("handle", "")).lstrip("@")
+        if not handle:
+            continue
+        try:
+            payload = yt_get(
+                "channels",
+                {
+                    "part": "snippet,statistics,contentDetails",
+                    "forHandle": handle,
+                },
+                state,
+            )
+        except QuotaExhausted:
+            _log("Enrichment quota exhausted while resolving labeled channels")
+            break
+        for item in payload.get("items", []):
+            resolved_id = item.get("id")
+            if not resolved_id:
+                continue
+            forced_ids.add(resolved_id)
+            forced_roles[resolved_id] = labeled.get("role")
+            forced_channels[resolved_id] = item
+            candidates[resolved_id] = (query, item)
     channels: dict[str, dict[str, Any]] = {}
     if candidates:
         try:
-            channels = fetch_channels(list(candidates), state)
+            regular_ids = [channel_id for channel_id in candidates if channel_id not in forced_channels]
+            channels = dict(forced_channels)
+            if regular_ids:
+                channels.update(fetch_channels(regular_ids, state))
         except QuotaExhausted:
             _log("Enrichment quota exhausted while fetching channel metadata")
     current: list[dict[str, Any]] = []
     for channel_id, channel in channels.items():
         statistics = channel.get("statistics", {})
-        if (
+        force = channel_id in forced_ids
+        if not force and (
             _number(statistics.get("videoCount")) < 3
             or _number(statistics.get("videoCount")) > 30
             or _number(statistics.get("subscriberCount")) < 200
@@ -641,21 +818,28 @@ def main(argv: list[str] | None = None) -> int:
         try:
             videos = fetch_videos(channel, state)
             query = candidates[channel_id][0]
-            result = _channel_output(channel, videos, query, rpm_data, cache, now)
+            result = _channel_output(channel, videos, query, rpm_data, cache, now, force=force)
             if result:
+                if force:
+                    result["labeled_role"] = forced_roles.get(channel_id)
                 current.append(result)
         except QuotaExhausted:
             _log(f"Enrichment quota exhausted at channel {channel_id}; stopping channel fetch")
             break
         except Exception as error:  # a malformed channel must not stop the run
             _log(f"Skipping channel {channel_id}: {error}")
+    channels = merge(previous, current, now=now, keep_ids=forced_ids)
+    clusters = entry_scores(channels, now=now, labels=labels)
+    _decorate_channels(channels, clusters)
     output = {
         "generated_at": now.isoformat().replace("+00:00", "Z"),
         "quota_units_used": state["quota_units_used"],
         "queries_run": queries_run,
-        "channels": merge(previous, current, now=now),
+        "channels": channels,
+        "clusters": clusters,
     }
     _write_output(args.out, output)
+    write_history(history_dir, output, now)
     _log(f"Wrote {len(output['channels'])} channels; quota units used: {state['quota_units_used']}")
     return 0
 

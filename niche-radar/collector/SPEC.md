@@ -68,8 +68,10 @@ score = round(30*velocity + 25*rpm_norm + 20*mon + 15*repl + 10*fresh)
    watch_hours_est, days_to_monetization, monetization_forecast, is_monetized (bool|null),
    rpm, rpm_source, region, region_ru, score,
    found_by_queries[], added_at (first seen date — preserve from previous channels.json), updated_at,
+   cluster, entry_verdict, entry_verdict_ru, entry_score, labeled_role,
    videos: [{id, title, thumbnail, views, published_at, duration_sec, is_outlier}]  (all long videos, newest first)
- } ] }
+ } ], "clusters": {cluster_key: {n, share_growing, median_vpv, median_vps, newcomers_30d,
+   median_rpm, niche_ru, style_group, language, channel_ids, entry_score, verdict, verdict_ru, label}} }
 ```
 Merge with the previous `data/channels.json`: preserve `added_at`; keep channels not re-found in this run for 60 days (mark `stale: true`); drop channels that now exceed 30 videos unless `added_at` < 90 days ago (they stay with `graduated: true`).
 

@@ -10,8 +10,9 @@
     channels: [], tab: 'cards', sort: 'new', q: '', filters: {}, quick: new Set(), presets: new Set(),
     saved: new Set(LS.get('saved', [])), liked: new Set(LS.get('liked', [])), seen: new Set(LS.get('seen', [])),
     notes: LS.get('notes', {}), submissions: LS.get('submissions', []), videoTab: {},
+    labels: LS.get('labels', {}), clusters: {},
   };
-  const persist = () => { LS.set('saved', [...state.saved]); LS.set('liked', [...state.liked]); LS.set('seen', [...state.seen]); LS.set('notes', state.notes); LS.set('submissions', state.submissions); };
+  const persist = () => { LS.set('saved', [...state.saved]); LS.set('liked', [...state.liked]); LS.set('seen', [...state.seen]); LS.set('notes', state.notes); LS.set('submissions', state.submissions); LS.set('labels', state.labels); };
 
   const fmt = n => n == null ? '—' : n >= 1e6 ? (n / 1e6).toFixed(1).replace('.0', '') + 'M' : n >= 1e3 ? (n / 1e3).toFixed(1).replace('.0', '') + 'K' : String(Math.round(n));
   const money = n => n == null ? '—' : '$' + Number(n).toFixed(n >= 10 ? 0 : 1);
@@ -81,7 +82,8 @@
     try {
       const r = await fetch('data/channels.json', { cache: 'no-store' });
       const d = await r.json();
-      state.channels = (d.channels || []).filter(c => !c.graduated);
+      state.channels = (d.channels || []).filter(c => !c.graduated || c.labeled_role);
+      state.clusters = d.clusters || {};
       try { state.rpm = await (await fetch('collector/rpm_baseline.json', { cache: 'no-store' })).json(); } catch { state.rpm = null; }
       $('#generatedAt').textContent = d.generated_at ? `Обновлено ${ago(d.generated_at)} · ${state.channels.length} каналов` : `${state.channels.length} каналов`;
       mergeLive();
@@ -195,12 +197,17 @@
     const vids = videoList(c, mode).slice(0, 3);
     const [mcls, mtxt] = monBadge(c);
     const rpmSrc = c.rpm_source === 'nexlev' ? 'NexLev' : 'оценка по нише';
+    const cluster = state.clusters[c.cluster];
+    const verdictClass = c.entry_verdict === 'open' ? 'badge--green' : c.entry_verdict === 'filling' ? 'badge--amber' : c.entry_verdict === 'crowded' ? 'badge--red' : 'badge';
+    const verdictTitle = cluster ? `Окно входа: ${cluster.n} новичков (${cluster.newcomers_30d} за 30 дн.), ${Math.round(cluster.share_growing * 100)}% растут, медиана ${fmt(cluster.median_vpv)} просм./видео` : '';
+    const label = state.labels[c.cluster] || (cluster && cluster.label);
+    const role = c.labeled_role === 'reference' ? '<span class="chip chip--tag label-role">референс</span>' : c.labeled_role === 'competitor' ? '<span class="chip chip--tag label-role">конкурент</span>' : '';
     return `<article class="card ${state.seen.has(c.id) ? 'is-seen' : ''}" data-id="${esc(c.id)}">
       <div class="card__head">
         <img class="avatar" src="${esc(c.thumbnail || '')}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
         <div style="min-width:0;flex:1">
           <p class="card__title">${esc(c.title)}</p>
-          <div class="card__meta">${esc(c.handle || '')} · ${fmt(c.subs)} подписчиков · ${c.videos_count} видео · ${lang(c)}</div>
+          <div class="card__meta">${esc(c.handle || '')} · ${fmt(c.subs)} подписчиков · ${c.videos_count} видео · ${lang(c)} ${role}</div>
           <div class="card__desc">${esc(c.description || '')}</div>
         </div>
         <button class="star ${state.saved.has(c.id) ? 'is-on' : ''}" data-act="save" title="Сохранить">★</button>
@@ -224,6 +231,7 @@
         <span class="badge ${mcls}">${mtxt}</span>
         <span class="badge ${diffColor(c.difficulty)}">Сложность: ${esc(c.difficulty_ru || c.difficulty)}</span>
         <span class="badge badge--blue">Score ${c.score}</span>
+        ${c.entry_verdict_ru ? `<span class="badge ${verdictClass}" title="${esc(verdictTitle)}">${esc(c.entry_verdict_ru)}</span>` : ''}
         <span class="badge">${c.channel_age_days} дн. каналу</span>
       </div>
       <div class="added ${daysAgo(c.added_at) === 0 ? 'is-today' : ''}">Добавлено ${ago(c.added_at)}${c.live ? ' · найдено кнопкой' : ''}${c.stale ? ' · не найден в последнем сборе' : ''}</div>
@@ -231,17 +239,24 @@
         <button class="btn btn--primary btn--sm" data-act="open">Разбор канала</button>
         <button class="btn btn--sm" data-act="curator">Куратор</button>
         <a class="btn btn--sm btn--yt" href="${ytUrl(c)}" target="_blank" rel="noopener">▶ YouTube</a>
+        <button class="btn btn--sm label-action ${label === 'good' ? 'is-on' : ''}" data-act="labelGood">👍 Хорошая ниша</button>
+        <button class="btn btn--sm label-action ${label === 'bad' ? 'is-on' : ''}" data-act="labelBad">👎 Плохая ниша</button>
         <button class="like btn--sm ${state.liked.has(c.id) ? 'is-on' : ''}" data-act="like">❤</button>
       </div>
     </article>`;
   }
 
-  function nichesTable(list) {
-    const groups = {};
-    list.forEach(c => { const g = groups[c.niche] ||= { name: c.niche_ru || c.niche, niche: c.niche, n: 0, rpm: [], score: [], v5: [], mon: 0, ai: 0 }; g.n++; if (c.rpm) g.rpm.push(c.rpm); g.score.push(c.score); if (c.avg_views_first_5) g.v5.push(c.avg_views_first_5); if (isSoon(c)) g.mon++; if (c.uses_ai) g.ai++; });
-    const med = a => a.length ? a.sort((x, y) => x - y)[Math.floor(a.length / 2)] : null;
-    const rows = Object.values(groups).sort((a, b) => med(b.score) - med(a.score)).map(g => `<tr data-niche="${esc(g.niche)}"><td><b>${esc(g.name)}</b></td><td>${g.n}</td><td>${money(med(g.rpm))}</td><td>${fmt(med(g.v5))}</td><td>${g.mon}/${g.n}</td><td>${g.ai}/${g.n}</td><td><span class="badge badge--blue">${med(g.score) ?? '—'}</span></td></tr>`).join('');
-    return `<div class="niches"><table><thead><tr><th>Ниша</th><th>Молодых каналов</th><th>Медиана RPM</th><th>Медиана просм. первых 5</th><th>Монетизация / прогноз</th><th>С ИИ</th><th>Score</th></tr></thead><tbody>${rows || '<tr><td colspan="7" class="muted">Нет данных</td></tr>'}</tbody></table></div>`;
+  function nichesTable() {
+    const styleNames = { live: 'Живое видео', ai: 'ИИ' };
+    const rows = Object.entries(state.clusters).sort(([, a], [, b]) => (b.entry_score || 0) - (a.entry_score || 0)).map(([key, g]) => {
+      const localLabel = state.labels[key];
+      const label = localLabel || g.label;
+      const verdictClass = g.verdict === 'open' ? 'badge--green' : g.verdict === 'filling' ? 'badge--amber' : g.verdict === 'crowded' ? 'badge--red' : '';
+      const verdictTitle = `Окно входа: ${g.n} новичков (${g.newcomers_30d} за 30 дн.), ${Math.round(g.share_growing * 100)}% растут, медиана ${fmt(g.median_vpv)} просм./видео`;
+      const [niche, styleGroup, language] = key.split('|');
+      return `<tr data-niche="${esc(niche)}"><td><b>${esc(g.niche_ru || niche)}</b></td><td>${esc(styleNames[styleGroup] || styleGroup || '—')}</td><td>${esc(lang({ language }))}</td><td>${g.n}</td><td>${Math.round(g.share_growing * 100)}%</td><td>${fmt(g.median_vpv)}</td><td>${g.newcomers_30d}</td><td>${money(g.median_rpm)}</td><td><span class="badge badge--blue">${g.entry_score ?? '—'}</span></td><td><span class="badge ${verdictClass}" title="${esc(verdictTitle)}">${esc(g.verdict_ru || g.verdict || '—')}</span></td><td>${label === 'good' ? '👍 хорошая' : label === 'bad' ? '👎 плохая' : '—'}</td></tr>`;
+    }).join('');
+    return `<div class="niches"><table><thead><tr><th>Ниша</th><th>Формат</th><th>Язык</th><th>Новичков</th><th>Растут %</th><th>Медиана просм./видео</th><th>Новых за 30 дн.</th><th>Медиана RPM</th><th>Оценка входа</th><th>Вердикт</th><th>Разметка</th></tr></thead><tbody>${rows || '<tr><td colspan="11" class="muted">Нет данных</td></tr>'}</tbody></table></div>`;
   }
 
   function render() {
@@ -249,7 +264,7 @@
     const grid = $('#grid');
     $('#savedCount').textContent = state.saved.size; $('#savedTabCount').textContent = state.saved.size;
     $('#resultsInfo').textContent = `${list.length} из ${state.channels.length} каналов`;
-    if (state.tab === 'niches') { grid.innerHTML = nichesTable(list); $('#empty').hidden = true; return; }
+    if (state.tab === 'niches') { grid.innerHTML = nichesTable(); $('#empty').hidden = true; return; }
     grid.innerHTML = list.map(card).join('');
     $('#empty').hidden = list.length > 0;
   }
@@ -333,20 +348,31 @@
   function renderSubmissions() {
     $('#submitList').innerHTML = state.submissions.map((s, i) => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.url)}</a> ${s.note ? '— ' + esc(s.note) : ''} <span class="muted">(${ago(s.at)})</span> <button class="chip" data-del-sub="${i}">удалить</button></li>`).join('');
   }
+  function exportLabels() {
+    const niches = Object.entries(state.labels).map(([cluster, label]) => {
+      const [niche, style_group, language] = cluster.split('|');
+      return { niche, style_group, language, label };
+    });
+    const blob = new Blob([JSON.stringify({ version: 1, niches }, null, 2)], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob); link.download = 'labels_export.json'; link.click();
+    URL.revokeObjectURL(link.href);
+  }
 
   /* ---------- events ---------- */
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-tab],[data-quick],[data-preset],[data-act],[data-close],[data-niche],[data-del-sub],#filtersToggle,#resetFilters,#submitBtn,#submitSave,#refreshBtn,#refreshRun,#liveClear');
+    const t = e.target.closest('[data-tab],[data-quick],[data-preset],[data-act],[data-close],[data-niche],[data-del-sub],#filtersToggle,#resetFilters,#submitBtn,#submitSave,#refreshBtn,#refreshRun,#liveClear,#exportLabels');
     if (!t) return;
     if (t.dataset.tab) { state.tab = t.dataset.tab; $$('.tab').forEach(b => b.classList.toggle('is-active', b === t)); render(); }
     else if (t.dataset.quick) { t.classList.toggle('is-active'); state.quick.has(t.dataset.quick) ? state.quick.delete(t.dataset.quick) : state.quick.add(t.dataset.quick); render(); }
     else if (t.dataset.preset) { t.classList.toggle('is-active'); state.presets.has(t.dataset.preset) ? state.presets.delete(t.dataset.preset) : state.presets.add(t.dataset.preset); render(); }
     else if (t.id === 'filtersToggle') { $('#filters').hidden = !$('#filters').hidden; }
-    else if (t.id === 'resetFilters') { state.filters = {}; $$('#filters select').forEach(s => s.selectedIndex = 0); render(); }
+    else if (t.id === 'resetFilters') { state.filters = {}; state.quick.clear(); state.presets.clear(); $$('#filters select').forEach(s => s.selectedIndex = 0); $$('[data-quick],[data-preset]').forEach(b => b.classList.remove('is-active')); render(); }
     else if (t.id === 'submitBtn') { renderSubmissions(); $('#submitModal').hidden = false; }
     else if (t.id === 'refreshBtn') { $('#apiKey').value = LS.get('apiKey', ''); $('#refreshLog').textContent = ''; $('#refreshBar').style.width = '0'; $('#refreshProgress').hidden = true; $('#refreshModal').hidden = false; }
     else if (t.id === 'refreshRun') runLive();
     else if (t.id === 'liveClear') { localStorage.removeItem('nr:live'); load(); $('#refreshLog').textContent = 'Найденные кнопкой каналы убраны.'; }
+    else if (t.id === 'exportLabels') exportLabels();
     else if (t.id === 'submitSave') { const url = $('#submitUrl').value.trim(); if (!url) return; state.submissions.unshift({ url, note: $('#submitNote').value.trim(), at: new Date().toISOString() }); persist(); $('#submitUrl').value = ''; $('#submitNote').value = ''; renderSubmissions(); }
     else if (t.dataset.delSub != null) { state.submissions.splice(+t.dataset.delSub, 1); persist(); renderSubmissions(); }
     else if (t.hasAttribute('data-close')) closeDrawer();
@@ -357,6 +383,11 @@
       if (act === 'open' && !$('#drawer').hidden) { $('#drawerPanel').scrollTop = 0; }
       if (act === 'save') { state.saved.has(id) ? state.saved.delete(id) : state.saved.add(id); persist(); if ($('#drawer').hidden) render(); else openDetail(c); }
       else if (act === 'like') { state.liked.has(id) ? state.liked.delete(id) : state.liked.add(id); persist(); render(); }
+      else if (act === 'labelGood' || act === 'labelBad') {
+        const value = act === 'labelGood' ? 'good' : 'bad';
+        if (state.labels[c.cluster] === value) delete state.labels[c.cluster]; else state.labels[c.cluster] = value;
+        persist(); render();
+      }
       else if (act === 'vtab') { state.videoTab[id] = t.dataset.mode; render(); }
       else if (act === 'open') openDetail(c);
       else if (act === 'curator') curator(c);

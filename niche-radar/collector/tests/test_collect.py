@@ -1,7 +1,9 @@
 import datetime as dt
 import importlib.util
+import json
 import os
 import sys
+import tempfile
 import unittest
 
 
@@ -117,6 +119,61 @@ class CollectTests(unittest.TestCase):
     def test_parse_nexlev_length_text(self):
         self.assertEqual(seed.parse_length_text("23:22"), 1402)
         self.assertEqual(seed.parse_length_text("1:02:03"), 3723)
+
+    def test_entry_scores_verdicts_and_bounds(self):
+        now = dt.datetime(2025, 2, 1, tzinfo=dt.timezone.utc)
+
+        def channel(cluster, average, added="2025-01-31"):
+            niche, style_group, language = cluster.split("|")
+            return {
+                "id": f"{niche}-{style_group}-{language}-{average}-{added}",
+                "niche": niche,
+                "niche_ru": niche,
+                "style_group": style_group,
+                "language": language,
+                "avg_views_first_5": average,
+                "avg_views": average,
+                "total_views": 100000,
+                "subs": 100,
+                "rpm": 5,
+                "added_at": added,
+            }
+
+        channels = [
+            channel("open|live|en", 30000),
+            *[channel("crowded|live|en", 30000) for _ in range(9)],
+            *[channel("unproven|live|en", 1000) for _ in range(2)],
+            *[channel("filling|live|en", 30000) for _ in range(6)],
+        ]
+        clusters = collect.entry_scores(channels, now=now)
+        self.assertEqual(clusters["open|live|en"]["verdict"], "open")
+        self.assertEqual(clusters["crowded|live|en"]["verdict"], "crowded")
+        self.assertEqual(clusters["unproven|live|en"]["verdict"], "unproven")
+        self.assertEqual(clusters["filling|live|en"]["verdict"], "filling")
+        self.assertTrue(all(0 <= item["entry_score"] <= 100 for item in clusters.values()))
+
+    def test_write_history_filename_and_keys(self):
+        now = dt.datetime(2025, 2, 1, tzinfo=dt.timezone.utc)
+        output = {
+            "generated_at": "2025-02-01T00:00:00Z",
+            "channels": [{"id": "one", "subs": 2}],
+            "clusters": {"animals|live|en": {"n": 1, "share_growing": 1}},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = collect.write_history(directory, output, now)
+            self.assertEqual(path, os.path.join(directory, "2025-02-01.json"))
+            with open(path, encoding="utf-8") as handle:
+                history = json.load(handle)
+        self.assertEqual(history["generated_at"], output["generated_at"])
+        self.assertEqual(history["channels"][0]["id"], "one")
+        self.assertEqual(history["clusters"]["animals|live|en"]["n"], 1)
+
+    def test_merge_keep_ids_preserves_graduated_channel(self):
+        previous = {"channels": []}
+        current = [{"id": "labeled", "videos_count": 45, "title": "Reference"}]
+        result = collect.merge(previous, current, keep_ids={"labeled"})
+        self.assertEqual(len(result), 1)
+        self.assertTrue(result[0]["graduated"])
 
 
 if __name__ == "__main__":
