@@ -82,7 +82,7 @@
     try {
       const r = await fetch('data/channels.json', { cache: 'no-store' });
       const d = await r.json();
-      state.channels = (d.channels || []).filter(c => !c.graduated);
+      state.channels = (d.channels || []).filter(c => !c.graduated || c.labeled_role);
       state.clusters = d.clusters || {};
       try { state.rpm = await (await fetch('collector/rpm_baseline.json', { cache: 'no-store' })).json(); } catch { state.rpm = null; }
       $('#generatedAt').textContent = d.generated_at ? `Обновлено ${ago(d.generated_at)} · ${state.channels.length} каналов` : `${state.channels.length} каналов`;
@@ -199,7 +199,7 @@
     const rpmSrc = c.rpm_source === 'nexlev' ? 'NexLev' : 'оценка по нише';
     const cluster = state.clusters[c.cluster];
     const verdictClass = c.entry_verdict === 'open' ? 'badge--green' : c.entry_verdict === 'filling' ? 'badge--amber' : c.entry_verdict === 'crowded' ? 'badge--red' : 'badge';
-    const verdictTitle = cluster ? `Окно входа: ${cluster.newcomers_30d} новичков, ${Math.round(cluster.share_growing * 100)}% растут, медиана ${fmt(cluster.median_vpv)} просм./видео` : '';
+    const verdictTitle = cluster ? `Окно входа: ${cluster.n} новичков (${cluster.newcomers_30d} за 30 дн.), ${Math.round(cluster.share_growing * 100)}% растут, медиана ${fmt(cluster.median_vpv)} просм./видео` : '';
     const label = state.labels[c.cluster];
     const role = c.labeled_role === 'reference' ? '<span class="chip chip--tag label-role">референс</span>' : c.labeled_role === 'competitor' ? '<span class="chip chip--tag label-role">конкурент</span>' : '';
     return `<article class="card ${state.seen.has(c.id) ? 'is-seen' : ''}" data-id="${esc(c.id)}">
@@ -252,7 +252,7 @@
       const localLabel = state.labels[key];
       const label = localLabel || g.label;
       const verdictClass = g.verdict === 'open' ? 'badge--green' : g.verdict === 'filling' ? 'badge--amber' : g.verdict === 'crowded' ? 'badge--red' : '';
-      const verdictTitle = `Окно входа: ${g.newcomers_30d} новичков, ${Math.round(g.share_growing * 100)}% растут, медиана ${fmt(g.median_vpv)} просм./видео`;
+      const verdictTitle = `Окно входа: ${g.n} новичков (${g.newcomers_30d} за 30 дн.), ${Math.round(g.share_growing * 100)}% растут, медиана ${fmt(g.median_vpv)} просм./видео`;
       const [niche, styleGroup, language] = key.split('|');
       return `<tr data-niche="${esc(niche)}"><td><b>${esc(g.niche_ru || niche)}</b></td><td>${esc(styleNames[styleGroup] || styleGroup || '—')}</td><td>${esc(lang({ language }))}</td><td>${g.n}</td><td>${Math.round(g.share_growing * 100)}%</td><td>${fmt(g.median_vpv)}</td><td>${g.newcomers_30d}</td><td>${money(g.median_rpm)}</td><td><span class="badge badge--blue">${g.entry_score ?? '—'}</span></td><td><span class="badge ${verdictClass}" title="${esc(verdictTitle)}">${esc(g.verdict_ru || g.verdict || '—')}</span></td><td>${label === 'good' ? '👍' : label === 'bad' ? '👎' : '—'}</td></tr>`;
     }).join('');
