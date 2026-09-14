@@ -367,7 +367,7 @@
     else if (t.dataset.quick) { t.classList.toggle('is-active'); state.quick.has(t.dataset.quick) ? state.quick.delete(t.dataset.quick) : state.quick.add(t.dataset.quick); render(); }
     else if (t.dataset.preset) { t.classList.toggle('is-active'); state.presets.has(t.dataset.preset) ? state.presets.delete(t.dataset.preset) : state.presets.add(t.dataset.preset); render(); }
     else if (t.id === 'filtersToggle') { $('#filters').hidden = !$('#filters').hidden; }
-    else if (t.id === 'resetFilters') { state.filters = {}; $$('#filters select').forEach(s => s.selectedIndex = 0); render(); }
+    else if (t.id === 'resetFilters') { state.filters = {}; state.quick.clear(); state.presets.clear(); $$('#filters select').forEach(s => s.selectedIndex = 0); $$('[data-quick],[data-preset]').forEach(b => b.classList.remove('is-active')); render(); }
     else if (t.id === 'submitBtn') { renderSubmissions(); $('#submitModal').hidden = false; }
     else if (t.id === 'refreshBtn') { $('#apiKey').value = LS.get('apiKey', ''); $('#refreshLog').textContent = ''; $('#refreshBar').style.width = '0'; $('#refreshProgress').hidden = true; $('#refreshModal').hidden = false; }
     else if (t.id === 'refreshRun') runLive();
