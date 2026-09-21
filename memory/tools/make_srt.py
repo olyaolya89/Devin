@@ -41,6 +41,16 @@ def wrap(words):
             cur = w
     if cur:
         lines.append(cur)
+    if len(lines) == 2:
+        best = None
+        for i in range(1, len(words)):
+            a, b = " ".join(words[:i]), " ".join(words[i:])
+            if len(a) <= MAX_LINE and len(b) <= MAX_LINE:
+                d = abs(len(a) - len(b))
+                if best is None or d < best[0]:
+                    best = (d, [a, b])
+        if best:
+            lines = best[1]
     return lines
 
 
