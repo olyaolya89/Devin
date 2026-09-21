@@ -1,20 +1,20 @@
 1
-00:00:00,000 --> 00:00:03,077
-On the western edge of San Francisco there
+00:00:00,000 --> 00:00:02,692
+On the western edge of San Francisco
 
 2
-00:00:03,077 --> 00:00:08,077
-is a four lane highway that the
-city is tearing out on purpose.
+00:00:02,692 --> 00:00:08,077
+there is a four lane highway that
+the city is tearing out on purpose.
 
 3
-00:00:08,077 --> 00:00:13,462
-It runs along Ocean Beach, past rows
-of pastel houses that sell for two,
+00:00:08,077 --> 00:00:10,000
+It runs along Ocean Beach,
 
 4
-00:00:13,462 --> 00:00:15,769
-three, and sometimes four million dollars.
+00:00:10,000 --> 00:00:15,769
+past rows of pastel houses that sell for
+two, three, and sometimes four million
 
 5
 00:00:15,769 --> 00:00:19,615
@@ -261,13 +261,14 @@ of San Francisco to the Oceanside
 treatment plant beside the zoo.
 
 57
-00:03:23,723 --> 00:03:25,262
-When it rains hard,
+00:03:23,723 --> 00:03:27,954
+When it rains hard, that
+tunnel is what keeps sewage out
 
 58
-00:03:25,262 --> 00:03:32,185
-that tunnel is what keeps sewage out of the
-ocean and off the streets of the Sunset
+00:03:27,954 --> 00:03:32,185
+of the ocean and off the
+streets of the Sunset District.
 
 59
 00:03:32,185 --> 00:03:37,185
@@ -537,14 +538,14 @@ Reroute traffic onto Sloat
 and Skyline boulevards.
 
 116
-00:06:55,185 --> 00:06:59,031
+00:06:55,185 --> 00:06:58,646
 Protect the sewer tunnel
-with a low wall buried under
+with a low wall buried
 
 117
-00:06:59,031 --> 00:07:04,031
-a restored beach instead of a pile
-of boulders standing in the surf.
+00:06:58,646 --> 00:07:04,031
+under a restored beach instead of a
+pile of boulders standing in the surf.
 
 118
 00:07:04,031 --> 00:07:05,954
@@ -696,13 +697,13 @@ to every voter in San
 Francisco as Proposition K.
 
 150
-00:08:58,738 --> 00:09:02,200
+00:08:58,738 --> 00:09:01,815
 Proposition K asked whether
-the upper highway should be
+the upper highway should
 
 151
-00:09:02,200 --> 00:09:06,046
-closed to private vehicles
+00:09:01,815 --> 00:09:06,046
+be closed to private vehicles
 permanently and converted into a park.
 
 152
@@ -867,12 +868,12 @@ the residents were right that something
 had been taken away from them.
 
 186
-00:11:07,846 --> 00:11:10,923
-Now walk the length of the road as
+00:11:07,846 --> 00:11:10,538
+Now walk the length of the road
 
 187
-00:11:10,923 --> 00:11:14,000
-it stands today and look at the houses.
+00:11:10,538 --> 00:11:14,000
+as it stands today and look at the houses.
 
 188
 00:11:14,000 --> 00:11:16,308
@@ -978,13 +979,13 @@ in front of the seawall eastward.
 The road was the buffer that caught it.
 
 210
-00:12:31,523 --> 00:12:33,062
-With the cars gone,
+00:12:31,523 --> 00:12:34,600
+With the cars gone, the city no longer
 
 211
-00:12:33,062 --> 00:12:38,062
-the city no longer plows the
-upper highway the way it used to.
+00:12:34,600 --> 00:12:38,062
+plows the upper highway
+the way it used to.
 
 212
 00:12:38,062 --> 00:12:43,062
@@ -992,14 +993,13 @@ The drifts creep across the old lanes
 toward the sidewalks and garage doors.
 
 213
-00:12:43,062 --> 00:12:46,138
-Homeowners along the
-row sweep sand off their
+00:12:43,062 --> 00:12:45,754
+Homeowners along the row sweep sand off
 
 214
-00:12:46,138 --> 00:12:49,215
-front steps the way other
-people sweep leaves.
+00:12:45,754 --> 00:12:49,215
+their front steps the way
+other people sweep leaves.
 
 215
 00:12:49,215 --> 00:12:52,677
@@ -1388,12 +1388,12 @@ A single placement can involve hundreds
 of thousands of cubic yards of sand.
 
 297
-00:17:46,831 --> 00:17:51,062
-Much of it washes away again
-within a few storm seasons,
+00:17:46,831 --> 00:17:49,523
+Much of it washes away again within
 
 298
-00:17:51,062 --> 00:17:52,600
+00:17:49,523 --> 00:17:52,600
+a few storm seasons,
 and the barges return.
 
 299
@@ -1424,13 +1424,13 @@ About fifteen miles south
 lies the town of Pacifica.
 
 305
-00:18:12,431 --> 00:18:16,277
+00:18:12,431 --> 00:18:15,892
 A row of apartment buildings
-on Esplanade Avenue stood there
+on Esplanade Avenue stood
 
 306
-00:18:16,277 --> 00:18:20,123
-on a bluff very much
+00:18:15,892 --> 00:18:20,123
+there on a bluff very much
 like the one at Sloat.
 
 307
@@ -1535,31 +1535,32 @@ It closed in 1972 and was
 replaced by condominiums.
 
 329
-00:19:36,877 --> 00:19:38,415
-Just up the hill,
+00:19:36,877 --> 00:19:39,569
+Just up the hill, the Sutro Baths
 
 330
-00:19:38,415 --> 00:19:43,415
-the Sutro Baths were once the largest
-indoor swimming complex in the world.
+00:19:39,569 --> 00:19:43,415
+were once the largest indoor
+swimming complex in the world.
 
 331
-00:19:43,415 --> 00:19:46,492
-They burned in 1966 and were left as
+00:19:43,415 --> 00:19:46,108
+They burned in 1966 and were left
 
 332
-00:19:46,492 --> 00:19:49,954
-concrete ruins that fill
+00:19:46,108 --> 00:19:49,954
+as concrete ruins that fill
 with seawater at high tide.
 
 333
-00:19:49,954 --> 00:19:51,492
-At the south end,
+00:19:49,954 --> 00:19:53,800
+At the south end, the
+Fleishhacker Pool beside the zoo
 
 334
-00:19:51,492 --> 00:19:58,415
-the Fleishhacker Pool beside the zoo was for
-years the largest outdoor swimming pool in
+00:19:53,800 --> 00:19:58,415
+was for years the largest outdoor
+swimming pool in the United States.
 
 335
 00:19:58,415 --> 00:20:02,262
