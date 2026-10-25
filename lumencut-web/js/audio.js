@@ -27,9 +27,28 @@ function voiceEnvelope(buf, dur) {
   return env;
 }
 
-export async function mixAudio({ voice, shots, duration, musicOn = true, musicDb = -16, sfxOn = true }, onProgress) {
+// Rides the voice gain toward a steady speech level (max ±12 dB, held through pauses) so jumps in loudness are evened out.
+function levelVoice(buf) {
+  const sr = buf.sampleRate, n = buf.length, chs = buf.numberOfChannels, win = Math.round(sr * 0.05), frames = Math.ceil(n / win), rms = new Float32Array(frames);
+  for (let f = 0; f < frames; f++) { let s = 0, c = 0; for (let ch = 0; ch < chs; ch++) { const d = buf.getChannelData(ch); for (let i = f * win; i < Math.min(n, (f + 1) * win); i++) { s += d[i] * d[i]; c++; } } rms[f] = Math.sqrt(s / (c || 1)); }
+  const speech = Array.from(rms).filter(x => x > 1e-4).sort((a, b) => a - b); if (!speech.length) return buf;
+  const target = speech[Math.floor(speech.length * 0.7)], gate = target * 0.12, gains = new Float32Array(frames);
+  let g = 1;
+  for (let f = 0; f < frames; f++) {
+    let s = 0, c = 0; for (let k = Math.max(0, f - 6); k <= Math.min(frames - 1, f + 6); k++) if (rms[k] > gate) { s += rms[k] * rms[k]; c++; }
+    const want = c ? Math.min(4, Math.max(0.25, target / Math.sqrt(s / c))) : g;
+    g += (want - g) * (want < g ? 0.5 : 0.15); gains[f] = g;
+  }
+  const out = new AudioBuffer({ length: n, numberOfChannels: chs, sampleRate: sr });
+  for (let ch = 0; ch < chs; ch++) { const d = buf.getChannelData(ch), o = out.getChannelData(ch); for (let i = 0; i < n; i++) { const p = i / win - 0.5, f0 = Math.max(0, Math.min(frames - 1, Math.floor(p))), f1 = Math.min(frames - 1, f0 + 1), t = Math.max(0, Math.min(1, p - f0)); o[i] = d[i] * (gains[f0] * (1 - t) + gains[f1] * t); } }
+  return out;
+}
+
+export async function mixAudio({ voice, shots, duration, musicOn = true, musicDb = -16, sfxOn = true, level = true }, onProgress) {
   const ctx = new OfflineAudioContext(2, Math.ceil(duration * SR), SR);
-  const v = ctx.createBufferSource(); v.buffer = voice; v.connect(ctx.destination); v.start(0);
+  if (level) { onProgress?.('Выравнивание громкости голоса…'); voice = levelVoice(voice); }
+  const v = ctx.createBufferSource(); v.buffer = voice; v.start(0);
+  if (level) { const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -20; comp.knee.value = 10; comp.ratio.value = 3; comp.attack.value = 0.005; comp.release.value = 0.15; v.connect(comp); comp.connect(ctx.destination); } else v.connect(ctx.destination);
   if (musicOn) {
     onProgress?.('Музыка по настроению сцен…');
     const env = voiceEnvelope(voice, duration);

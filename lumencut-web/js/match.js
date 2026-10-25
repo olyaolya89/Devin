@@ -2,6 +2,7 @@
 import { searchAll } from './sources.js';
 import { textEmbed, imageEmbed, cos } from './ai.js';
 
+const WEATHER = /\b(snow\w*|ice|icy|frozen|frost\w*|blizzard|icicles?|winter\w*|autumn|fall leaves|rain|rainy|raining|rainfall|storm\w*|beach\w*)\b/i;
 const tok = s => new Set(String(s || '').toLowerCase().split(/[^a-zа-яё0-9]+/i).filter(w => w.length > 2).map(w => w.slice(0, 5)));
 export const MAX_CUT = 5;
 
@@ -34,7 +35,7 @@ export async function pickMedia(shots, settings, onProgress, preUsed = []) {
       c.emb = embs[k] || null;
       c.sim = c.emb && textE[i] ? cos(c.emb, textE[i]) : null;
       const overlap = [...tok(c.tags)].filter(w => target.has(w)).length;
-      c.score = (c.sim != null ? c.sim * 100 : overlap * 3) + (c.kind === 'video' ? (settings.preferVideo ? 2.5 : 1) : 0) + (c.qr === 0 ? 0.8 : c.qr === 1 ? 0.4 : 0) + (c.sim != null ? overlap * 0.3 : 0) - (/\b(chart|diagram|graph|logo|map|svg|icon|table|document|scan|text)\b/i.test(c.tags) ? 6 : 0);
+      c.score = (c.sim != null ? c.sim * 100 : overlap * 3) + (c.kind === 'video' ? (settings.preferVideo ? 2.5 : 1) : 0) + (c.qr === 0 ? 0.8 : c.qr === 1 ? 0.4 : 0) + (c.sim != null ? overlap * 0.3 : 0) - (WEATHER.test(c.tags) && !WEATHER.test(`${s.text} ${s.visual} ${s.meaning}`) ? 8 : 0) - (/\b(chart|diagram|graph|logo|map|svg|icon|table|document|scan|text)\b/i.test(c.tags) ? 6 : 0);
     });
     pool.sort((a, b) => b.score - a.score);
     const dur = s.end - s.start, need = Math.max(1, Math.ceil(dur / MAX_CUT - 0.05));

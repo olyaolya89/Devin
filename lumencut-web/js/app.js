@@ -97,7 +97,7 @@ async function doRender(limit) {
   try {
     const duration = limit < Infinity ? Math.min(limit, S.shots.at(-1).end) : S.shots.at(-1).end;
     let voice = S.voice; if (!voice) { info('Озвучка не выбрана — видео будет без голоса'); voice = new AudioBuffer({ length: Math.ceil(S.shots.at(-1).end * 48000), sampleRate: 48000, numberOfChannels: 1 }); }
-    const audio = await mixAudio({ voice, shots: S.shots, duration: Math.max(duration, voice.duration), musicOn: $('#music').checked, musicDb: +$('#musicDb').value, sfxOn: $('#sfx').checked }, info);
+    const audio = await mixAudio({ voice, shots: S.shots, duration: Math.max(duration, voice.duration), musicOn: $('#music').checked, musicDb: +$('#musicDb').value, sfxOn: $('#sfx').checked, level: $('#level')?.checked !== false }, info);
     let fileHandle = null;
     if (limit === Infinity && window.showSaveFilePicker) { try { fileHandle = await window.showSaveFilePicker({ suggestedName: 'lumencut-video.mp4', types: [{ description: 'MP4', accept: { 'video/mp4': ['.mp4'] } }] }); } catch { buttons.forEach(b => (b.disabled = false)); return; } }
     const t0 = performance.now();
