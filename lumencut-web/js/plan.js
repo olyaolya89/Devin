@@ -3,7 +3,7 @@ export const SFX = ['whoosh','swish','impact','hit','riser','slowmo','freeze','t
 export const MOODS = ['mystery','tension','action','wonder','hopeful','sad','triumph','playful','calm','dark','epic'];
 export const OVERLAYS = ['none','keyword','number','date','place','quote','chapter'];
 
-const STOP = new Set('the a an and or but in on at to for of with from by was were is are as this that these those it its they them their there then than so if not no yes be been being have has had do does did will would can could should just also very about into over only what when where which who why how you your we our he she his her i me my'.split(' '));
+const STOP = new Set('january february march april may june july august september october november december monday tuesday wednesday thursday friday saturday sunday the a an and or but in on at to for of with from by was were is are as this that these those it its they them their there then than so if not no yes be been being have has had do does did will would can could should just also very about into over only what when where which who why how you your we our he she his her i me my'.split(' '));
 
 export const norm = w => String(w).toLowerCase().replace(/[^a-zа-яё0-9]+/gi, '');
 
@@ -130,6 +130,8 @@ Return JSON only:
 {"topic":"<4-8 word English subject, era, place>","shots":[{"meaning":"<what this line means, English, <=15 words>","visual":"<one concrete filmable shot, English, <=14 words>","queries":["<2-4 word stock search>","<alternative angle>","<broader fallback>"],"overlay":{"type":"none|keyword|number|date|place|quote|chapter","text":"<short on-screen text, <=4 words, UPPERCASE for keyword/chapter>","value":<number or null>,"prefix":"<e.g. $>","suffix":"<e.g. %, M, YEARS>"},"sfx":"none|${SFX.join('|')}","mood":"${MOODS.join('|')}"}]}
 Rules:
 - Exactly one shots entry per numbered line, same order.
+- The audience is American. Infer the story's setting (place, era, season) from the whole script; if it is unclear, assume the USA.
+- Months, dates, weekdays and seasons are TIME references, not visuals. Never show snow, ice, frost, rain, autumn leaves, beaches or other weather/season imagery unless the line itself is about weather/season or the story's setting clearly has that weather. Show what HAPPENS in the line instead ("In February he lost his job" -> "man carrying cardboard box out of office building").
 - Queries in English, concrete nouns/actions, no abstract words, no names of the script's people unless famous. Neighbouring lines must get visibly DIFFERENT shots (different subject, place or scale) so no frame feels repeated.
 - overlay: use on about 1 of 3 lines only: number (counts, money, percent; give numeric value), date (years), place (city/country names), keyword (one key idea), quote (spoken quote), chapter (new section/turning point). Otherwise type "none".
 - sfx: pop/blip when a keyword/date/place appears, counter for numbers, whoosh/swish on fast transitions, riser/impact/stinger only for big reveals, ambience names rarely; "none" for about half of lines.
