@@ -56,6 +56,6 @@ export function planCuts(s) {
   s.cuts = s.picks.map((c, k) => {
     const len = Math.min(seg, MAX_CUT + 0.5);
     const d = c.duration || 0, room = Math.max(0, d - len - 0.5);
-    return { media: c, t0: s.start + k * seg, t1: s.start + (k + 1) * seg, from: c.kind === 'video' ? Math.min(room, 0.5 + room * 0.25) : 0 };
+    return { media: c, t0: s.start + k * seg, t1: s.start + (k + 1) * seg, from: c.kind === 'video' ? Math.min(room, c.start != null ? c.start : 0.5 + room * 0.25) : 0 };
   });
 }

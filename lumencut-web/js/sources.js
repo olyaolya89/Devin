@@ -70,9 +70,11 @@ export async function archive(q) {
     if (!m?.files) return null;
     const id = ids[k], md = m.metadata || {}, rank = f => /h\.264 hd/i.test(f.format) ? 0 : /^h\.264/i.test(f.format) ? 1 : /^(hires )?mpeg4$/i.test(f.format) ? 2 : /mpeg4/i.test(f.format) ? 3 : 9;
     const vid = m.files.filter(f => /\.mp4$/i.test(f.name) && rank(f) < 9).sort((a, b) => rank(a) - rank(b))[0]; if (!vid) return null;
-    const thumbs = m.files.filter(f => f.format === 'Thumbnail').map(f => f.name).sort();
-    const dl = n => `https://archive.org/download/${encodeURIComponent(id)}/${n.split('/').map(encodeURIComponent).join('/')}`;
-    return { id: 'ia-' + id, group: 'ia-' + id, source: 'Internet Archive', kind: 'video', url: dl(vid.name), thumb: dl(thumbs[Math.floor(thumbs.length / 2)] || '__ia_thumb.jpg'), duration: secs(vid.length), author: [].concat(md.creator || 'unknown')[0], license: md.licenseurl || 'Public domain collection', page: 'https://archive.org/details/' + id, tags: `${[].concat(md.title)[0] || ''} ${[].concat(md.subject || []).join(' ')}`.slice(0, 200) };
+    // archive.org/cors/ is the only CORS-enabled video path but it ignores Range, so cut near the start (the browser streams up to that point).
+    const dur = secs(vid.length) || 60, want = Math.min(45, dur * 0.3);
+    const thumbs = m.files.filter(f => f.format === 'Thumbnail').map(f => ({ n: f.name, t: Number((f.name.match(/_(\d+)\.jpg$/) || [])[1]) })).filter(x => x.t >= 0).sort((a, b) => Math.abs(a.t - want) - Math.abs(b.t - want));
+    const path = n => `${encodeURIComponent(id)}/${n.split('/').map(encodeURIComponent).join('/')}`;
+    return { id: 'ia-' + id, group: 'ia-' + id, source: 'Internet Archive', kind: 'video', url: 'https://archive.org/cors/' + path(vid.name), thumb: 'https://archive.org/download/' + path(thumbs[0]?.n || '__ia_thumb.jpg'), start: thumbs[0] ? thumbs[0].t : 0, duration: dur, author: [].concat(md.creator || 'unknown')[0], license: md.licenseurl || 'Public domain collection', page: 'https://archive.org/details/' + id, tags: `${[].concat(md.title)[0] || ''} ${[].concat(md.subject || []).join(' ')}`.slice(0, 200) };
   }).filter(Boolean);
 }
 
