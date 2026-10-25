@@ -10,7 +10,7 @@ export async function gatherCandidates(shots, settings, W, onProgress) {
   const worker = async () => {
     while (cursor < shots.length) {
       const s = shots[cursor++];
-      const lists = await Promise.all(s.queries.map((q, qr) => searchAll(settings, q, W).then(r => r.map(c => ({ ...c, qr }))).catch(() => [])));
+      const lists = await Promise.all(s.queries.map((q, qr) => searchAll(settings, q, W, qr).then(r => r.map(c => ({ ...c, qr }))).catch(() => [])));
       const m = new Map(); for (const c of lists.flat()) if (!m.has(c.id) || m.get(c.id).qr > c.qr) m.set(c.id, c);
       s.candidates = [...m.values()];
       onProgress?.(`Поиск кадров: ${++done}/${shots.length}`);
@@ -25,10 +25,11 @@ export async function pickMedia(shots, settings, onProgress, preUsed = []) {
   const usedIds = new Set(preUsed), usedEmb = [];
   for (const [i, s] of shots.entries()) {
     onProgress?.(`Смысловой подбор (${useClip ? 'CLIP' : 'по словам'}): ${i + 1}/${shots.length}`);
-    const pool = (s.candidates || []).filter(c => !usedIds.has(c.id) && !usedIds.has(c.url));
+    const target = tok(`${s.text} ${s.visual} ${s.queries.join(' ')}`);
+    const pre = c => [...tok(c.tags)].filter(w => target.has(w)).length + (c.qr === 0 ? 1 : c.qr === 1 ? 0.5 : 0) + (c.kind === 'video' ? 0.5 : 0);
+    const pool = (s.candidates || []).filter(c => !usedIds.has(c.id) && !usedIds.has(c.url)).sort((a, b) => pre(b) - pre(a)).slice(0, 48);
     let embs = [];
     if (useClip && pool.length) try { embs = await imageEmbed(pool.map(c => c.thumb), onProgress); } catch (e) { console.warn(e); }
-    const target = tok(`${s.text} ${s.visual} ${s.queries.join(' ')}`);
     pool.forEach((c, k) => {
       c.emb = embs[k] || null;
       c.sim = c.emb && textE[i] ? cos(c.emb, textE[i]) : null;
