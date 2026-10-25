@@ -16,9 +16,9 @@ function tab(name) { document.querySelectorAll('nav button').forEach(b => b.clas
 
 // settings
 const K = { pexels: 'k_pexels', pixabay: 'k_pixabay', gemini: 'k_gemini', model: 'k_model' };
-function loadSettings() { const c = cfg(); for (const [k, id] of Object.entries(K)) if (c[k]) $('#' + id).value = c[k]; $('#k_wikimedia').checked = c.wikimedia !== false; $('#k_clip').checked = c.clip !== false; $('#k_video').checked = c.preferVideo !== false; keysInfo(); }
+function loadSettings() { const c = cfg(); for (const [k, id] of Object.entries(K)) if (c[k]) $('#' + id).value = c[k]; $('#k_wikimedia').checked = c.wikimedia !== false; for (const k of ['nasa', 'archive', 'loc']) $('#k_' + k).checked = c[k] !== false; $('#k_clip').checked = c.clip !== false; $('#k_video').checked = c.preferVideo !== false; keysInfo(); }
 function keysInfo() { const c = cfg(); $('#keysInfo').textContent = `Pexels: ${c.pexels ? '✓' : '—'} · Pixabay: ${c.pixabay ? '✓' : '—'} · Gemini: ${c.gemini ? '✓' : '—'} (ключи хранятся только в этом браузере)`; }
-$('#saveKeys').onclick = () => { const c = {}; for (const [k, id] of Object.entries(K)) c[k] = $('#' + id).value.trim(); c.wikimedia = $('#k_wikimedia').checked; c.clip = $('#k_clip').checked; c.preferVideo = $('#k_video').checked; localStorage.setItem('lumencut.settings', JSON.stringify(c)); keysInfo(); };
+$('#saveKeys').onclick = () => { const c = {}; for (const [k, id] of Object.entries(K)) c[k] = $('#' + id).value.trim(); c.wikimedia = $('#k_wikimedia').checked; for (const k of ['nasa', 'archive', 'loc']) c[k] = $('#k_' + k).checked; c.clip = $('#k_clip').checked; c.preferVideo = $('#k_video').checked; localStorage.setItem('lumencut.settings', JSON.stringify(c)); keysInfo(); };
 loadSettings();
 
 // project

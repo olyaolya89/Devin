@@ -11,7 +11,20 @@
   - **Pexels** — https://www.pexels.com/api/ → «Get started» → после входа скопируйте ключ;
   - **Pixabay** — https://pixabay.com/api/docs/ → войдите → ключ показан в разделе «Parameters» (поле `key`);
   - **Gemini** — https://aistudio.google.com/apikey → «Create API key». Нужен для подбора кадров по смыслу.
-  Без ключей сайт работает, но ищет только в Wikimedia (исторические фото) — качество хуже.
+  Без ключей сайт работает, но ищет только в бесплатных архивах (ниже) — для современных тем качество хуже.
+
+## Откуда берутся кадры (только без нарушения авторских прав)
+| Источник | Что там | Ключ | Права |
+|---|---|---|---|
+| Pexels, Pixabay | современные стоковые видео и фото | бесплатный | можно в YouTube, в т.ч. с монетизацией |
+| Wikimedia Commons | исторические фото и видео | не нужен | только свободные лицензии (Public domain, CC0, CC BY/BY-SA) — авторы попадают в `credits.txt` |
+| NASA | космос, наука, техника | не нужен | общественное достояние; кадры с пометкой «courtesy/copyright» третьих лиц отбрасываются |
+| Internet Archive | архивная кинохроника, старые фильмы | не нужен | только коллекции Prelinger и фильмы правительства США (FedFlix, US Gov Films). Лицензии, которые ставят сами загрузчики, не учитываются |
+| Library of Congress | исторические фото | не нужен | только с отметкой «No known restrictions» |
+
+Каждый источник можно выключить галочкой во вкладке «Настройки».
+Не подключены: Freepik и Free To Use (для коммерческого использования нужна оплата), Coverr (условия API запрещают коммерческое использование и требуют показывать их логотип), Mixkit, Dareful и YouTube Audio Library (нет публичного API), National Archives (ключ по заявке).
+Всегда вставляйте содержимое `credits.txt` в описание видео.
 
 ## Как пользоваться (по шагам)
 1. Откройте сайт: `https://olyaolya89.github.io/Devin/lumencut-web/` (после слияния PR).
@@ -40,5 +53,5 @@
 
 ## Для разработчика
 Чистый статический сайт (ES-модули, без сборки). Локально: `python -m http.server` в этой папке и открыть `http://localhost:8000`.
-`js/plan.js` — сцены, тайминг, план Gemini · `js/sources.js` — Pexels/Pixabay/Wikimedia · `js/ai.js` — Whisper + CLIP (transformers.js) ·
+`js/plan.js` — сцены, тайминг, план Gemini · `js/sources.js` — Pexels/Pixabay/Wikimedia/NASA/Internet Archive/Library of Congress · `js/ai.js` — Whisper + CLIP (transformers.js) ·
 `js/match.js` — смысловой подбор без повторов · `js/audio.js` — микс · `js/render.js` — графика и кодирование MP4 (WebCodecs + mp4-muxer, MIT).

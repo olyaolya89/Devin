@@ -8,8 +8,8 @@ const easeOut = x => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
 function loadMedia(c) {
   if (c.kind === 'video') return new Promise(res => {
     const v = document.createElement('video'); v.crossOrigin = 'anonymous'; v.muted = true; v.playsInline = true; v.preload = 'auto';
-    const fail = () => res(loadImage(c.thumb)); const t = setTimeout(fail, 20000);
-    v.onerror = () => { clearTimeout(t); fail(); };
+    let alt = c.alt; const fail = () => res(loadImage(c.thumb)); let t = setTimeout(fail, 20000);
+    v.onerror = () => { clearTimeout(t); if (alt) { v.src = alt; alt = null; t = setTimeout(fail, 20000); } else fail(); };
     v.onloadeddata = () => { clearTimeout(t); res({ v, w: v.videoWidth, h: v.videoHeight }); };
     v.src = c.url;
   });
