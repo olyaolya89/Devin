@@ -22,7 +22,8 @@
 <section id="tab-render" class="tab">
   <div class="card"><div class="grid2">
     <label>Качество <select id="res"><option value="1920x1080">1080p (1920×1080)</option><option value="1280x720">720p — быстрее</option></select></label>
-    <label><input type="checkbox" id="subs" checked> Субтитры (караоке)</label>
+    <label>Графика на экране (плашки) <select id="gfx"><option value="rare" selected>Мало — только цифры, годы, места и главы, не чаще раза в 20 сек</option><option value="none">Нет — только кадры и субтитры</option><option value="all">Много — как в раскадровке</option></select></label>
+    <label><input type="checkbox" id="subs" checked> Субтитры (караоке, по голосу)</label>
     <label><input type="checkbox" id="level" checked> Выровнять громкость голоса</label>
   <label><input type="checkbox" id="music" checked> Фоновая музыка по настроению</label>
     <label>Громкость музыки <input type="range" id="musicDb" min="-30" max="-8" value="-16"></label>

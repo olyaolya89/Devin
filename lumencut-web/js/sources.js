@@ -1,12 +1,20 @@
 // Free, copyright-safe sources (all CORS-enabled): Pexels, Pixabay, Wikimedia Commons, NASA, Internet Archive (public-domain collections only), Library of Congress ("no known restrictions" only).
 const fitFile = (files, W) => files.filter(f => f.link && (f.file_type || '').includes('mp4') && f.width >= f.height).sort((a, b) => Math.abs(a.width - W) - Math.abs(b.width - W))[0];
 
-export async function pexels(key, q, W) {
+// Free Pexels keys allow only 200 requests/hour: photos are fetched for the main query only, and a 429 pauses Pexels instead of silently returning nothing.
+export const limits = { pexelsUntil: 0, onLimit: null };
+const pexelsGet = async (url, h, empty) => {
+  if (Date.now() < limits.pexelsUntil) return empty;
+  const r = await fetch(url, { headers: h }).catch(() => null);
+  if (r?.status === 429) { if (!limits.pexelsUntil) limits.onLimit?.('Pexels'); limits.pexelsUntil = Date.now() + 15 * 60000; }
+  return r?.ok ? r.json() : empty;
+};
+export async function pexels(key, q, W, photos = true) {
   if (!key) return [];
   const h = { Authorization: key };
   const [v, p] = await Promise.all([
-    fetch('https://api.pexels.com/videos/search?' + new URLSearchParams({ query: q, per_page: '15', orientation: 'landscape' }), { headers: h }).then(r => r.ok ? r.json() : { videos: [] }),
-    fetch('https://api.pexels.com/v1/search?' + new URLSearchParams({ query: q, per_page: '8', orientation: 'landscape' }), { headers: h }).then(r => r.ok ? r.json() : { photos: [] })
+    pexelsGet('https://api.pexels.com/videos/search?' + new URLSearchParams({ query: q, per_page: '20', orientation: 'landscape' }), h, { videos: [] }),
+    photos ? pexelsGet('https://api.pexels.com/v1/search?' + new URLSearchParams({ query: q, per_page: '10', orientation: 'landscape' }), h, { photos: [] }) : { photos: [] }
   ]);
   return [
     ...(v.videos || []).map(x => { const f = fitFile(x.video_files || [], W); return f && { id: 'pexels-v' + x.id, group: 'pexels-v' + x.id, source: 'Pexels', kind: 'video', url: f.link, thumb: x.image, duration: x.duration, author: x.user?.name || '', page: x.url, tags: (x.url || '').split('/').slice(-2, -1)[0]?.replace(/-\d+$/, '').replace(/-/g, ' ') || '' }; }),
@@ -16,6 +24,7 @@ export async function pexels(key, q, W) {
 
 export async function pixabay(key, q, W) {
   if (!key) return [];
+  await pixGate(); await pixGate();
   const [v, p] = await Promise.all([
     fetch('https://pixabay.com/api/videos/?' + new URLSearchParams({ key, q, per_page: '15', safesearch: 'true' })).then(r => r.ok ? r.json() : { hits: [] }),
     fetch('https://pixabay.com/api/?' + new URLSearchParams({ key, q, per_page: '8', image_type: 'photo', orientation: 'horizontal', safesearch: 'true' })).then(r => r.ok ? r.json() : { hits: [] })
@@ -41,7 +50,7 @@ export async function wikimedia(q) {
 }
 
 const gate = gap => { let next = 0; return async () => { const now = Date.now(), wait = Math.max(0, next - now); next = Math.max(now, next) + gap; if (wait) await new Promise(r => setTimeout(r, wait)); }; };
-const locGate = gate(700), iaGate = gate(400);
+const locGate = gate(700), iaGate = gate(400), pixGate = gate(650); // Pixabay: 100 requests/minute
 const getJson = async url => { const r = await fetch(url); return r.ok ? r.json() : null; };
 
 // NASA Image and Video Library: NASA media is generally not copyrighted; items crediting third parties are skipped.
@@ -92,8 +101,15 @@ export async function loc(q) {
   }).filter(Boolean);
 }
 
-export async function searchAll(settings, q, W, qr = 0) {
-  const tasks = [pexels(settings.pexels, q, W), pixabay(settings.pixabay, q, W)];
+// Same query from different scenes is answered once (also saves the Pexels/Pixabay hourly limits).
+const cache = new Map();
+export function searchAll(settings, q, W, qr = 0) {
+  const key = [qr, !!settings.pexels, !!settings.pixabay, settings.wikimedia, settings.nasa, settings.archive, settings.loc, q.toLowerCase().trim()].join('|');
+  if (!cache.has(key)) cache.set(key, searchFresh(settings, q, W, qr).catch(e => { cache.delete(key); throw e; }));
+  return cache.get(key);
+}
+async function searchFresh(settings, q, W, qr) {
+  const tasks = [pexels(settings.pexels, q, W, qr === 0), pixabay(settings.pixabay, q, W)];
   if (settings.wikimedia !== false) tasks.push(wikimedia(q));
   if (settings.nasa !== false && qr < 2) tasks.push(nasa(q));
   if (settings.archive !== false && qr === 0) tasks.push(archive(q));

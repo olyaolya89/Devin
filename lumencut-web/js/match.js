@@ -20,12 +20,16 @@ export async function gatherCandidates(shots, settings, W, onProgress) {
   await Promise.all(Array.from({ length: 3 }, worker));
 }
 
-export async function pickMedia(shots, settings, onProgress, preUsed = []) {
+export const cutsNeeded = s => Math.max(1, Math.ceil((s.end - s.start) / MAX_CUT - 0.05));
+
+// preUsed: ids/urls already on screen elsewhere; preEmb: their CLIP vectors, so "Найти заново" can't bring back a look-alike frame.
+export async function pickMedia(shots, settings, onProgress, preUsed = [], preEmb = []) {
   let useClip = settings.clip !== false, textE = [];
   if (useClip) try { textE = await textEmbed(shots.map(s => `a photo of ${s.visual || s.text}. ${s.meaning || ''}`.slice(0, 300)), onProgress); } catch (e) { console.warn(e); useClip = false; }
-  const usedIds = new Set(preUsed), usedEmb = [];
+  const usedIds = new Set(preUsed), usedEmb = preEmb.filter(v => v?.length).map(v => ({ v }));
   for (const [i, s] of shots.entries()) {
     onProgress?.(`Смысловой подбор (${useClip ? 'CLIP' : 'по словам'}): ${i + 1}/${shots.length}`);
+    const need = cutsNeeded(s), len = (s.end - s.start) / need;
     const target = tok(`${s.text} ${s.visual} ${s.queries.join(' ')}`);
     const pre = c => [...tok(c.tags)].filter(w => target.has(w)).length + (c.qr === 0 ? 1 : c.qr === 1 ? 0.5 : 0) + (c.kind === 'video' ? 0.5 : 0);
     const pool = (s.candidates || []).filter(c => !usedIds.has(c.id) && !usedIds.has(c.url)).sort((a, b) => pre(b) - pre(a)).slice(0, 48);
@@ -35,21 +39,50 @@ export async function pickMedia(shots, settings, onProgress, preUsed = []) {
       c.emb = embs[k] || null;
       c.sim = c.emb && textE[i] ? cos(c.emb, textE[i]) : null;
       const overlap = [...tok(c.tags)].filter(w => target.has(w)).length;
-      c.score = (c.sim != null ? c.sim * 100 : overlap * 3) + (c.kind === 'video' ? (settings.preferVideo ? 2.5 : 1) : 0) + (c.qr === 0 ? 0.8 : c.qr === 1 ? 0.4 : 0) + (c.sim != null ? overlap * 0.3 : 0) - (WEATHER.test(c.tags) && !WEATHER.test(`${s.text} ${s.visual} ${s.meaning}`) ? 8 : 0) - (/\b(chart|diagram|graph|logo|map|svg|icon|table|document|scan|text)\b/i.test(c.tags) ? 6 : 0);
+      const tooShort = c.kind === 'video' && c.duration && c.duration < len * 0.6 ? 2 : 0; // would have to be slowed down a lot
+      c.score = (c.sim != null ? c.sim * 100 : overlap * 3) + (c.kind === 'video' ? (settings.preferVideo ? 2.5 : 1) : 0) + (c.qr === 0 ? 0.8 : c.qr === 1 ? 0.4 : 0) + (c.sim != null ? overlap * 0.3 : 0) - tooShort - (WEATHER.test(c.tags) && !WEATHER.test(`${s.text} ${s.visual} ${s.meaning}`) ? 8 : 0) - (/\b(chart|diagram|graph|logo|map|svg|icon|table|document|scan|text)\b/i.test(c.tags) ? 6 : 0);
     });
     pool.sort((a, b) => b.score - a.score);
-    const dur = s.end - s.start, need = Math.max(1, Math.ceil(dur / MAX_CUT - 0.05));
+    // Off-meaning = clearly worse than the best match of this scene (not just below a fixed number).
+    const best = Math.max(-1, ...pool.map(c => c.sim ?? -1));
+    const floor = best >= 0.17 ? Math.max(0.17, best - 0.07) : -Infinity;
+    const ok = (c, strict) => {
+      if (c.sim != null && c.sim < (strict ? floor : Math.min(floor, 0.15))) return false;
+      if (c.emb && usedEmb.some(e => cos(e.v, c.emb) > 0.93)) return false; // visually the same frame
+      if (strict && c.emb && usedEmb.slice(-3).some(e => cos(e.v, c.emb) > 0.88)) return false; // too similar to neighbours
+      return true;
+    };
     s.picks = [];
-    for (const c of pool) {
-      if (c.sim != null && c.sim < 0.17 && pool.some(x => x !== c && x.sim >= 0.17 && !s.picks.includes(x))) continue; // off-meaning
+    // Second, relaxed pass only fills long scenes, so a single clip is not stretched far past 5 s.
+    for (const strict of [true, false]) for (const c of pool) {
       if (s.picks.length >= need) break;
-      if (c.emb && usedEmb.some(e => cos(e.v, c.emb) > 0.93)) continue; // visually the same frame
-      if (c.emb && usedEmb.slice(-3).some(e => cos(e.v, c.emb) > 0.88)) continue; // too similar to neighbours
+      if (s.picks.includes(c) || !ok(c, strict)) continue;
       s.picks.push(c); usedIds.add(c.id); usedIds.add(c.url); if (c.emb) usedEmb.push({ v: c.emb });
     }
     s.candidates = pool.slice(0, 16).map(({ emb, ...c }) => c);
     planCuts(s);
   }
+}
+
+// Scenes that got fewer clips than they need: search wider (the visual description, the meaning, the story topic) and pick again.
+export async function refillShort(all, settings, topic, onProgress) {
+  const short = all.filter(s => (s.picks?.length || 0) < cutsNeeded(s));
+  if (!short.length) return 0;
+  const words = t => String(t || '').split(/\s+/).filter(w => w.length > 2).slice(0, 5).join(' ');
+  for (const s of short) {
+    s.oldCandidates = s.candidates || [];
+    s.queriesBak = s.queries;
+    s.queries = [...new Set([words(s.visual), words(s.meaning), topic].filter(q => q && !s.queries.includes(q)))].slice(0, 3);
+  }
+  await gatherCandidates(short.filter(s => s.queries.length), settings, 1920, onProgress);
+  for (const s of short) {
+    const fresh = s.queries.length ? s.candidates.map(c => ({ ...c, qr: 2 })) : []; // wider queries rank below the original ones
+    const m = new Map([...fresh, ...s.oldCandidates].map(c => [c.id, c]));
+    s.candidates = [...m.values()]; s.queries = s.queriesBak; delete s.oldCandidates; delete s.queriesBak;
+  }
+  const others = all.filter(s => !short.includes(s)).flatMap(s => s.picks || []);
+  await pickMedia(short, settings, onProgress, others.flatMap(p => [p.id, p.url]), others.map(p => p.emb));
+  return short.length;
 }
 
 export function planCuts(s) {
