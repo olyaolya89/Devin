@@ -13,8 +13,9 @@
 <main>
 <section id="tab-project" class="tab on">
   <div class="card"><h2>Сценарий (английский)</h2><textarea id="script" placeholder="Вставьте готовый сценарий. Каждая фраза станет сценой 2–5 секунд."></textarea>
-  <div class="row"><label class="file">🎙 Озвучка (MP3/WAV из ElevenLabs и т.п.)<input type="file" id="voice" accept="audio/*"></label><span id="voiceInfo" class="muted">не выбрана — время сцен будет оценено (2,6 слова/сек), звук будет тишиной</span></div>
-  <div class="row"><button id="go" class="primary">Сделать раскадровку</button><button id="saveProj">Сохранить проект</button><label class="file small">Открыть проект<input type="file" id="loadProj" accept=".json"></label></div></div>
+  <div class="row"><label class="file">🎙 Озвучка (MP3/WAV из ElevenLabs и т.п.)<input type="file" id="voice" accept=".mp3,.wav,.m4a,.aac,.ogg,.opus,.flac,.webm,audio/*"></label><span id="voiceInfo" class="muted">не выбрана — время сцен будет оценено (2,6 слова/сек), звук будет тишиной</span></div>
+  <div class="row"><button id="auto" class="primary">🎬 Сделать готовое видео</button><button id="go">Только раскадровка</button><button id="saveProj">Сохранить проект</button><label class="file small">Открыть проект<input type="file" id="loadProj" accept=".json"></label></div>
+  <p class="muted">«Сделать готовое видео» — всё автоматически: тайминг по голосу → подбор кадров по смыслу → графика, звуки, музыка → MP4. Можно также перетащить MP3 прямо на страницу.</p></div>
   <div class="card"><h3>Ход работы</h3><div id="progress" class="bar"><i></i></div><pre id="log"></pre></div>
 </section>
 <section id="tab-board" class="tab"><div class="row"><b id="boardInfo" class="muted">Раскадровки ещё нет</b></div><div id="board"></div></section>
