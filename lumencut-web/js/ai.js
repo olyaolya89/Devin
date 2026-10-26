@@ -2,12 +2,13 @@
 const TF = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1';
 let tf, clip;
 const lib = async () => (tf ||= await import(TF));
-const device = () => ('gpu' in navigator ? 'webgpu' : 'wasm');
+let dev;
+const device = async () => (dev ||= await navigator.gpu?.requestAdapter().then(a => (a ? 'webgpu' : 'wasm'), () => 'wasm') || 'wasm');
 
 export async function transcribe(float32, onProgress) {
   const T = await lib();
   let asr;
-  try { asr = await T.pipeline('automatic-speech-recognition', 'Xenova/whisper-base.en', { device: device(), dtype: 'fp32', progress_callback: p => p.status === 'progress' && onProgress?.(`Загрузка Whisper ${Math.round(p.progress || 0)}%`) }); }
+  try { asr = await T.pipeline('automatic-speech-recognition', 'Xenova/whisper-base.en', { device: await device(), dtype: 'fp32', progress_callback: p => p.status === 'progress' && onProgress?.(`Загрузка Whisper ${Math.round(p.progress || 0)}%`) }); }
   catch { asr = await T.pipeline('automatic-speech-recognition', 'Xenova/whisper-base.en', { device: 'wasm', progress_callback: p => p.status === 'progress' && onProgress?.(`Загрузка Whisper ${Math.round(p.progress || 0)}%`) }); }
   onProgress?.('Распознаю голос (Whisper)…');
   const out = await asr(float32, { return_timestamps: 'word', chunk_length_s: 30, stride_length_s: 5 });

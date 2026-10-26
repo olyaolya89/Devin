@@ -23,14 +23,20 @@ loadSettings();
 
 // project
 const saved = JSON.parse(localStorage.getItem('lumencut.project') || 'null');
-if (saved) { Object.assign(S, saved); $('#script').value = S.script || ''; if (S.shots.length) drawBoard(); }
 const persist = () => { try { localStorage.setItem('lumencut.project', JSON.stringify({ script: S.script, shots: S.shots, topic: S.topic })); } catch { } };
-$('#voice').onchange = async e => { const f = e.target.files[0]; if (!f) return; $('#voiceInfo').textContent = 'читаю файл…'; S.voice = await decodeFile(f); S.voiceName = f.name; $('#voiceInfo').textContent = `${f.name} · ${S.voice.duration.toFixed(1)} сек`; };
+async function setVoice(f) {
+  if (!f) return; const vi = $('#voiceInfo'); vi.textContent = `читаю «${f.name}» (${(f.size / 1048576).toFixed(1)} МБ)…`;
+  try { S.voice = await decodeFile(f); S.voiceName = f.name; vi.textContent = `✓ ${f.name} · ${fmt(S.voice.duration)}`; }
+  catch (e) { S.voice = null; vi.textContent = '⚠ ' + e.message; console.error(e); }
+}
+$('#voice').onchange = e => setVoice(e.target.files[0]);
+addEventListener('dragover', e => e.preventDefault());
+addEventListener('drop', e => { const f = [...(e.dataTransfer?.files || [])].find(x => /^audio\/|\.(mp3|wav|m4a|aac|ogg|opus|flac)$/i.test(x.type || x.name)); if (f) { e.preventDefault(); tab('project'); setVoice(f); } });
 $('#saveProj').onclick = () => download(new Blob([JSON.stringify({ script: $('#script').value, shots: S.shots, topic: S.topic }, null, 1)], { type: 'application/json' }), 'lumencut-project.json');
 $('#loadProj').onchange = async e => { const f = e.target.files[0]; if (!f) return; Object.assign(S, JSON.parse(await f.text())); $('#script').value = S.script || ''; drawBoard(); log('Проект открыт. Для рендера снова выберите файл озвучки.'); };
 
-$('#go').onclick = async () => {
-  const btn = $('#go'); btn.disabled = true; $('#log').textContent = '';
+async function makeStoryboard() {
+  const btns = [$('#go'), $('#auto')]; btns.forEach(b => (b.disabled = true)); $('#log').textContent = '';
   try {
     const c = cfg(); S.script = $('#script').value.trim(); if (!S.script) throw new Error('Вставьте сценарий');
     if (!c.pexels && !c.pixabay) log('⚠ Нет ключей Pexels/Pixabay — ищу только в Wikimedia. Добавьте бесплатные ключи во вкладке «Настройки» для качественного видео.');
@@ -46,9 +52,19 @@ $('#go').onclick = async () => {
     const W = 1920; await gatherCandidates(S.shots, c, W, m => { status(m); }); prog('#progress', 0.7);
     await pickMedia(S.shots, c, status); prog('#progress', 1);
     const miss = S.shots.filter(s => !s.picks.length).length; log(`Готово. ${miss ? `Без кадра: ${miss} сцен — замените вручную во вкладке «Раскадровка».` : 'Все сцены с уникальными кадрами.'}`);
-    persist(); drawBoard(); tab('board');
-  } catch (e) { log('Ошибка: ' + e.message); console.error(e); }
-  btn.disabled = false;
+    persist(); drawBoard(); return true;
+  } catch (e) { log('Ошибка: ' + e.message); console.error(e); return false; }
+  finally { btns.forEach(b => (b.disabled = false)); }
+}
+$('#go').onclick = async () => { if (await makeStoryboard()) tab('board'); };
+$('#auto').onclick = async () => {
+  if (!$('#script').value.trim()) return alert('Вставьте сценарий');
+  if (!S.voice && !confirm('Озвучка не выбрана — видео будет без голоса. Продолжить?')) return;
+  let fileHandle = false;
+  if (window.showSaveFilePicker) { try { fileHandle = await window.showSaveFilePicker({ suggestedName: 'lumencut-video.mp4', types: [{ description: 'MP4', accept: { 'video/mp4': ['.mp4'] } }] }); } catch { return; } }
+  log('Шаг 1/2: раскадровка…');
+  if (!(await makeStoryboard())) return;
+  tab('render'); await doRender(Infinity, fileHandle);
 };
 
 // storyboard
@@ -89,21 +105,21 @@ $('#board').addEventListener('click', async e => {
 });
 
 // render
-async function doRender(limit) {
+async function doRender(limit, presetHandle = null) {
   if (!S.shots.length) return alert('Сначала сделайте раскадровку');
   if (!('VideoEncoder' in window)) return alert('Нужен Google Chrome или Microsoft Edge (последней версии).');
-  const [W, H] = $('#res').value.split('x').map(Number); const buttons = [$('#test'), $('#full')]; buttons.forEach(b => (b.disabled = true));
+  const [W, H] = $('#res').value.split('x').map(Number); const buttons = [$('#test'), $('#full'), $('#auto')]; buttons.forEach(b => (b.disabled = true));
   $('#downloads').innerHTML = ''; const info = m => ($('#rinfo').textContent = m);
   try {
     const duration = limit < Infinity ? Math.min(limit, S.shots.at(-1).end) : S.shots.at(-1).end;
     let voice = S.voice; if (!voice) { info('Озвучка не выбрана — видео будет без голоса'); voice = new AudioBuffer({ length: Math.ceil(S.shots.at(-1).end * 48000), sampleRate: 48000, numberOfChannels: 1 }); }
     const audio = await mixAudio({ voice, shots: S.shots, duration: Math.max(duration, voice.duration), musicOn: $('#music').checked, musicDb: +$('#musicDb').value, sfxOn: $('#sfx').checked, level: $('#level')?.checked !== false }, info);
-    let fileHandle = null;
-    if (limit === Infinity && window.showSaveFilePicker) { try { fileHandle = await window.showSaveFilePicker({ suggestedName: 'lumencut-video.mp4', types: [{ description: 'MP4', accept: { 'video/mp4': ['.mp4'] } }] }); } catch { buttons.forEach(b => (b.disabled = false)); return; } }
+    let fileHandle = presetHandle || null;
+    if (presetHandle == null && limit === Infinity && window.showSaveFilePicker) { try { fileHandle = await window.showSaveFilePicker({ suggestedName: 'lumencut-video.mp4', types: [{ description: 'MP4', accept: { 'video/mp4': ['.mp4'] } }] }); } catch { buttons.forEach(b => (b.disabled = false)); return; } }
     const t0 = performance.now();
     const blob = await renderVideo({ shots: S.shots, audio, W, H, canvas: $('#canvas'), subtitles: $('#subs').checked, limit, fileHandle, onProgress: (p, m) => { prog('#rprogress', p); info(m); } });
     prog('#rprogress', 1); info(`Готово за ${((performance.now() - t0) / 60000).toFixed(1)} мин.${fileHandle ? ' Файл сохранён туда, куда вы указали.' : ''}`);
-    if (blob) link(blob, limit < Infinity ? 'lumencut-test.mp4' : 'lumencut-video.mp4', 'Скачать MP4');
+    if (blob) { link(blob, limit < Infinity ? 'lumencut-test.mp4' : 'lumencut-video.mp4', 'Скачать MP4'); if (presetHandle === false) download(blob, 'lumencut-video.mp4'); }
     link(new Blob([toSrt(S.shots)], { type: 'text/plain' }), 'subtitles.srt', 'Субтитры .srt');
     const credits = [...new Map(S.shots.flatMap(s => s.picks || []).map(p => [p.id, `${p.source} — ${p.author || 'unknown'}${p.license ? ' (' + p.license + ')' : ''} — ${p.page || p.url}`])).values()].join('\n');
     link(new Blob([credits], { type: 'text/plain' }), 'credits.txt', 'Авторы кадров');
@@ -114,3 +130,5 @@ function link(blob, name, label) { const a = document.createElement('a'); a.clas
 function download(blob, name) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); }
 $('#test').onclick = () => doRender(20);
 $('#full').onclick = () => doRender(Infinity);
+
+try { if (saved) { Object.assign(S, saved); $('#script').value = S.script || ''; if (S.shots.length) drawBoard(); } } catch (e) { console.error(e); localStorage.removeItem('lumencut.project'); }

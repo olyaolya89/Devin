@@ -86,8 +86,12 @@ export async function mixAudio({ voice, shots, duration, musicOn = true, musicDb
 }
 
 export async function decodeFile(file) {
-  const ctx = new AudioContext({ sampleRate: SR });
-  try { return await ctx.decodeAudioData(await file.arrayBuffer()); } finally { ctx.close(); }
+  const data = await file.arrayBuffer();
+  let lastErr;
+  for (const make of [() => new AudioContext({ sampleRate: SR }), () => new AudioContext(), () => new OfflineAudioContext(1, 1, SR)]) {
+    let ctx; try { ctx = make(); return await ctx.decodeAudioData(data.slice(0)); } catch (e) { lastErr = e; } finally { ctx?.close?.().catch(() => { }); }
+  }
+  throw new Error(`браузер не смог прочитать «${file.name}» (${lastErr?.message || 'неизвестный формат'}). Пересохраните озвучку как MP3 или WAV.`);
 }
 
 export async function to16kMono(buf) {
