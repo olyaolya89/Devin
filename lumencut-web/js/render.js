@@ -61,7 +61,9 @@ function drawOverlay(ctx, s, t, W, H) {
 
 function drawSubs(ctx, s, t, W, H) {
   const words = s.text.split(/\s+/); const a = s.start, b = Math.max(a + 0.5, s.wordEnd ?? s.end); if (t > b + 0.3) return;
-  const k = Math.min(words.length - 1, Math.max(0, Math.floor((t - a) / (b - a) * words.length)));
+  // highlight the word actually being spoken (Whisper timings); even spread only when there was no voice to align to
+  const wt = s.wt?.length === words.length ? s.wt : null;
+  let k = 0; if (wt) { while (k + 1 < words.length && wt[k + 1] <= t) k++; } else k = Math.min(words.length - 1, Math.max(0, Math.floor((t - a) / (b - a) * words.length)));
   const g0 = Math.floor(k / 6) * 6, grp = words.slice(g0, g0 + 6), u = W / 1920;
   ctx.save(); ctx.font = `800 ${56 * u}px Inter, Arial, sans-serif`; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
   const sp = ctx.measureText(' ').width, widths = grp.map(w => ctx.measureText(w).width), total = widths.reduce((x, y) => x + y, 0) + sp * (grp.length - 1);
@@ -112,10 +114,13 @@ export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, 
     const m = await next; next = ci + 1 < cuts.length ? loadMedia(cuts[ci + 1].media || {}) : null;
     if (m.v) {
       await seek(m.v, cut.from || 0);
+      // A clip shorter than its cut is played slower (down to 0.5×) instead of freezing on its last frame.
+      const avail = (Number.isFinite(m.v.duration) ? m.v.duration : Infinity) - m.v.currentTime, want = (end - f) / fps;
+      const rate = avail < want ? Math.max(0.5, avail / want) : 1; m.v.playbackRate = rate;
       await new Promise(res => {
         let done = false, timer; const base = m.v.currentTime, start = f;
         const finish = () => { if (done) return; done = true; clearTimeout(timer); m.v.pause(); while (f < end) emit(cut, m, ci); res(); };
-        const step = (now, meta) => { if (done) return; clearTimeout(timer); while (f < end && (f - start) / fps <= meta.mediaTime - base + 0.5 / fps) emit(cut, m, ci); if (f >= end) return finish(); timer = setTimeout(finish, 4000); m.v.requestVideoFrameCallback(step); };
+        const step = (now, meta) => { if (done) return; clearTimeout(timer); while (f < end && (f - start) / fps * rate <= meta.mediaTime - base + 0.5 / fps) emit(cut, m, ci); if (f >= end) return finish(); timer = setTimeout(finish, 4000); m.v.requestVideoFrameCallback(step); };
         m.v.onended = finish; timer = setTimeout(finish, 8000); m.v.requestVideoFrameCallback(step); m.v.play().catch(finish);
       });
       m.v.removeAttribute('src'); m.v.load();

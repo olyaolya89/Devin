@@ -27,7 +27,7 @@ export function splitShots(script, maxWords = 12) {
 
 // Needleman–Wunsch alignment of script words to Whisper words → start/end per shot.
 export function alignTiming(shots, asrWords, totalDur) {
-  const sw = []; shots.forEach((s, si) => s.text.split(/\s+/).forEach(w => { const n = norm(w); if (n) sw.push({ n, si }); }));
+  const sw = []; shots.forEach((s, si) => s.text.split(/\s+/).forEach((w, wi) => { const n = norm(w); if (n) sw.push({ n, si, wi }); }));
   const aw = asrWords.map(w => ({ n: norm(w.text), s: w.start, e: w.end })).filter(w => w.n);
   const N = sw.length, M = aw.length, W = M + 1;
   const score = new Int32Array((N + 1) * W), dir = new Uint8Array((N + 1) * W);
@@ -42,8 +42,25 @@ export function alignTiming(shots, asrWords, totalDur) {
   const match = new Array(N).fill(null); let i = N, j = M;
   while (i > 0 || j > 0) { const d = dir[i * W + j]; if (i > 0 && j > 0 && d === 0) { match[i - 1] = aw[j - 1]; i--; j--; } else if (i > 0 && (j === 0 || d === 1)) i--; else j--; }
   const first = shots.map(() => null), last = shots.map(() => null);
-  sw.forEach((w, k) => { const m = match[k]; if (!m) return; if (first[w.si] == null) first[w.si] = m.s; last[w.si] = m.e; });
-  return fillTiming(shots, first, last, totalDur);
+  const wt = shots.map(s => new Array(s.text.split(/\s+/).length).fill(null));
+  sw.forEach((w, k) => { const m = match[k]; if (!m) return; if (first[w.si] == null) first[w.si] = m.s; last[w.si] = m.e; wt[w.si][w.wi] = m.s; });
+  fillTiming(shots, first, last, totalDur);
+  shots.forEach((s, k) => { s.wt = wordTimes(wt[k], s.start, s.wordEnd); });
+  return shots;
+}
+
+// Start time of every script word (for karaoke subtitles in sync with the voice); unmatched words are interpolated.
+function wordTimes(t, a, b) {
+  const n = t.length, out = new Array(n);
+  for (let i = 0; i < n; i++) {
+    if (t[i] != null) { out[i] = t[i]; continue; }
+    let p = i - 1; while (p >= 0 && t[p] == null) p--;
+    let q = i + 1; while (q < n && t[q] == null) q++;
+    const ta = p >= 0 ? t[p] : a, tb = q < n ? t[q] : b;
+    out[i] = ta + (tb - ta) * (i - p) / (q - p);
+  }
+  for (let i = 1; i < n; i++) out[i] = Math.max(out[i], out[i - 1]);
+  return out.map(x => Math.round(x * 100) / 100);
 }
 
 export function estimateTiming(shots, wps = 2.6) {
@@ -69,7 +86,7 @@ export function significant(text) {
 }
 
 function detectOverlay(text) {
-  const num = text.match(/(\$|€|£)?\s?(\d[\d,.]*)\s?(%|percent|million|billion|thousand|trillion|km|miles|meters|years|tons|degrees)?/i);
+  const num = text.match(/(\$|€|£)?\s?(\d[\d,.]*\d|\d)\s?(%|percent|million|billion|thousand|trillion|km|miles|meters|years|tons|degrees)?/i);
   const year = text.match(/\b(1[5-9]\d\d|20\d\d)\b/);
   if (year && (!num || num[2] === year[1])) return { type: 'date', text: year[1] };
   if (num && num[2].replace(/[,.]/g, '').length >= 2) {
@@ -87,7 +104,7 @@ export function heuristicPlan(shots) {
     const words = significant(s.text); const longest = [...new Set(words)].sort((a, b) => b.length - a.length);
     s.meaning = s.text; s.visual = words.slice(0, 6).join(' ');
     s.queries = [longest.slice(0, 3).join(' '), `${longest.slice(0, 2).join(' ')} ${topic}`.trim(), longest[0] || topic].filter(Boolean);
-    s.overlay = i === 0 ? { type: 'keyword', text: longest.slice(0, 2).join(' ').toUpperCase() } : detectOverlay(s.text);
+    s.overlay = detectOverlay(s.text);
     s.sfx = { number: 'counter', date: 'blip', keyword: 'whoosh' }[s.overlay.type] || (i % 6 === 3 ? 'swish' : 'none');
     s.mood = 'mystery';
   });
@@ -133,8 +150,8 @@ Rules:
 - The audience is American. Infer the story's setting (place, era, season) from the whole script; if it is unclear, assume the USA.
 - Months, dates, weekdays and seasons are TIME references, not visuals. Never show snow, ice, frost, rain, autumn leaves, beaches or other weather/season imagery unless the line itself is about weather/season or the story's setting clearly has that weather. Show what HAPPENS in the line instead ("In February he lost his job" -> "man carrying cardboard box out of office building").
 - Queries in English, concrete nouns/actions, no abstract words, no names of the script's people unless famous. Neighbouring lines must get visibly DIFFERENT shots (different subject, place or scale) so no frame feels repeated.
-- overlay: use on about 1 of 3 lines only: number (counts, money, percent; give numeric value), date (years), place (city/country names), keyword (one key idea), quote (spoken quote), chapter (new section/turning point). Otherwise type "none".
-- sfx: pop/blip when a keyword/date/place appears, counter for numbers, whoosh/swish on fast transitions, riser/impact/stinger only for big reveals, ambience names rarely; "none" for about half of lines.
+- overlay: RARELY - at most 1 of 8 lines, only for the strongest facts: number (a striking count, money, percent; give numeric value), date (a key year), place (first mention of a city/country), chapter (new section/turning point), quote (only a real spoken quote). Avoid keyword. The footage must carry the story, not text boxes. Otherwise type "none".
+- sfx: counter for a shown number, blip for a shown date/place, whoosh/swish on a few fast transitions, riser/impact/stinger only for big reveals, ambience names rarely; "none" for about two thirds of lines.
 - mood: background music mood for this part of the story; keep it stable for long stretches.`;
 }
 
@@ -157,6 +174,21 @@ export async function geminiPlan(key, model, shots, onProgress) {
     });
   }
   return { topic, shots };
+}
+
+// On-screen graphics ("плашки") and SFX density, applied at render time so the storyboard keeps everything.
+// mode: 'none' = no graphics, 'rare' = numbers/dates/places/chapters at least 20 s apart, 'all' = as planned.
+export function thinGraphics(shots, mode = 'rare') {
+  let lastGfx = -Infinity, lastSfx = -Infinity;
+  return shots.map(s0 => {
+    const s = { ...s0 }, type = s.overlay?.type || 'none';
+    const keep = mode === 'all' ? type !== 'none' : mode === 'rare' && ['number', 'date', 'place', 'chapter'].includes(type) && s.start - lastGfx >= 20;
+    if (keep) lastGfx = s.start; else if (type !== 'none') s.overlay = { type: 'none' };
+    // pop/blip/counter only make sense together with the graphic they accompany
+    if (!keep && ['pop', 'blip', 'counter', 'ding'].includes(s.sfx)) s.sfx = 'none';
+    if (s.sfx && s.sfx !== 'none') { if (s.start - lastSfx < (mode === 'all' ? 2.5 : 4)) s.sfx = 'none'; else lastSfx = s.start; }
+    return s;
+  });
 }
 
 export function toSrt(shots) {

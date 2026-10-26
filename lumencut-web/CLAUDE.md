@@ -19,6 +19,8 @@ geminiPlan() | heuristicPlan()          plan.js   – meaning → concrete visua
 gatherCandidates()                      match.js  – sources.js searchAll()
 pickMedia()                             match.js  – CLIP Xenova/clip-vit-base-patch32 text↔thumbnail; global no-repeat
 planCuts()                              match.js  – MAX_CUT = 5 s
+refillShort()                           match.js  – wider search (visual/meaning/topic) for scenes short of clips
+thinGraphics()                          plan.js   – render-time overlay/SFX density (UI "Графика": rare/none/all)
 mixAudio()                              audio.js  – levelVoice() + compressor, 35 SFX (sfx/), 11 music beds (music/), ducking, ~-14 LUFS
 renderVideo()                           render.js – canvas + WebCodecs + vendor mp4-muxer
 ```
@@ -37,6 +39,9 @@ renderVideo()                           render.js – canvas + WebCodecs + vendo
 7. Owner is non-technical, on Windows. Explain changes to her in Russian, step by step.
 
 ## Known limits / ideas to check
+- Free Pexels key = 200 requests/hour: photos only for the main query, identical queries cached, 429 pauses Pexels 15 min and logs it. Pixabay gated at 100/min.
+- Subtitles highlight words by Whisper timings (shot.wt); without voice they are spread evenly.
+- Clips shorter than their cut play slower (≥0.5×) instead of freezing.
 - Without Pexels/Pixabay keys only Wikimedia/NASA/IA/LoC are searched → weak matches for modern everyday topics.
 - Pitch jumps in TTS voice are not corrected (only loudness levelling).
 - Render is ~real time; tab must stay in foreground.
