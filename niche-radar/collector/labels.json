@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "notes": "Ручная разметка: ниши/каналы, которые пользователь считает хорошей или плохой точкой входа. Кластер = niche|style_group|language.",
+  "niches": [
+    {"niche": "jewelry", "niche_ru": "Ювелирка", "style_group": "live", "language": "en", "label": "good", "why": "1 референс летит (21K просм./видео), 2 конкурента буксуют — окно спорное, но спрос есть"},
+    {"niche": "animals", "niche_ru": "Психология котов", "style_group": "live", "language": "en", "label": "good", "why": "Felune 265K просм./видео, 132 просм./подп.; конкурентов 3"},
+    {"niche": "disasters", "niche_ru": "Природные катастрофы (живое видео)", "style_group": "live", "language": "en", "label": "good", "why": "UnderTheHeadline 4.9M за 2 недели"},
+    {"niche": "disasters", "niche_ru": "Природные катастрофы (ИИ)", "style_group": "ai", "language": "en", "label": "good", "why": "GeoOrigins 2.8M за месяц, 339 просм./подп."},
+    {"niche": "lifehacks", "niche_ru": "Бытовые лайфхаки", "style_group": "live", "language": "en", "label": "good", "why": "1 референс, 1 конкурент"},
+    {"niche": "history", "niche_ru": "История открытий и брендов", "style_group": "ai", "language": "es", "label": "good", "why": "Vidas de Película 105K просм./видео, конкурентов почти нет"},
+    {"niche": "nostalgia", "niche_ru": "Ностальгия 1960–80", "style_group": "ai", "language": "de", "label": "good", "why": "Deutschland, wie es einmal war: 1.07M за 2 мес., 194 просм./подп."}
+  ],
+  "channels": [
+    {"handle": "@NataliePencer", "niche": "jewelry", "role": "reference"},
+    {"handle": "@EverythingXplaiin", "niche": "jewelry", "role": "competitor"},
+    {"handle": "@KaratVerdict1", "niche": "jewelry", "role": "competitor"},
+    {"handle": "@ThommasSinclair", "niche": "jewelry", "role": "competitor"},
+    {"handle": "@GoldsmithVerdict", "niche": "jewelry", "role": "competitor"},
+    {"handle": "@Felunee", "niche": "animals", "role": "reference"},
+    {"handle": "@CatClub5", "niche": "animals", "role": "competitor"},
+    {"handle": "@PurrfectFacts-USA", "niche": "animals", "role": "competitor"},
+    {"handle": "@GeorgeKnowsWhy", "niche": "animals", "role": "competitor"},
+    {"handle": "@UnderTheHeadline", "niche": "disasters", "role": "reference"},
+    {"id": "UCtrNrW5RTVzL7Tj07EExLKg", "niche": "disasters", "role": "reference"},
+    {"handle": "@THISisWHYYTB", "niche": "disasters", "role": "reference"},
+    {"handle": "@GeoOrigins-c8v", "niche": "disasters", "role": "reference"},
+    {"id": "UCqX_HO1AR-1uNx9T41ID9IQ", "niche": "lifehacks", "role": "reference"},
+    {"id": "UCG1FhX9QEcUEqNQEnP1EaiQ", "niche": "lifehacks", "role": "competitor"},
+    {"handle": "@vidasextraordinarias-k8x", "niche": "history", "role": "reference"},
+    {"handle": "@la-santabarbara", "niche": "history", "role": "reference"},
+    {"handle": "@Deutschlandwieeseinmalwar", "niche": "nostalgia", "role": "reference"},
+    {"handle": "@WundersameErinnerungen", "niche": "nostalgia", "role": "competitor"},
+    {"handle": "@VergessenesÜberlebenswissen", "niche": "nostalgia", "role": "competitor"}
+  ]
+}

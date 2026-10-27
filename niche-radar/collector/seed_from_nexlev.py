@@ -166,6 +166,13 @@ def channel_from_record(
     if first_video_at and not calculated["_long_videos"]:
         age_days = max(1, (now - collect._parse_time(first_video_at)).total_seconds() / 86400)
     region = _region(record.get("location"), rpm_data)
+    monthly_views_est = int(float(stats.get("monthlyViews") or calculated["monthly_views_est"]))
+    rpm = float(stats.get("rpm", {}).get("total") or 0)
+    monthly_revenue_raw = stats.get("monthlyRevenue")
+    try:
+        monthly_revenue = None if monthly_revenue_raw is None else float(monthly_revenue_raw)
+    except (TypeError, ValueError):
+        monthly_revenue = None
     result = {
         "id": channel_id,
         "handle": record.get("username", ""),
@@ -195,13 +202,16 @@ def channel_from_record(
         "avg_views_first_5": calculated["avg_views_first_5"],
         "avg_duration_sec": calculated["avg_duration_sec"] or float(stats.get("avgVideoLength") or 0),
         "views_per_day": calculated["views_per_day"],
+        "monthly_views_est": monthly_views_est,
+        "monthly_income_est": round(monthly_views_est / 1000 * rpm, 2),
         "subs_per_day": calculated["subs_per_day"],
         "watch_hours_est": calculated["watch_hours_est"],
         "days_to_monetization": calculated["days_to_monetization"],
         "monetization_forecast": calculated["monetization_forecast"],
         "is_monetized": bool(record.get("isMonetizationEnabled")),
-        "rpm": float(stats.get("rpm", {}).get("total") or 0),
+        "rpm": rpm,
         "rpm_source": "nexlev",
+        "monthly_revenue_nexlev": monthly_revenue,
         "region": region,
         "region_ru": rpm_data["region_ru"].get(region, "Другое"),
         "score": 0,

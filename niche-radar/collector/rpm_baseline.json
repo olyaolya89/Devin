@@ -2,6 +2,9 @@
   "_comment": "Базовый RPM (USD за 1000 просмотров) по нише × региону. Используется, когда нет данных NexLev. region: us (US/UK/CA/AU), eu (DE/FR/NL/…), latam (ES/PT-BR), ru, other.",
   "niches": {
     "finance":           {"ru_name": "Финансы и пенсия",        "us": 14.0, "eu": 9.0,  "latam": 4.0, "ru": 3.0, "other": 3.0},
+    "jewelry":           {"ru_name": "Ювелирка",                 "us": 14.0, "eu": 9.0,  "latam": 4.0, "ru": 3.0, "other": 3.0},
+    "disasters":         {"ru_name": "Природные катастрофы",     "us": 7.0,  "eu": 5.0,  "latam": 3.0, "ru": 2.0, "other": 2.0},
+    "lifehacks":         {"ru_name": "Бытовые лайфхаки",         "us": 6.0,  "eu": 4.0,  "latam": 3.0, "ru": 2.0, "other": 2.0},
     "nostalgia_finance": {"ru_name": "Ностальгия и экономия",   "us": 12.0, "eu": 8.0,  "latam": 3.5, "ru": 2.5, "other": 2.5},
     "nostalgia":         {"ru_name": "Ностальгия",              "us": 9.0,  "eu": 6.0,  "latam": 3.0, "ru": 2.0, "other": 2.0},
     "relocation":        {"ru_name": "Travel и релокация",      "us": 11.0, "eu": 8.0,  "latam": 4.0, "ru": 2.5, "other": 3.0},

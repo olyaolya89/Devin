@@ -26,6 +26,7 @@
     <button type="button" class="tab is-on" data-tab="all">Все каналы</button>
     <button type="button" class="tab" data-tab="saved">Сохранённые</button>
     <button type="button" class="tab" data-tab="liked">Нравится</button>
+    <button type="button" class="tab" data-tab="niches">Ниши</button>
   </nav>
   <div class="toolbar">
     <select id="sort" class="sel">
@@ -34,6 +35,8 @@
       <option value="subs">По подписчикам</option>
       <option value="views">По просмотрам</option>
       <option value="score">По Score</option>
+      <option value="income">По доходу/мес.</option>
+      <option value="entry">По оценке входа в нишу</option>
       <option value="monetization">Ближе к монетизации</option>
     </select>
     <button type="button" class="btn btn-red" id="filtersToggle">Фильтры</button>
@@ -68,6 +71,7 @@
   </section>
   <p class="muted" id="resultsInfo"></p>
   <div class="grid" id="grid"></div>
+  <section id="niches" hidden></section>
   <div class="empty" id="empty" hidden><h3>Ничего не найдено</h3><p>Сбрось фильтры или нажми «Обновить каналы».</p></div>
 </div>
 <button type="button" class="support" id="supportBtn">Поддержка</button>
@@ -101,7 +105,7 @@
     <p class="muted" id="supportOk" hidden>Сообщение сохранено.</p>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/gh/olyaolya89/Devin@devin/1788859371-niche-radar-competitors/niche-radar/live.js"></script>
+<script src="live.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

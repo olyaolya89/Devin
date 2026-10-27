@@ -64,6 +64,19 @@
     {"text": "space explained animation faceless", "niche": "science", "lang": "en"},
     {"text": "химические элементы документалка", "niche": "science", "lang": "ru"},
     {"text": "история объяснение анимация", "niche": "history", "lang": "ru"},
-    {"text": "как устроено инженерия объяснение", "niche": "engineering", "lang": "ru"}
+    {"text": "как устроено инженерия объяснение", "niche": "engineering", "lang": "ru"},
+    {"text": "jewelry history explained", "niche": "jewelry", "lang": "en"},
+    {"text": "why gemstones are valuable", "niche": "jewelry", "lang": "en"},
+    {"text": "gold jewelry secrets", "niche": "jewelry", "lang": "en"},
+    {"text": "natural disasters explained", "niche": "disasters", "lang": "en"},
+    {"text": "what happened in this disaster", "niche": "disasters", "lang": "en"},
+    {"text": "disaster footage explained", "niche": "disasters", "lang": "en"},
+    {"text": "household life hacks that work", "niche": "lifehacks", "lang": "en"},
+    {"text": "everyday life hacks explained", "niche": "lifehacks", "lang": "en"},
+    {"text": "simple home tricks", "niche": "lifehacks", "lang": "en"},
+    {"text": "historia de descubrimientos explicada", "niche": "history", "lang": "es", "style_hint": "ai_video"},
+    {"text": "historia de marcas famosas", "niche": "history", "lang": "es", "style_hint": "ai_video"},
+    {"text": "Nostalgie der 60er 70er 80er", "niche": "nostalgia", "lang": "de", "style_hint": "ai_video"},
+    {"text": "deutsche Erinnerungen aus den 70ern", "niche": "nostalgia", "lang": "de", "style_hint": "ai_video"}
   ]
 }
