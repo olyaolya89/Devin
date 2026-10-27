@@ -77,6 +77,23 @@
     {"text": "historia de descubrimientos explicada", "niche": "history", "lang": "es", "style_hint": "ai_video"},
     {"text": "historia de marcas famosas", "niche": "history", "lang": "es", "style_hint": "ai_video"},
     {"text": "Nostalgie der 60er 70er 80er", "niche": "nostalgia", "lang": "de", "style_hint": "ai_video"},
-    {"text": "deutsche Erinnerungen aus den 70ern", "niche": "nostalgia", "lang": "de", "style_hint": "ai_video"}
+    {"text": "deutsche Erinnerungen aus den 70ern", "niche": "nostalgia", "lang": "de", "style_hint": "ai_video"},
+    {"text": "what if stick figure animation", "niche": "pov_stories", "lang": "en", "style_hint": "stickman"},
+    {"text": "forgotten wwii stories documentary", "niche": "history", "lang": "en"},
+    {"text": "things the wild west actually", "niche": "history", "lang": "en"},
+    {"text": "the tragic story of", "niche": "true_crime", "lang": "en"},
+    {"text": "biggest machines ever built", "niche": "engineering", "lang": "en"},
+    {"text": "seniors over 60 must know", "niche": "finance", "lang": "en"},
+    {"text": "frugal living tips", "niche": "nostalgia_finance", "lang": "en"},
+    {"text": "historia de méxico que no te contaron", "niche": "history", "lang": "es"},
+    {"text": "inventos de japón que cambiarán el mundo", "niche": "engineering", "lang": "es"},
+    {"text": "megaconstrucciones más grandes del mundo", "niche": "engineering", "lang": "es"},
+    {"text": "así se vivía antes", "niche": "nostalgia", "lang": "es"},
+    {"text": "história do brasil que ninguém conta", "niche": "history", "lang": "pt"},
+    {"text": "por que o brasil", "niche": "geography", "lang": "pt", "style_hint": "maps_graphics"},
+    {"text": "casas baratas no brasil", "niche": "relocation", "lang": "pt"},
+    {"text": "japans neue erfindung", "niche": "engineering", "lang": "de"},
+    {"text": "megaprojekte der welt doku", "niche": "engineering", "lang": "de"},
+    {"text": "zweiter weltkrieg geschichte doku", "niche": "history", "lang": "de"}
   ]
 }
