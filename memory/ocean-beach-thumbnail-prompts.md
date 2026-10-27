@@ -1,0 +1,28 @@
+# Ocean Beach thumbnail prompts (full, with text overlays, reference style)
+
+Style block used in every prompt (matches competitor references):
+
+Photorealistic YouTube thumbnail, 16:9, 1920x1080, editorial drone photography look, overcast stormy sky, cold blue-grey palette, wet surfaces, high dynamic range, sharp focus, one luxury coastal house as hero object plus one visible physical threat. Text layout exactly like breaking-news thumbnails: in the lower-left corner, first line is a small red rectangle with white bold uppercase text "BREAKING" immediately followed by a small white rectangle with black bold uppercase location text; second line below it is a large white rectangle with huge black bold condensed uppercase headline text, slightly rotated, occupying about one third of the frame width. Font: heavy condensed sans-serif like Anton or Bebas Neue. Lower-right corner left empty. No other text, no people, no logos, no watermark.
+
+---
+
+## 1. HIGHWAY GONE (main)
+Photorealistic YouTube thumbnail, 16:9, aerial drone view of a four-lane coastal highway in San Francisco half buried under drifting sand dunes, sand streaming across cracked asphalt, a row of pastel two-story stucco houses with garage doors on the left, huge grey Pacific waves crashing on a wide beach on the right, orange traffic barriers, low fog, overcast stormy sky, cold blue-grey palette, editorial drone photography, high detail. Lower-left corner text overlay in breaking-news style: small red box with white bold uppercase "BREAKING" followed by a white box with black bold uppercase "OCEAN BEACH"; below it a large white box with huge black bold condensed uppercase headline "HIGHWAY GONE", slightly rotated. Heavy condensed sans-serif font. Lower-right corner empty. No other text, no people, no watermark.
+
+## 2. $3M ON THE EDGE
+Photorealistic YouTube thumbnail, 16:9, low-angle shot from a wet beach looking up at a 40-foot eroding sandy bluff in San Francisco, a cracked asphalt parking lot breaking off the top edge with rusted rebar and a bent guardrail hanging in the air, a bright white modern three-story coastal house perched right behind the edge, concrete rubble and dark boulders in the surf below, storm waves and spray, dark overcast sky, cold desaturated palette, cinematic scale, high detail. Lower-left corner text overlay in breaking-news style: small red box with white bold uppercase "BREAKING" followed by a white box with black bold uppercase "SAN FRANCISCO"; below it a large white box with huge black bold condensed uppercase headline "$3M ON THE EDGE", slightly rotated. Heavy condensed sans-serif font. Lower-right corner empty. No other text, no people, no watermark.
+
+## 3. CAN'T BUILD A WALL
+Photorealistic YouTube thumbnail, 16:9, a massive winter storm wave exploding over an old curved concrete seawall with a wide stairway in San Francisco, white spray flying across an empty four-lane road, a row of pastel three-story ocean-facing houses with big windows directly behind the road, cracked and patched concrete in the foreground, dark stormy sky, cold blue and grey tones, wide-angle, cinematic, high detail. Lower-left corner text overlay in breaking-news style: small red box with white bold uppercase "BREAKING" followed by a white box with black bold uppercase "OCEAN BEACH"; below it a large white box with huge black bold condensed uppercase headline "CAN'T BUILD A WALL", slightly rotated. Heavy condensed sans-serif font. Lower-right corner empty. No other text, no people, no watermark.
+
+## 4. CITY TEARS IT OUT
+Photorealistic YouTube thumbnail, 16:9, aerial 45-degree drone view of a yellow excavator demolishing a coastal four-lane highway on top of a sandy bluff in San Francisco, chunks of broken asphalt tumbling down the slope toward a grey beach, orange construction barriers, a distant row of pastel houses under heavy overcast sky, Pacific waves on the right, muted cold colors, strong diagonal composition, editorial drone photography, high detail. Lower-left corner text overlay in breaking-news style: small red box with white bold uppercase "BREAKING" followed by a white box with black bold uppercase "CALIFORNIA"; below it a large white box with huge black bold condensed uppercase headline "CITY TEARS IT OUT", slightly rotated. Heavy condensed sans-serif font. Lower-right corner empty. No other text, no people, no watermark.
+
+## 5. $3M FOR THIS?
+Photorealistic YouTube thumbnail, 16:9, street-level shot of a pastel stucco three-story house on a coastal road in San Francisco, its garage door half buried under a wind-blown sand dune, a tilted dark blue real estate sign reading "FOR SALE" stuck in the sand in the foreground, sand streaming across empty asphalt, grey Pacific Ocean with storm waves behind a low seawall, thick fog, overcast sky, cold desaturated palette, shallow depth of field on the sign, high detail. Lower-left corner text overlay in breaking-news style: small red box with white bold uppercase "BREAKING" followed by a white box with black bold uppercase "SAN FRANCISCO"; below it a large white box with huge black bold condensed uppercase headline "$3M FOR THIS?", slightly rotated. Heavy condensed sans-serif font. Lower-right corner empty. No other text except the FOR SALE sign, no people, no watermark.
+
+---
+
+Negative prompt (if the generator supports it): blurry, cartoon, illustration, 3D render, people, faces, extra text, misspelled words, watermark, logo, sunny sky, warm colors, lens flare.
+
+Tip: if the generator misspells the headline, generate with "no text" and add BREAKING / place / headline in CapCut or Canva using font Anton, red #E5141C and white boxes, headline height about 20% of the frame.
