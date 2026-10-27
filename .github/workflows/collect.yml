@@ -19,7 +19,12 @@ jobs:
       - name: Collect channels
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-        run: python niche-radar/collector/collect.py --out niche-radar/data/channels.json
+        run: |
+          if [ -z "$YOUTUBE_API_KEY" ]; then
+            echo "::warning::YOUTUBE_API_KEY secret is not set - skipping collection"
+            exit 0
+          fi
+          python niche-radar/collector/collect.py --out niche-radar/data/channels.json
       - name: Commit changed data
         run: |
           git config user.name "niche-radar-bot"

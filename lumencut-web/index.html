@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LumenCut Studio — сценарий → видео</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header><div class="logo">Lumen<b>Cut</b> <span>Studio</span></div>
+<nav><button data-tab="project" class="on">1. Сценарий и голос</button><button data-tab="board">2. Раскадровка</button><button data-tab="render">3. Рендер</button><button data-tab="settings">Настройки</button></nav></header>
+<main>
+<section id="tab-project" class="tab on">
+  <div class="card"><h2>Сценарий (английский)</h2><textarea id="script" placeholder="Вставьте готовый сценарий. Каждая фраза станет сценой 2–5 секунд."></textarea>
+  <div class="row"><label class="file">🎙 Озвучка (MP3/WAV из ElevenLabs и т.п.)<input type="file" id="voice" accept=".mp3,.wav,.m4a,.aac,.ogg,.opus,.flac,.webm,audio/*"></label><span id="voiceInfo" class="muted">не выбрана — время сцен будет оценено (2,6 слова/сек), звук будет тишиной</span></div>
+  <div class="row"><button id="auto" class="primary">🎬 Сделать готовое видео</button><button id="go">Только раскадровка</button><button id="saveProj">Сохранить проект</button><label class="file small">Открыть проект<input type="file" id="loadProj" accept=".json"></label></div>
+  <p class="muted">«Сделать готовое видео» — всё автоматически: тайминг по голосу → подбор кадров по смыслу → графика, звуки, музыка → MP4. Можно также перетащить MP3 прямо на страницу.</p></div>
+  <div class="card"><h3>Ход работы</h3><div id="progress" class="bar"><i></i></div><pre id="log"></pre></div>
+</section>
+<section id="tab-board" class="tab"><div class="row"><b id="boardInfo" class="muted">Раскадровки ещё нет</b></div><div id="board"></div></section>
+<section id="tab-render" class="tab">
+  <div class="card"><div class="grid2">
+    <label>Качество <select id="res"><option value="1920x1080">1080p (1920×1080)</option><option value="1280x720">720p — быстрее</option></select></label>
+    <label>Графика на экране (плашки) <select id="gfx"><option value="rare" selected>Мало — только цифры, годы, места и главы, не чаще раза в 20 сек</option><option value="none">Нет — только кадры и субтитры</option><option value="all">Много — как в раскадровке</option></select></label>
+    <label><input type="checkbox" id="subs" checked> Субтитры (караоке, по голосу)</label>
+    <label><input type="checkbox" id="level" checked> Выровнять громкость голоса</label>
+  <label><input type="checkbox" id="music" checked> Фоновая музыка по настроению</label>
+    <label>Громкость музыки <input type="range" id="musicDb" min="-30" max="-8" value="-16"></label>
+    <label><input type="checkbox" id="sfx" checked> Звуковые эффекты (whoosh, pop, counter…)</label>
+  </div>
+  <div class="row"><button id="test" class="primary">Тест: первые 20 секунд</button><button id="full" class="primary">Рендер всего видео</button></div>
+  <p class="muted">Во время рендера не сворачивайте вкладку. Видео собирается прямо в браузере — бесплатно, без сервера.</p></div>
+  <div class="card"><div id="rprogress" class="bar"><i></i></div><div id="rinfo" class="muted"></div><canvas id="canvas" width="1920" height="1080"></canvas><div id="downloads" class="row"></div></div>
+</section>
+<section id="tab-settings" class="tab"><div class="card grid2">
+  <label>Pexels API key (бесплатно: pexels.com/api) <input id="k_pexels" type="password"></label>
+  <label>Pixabay API key (бесплатно: pixabay.com/api/docs) <input id="k_pixabay" type="password"></label>
+  <label>Gemini API key (бесплатно: aistudio.google.com/apikey) <input id="k_gemini" type="password"></label>
+  <label>Модель Gemini <input id="k_model" value="gemini-flash-latest"></label>
+  <label><input type="checkbox" id="k_wikimedia" checked> Wikimedia Commons — исторические фото/видео (только свободные лицензии)</label>
+  <label><input type="checkbox" id="k_nasa" checked> NASA — космос, наука, техника (общественное достояние)</label>
+  <label><input type="checkbox" id="k_archive" checked> Internet Archive — архивная кинохроника (только Prelinger и фильмы правительства США)</label>
+  <label><input type="checkbox" id="k_loc" checked> Library of Congress — исторические фото (только «No known restrictions»)</label>
+  <label><input type="checkbox" id="k_clip" checked> Смысловой подбор CLIP (нейросеть в браузере, ~150 МБ один раз)</label>
+  <label><input type="checkbox" id="k_video" checked> Предпочитать видео, а не фото</label>
+  <div class="row"><button id="saveKeys" class="primary">Сохранить</button><span id="keysInfo" class="muted">Ключи хранятся только в этом браузере.</span></div>
+</div></section>
+</main>
+<script type="module" src="js/app.js"></script>
+</body></html>
