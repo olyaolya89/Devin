@@ -75,7 +75,10 @@
     ['История цивилизаций', /history|ancient|empire|civilization|historia|geschichte|história|méxico/i],
   ];
   const textOf = c => [...(c.tags || []), c.title, ...(c.videos || []).map(v => v.title)].join(' ');
-  const subniche = c => { if (c.subniche_ru) return c.subniche_ru; const t = textOf(c); const hits = SUBNICHES.filter(([, re]) => re.test(t)).map(([n]) => n); return hits.slice(0, 2).join(', ') || (c.niche_ru || 'Другое'); };
+  const subniches = c => { if (c.subniche_ru) return c.subniche_ru.split(', '); const t = textOf(c); const hits = SUBNICHES.filter(([, re]) => re.test(t)).map(([n]) => n); return hits.length ? hits : [c.niche_ru || 'Другое']; };
+  const subniche = c => subniches(c).slice(0, 2).join(', ');
+  const ageDays = c => { const t = Date.parse(c.first_video_at || ''); return Number.isFinite(t) ? (Date.now() - t) / 864e5 : (c.channel_age_days || 0); };
+  const longCount = c => c.videos_count_long ?? c.videos_count ?? 0;
   const outX = (c, v) => { const m = c.median_views || c.avg_views || 0; return m ? (v.views || 0) / m : 0; };
   const bestX = c => Math.max(0, ...(c.videos || []).map(v => outX(c, v)));
   const vps = c => (c.total_views || 0) / Math.max(c.subs || 1, 1);
@@ -85,7 +88,7 @@
     ['Всего просмотров от 200 тыс. — спрос уже доказан', c => (c.total_views || 0) >= 200000],
     ['На 1 подписчика ≥ 80 просмотров — ролики продвигает алгоритм', c => vps(c) >= 80],
     ['Есть ролик-аутлаер ≥ 2,5× от обычных просмотров канала', c => bestX(c) >= 2.5],
-    ['Первый длинный ролик не старше года, видео от 3 до 30', c => (c.channel_age_days || 0) <= 365 && (c.videos_count || 0) <= 30],
+    ['Первый длинный ролик не старше года, от 3 длинных роликов, всего видео не больше 30', c => ageDays(c) <= 365 && longCount(c) >= 3 && (c.videos_count || 0) <= 30],
   ];
   const refMatch = c => CRITERIA.every(([, f]) => f(c));
   const entryIndex = c => { let v = c.entry_score; if (v == null) return null; if (c.entry_verdict === 'crowded') v = Math.min(v, 40); if (c.entry_verdict === 'unproven') v = Math.min(v, 55); return v; };
@@ -95,12 +98,12 @@
     if (c.description_ru) return c.description_ru;
     const lang = (LANG[(c.language || '').split('-')[0]] || c.language || 'английском').toLowerCase().replace(/ий$/, 'ом');
     const style = (c.style_ru || 'смешанный').toLowerCase();
-    const age = Math.round(c.channel_age_days || 0); const long = c.videos_count_long || c.videos_count || 0;
+    const age = Math.round(ageDays(c)); const long = longCount(c);
     const best = (c.videos || []).slice().sort((a, b) => (b.views || 0) - (a.views || 0))[0];
     const out = [];
     out.push(`Канал на ${lang} языке в нише «${c.niche_ru || 'Другое'}», подниша — «${subniche(c)}».`);
     out.push(`Формат: ${style}, ${faceless(c) ? 'без лица в кадре' : 'с ведущим в кадре'}, ${c.uses_ai ? 'с использованием нейросетей' : 'без явного использования нейросетей'}.`);
-    out.push(`Канал молодой: первый длинный ролик вышел ${age} ${plural(age, 'день', 'дня', 'дней')} назад, всего ${long} ${plural(long, 'длинный ролик', 'длинных ролика', 'длинных роликов')}.`);
+    out.push(`${age <= 365 ? 'Канал молодой' : 'Канал уже старше года'}: первый длинный ролик вышел ${age} ${plural(age, 'день', 'дня', 'дней')} назад, всего ${long} ${plural(long, 'длинный ролик', 'длинных ролика', 'длинных роликов')}.`);
     out.push(`Подписчиков ${fmt(c.subs)}, а просмотров ${fmt(c.total_views)} — на каждого подписчика приходится ${Math.round(vps(c))} ${plural(vps(c), 'просмотр', 'просмотра', 'просмотров')}${vps(c) >= 80 ? ', значит ролики раскручивает алгоритм YouTube, а не база подписчиков' : ''}.`);
     if (best) out.push(`В среднем ролик набирает ${fmt(c.avg_views)} просмотров, лучший («${best.title}») — ${fmt(best.views)}, это ${outX(c, best).toFixed(1).replace('.', ',')}× от обычного для канала.`);
     out.push(`Монетизация: ${c.is_monetized ? 'уже включена' : c.monetization_forecast && c.monetization_forecast !== 'неясно' ? 'прогноз — ' + c.monetization_forecast : 'пока неясно'}. Оценка дохода — около ${fmt(monthly(c))} $ в месяц при RPM ${money(c.rpm)}.`);
@@ -133,7 +136,7 @@
       if (q && !`${c.title} ${c.handle} ${(c.tags || []).join(' ')}`.toLowerCase().includes(q)) return false;
       if (tag && !(c.tags || []).includes(tag)) return false;
       if (niche && c.niche !== niche && c.niche_ru !== niche) return false;
-      if (sub && !subniche(c).split(', ').includes(sub)) return false;
+      if (sub && !subniches(c).includes(sub)) return false;
       if (cat && !(c.tags || []).includes(cat)) return false;
       if (lang && (c.language || '').split('-')[0] !== lang) return false;
       if (format && c.production_style !== format) return false;
@@ -166,7 +169,7 @@
     const fill = (id, arr, labelFn) => { const el = $(id); const cur = el.value; el.innerHTML = el.options[0].outerHTML + arr.map(v => `<option value="${esc(v)}">${esc(labelFn ? labelFn(v) : v)}</option>`).join(''); el.value = [...el.options].some(o => o.value === cur) ? cur : ''; };
     fill('#fTag', uniq('tags').slice(0, 40));
     fill('#fNiche', uniq('niche'), v => state.all.find(c => c.niche === v)?.niche_ru || v);
-    fill('#fSub', [...new Set(state.all.flatMap(c => subniche(c).split(', ')))].sort());
+    fill('#fSub', [...new Set(state.all.flatMap(subniches))].sort());
     fill('#fCat', uniq('tags').slice(0, 30));
     fill('#fLang', [...new Set(uniq('language').map(l => l.split('-')[0]))], v => LANG[v] || v);
     fill('#fFormat', uniq('production_style'), v => state.all.find(c => c.production_style === v)?.style_ru || v);
