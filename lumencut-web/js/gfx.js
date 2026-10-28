@@ -227,18 +227,18 @@ const niceMax = v => { const p = Math.pow(10, Math.floor(Math.log10(v || 1))), m
 function chart(ctx, ov, t, W, H, u) {
   const { o } = ov, lt = t - ov.t0, bars = o.bars || [], a = fade(ov, t, 0.5, 0.5);
   ctx.globalAlpha = a; const bg = ctx.createRadialGradient(W * 0.5, H * 0.45, 0, W * 0.5, H * 0.45, W * 0.7); bg.addColorStop(0, '#142542'); bg.addColorStop(1, '#070d1a'); ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-  const x0 = W * 0.205, x1 = W * 0.9, top = H * 0.25, bot = H * 0.82, axis = H * 0.87;
+  const x0 = W * 0.22, x1 = W * 0.88, top = H * 0.25, bot = H * 0.82, axis = H * 0.87;
   ctx.globalAlpha = a * easeOut(lt / 0.5); fit(ctx, 800, 46 * u, MONT, String(o.text || '').toUpperCase(), W * 0.7, 1 * u); ctx.fillStyle = '#fff'; ctx.fillText(String(o.text || '').toUpperCase(), x0, H * 0.14);
-  const max = niceMax(Math.max(...bars.map(b => b.value)) * 1.1), slot = (bot - top) / Math.max(1, bars.length), bh = Math.min(24 * u, slot * 0.34);
+  const max = niceMax(Math.max(...bars.map(b => b.value)) * 1.1), slot = (bot - top) / Math.max(1, bars.length), bh = Math.min(30 * u, slot * 0.36);
   ctx.globalAlpha = a * 0.5; ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(x0, axis, x1 - x0, 1.5 * u); ctx.fillRect(x0, top - 20 * u, 1.5 * u, axis - top + 20 * u);
-  setFont(ctx, 500, 14 * u, INTER); ctx.textAlign = 'center'; ctx.fillStyle = '#fff';
-  for (let k = 0; k <= 5; k++) ctx.fillText(fmtNum(max * k / 5, max < 10 ? 1 : 0), x0 + (x1 - x0) * k / 5, axis + 26 * u);
-  if (o.unit) { setFont(ctx, 500, 16 * u, INTER); ctx.fillText(String(o.unit), (x0 + x1) / 2, axis + 58 * u); }
+  setFont(ctx, 500, 18 * u, INTER); ctx.textAlign = 'center'; ctx.fillStyle = '#fff';
+  for (let k = 0; k <= 5; k++) ctx.fillText(fmtNum(max * k / 5, max < 10 ? 1 : 0), x0 + (x1 - x0) * k / 5, axis + 30 * u);
+  if (o.unit) { setFont(ctx, 500, 20 * u, INTER); ctx.fillText(String(o.unit), (x0 + x1) / 2, axis + 64 * u); }
   bars.forEach((b, i) => {
     const g = easeOut((lt - 0.6 - i * 0.28) / 0.9), y = top + slot * i + slot / 2, len = (x1 - x0) * b.value / max * g, col = BAR_COLORS[i % BAR_COLORS.length];
-    ctx.globalAlpha = a * Math.min(1, g * 3 + 0.3); setFont(ctx, 500, 16 * u, INTER); ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(255,255,255,0.75)'; ctx.fillText(b.label, x0 - 14 * u, y + 5 * u);
+    ctx.globalAlpha = a * Math.min(1, g * 3 + 0.3); setFont(ctx, 600, 22 * u, INTER); ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillText(b.label, x0 - 16 * u, y + 7 * u);
     ctx.globalAlpha = a; ctx.fillStyle = col; ctx.shadowColor = col; ctx.shadowBlur = 14 * u; ctx.fillRect(x0 + 2 * u, y - bh / 2, len, bh); noShadow(ctx);
-    if (g > 0.85) { ctx.globalAlpha = a * (g - 0.85) / 0.15; setFont(ctx, 700, 18 * u, MONT); ctx.textAlign = 'left'; ctx.fillStyle = col; ctx.fillText(`${o.prefix || ''}${fmtNum(b.value, decimals(b.value))}${o.suffix || ''}`, x0 + len + 14 * u, y + 6 * u); }
+    if (g > 0.85) { ctx.globalAlpha = a * (g - 0.85) / 0.15; setFont(ctx, 700, 26 * u, MONT); ctx.textAlign = 'left'; ctx.fillStyle = col; ctx.fillText(`${o.prefix || ''}${fmtNum(b.value, decimals(b.value))}${o.suffix || ''}`, x0 + len + 16 * u, y + 9 * u); }
   });
 }
 
