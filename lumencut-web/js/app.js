@@ -38,7 +38,9 @@ function applyStyle(st, persistIt = true) {
   S.style = structuredClone(st); CUT.max = S.style.cut.max || 5; if (persistIt) saveStyle(S.style);
   $('#styleInfo').innerHTML = describeStyle(S.style).map(l => `<li>${esc(l)}</li>`).join('');
   $('#subs').value = S.style.subtitles in SUB_LOOKS ? S.style.subtitles : 'none';
-  $('#musicDb').value = Math.max(-30, Math.min(-8, S.style.music.db)); $('#music').checked = S.style.music.db > -50; musicDbVal();
+  // a profile saved by the first version could carry -60 dB ("no music heard"): music stays on, quiet
+  if (!(S.style.music.db > -50)) S.style.music.db = -26;
+  $('#musicDb').value = Math.max(-30, Math.min(-8, S.style.music.db)); $('#music').checked = true; musicDbVal();
   styleChoices();
 }
 const musicDbVal = () => ($('#musicDbVal').textContent = `${$('#musicDb').value} дБ`);
@@ -63,7 +65,7 @@ $('#musicFile').onchange = async e => { const f = e.target.files[0]; if (!f) ret
 const saved = JSON.parse(localStorage.getItem('lumencut.project') || 'null');
 // CLIP vectors (512 numbers per clip) are dropped when saving: they overflowed localStorage and the project silently stopped saving.
 const noEmb = (k, v) => (k === 'emb' ? undefined : v);
-const persist = () => { try { localStorage.setItem('lumencut.project', JSON.stringify({ script: S.script, shots: S.shots, topic: S.topic, style: S.style }, noEmb)); } catch (e) { log('⚠ Проект не поместился в память браузера — нажмите «Сохранить проект», чтобы не потерять раскадровку.'); } };
+const persist = () => { try { localStorage.setItem('lumencut.project', JSON.stringify({ script: S.script, shots: S.shots, topic: S.topic, style: S.style, boardLook: S.boardLook, boardVoice: S.boardVoice }, noEmb)); } catch (e) { log('⚠ Проект не поместился в память браузера — нажмите «Сохранить проект», чтобы не потерять раскадровку.'); } };
 async function setVoice(f) {
   if (!f) return; const vi = $('#voiceInfo'); vi.textContent = `читаю «${f.name}» (${(f.size / 1048576).toFixed(1)} МБ)…`;
   try { S.voice = await decodeFile(f); S.voiceName = f.name; vi.textContent = `✓ ${f.name} · ${fmt(S.voice.duration)}`; }
@@ -98,6 +100,7 @@ async function makeStoryboard() {
     const refilled = await refillShort(S.shots, c, S.topic, status); if (refilled) log(`Длинным сценам не хватало разных кадров — дополнительный поиск для ${refilled} сцен.`); prog('#progress', 1);
     const long = S.shots.filter(s => s.picks.length && s.picks.length < cutsNeeded(s)).length; if (long) log(`⚠ ${long} сцен с кадром длиннее 5 сек — их можно дополнить во вкладке «Раскадровка» (кнопка «Найти заново»).`);
     const miss = S.shots.filter(s => !s.picks.length).length; log(`Готово. ${miss ? `Без кадра: ${miss} сцен — замените вручную во вкладке «Раскадровка».` : 'Все сцены с уникальными кадрами.'}`);
+    S.boardLook = st.look; S.boardVoice = S.voice ? Math.round(S.voice.duration * 10) / 10 : null;
     persist(); drawBoard(); return true;
   } catch (e) { log('Ошибка: ' + e.message); console.error(e); return false; }
   finally { btns.forEach(b => (b.disabled = false)); }
@@ -174,7 +177,19 @@ $('#board').addEventListener('click', async e => {
 });
 
 // render
+// The storyboard belongs to the script, voice and style it was made from; rendering an old one gives footage and
+// graphics for another text (this happened in the first test: an old storyboard under a new voiceover).
+function staleReason() {
+  const txt = $('#script').value.trim();
+  if (txt && S.script && txt !== S.script) return 'сценарий изменился';
+  if (S.voice && S.shots.length && Math.abs(S.voice.duration - S.shots.at(-1).end) > 2) return 'озвучка другой длины';
+  if (S.boardLook && S.boardLook !== S.style.look) return 'выбран другой стиль';
+  if (!S.boardLook && S.style.look === 'doc') return 'раскадровка сделана старой версией программы, без графики нового стиля';
+  return '';
+}
 async function doRender(limit, presetHandle = null) {
+  const why = S.shots.length ? staleReason() : '';
+  if (why && confirm(`Раскадровка сделана не для того, что сейчас на странице (${why}). Сделать раскадровку заново перед рендером? Рекомендуется — иначе кадры и графика будут от старого сценария.`)) { tab('project'); if (!(await makeStoryboard())) return; tab('render'); }
   if (!S.shots.length) return alert('Сначала сделайте раскадровку');
   if (!('VideoEncoder' in window)) return alert('Нужен Google Chrome или Microsoft Edge (последней версии).');
   const [W, H] = $('#res').value.split('x').map(Number); const buttons = [$('#test'), $('#full'), $('#auto')]; buttons.forEach(b => (b.disabled = true));
@@ -202,4 +217,4 @@ $('#test').onclick = () => doRender(20);
 $('#full').onclick = () => doRender(Infinity);
 
 applyStyle(S.style, false);
-try { if (saved) { Object.assign(S, { script: saved.script, shots: saved.shots || [], topic: saved.topic }); $('#script').value = S.script || ''; if (S.shots.length) drawBoard(); } } catch (e) { console.error(e); localStorage.removeItem('lumencut.project'); }
+try { if (saved) { Object.assign(S, { script: saved.script, shots: saved.shots || [], topic: saved.topic, boardLook: saved.boardLook, boardVoice: saved.boardVoice }); $('#script').value = S.script || ''; if (S.shots.length) drawBoard(); } } catch (e) { console.error(e); localStorage.removeItem('lumencut.project'); }

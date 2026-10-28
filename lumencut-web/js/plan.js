@@ -111,6 +111,7 @@ function spelledNumber(words, i) {
   let total = 0, cur = 0, k = i, any = false;
   for (; k < words.length; k++) {
     const w = words[k].toLowerCase().replace(/[^a-z-]/g, ''); if (!w) break;
+    if (w === 'a' && !any && k === i && SCALE[(words[k + 1] || '').toLowerCase().replace(/[^a-z]/g, '')]) { cur = 1; any = true; continue; }
     const parts = w.split('-'); let ok = true, v = 0;
     for (const p of parts) { if (p in ONES) v += ONES[p]; else if (p in TENS) v += TENS[p]; else { ok = false; break; } }
     if (ok && parts.every(Boolean)) { cur += v; any = true; continue; }
@@ -148,6 +149,21 @@ function detectOverlay(text) {
   const place = text.match(/\b(?:in|at|near|from)\s+((?:[A-Z][a-z]+\s){1,2}[A-Z][a-z]+|[A-Z][a-z]{3,}\s[A-Z][a-z]{3,})/);
   if (place) return { type: 'place', text: place[1], word: place[1].split(' ')[0] };
   return { type: 'none' };
+}
+
+// Every number said in a line, digits or words ("$12.5 million", "forty-six", "1989").
+export function lineNumbers(text) {
+  const out = [], words = String(text).split(/\s+/);
+  for (const m of String(text).matchAll(/(\d[\d,]*(?:\.\d+)?)\s*(million|billion|thousand|trillion)?/gi)) { const v = parseFloat(m[1].replace(/,/g, '')); out.push(v); if (m[2]) out.push(v * SCALE[m[2].toLowerCase()]); }
+  for (let i = 0; i < words.length; i++) { const sp = spelledNumber(words, i); if (sp) { out.push(sp.value); i += sp.n - 1; } }
+  return out;
+}
+// A number or year graphic must show a fact that is spoken in its own line (Gemini sometimes invents dates).
+export function factInLine(o, text) {
+  if (!o || !['year', 'date', 'counter', 'stat', 'number'].includes(o.type)) return true;
+  const nums = lineNumbers(text), has = v => Number.isFinite(v) && nums.some(n => Math.abs(n - v) <= Math.abs(v) * 0.01 + 1e-9);
+  if (o.type === 'year' || o.type === 'date') { const y = String(o.text ?? o.value ?? '').match(/\b(1[5-9]\d\d|20\d\d)\b/); return !!y && String(text).includes(y[1]); }
+  const v = +o.value; return has(v) || (o.from != null && has(+o.from) && has(v));
 }
 
 // Classic overlay → doc overlay (same facts, the reference's look).
@@ -249,6 +265,7 @@ export function thinGraphics(shots, mode = 'rare', style) {
   return shots.map((s0, i) => {
     const s = { ...s0 };
     if (doc) s.overlay = toDoc(s.overlay, i);
+    if (s.overlay && s.overlay.type !== 'none' && !factInLine(s.overlay, s.text)) s.overlay = { type: 'none' };
     const type = s.overlay?.type || 'none';
     const keep = type !== 'none' && (mode === 'all' || (mode === 'rare' && (doc ? (allowed[type] || 0) > 0 && s.start >= lastEnd + 1 : ['number', 'date', 'place', 'chapter'].includes(type)) && s.start - lastGfx >= gap));
     if (keep) { lastGfx = s.start; lastEnd = doc ? ovWindow(s).t1 : s.end; } else if (type !== 'none') s.overlay = { type: 'none' };
@@ -315,7 +332,7 @@ async function geminiDocPlan(key, model, shots, onProgress, style) {
       s.meaning = p.meaning || fb[i].meaning; s.visual = p.visual || fb[i].visual;
       s.queries = (Array.isArray(p.queries) ? p.queries.filter(q => typeof q === 'string' && q.trim()) : []).slice(0, 3);
       if (!s.queries.length) s.queries = fb[i].queries;
-      s.overlay = cleanOverlay(p.overlay) || { type: 'none' };
+      s.overlay = cleanOverlay(p.overlay, s.text) || { type: 'none' };
       s.sfx = 'none';
       s.mood = MOODS.includes(p.mood) ? p.mood : (shots[start + i - 1]?.mood || 'mystery');
     });
@@ -324,8 +341,9 @@ async function geminiDocPlan(key, model, shots, onProgress, style) {
 }
 
 // Drops graphics Gemini returned without the data they need.
-export function cleanOverlay(o) {
+export function cleanOverlay(o, line = '') {
   if (!o || !DOC_OVERLAYS.includes(o.type) || o.type === 'none') return null;
+  if (line && !factInLine(o, line)) return null;
   const n = x => (typeof x === 'number' ? x : parseFloat(String(x ?? '').replace(/[^\d.-]/g, '')));
   const list = a => (Array.isArray(a) ? a.map(x => String(x ?? '').trim()).filter(Boolean).slice(0, 5) : []);
   const r = { ...o, text: String(o.text ?? '').trim() };
