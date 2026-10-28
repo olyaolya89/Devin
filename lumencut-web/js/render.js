@@ -1,5 +1,6 @@
 // Browser renderer: canvas motion graphics + WebCodecs H.264/AAC → MP4 (no server, no ffmpeg).
 import { Muxer, ArrayBufferTarget, FileSystemWritableFileStreamTarget } from '../vendor/mp4-muxer.mjs';
+import { buildOverlays, drawDoc, drawFramed, FONTS } from './gfx.js';
 
 const YEL = '#FFD400';
 const easeBack = x => { const c = 1.9; x = Math.min(1, Math.max(0, x)); return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
@@ -59,23 +60,44 @@ function drawOverlay(ctx, s, t, W, H) {
   ctx.restore();
 }
 
-function drawSubs(ctx, s, t, W, H) {
+// Subtitle looks (as Kutly's caption styles): karaoke = 6 words, spoken one yellow; boxed = line on a dark panel; word = one big word at a time.
+function drawSubs(ctx, s, t, W, H, look = 'karaoke') {
   const words = s.text.split(/\s+/); const a = s.start, b = Math.max(a + 0.5, s.wordEnd ?? s.end); if (t > b + 0.3) return;
   // highlight the word actually being spoken (Whisper timings); even spread only when there was no voice to align to
   const wt = s.wt?.length === words.length ? s.wt : null;
   let k = 0; if (wt) { while (k + 1 < words.length && wt[k + 1] <= t) k++; } else k = Math.min(words.length - 1, Math.max(0, Math.floor((t - a) / (b - a) * words.length)));
-  const g0 = Math.floor(k / 6) * 6, grp = words.slice(g0, g0 + 6), u = W / 1920;
-  ctx.save(); ctx.font = `800 ${56 * u}px Inter, Arial, sans-serif`; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+  const u = W / 1920; ctx.save(); ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+  if (look === 'word') {
+    const w = words[k].replace(/[^\p{L}\p{N}'%$-]/gu, '').toUpperCase(), st = wt ? wt[k] : a + (b - a) * k / words.length, e = easeBack((t - st) / 0.18);
+    ctx.font = `900 ${96 * u}px Montserrat, Inter, sans-serif`; ctx.textAlign = 'center'; ctx.translate(W / 2, H - 190 * u); ctx.scale(e, e);
+    ctx.lineWidth = 16 * u; ctx.strokeStyle = '#000'; ctx.strokeText(w, 0, 0); ctx.fillStyle = k % 2 ? YEL : '#fff'; ctx.fillText(w, 0, 0); ctx.restore(); return;
+  }
+  const n = look === 'boxed' ? 8 : 6, g0 = Math.floor(k / n) * n, grp = words.slice(g0, g0 + n);
+  ctx.font = `${look === 'boxed' ? 700 : 800} ${(look === 'boxed' ? 46 : 56) * u}px Inter, Arial, sans-serif`;
   const sp = ctx.measureText(' ').width, widths = grp.map(w => ctx.measureText(w).width), total = widths.reduce((x, y) => x + y, 0) + sp * (grp.length - 1);
   let x = (W - total) / 2; const y = H - 110 * u;
-  grp.forEach((w, i) => { ctx.lineWidth = 10 * u; ctx.strokeStyle = '#000'; ctx.strokeText(w, x, y); ctx.fillStyle = g0 + i === k ? YEL : '#fff'; ctx.fillText(w, x, y); x += widths[i] + sp; });
+  if (look === 'boxed') { ctx.fillStyle = 'rgba(0,0,0,0.72)'; rrect(ctx, x - 24 * u, y - 40 * u, total + 48 * u, 80 * u, 10 * u); }
+  grp.forEach((w, i) => {
+    const on = g0 + i === k;
+    if (look === 'boxed') { ctx.fillStyle = on ? YEL : (g0 + i < k ? '#fff' : 'rgba(255,255,255,0.7)'); ctx.fillText(w, x, y); }
+    else { ctx.lineWidth = 10 * u; ctx.strokeStyle = '#000'; ctx.strokeText(w, x, y); ctx.fillStyle = on ? YEL : '#fff'; ctx.fillText(w, x, y); }
+    x += widths[i] + sp;
+  });
   ctx.restore();
 }
 
 function vignette(ctx, W, H) { const g = ctx.createRadialGradient(W / 2, H / 2, H * 0.45, W / 2, H / 2, H * 0.95); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.45)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
 
-export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, canvas, subtitles = true, limit = Infinity, fileHandle, onProgress }) {
-  await Promise.all(['700 80px Oswald', '800 40px Inter'].map(f => document.fonts.load(f).catch(() => {})));
+const ARCHIVE = new Set(['Wikimedia', 'Library of Congress', 'Internet Archive']);
+const pseudo = i => ((i * 2654435761) >>> 0) % 1000 / 1000;
+
+// style: profile from styles.js (look, grade, dissolve share, framed archive photos). subtitles: false or a look name.
+export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, canvas, subtitles = 'karaoke', style = { look: 'classic' }, limit = Infinity, fileHandle, onProgress }) {
+  await Promise.all(['700 80px Oswald', '800 40px Inter', ...FONTS].map(f => document.fonts.load(f).catch(() => {})));
+  if (subtitles === true) subtitles = 'karaoke';
+  const doc = style.look === 'doc', gr = style.grade || {};
+  const grade = `contrast(${gr.contrast ?? 1.07}) saturate(${gr.sat ?? 1.06}) brightness(${gr.bright ?? 1})${gr.warm ? ` sepia(${gr.warm})` : ''}`;
+  const overlays = doc ? await buildOverlays(shots, W, H) : [];
   const total = Math.min(audio.duration, limit), nFrames = Math.ceil(total * fps);
   canvas.width = W; canvas.height = H; const ctx = canvas.getContext('2d', { alpha: false });
   const snap = document.createElement('canvas'); snap.width = W; snap.height = H; const sctx = snap.getContext('2d');
@@ -92,18 +114,25 @@ export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, 
   const L = audio.getChannelData(0), R = audio.getChannelData(audio.numberOfChannels > 1 ? 1 : 0), aEnd = Math.min(L.length, Math.ceil(total * 48000)); let apos = 0;
   const pushAudio = t => { const until = Math.min(aEnd, Math.ceil(t * 48000)); while (apos < until) { const n = Math.min(1024, until - apos), d = new Float32Array(n * 2); d.set(L.subarray(apos, apos + n), 0); d.set(R.subarray(apos, apos + n), n); const ad = new AudioData({ format: 'f32-planar', sampleRate: 48000, numberOfFrames: n, numberOfChannels: 2, timestamp: Math.round(apos * 1e6 / 48000), data: d }); aenc.encode(ad); ad.close(); apos += n; } };
 
-  const cuts = []; shots.forEach(s => (s.cuts || [{ media: null, t0: s.start, t1: s.end, from: 0 }]).forEach((c, k) => cuts.push({ ...c, shot: s, first: k === 0, trans: k === 0 && s.overlay?.type === 'chapter' ? 'fade' : k === 0 && ['whoosh', 'swish'].includes(s.sfx) ? 'whip' : 'cut' })));
+  const cuts = []; shots.forEach(s => (s.cuts || [{ media: null, t0: s.start, t1: s.end, from: 0 }]).forEach((c, k) => cuts.push({ ...c, shot: s, first: k === 0,
+    trans: doc ? (pseudo(cuts.length + 1) < (style.dissolve ?? 0.6) ? 'dissolve' : 'cut') : k === 0 && s.overlay?.type === 'chapter' ? 'fade' : k === 0 && ['whoosh', 'swish'].includes(s.sfx) ? 'whip' : 'cut' })));
   let f = 0, started = performance.now();
   const emit = (cut, m, ci) => {
     const t = f / fps, p = (t - cut.t0) / Math.max(0.1, cut.t1 - cut.t0), dir = ci % 4;
-    ctx.filter = 'contrast(1.07) saturate(1.06)';
+    ctx.filter = grade;
     const isV = !!m.v, sc = isV ? 1.03 + 0.04 * p : 1.08 + 0.1 * p, px = isV ? 0 : [-.6, .6, 0, 0][dir] * (p - .5), py = isV ? 0 : [0, 0, -.6, .6][dir] * (p - .5);
     const lt = t - cut.t0;
     if (cut.trans === 'whip' && lt < 0.3 && f > 0) { const e = easeOut(lt / 0.3); ctx.save(); ctx.translate(W * (1 - e), 0); cover(ctx, m.v || m.img, m.w, m.h, W, H, sc, px, py); ctx.restore(); ctx.filter = 'blur(6px)'; ctx.drawImage(snap, -W * e, 0); }
+    else if (cut.framed) drawFramed(ctx, m, W, H, p);
     else cover(ctx, m.v || m.img, m.w, m.h, W, H, sc, px, py);
     ctx.filter = 'none'; vignette(ctx, W, H);
+    // cross-dissolve: the last picture of the previous cut fades out over the new one, still drifting slowly
+    if (cut.trans === 'dissolve' && lt < 0.7 && f > 0) { const e = easeOut(lt / 0.7), z = 1 + 0.015 * lt; ctx.save(); ctx.globalAlpha = 1 - e; ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(snap, -W / 2, -H / 2); ctx.restore(); }
     if (cut.trans === 'fade' && lt < 0.45) { ctx.fillStyle = `rgba(0,0,0,${1 - lt / 0.45})`; ctx.fillRect(0, 0, W, H); }
-    drawOverlay(ctx, cut.shot, t, W, H); if (subtitles) drawSubs(ctx, cut.shot, t, W, H);
+    if (f === cut.endF - 1) sctx.drawImage(canvas, 0, 0); // picture without graphics, for the next transition
+    if (doc) { for (const ov of overlays) if (t >= ov.t0 && t <= ov.t1) drawDoc(ctx, ov, t, W, H); }
+    else drawOverlay(ctx, cut.shot, t, W, H);
+    if (subtitles && subtitles !== 'none') drawSubs(ctx, cut.shot, t, W, H, subtitles);
     const vf = new VideoFrame(canvas, { timestamp: Math.round(f * 1e6 / fps), duration: Math.round(1e6 / fps) });
     venc.encode(vf, { keyFrame: f % (fps * 2) === 0 }); vf.close(); f++;
     if (f % fps === 0) { pushAudio(f / fps); const el = (performance.now() - started) / 1000; onProgress?.(f / nFrames, `Кадр ${f}/${nFrames} · ${(f / fps / el).toFixed(2)}× скорость`); }
@@ -112,6 +141,7 @@ export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, 
   for (let ci = 0; ci < cuts.length && f < nFrames && !err; ci++) {
     const cut = cuts[ci], end = Math.min(nFrames, ci === cuts.length - 1 ? nFrames : Math.round(cut.t1 * fps));
     const m = await next; next = ci + 1 < cuts.length ? loadMedia(cuts[ci + 1].media || {}) : null;
+    cut.endF = end; cut.framed = doc && style.framePhotos !== false && !m.v && m.img && ARCHIVE.has(cut.media?.source);
     if (m.v) {
       await seek(m.v, cut.from || 0);
       // A clip shorter than its cut is played slower (down to 0.5×) instead of freezing on its last frame.
@@ -125,7 +155,6 @@ export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, 
       });
       m.v.removeAttribute('src'); m.v.load();
     } else while (f < end) { emit(cut, m, ci); if (venc.encodeQueueSize > 20) await new Promise(r => setTimeout(r, 15)); else if (f % 15 === 0) await new Promise(r => setTimeout(r, 0)); }
-    sctx.drawImage(canvas, 0, 0);
   }
   if (err) throw err;
   pushAudio(total); await venc.flush(); await aenc.flush(); muxer.finalize();

@@ -4,7 +4,8 @@ import { textEmbed, imageEmbed, cos } from './ai.js';
 
 const WEATHER = /\b(snow\w*|ice|icy|frozen|frost\w*|blizzard|icicles?|winter\w*|autumn|fall leaves|rain|rainy|raining|rainfall|storm\w*|beach\w*)\b/i;
 const tok = s => new Set(String(s || '').toLowerCase().split(/[^a-zа-яё0-9]+/i).filter(w => w.length > 2).map(w => w.slice(0, 5)));
-export const MAX_CUT = 5;
+// Longest a single picture may stay on screen; set from the style (classic 5 s, reference documentary ~8 s).
+export const CUT = { max: 5 };
 
 export async function gatherCandidates(shots, settings, W, onProgress) {
   let cursor = 0, done = 0;
@@ -20,7 +21,7 @@ export async function gatherCandidates(shots, settings, W, onProgress) {
   await Promise.all(Array.from({ length: 3 }, worker));
 }
 
-export const cutsNeeded = s => Math.max(1, Math.ceil((s.end - s.start) / MAX_CUT - 0.05));
+export const cutsNeeded = s => Math.max(1, Math.ceil((s.end - s.start) / CUT.max - 0.05));
 
 // preUsed: ids/urls already on screen elsewhere; preEmb: their CLIP vectors, so "Найти заново" can't bring back a look-alike frame.
 export async function pickMedia(shots, settings, onProgress, preUsed = [], preEmb = []) {
@@ -88,7 +89,7 @@ export async function refillShort(all, settings, topic, onProgress) {
 export function planCuts(s) {
   const n = s.picks.length || 1, seg = (s.end - s.start) / n;
   s.cuts = s.picks.map((c, k) => {
-    const len = Math.min(seg, MAX_CUT + 0.5);
+    const len = Math.min(seg, CUT.max + 0.5);
     const d = c.duration || 0, room = Math.max(0, d - len - 0.5);
     return { media: c, t0: s.start + k * seg, t1: s.start + (k + 1) * seg, from: c.kind === 'video' ? Math.min(room, c.start != null ? c.start : 0.5 + room * 0.25) : 0 };
   });

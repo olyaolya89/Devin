@@ -1,4 +1,5 @@
-// Mix voice + procedural music (Razgon kit, by mood) + SFX cues, with ducking and loudness normalization.
+// Mix voice + procedural music (Razgon kit, by mood, or the user's own track) + SFX cues, with ducking and loudness normalization.
+import { ovWindow, checklistTicks } from './gfx.js';
 const SR = 48000;
 const cache = new Map();
 async function load(ctx, url) {
@@ -17,6 +18,47 @@ export function sfxCues(shots) {
     else cues.push({ at: s.start, name, gain: -12 });
   }
   return cues.filter(c => c.at >= 0);
+}
+
+// Doc look: quiet effects synthesised here and tied to the graphics, as in the reference (a soft air whoosh when a
+// graphic comes in, a low thud when a number lands, a pencil tick for each checklist item, paper for cards).
+export function softCues(shots) {
+  const cues = [];
+  for (const s of shots) {
+    const type = s.overlay?.type; if (!type || type === 'none') continue;
+    const w = ovWindow(s), add = (at, name, gain = 0) => cues.push({ at, name, gain });
+    if (type === 'counter') { add(w.t0 - 0.1, 'whoosh', -3); add(w.land + 0.12, 'thud'); }
+    else if (type === 'stat') add(w.land + 0.1, 'tick');
+    else if (type === 'year') add(w.t0 + 0.05, 'thud');
+    else if (type === 'title' || type === 'map' || type === 'chart' || type === 'panel') { add(w.t0 - 0.15, 'whoosh'); if (type === 'map') add(w.t0 + 0.9, 'tick', -2); }
+    else if (type === 'lowerthird' || type === 'infocard') add(w.t0 - 0.05, 'whoosh', -4);
+    else if (type === 'checklist') { add(w.t0, 'paper'); checklistTicks({ s, o: s.overlay, ...w }).forEach(t => add(t, 'tick')); }
+    else if (type === 'name') { add(w.t0, 'paper'); add(w.t0 + 0.35, 'marker'); }
+    else if (type === 'statement') add(w.t0, 'thud', -4);
+  }
+  return cues.filter(c => c.at >= 0);
+}
+
+let noise;
+function noiseBuf(ctx) { if (noise) return noise; noise = new AudioBuffer({ length: SR * 2, sampleRate: SR, numberOfChannels: 1 }); const d = noise.getChannelData(0); let b = 0; for (let i = 0; i < d.length; i++) { b = 0.97 * b + 0.03 * (Math.random() * 2 - 1); d[i] = (Math.random() * 2 - 1) * 0.5 + b * 4; } return noise; }
+function synth(ctx, out, c) {
+  const at = c.at, g = ctx.createGain(); g.connect(out); g.gain.value = 0; const peak = db(c.gain);
+  const env = (a, hold, rel, p) => { g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(p * peak, at + a); g.gain.setValueAtTime(p * peak, at + a + hold); g.gain.exponentialRampToValueAtTime(1e-4, at + a + hold + rel); };
+  const nz = (dur, off = 0) => { const n = ctx.createBufferSource(); n.buffer = noiseBuf(ctx); n.start(at, off, dur + 0.05); return n; };
+  if (c.name === 'whoosh') { // band-passed air sweeping up and back down
+    const n = nz(1.0, Math.random()), f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 0.8;
+    f.frequency.setValueAtTime(260, at); f.frequency.exponentialRampToValueAtTime(2400, at + 0.5); f.frequency.exponentialRampToValueAtTime(700, at + 0.95);
+    n.connect(f); f.connect(g); g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(0.16 * peak, at + 0.45); g.gain.linearRampToValueAtTime(0, at + 0.95);
+  } else if (c.name === 'thud') { // soft low hit
+    const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.setValueAtTime(95, at); o.frequency.exponentialRampToValueAtTime(48, at + 0.45); o.connect(g); o.start(at); o.stop(at + 0.6); env(0.008, 0.03, 0.45, 0.14);
+  } else if (c.name === 'tick') { // pencil tick
+    const n = nz(0.06, Math.random()), f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 3200; f.Q.value = 2.5; n.connect(f); f.connect(g); env(0.002, 0.004, 0.05, 0.5);
+  } else if (c.name === 'paper') {
+    const n = nz(0.35, Math.random()), f = ctx.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 1800; n.connect(f); f.connect(g); env(0.03, 0.05, 0.25, 0.12);
+  } else if (c.name === 'marker') { // felt pen drawing a circle
+    const n = nz(0.8, Math.random()), f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 2200; f.Q.value = 1.2; n.connect(f); f.connect(g);
+    g.gain.setValueAtTime(0, at); for (let k = 0; k < 6; k++) { g.gain.linearRampToValueAtTime(0.09 * peak, at + k * 0.12 + 0.05); g.gain.linearRampToValueAtTime(0.03 * peak, at + k * 0.12 + 0.11); } g.gain.linearRampToValueAtTime(0, at + 0.8);
+  }
 }
 
 function voiceEnvelope(buf, dur) {
@@ -44,7 +86,9 @@ function levelVoice(buf) {
   return out;
 }
 
-export async function mixAudio({ voice, shots, duration, musicOn = true, musicDb = -16, sfxOn = true, level = true }, onProgress) {
+// musicTrack: the user's own music (AudioBuffer), looped under the whole video instead of the mood beds.
+export async function mixAudio({ voice, shots, duration, musicOn = true, musicDb = -16, sfxOn = true, level = true, style, musicTrack = null }, onProgress) {
+  if (musicDb <= -50) musicOn = false;
   const ctx = new OfflineAudioContext(2, Math.ceil(duration * SR), SR);
   if (level) { onProgress?.('Выравнивание громкости голоса…'); voice = levelVoice(voice); }
   const v = ctx.createBufferSource(); v.buffer = voice; v.start(0);
@@ -57,7 +101,12 @@ export async function mixAudio({ voice, shots, duration, musicOn = true, musicDb
     const sections = []; for (const s of shots) { const last = sections.at(-1); if (last && last.mood === s.mood) last.end = s.end; else sections.push({ mood: s.mood || 'mystery', start: s.start, end: s.end }); }
     // merge very short sections into previous to avoid jumpy music
     const merged = []; for (const sec of sections) { if (merged.length && sec.end - sec.start < 12) merged.at(-1).end = sec.end; else merged.push(sec); }
-    for (const [k, sec] of merged.entries()) {
+    if (musicTrack) {
+      const src = ctx.createBufferSource(); src.buffer = musicTrack; src.loop = true; const g = ctx.createGain(); src.connect(g); g.connect(bus);
+      g.gain.setValueAtTime(0, 0); g.gain.linearRampToValueAtTime(1, 1.5); g.gain.setValueAtTime(1, Math.max(1.6, duration - 3)); g.gain.linearRampToValueAtTime(0, duration);
+      src.start(0); src.stop(duration);
+    }
+    for (const [k, sec] of (musicTrack ? [] : merged).entries()) {
       const buf = await load(ctx, `music/${sec.mood}.mp3`).catch(() => load(ctx, 'music/mystery.mp3'));
       const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
       const g = ctx.createGain(); src.connect(g); g.connect(bus);
@@ -68,6 +117,7 @@ export async function mixAudio({ voice, shots, duration, musicOn = true, musicDb
   }
   if (sfxOn) {
     onProgress?.('Звуковые эффекты…');
+    if (style?.look === 'doc' && style.sfx?.soft) { const out = ctx.createGain(); out.gain.value = 1; out.connect(ctx.destination); for (const c of softCues(shots)) synth(ctx, out, c); }
     for (const c of sfxCues(shots)) {
       const buf = await load(ctx, `sfx/${c.name}.mp3`).catch(() => null); if (!buf) continue;
       const src = ctx.createBufferSource(); src.buffer = buf; const g = ctx.createGain(); g.gain.value = db(c.gain);

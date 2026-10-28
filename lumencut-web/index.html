@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LumenCut Studio — сценарий → видео</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@700&family=Montserrat:wght@500;600;700;800;900&family=Caveat:wght@600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,18 +16,26 @@
   <div class="row"><label class="file">🎙 Озвучка (MP3/WAV из ElevenLabs и т.п.)<input type="file" id="voice" accept=".mp3,.wav,.m4a,.aac,.ogg,.opus,.flac,.webm,audio/*"></label><span id="voiceInfo" class="muted">не выбрана — время сцен будет оценено (2,6 слова/сек), звук будет тишиной</span></div>
   <div class="row"><button id="auto" class="primary">🎬 Сделать готовое видео</button><button id="go">Только раскадровка</button><button id="saveProj">Сохранить проект</button><label class="file small">Открыть проект<input type="file" id="loadProj" accept=".json"></label></div>
   <p class="muted">«Сделать готовое видео» — всё автоматически: тайминг по голосу → подбор кадров по смыслу → графика, звуки, музыка → MP4. Можно также перетащить MP3 прямо на страницу.</p></div>
+  <div class="card"><h2>Стиль ролика — по образцу (референсу)</h2>
+  <div class="row"><label class="grow">Стиль, в котором соберётся видео <select id="style"></select></label></div>
+  <div class="row"><label class="file">🎞 Загрузить видео-образец (MP4 конкурента)<input type="file" id="refVideo" accept="video/*,.mp4,.webm,.mov,.m4v"></label>
+  <label class="file small">Открыть стиль из файла<input type="file" id="loadStyle" accept=".json"></label><button id="saveStyleFile" class="small">Сохранить стиль в файл</button></div>
+  <div id="refProgress" class="bar" style="margin-top:12px"><i></i></div><div id="refStatus" class="muted"></div>
+  <ul id="styleInfo"></ul>
+  <p class="muted">Загрузите ролик, на который хотите быть похожи. Программа сама его посмотрит (2–4 минуты, вкладку не сворачивать): как долго держится кадр, сколько плавных переходов, какой цвет, насколько тихо играет музыка. С ключом Gemini она ещё покажет кадры Gemini и посчитает, какие цифры, плашки, карты и списки там есть и как часто. Дальше кнопка «Сделать готовое видео» собирает ролик в этом стиле. Видео остаётся на компьютере — наружу уходят только кадры для Gemini.</p></div>
   <div class="card"><h3>Ход работы</h3><div id="progress" class="bar"><i></i></div><pre id="log"></pre></div>
 </section>
 <section id="tab-board" class="tab"><div class="row"><b id="boardInfo" class="muted">Раскадровки ещё нет</b></div><div id="board"></div></section>
 <section id="tab-render" class="tab">
   <div class="card"><div class="grid2">
     <label>Качество <select id="res"><option value="1920x1080">1080p (1920×1080)</option><option value="1280x720">720p — быстрее</option></select></label>
-    <label>Графика на экране (плашки) <select id="gfx"><option value="rare" selected>Мало — только цифры, годы, места и главы, не чаще раза в 20 сек</option><option value="none">Нет — только кадры и субтитры</option><option value="all">Много — как в раскадровке</option></select></label>
-    <label><input type="checkbox" id="subs" checked> Субтитры (караоке, по голосу)</label>
+    <label>Графика на экране (цифры, плашки, карты) <select id="gfx"><option value="rare" selected>Как в стиле — виды и частота из образца</option><option value="none">Нет — только кадры</option><option value="all">Все из раскадровки</option></select></label>
+    <label>Субтитры <select id="subs"></select></label>
     <label><input type="checkbox" id="level" checked> Выровнять громкость голоса</label>
   <label><input type="checkbox" id="music" checked> Фоновая музыка по настроению</label>
-    <label>Громкость музыки <input type="range" id="musicDb" min="-30" max="-8" value="-16"></label>
-    <label><input type="checkbox" id="sfx" checked> Звуковые эффекты (whoosh, pop, counter…)</label>
+    <label>Громкость музыки <span><input type="range" id="musicDb" min="-30" max="-8" value="-16"> <b id="musicDbVal" class="muted"></b></span></label>
+    <label class="file small">🎵 Своя музыка (MP3/WAV, например из YouTube Audio Library)<input type="file" id="musicFile" accept="audio/*,.mp3,.wav,.m4a,.flac"></label><span id="musicInfo" class="muted">не выбрана — музыка по настроению сцен</span>
+    <label><input type="checkbox" id="sfx" checked> Звуковые эффекты (в стиле «Документалка» — тихие, только при появлении графики)</label>
   </div>
   <div class="row"><button id="test" class="primary">Тест: первые 20 секунд</button><button id="full" class="primary">Рендер всего видео</button></div>
   <p class="muted">Во время рендера не сворачивайте вкладку. Видео собирается прямо в браузере — бесплатно, без сервера.</p></div>
