@@ -162,7 +162,8 @@ export function buildProfile({ file, duration, shots, color, sound, gfx }) {
     contrast: Math.round(clamp(color.con / 0.19, 0.98, 1.12) * 100) / 100,
     bright: Math.round(clamp(0.45 / Math.max(0.2, color.lum), 0.97, 1.05) * 100) / 100
   };
-  if (sound) p.music.db = sound.music ? Math.round(clamp(sound.musicRel + 3, -30, -10)) : -60;
+  // never switches the music off: a bed the analysis could not hear is kept very quiet instead
+  if (sound) p.music.db = sound.music ? Math.round(clamp(sound.musicRel + 3, -28, -12)) : -26;
   if (gfx?.total) {
     p.gfx.every = Math.round(clamp(gfx.every, 6, 90));
     p.gfx.types = Object.fromEntries(GFX_TYPES.map(t => [t, Math.round((gfx.counts[t] || 0) / gfx.total * 100) / 100]));

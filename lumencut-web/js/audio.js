@@ -20,21 +20,27 @@ export function sfxCues(shots) {
   return cues.filter(c => c.at >= 0);
 }
 
-// Doc look: quiet effects synthesised here and tied to the graphics, as in the reference (a soft air whoosh when a
-// graphic comes in, a low thud when a number lands, a pencil tick for each checklist item, paper for cards).
+// Doc look: effects tied to the graphics, kept as quiet as in the reference. Two layers: soft sounds synthesised here
+// (air whoosh, low thud when a number lands, pencil tick, paper, marker) and, on top, the Razgon Animation Studio
+// library in sfx/ ('sfx:' cues) at UI level, well under the voice. Gains in dB; the mixer applies them as is.
 export function softCues(shots) {
   const cues = [];
   for (const s of shots) {
     const type = s.overlay?.type; if (!type || type === 'none') continue;
     const w = ovWindow(s), add = (at, name, gain = 0) => cues.push({ at, name, gain });
-    if (type === 'counter') { add(w.t0 - 0.1, 'whoosh', -3); add(w.land + 0.12, 'thud'); }
-    else if (type === 'stat') add(w.land + 0.1, 'tick');
-    else if (type === 'year') add(w.t0 + 0.05, 'thud');
-    else if (type === 'title' || type === 'map' || type === 'chart' || type === 'panel') { add(w.t0 - 0.15, 'whoosh'); if (type === 'map') add(w.t0 + 0.9, 'tick', -2); }
-    else if (type === 'lowerthird' || type === 'infocard') add(w.t0 - 0.05, 'whoosh', -4);
-    else if (type === 'checklist') { add(w.t0, 'paper'); checklistTicks({ s, o: s.overlay, ...w }).forEach(t => add(t, 'tick')); }
-    else if (type === 'name') { add(w.t0, 'paper'); add(w.t0 + 0.35, 'marker'); }
-    else if (type === 'statement') add(w.t0, 'thud', -4);
+    if (type === 'counter') { add(w.t0 - 0.1, 'whoosh', -3); add(w.t0 + 0.15, 'sfx:counter', -27); add(w.land + 0.12, 'thud'); add(w.land + 0.1, 'sfx:pop', -22); }
+    else if (type === 'stat') { add(w.land + 0.1, 'tick'); add(w.t0 + 0.05, 'sfx:blip', -22); }
+    else if (type === 'year') { add(w.t0 + 0.05, 'thud'); add(w.t0, 'sfx:impact', -27); }
+    else if (type === 'title' || type === 'map' || type === 'chart' || type === 'panel') {
+      add(w.t0 - 0.15, 'whoosh'); add(w.t0 - 0.2, 'sfx:whoosh', -24);
+      if (type === 'map') { add(w.t0 + 0.9, 'tick', -2); add(w.t0 + 0.9, 'sfx:blip', -23); }
+      if (type === 'chart') (s.overlay.bars || []).forEach((_, i) => add(w.t0 + 0.6 + i * 0.28, 'sfx:blip', -26));
+      if (type === 'panel') (s.overlay.items || []).forEach((_, i) => add(w.t0 + 0.9 + i * Math.min(0.9, Math.max(0.35, (w.t1 - w.t0 - 2.5) / Math.max(1, s.overlay.items.length))), 'sfx:pop', -26));
+    }
+    else if (type === 'lowerthird' || type === 'infocard') { add(w.t0 - 0.05, 'whoosh', -4); add(w.t0 - 0.05, 'sfx:swish', -24); }
+    else if (type === 'checklist') { add(w.t0, 'paper'); add(w.t0, 'sfx:swish', -26); checklistTicks({ s, o: s.overlay, ...w }).forEach(t => { add(t, 'tick'); add(t, 'sfx:pop', -25); }); }
+    else if (type === 'name') { add(w.t0, 'paper'); add(w.t0 + 0.1, 'sfx:flash', -26); add(w.t0 + 0.35, 'marker'); }
+    else if (type === 'statement') { add(w.t0, 'thud', -4); add(w.t0, 'sfx:impact', -28); }
   }
   return cues.filter(c => c.at >= 0);
 }
@@ -117,7 +123,14 @@ export async function mixAudio({ voice, shots, duration, musicOn = true, musicDb
   }
   if (sfxOn) {
     onProgress?.('Звуковые эффекты…');
-    if (style?.look === 'doc' && style.sfx?.soft) { const out = ctx.createGain(); out.gain.value = 1; out.connect(ctx.destination); for (const c of softCues(shots)) synth(ctx, out, c); }
+    if (style?.look === 'doc' && style.sfx?.soft) {
+      const out = ctx.createGain(); out.gain.value = 1; out.connect(ctx.destination);
+      for (const c of softCues(shots)) {
+        if (!c.name.startsWith('sfx:')) { synth(ctx, out, c); continue; }
+        const buf = await load(ctx, `sfx/${c.name.slice(4)}.mp3`).catch(() => null); if (!buf) continue;
+        const src = ctx.createBufferSource(); src.buffer = buf; const g = ctx.createGain(); g.gain.value = db(c.gain); src.connect(g); g.connect(out); src.start(c.at);
+      }
+    }
     for (const c of sfxCues(shots)) {
       const buf = await load(ctx, `sfx/${c.name}.mp3`).catch(() => null); if (!buf) continue;
       const src = ctx.createBufferSource(); src.buffer = buf; const g = ctx.createGain(); g.gain.value = db(c.gain);
