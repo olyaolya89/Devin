@@ -12,23 +12,33 @@ plus `subtitles.srt` and `credits.txt`. No server, no ffmpeg, no paid credits. U
 
 ## Pipeline (js/app.js → makeStoryboard() then doRender())
 ```
+style = loadStyle()                     styles.js – 'doc' (reference documentary, default), 'classic', or 'ref' from analyzeReference() (reference.js)
 splitShots(script)                      plan.js   – 2–5 s scenes
 transcribe(to16kMono(voice))            ai.js     – Whisper Xenova/whisper-base.en via @huggingface/transformers@3.8.1 (jsDelivr)
 alignTiming(shots, words)               plan.js   – fallback estimateTiming() at voice speed
+mergeShort(shots, style.cut.min)        plan.js   – doc look: joins short lines so a picture holds 3–8 s
 geminiPlan() | heuristicPlan()          plan.js   – meaning → concrete visual + English stock queries, overlay, sfx, mood
 gatherCandidates()                      match.js  – sources.js searchAll()
 pickMedia()                             match.js  – CLIP Xenova/clip-vit-base-patch32 text↔thumbnail; global no-repeat
 planCuts()                              match.js  – MAX_CUT = 5 s
 refillShort()                           match.js  – wider search (visual/meaning/topic) for scenes short of clips
-thinGraphics()                          plan.js   – render-time overlay/SFX density (UI "Графика": rare/none/all)
+thinGraphics(shots, mode, style)        plan.js   – render-time overlay/SFX density (UI "Графика": as style/none/all)
+buildOverlays()/drawDoc()               gfx.js    – doc look: 12 graphic types timed to spoken words (ovWindow)
 mixAudio()                              audio.js  – levelVoice() + compressor, 35 SFX (sfx/), 11 music beds (music/), ducking, ~-14 LUFS
 renderVideo()                           render.js – canvas + WebCodecs + vendor mp4-muxer
 ```
 
+## Reference style (Oct 2026)
+The owner wants videos that look like a competitor reference (youtube.com/@MaraWardwell, file in the project folder).
+`styles.js` STYLES.doc holds what was measured by hand; `reference.js` measures an uploaded video in the browser (cuts and dissolves from
+64×36 frame diffs + colour histograms, music level from pause loudness, graphics via Gemini on frames every ~4 s) and builds a profile on top of doc.
+The doc look has no subtitles by default, soft synthesised SFX tied to graphics (audio.js softCues/synth), and cuts up to style.cut.max (8 s).
+Classic keeps rule 3 (≤ 5 s). Test graphics by rendering frames in headless Chromium (jsDelivr may be blocked in the cloud container: route it to local npm copies).
+
 ## Hard rules (owner requirements — keep them)
 1. Footage chosen by MEANING, not literal words. Gemini prompt in plan.js; CLIP re-ranks.
 2. No repeated frames: same id/url never reused; cosine > 0.93 globally / > 0.88 vs neighbours is rejected; UI blocks manual reuse.
-3. ≤ 5 s per cut; long scenes get several different picks.
+3. ≤ 5 s per cut in the classic look (doc look: style.cut.max, 8 s, as in the reference); long scenes get several different picks.
 4. Copyright-safe only (monetised YouTube). Sources: Pexels, Pixabay (user keys), Wikimedia (non-free filtered),
    NASA (copyright/courtesy filtered), Internet Archive ONLY collections prelinger/FedFlix/usgovfilms/nasa
    (uploader licence tags are untrustworthy), Library of Congress ONLY "No known restrictions".

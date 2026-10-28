@@ -24,4 +24,5 @@ canvas{width:100%;margin-top:12px;border-radius:10px;background:#000;aspect-rati
 .cands{display:flex;gap:6px;overflow-x:auto;padding-top:8px}.cands img{height:62px;aspect-ratio:16/9;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;opacity:.8}
 .cands img:hover{opacity:1;border-color:var(--acc)}.cands img.used{opacity:.25}.badge{font:600 11px Inter;background:#222a38;border-radius:5px;padding:2px 6px;color:var(--mut)}
 a.dl{background:var(--acc);color:#111;text-decoration:none;padding:9px 14px;border-radius:9px;font-weight:700}
+label.grow{flex:1}#style{width:100%}#styleInfo{margin:10px 0 0;padding-left:18px;color:var(--txt);font-size:14px}#styleInfo li{margin:3px 0}#refStatus{margin-top:6px;font-size:13px}
 @media(max-width:800px){.shot{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
