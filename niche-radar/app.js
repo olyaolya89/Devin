@@ -1,7 +1,7 @@
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  const LS = { saved: 'nr:saved', liked: 'nr:liked', seen: 'nr:seen', live: 'nr:live', key: 'nr:apiKey', support: 'nr:support', labels: 'nr:labels' };
+  const LS = { saved: 'nr:saved', liked: 'nr:liked', seen: 'nr:seen', live: 'nr:live', liveAt: 'nr:liveAt', key: 'nr:apiKey', maxQ: 'nr:maxQueries', support: 'nr:support', labels: 'nr:labels' };
   const loadSet = k => { try { return new Set(JSON.parse(localStorage.getItem(k) || '[]')); } catch { return new Set(); } };
   const saveSet = (k, set) => localStorage.setItem(k, JSON.stringify([...set]));
   const loadArr = k => { try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch { return []; } };
@@ -239,8 +239,8 @@
     if (t.dataset.open) { openDrawer(t.dataset.open); return; }
     if (t.id === 'filtersToggle') { $('#filters').hidden = !$('#filters').hidden; return; }
     if (t.id === 'resetFilters') { $$('#filters select').forEach(s => { s.selectedIndex = 0; }); $('#subsMin').value = 0; $('#subsMax').value = $('#subsMax').max; $('#viewsMin').value = 0; $('#viewsMax').value = $('#viewsMax').max; $('#avgMin').value = 0; $('#avgMax').value = $('#avgMax').max; $('#rpmMin').value = 0; $('#rpmMax').value = 30; $('#onlyNew3').checked = $('#onlyUnseen').checked = false; $('#onlyRef').checked = true; labs(); render(); return; }
-    if (t.id === 'refreshBtn') { $('#refreshModal').hidden = false; const k = localStorage.getItem(LS.key); if (k) $('#apiKey').value = k; return; }
-    if (t.id === 'liveClear') { localStorage.removeItem(LS.live); location.reload(); return; }
+    if (t.id === 'refreshBtn') { openRefresh(); return; }
+    if (t.id === 'liveClear') { localStorage.removeItem(LS.live); localStorage.removeItem(LS.liveAt); location.reload(); return; }
     if (t.id === 'refreshRun') runLive();
     if (t.id === 'supportBtn') { $('#supportModal').hidden = false; return; }
     if (t.id === 'supportSend') { const text = $('#supportText').value.trim(); if (!text) return; const prev = loadArr(LS.support); prev.push({ text, at: new Date().toISOString() }); localStorage.setItem(LS.support, JSON.stringify(prev)); $('#supportOk').hidden = false; $('#supportText').value = ''; }
@@ -252,28 +252,47 @@
   });
   document.addEventListener('change', e => { if (e.target.id === 'sort') { state.sort = e.target.value; render(); } if (e.target.closest('#filters')) render(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') $$('.overlay').forEach(o => o.hidden = true); });
+  function openRefresh() {
+    $('#refreshModal').hidden = false;
+    const key = localStorage.getItem(LS.key);
+    if (key) $('#apiKey').value = key;
+    const q = localStorage.getItem(LS.maxQ);
+    if (q) { $('#maxQueries').value = q; $('#maxQueriesVal').textContent = q; }
+    if (key) runLive();
+  }
   async function runLive() {
+    if (state.liveRunning) return;
     const key = ($('#apiKey').value || '').trim();
     if (!key) { $('#refreshLog').textContent = 'Вставь ключ YouTube Data API v3'; return; }
     if (!window.NR_LIVE) { $('#refreshLog').textContent = 'Скрипт поиска не загрузился'; return; }
-    localStorage.setItem(LS.key, key); $('#refreshProgress').hidden = false;
+    state.liveRunning = true;
+    localStorage.setItem(LS.key, key); localStorage.setItem(LS.maxQ, $('#maxQueries').value); $('#refreshProgress').hidden = false;
     try {
       const res = await window.NR_LIVE.run({ key, maxQueries: +$('#maxQueries').value, niche: $('#fNiche').value, lang: $('#fLang').value }, (t, f) => { $('#refreshLog').textContent = t; $('#refreshBar').style.width = Math.round((f || 0) * 100) + '%'; });
       const prev = loadArr(LS.live); const map = new Map(prev.map(c => [c.id, c])); (res.channels || []).forEach(c => map.set(c.id, c));
       localStorage.setItem(LS.live, JSON.stringify([...map.values()]));
+      localStorage.setItem(LS.liveAt, new Date().toISOString());
       $('#refreshLog').textContent = `Готово: ${res.channels.length} каналов, ${res.units} ед. квоты` + (res.stopped ? ' · ' + res.stopped : '');
       setTimeout(() => location.reload(), 700);
     } catch (err) { $('#refreshLog').textContent = err.message || String(err); }
+    finally { state.liveRunning = false; }
   }
   async function boot() {
     let data = { channels: [], generated_at: null };
     try { const r = await fetch('data/channels.json', { cache: 'no-store' }); if (r.ok) data = await r.json(); } catch {}
     try { const r = await fetch('collector/rpm_baseline.json', { cache: 'no-store' }); if (r.ok) state.rpm = await r.json(); } catch {}
     state.clusters = data.clusters || {};
-    const live = loadArr(LS.live); const seen = new Set((data.channels || []).map(c => c.id));
-    state.all = (data.channels || []).filter(c => !c.graduated || c.labeled_role).concat(live.filter(c => c && c.id && !seen.has(c.id)));
-    const when = data.generated_at ? new Date(data.generated_at) : null;
-    $('#generatedAt').textContent = when ? 'Обновлено ' + when.toLocaleString('ru-RU') : (live.length ? 'Найдено в браузере: ' + live.length : '');
+    const live = loadArr(LS.live).filter(c => c && c.id);
+    const fresh = new Map(live.map(c => [c.id, c]));
+    state.all = (data.channels || []).filter(c => !c.graduated || c.labeled_role).map(c => {
+      const f = fresh.get(c.id); if (!f) return c;
+      fresh.delete(c.id); return { ...c, ...f, added_at: c.added_at || f.added_at };
+    }).concat([...fresh.values()]);
+    const fileAt = data.generated_at ? new Date(data.generated_at) : null;
+    const rawAt = live.length ? localStorage.getItem(LS.liveAt) : null;
+    const liveAt = rawAt && !isNaN(new Date(rawAt)) ? new Date(rawAt) : null;
+    const when = liveAt && (!fileAt || liveAt > fileAt) ? liveAt : fileAt;
+    $('#generatedAt').textContent = when ? 'Обновлено ' + when.toLocaleString('ru-RU') + (when === liveAt ? ' · в браузере: ' + live.length : '') : '';
     fillSelects(); render();
   }
   boot();
