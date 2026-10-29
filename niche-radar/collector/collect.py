@@ -24,7 +24,7 @@ RPM_PATH = os.path.join(BASE_DIR, "rpm_baseline.json")
 CACHE_PATH = os.path.join(BASE_DIR, "nexlev_cache.json")
 LABELS_PATH = os.path.join(BASE_DIR, "labels.json")
 API_URL = "https://www.googleapis.com/youtube/v3"
-SEARCH_LIMIT = 7500
+SEARCH_LIMIT = 4000
 ENRICHMENT_LIMIT = 1500
 
 STYLE_KEYWORDS = {
