@@ -169,7 +169,7 @@
         channels.push(...(d.items || []));
       } catch (e) { if (e instanceof QuotaExhausted) stopped = e; }
     }
-    const eligible = channels.filter(c => { const v = num(c.statistics?.videoCount); return v >= 3 && v <= 30 && num(c.statistics?.subscriberCount) >= 200; });
+    const eligible = channels.filter(c => { const v = num(c.statistics?.videoCount); return v >= 1 && v <= 30 && num(c.statistics?.subscriberCount) >= 200; });
     log(`Подходит по числу видео и подписчикам: ${eligible.length}`, 0.55);
     const out = [];
     for (let i = 0; i < eligible.length && !stopped; i++) {
@@ -183,7 +183,7 @@
         const vd = await ytGet('videos', { part: 'snippet,contentDetails,statistics', id: vids.join(','), maxResults: 50 }, st, 1);
         const videos = (vd.items || []).map(normVideo);
         const m = metrics(ch, videos, now, null);
-        if (m.videos_count_long < 3 || !m.first_video_at || (now - new Date(m.first_video_at)) / 86400000 > 365) continue;
+        if (m.videos_count_long < 1 || !m.first_video_at || (now - new Date(m.first_video_at)) / 86400000 > 365) continue;
         const q = foundBy.get(ch.id);
         const cl = classify(ch, videos, q);
         const niche = q?.niche || 'other';

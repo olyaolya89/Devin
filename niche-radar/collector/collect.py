@@ -589,7 +589,7 @@ def _channel_output(
     statistics = channel.get("statistics", {})
     video_count = _number(statistics.get("videoCount"))
     if not force and (
-        video_count < 3
+        video_count < 1
         or video_count > 30
         or _number(statistics.get("subscriberCount")) < 200
         or statistics.get("hiddenSubscriberCount")
@@ -597,7 +597,7 @@ def _channel_output(
         return None
     long_videos = [video for video in videos if _number(video.get("duration_sec")) >= 90]
     first = min((_parse_time(video.get("published_at")) for video in long_videos), default=None)
-    if not first or (now - first).days > 365 or len(long_videos) < 3:
+    if not first or (now - first).days > 365 or len(long_videos) < 1:
         return None
     found_query = query
     classification = classify(channel, videos, query)
@@ -812,7 +812,7 @@ def main(argv: list[str] | None = None) -> int:
         statistics = channel.get("statistics", {})
         force = channel_id in forced_ids
         if not force and (
-            _number(statistics.get("videoCount")) < 3
+            _number(statistics.get("videoCount")) < 1
             or _number(statistics.get("videoCount")) > 30
             or _number(statistics.get("subscriberCount")) < 200
             or statistics.get("hiddenSubscriberCount")

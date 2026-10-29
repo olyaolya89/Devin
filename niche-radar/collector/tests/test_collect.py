@@ -175,6 +175,36 @@ class CollectTests(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0]["graduated"])
 
+    def test_channel_output_accepts_a_single_long_video(self):
+        now = dt.datetime(2025, 1, 31, tzinfo=dt.timezone.utc)
+        videos = [
+            {
+                "id": "only",
+                "title": "Only video",
+                "views": 40000,
+                "duration_sec": 3600,
+                "published_at": "2025-01-10T00:00:00Z",
+            }
+        ]
+        output = collect._channel_output(
+            {
+                "id": "breakout",
+                "snippet": {"title": "Breakout", "country": "US"},
+                "statistics": {
+                    "subscriberCount": "400",
+                    "viewCount": "40000",
+                    "videoCount": "1",
+                },
+            },
+            videos,
+            {"text": "engineering", "niche": "engineering", "lang": "en"},
+            collect._load_json(collect.RPM_PATH, {}),
+            {},
+            now,
+        )
+        self.assertIsNotNone(output)
+        self.assertEqual(output["videos_count_long"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()
