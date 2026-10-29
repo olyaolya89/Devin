@@ -334,6 +334,10 @@ def yt_get(
                 state["key_index"] = (key_index + 1) % len(keys)
                 _log("YouTube API key quota exceeded; rotating key")
                 continue
+            _log(
+                f"YouTube API {resource} failed: HTTP {error.code}"
+                f" reason={reason or 'unknown'} body={body[:600]}"
+            )
             raise
     state["exhausted"] = True
     raise QuotaExhausted("all YouTube API keys have exhausted quota")
