@@ -26,6 +26,14 @@ LABELS_PATH = os.path.join(BASE_DIR, "labels.json")
 API_URL = "https://www.googleapis.com/youtube/v3"
 SEARCH_LIMIT = 4000
 ENRICHMENT_LIMIT = 1500
+MAX_VIDEOS = 300
+MAX_SUBS = 300000
+MAX_INACTIVE_DAYS = 120
+DAILY_KEEP = 120
+ENRICHED_KEYS = (
+    "notes_ru", "subniche_ru", "extra_monetization", "enriched_at", "notes_source",
+    "uses_ai", "uses_ai_mode", "difficulty", "difficulty_ru", "production_methods_ru",
+)
 
 STYLE_KEYWORDS = {
     "stickman": ("stickman", "stick figure", "stick-figure", "stickly", "палочный"),
@@ -380,6 +388,17 @@ def search(
     return results
 
 
+def eligible(statistics: dict[str, Any]) -> bool:
+    """Small-but-proven channel: 1..MAX_VIDEOS uploads, 200..MAX_SUBS public subscribers."""
+    videos = _number(statistics.get("videoCount"))
+    subs = _number(statistics.get("subscriberCount"))
+    return (
+        1 <= videos <= MAX_VIDEOS
+        and 200 <= subs <= MAX_SUBS
+        and not statistics.get("hiddenSubscriberCount")
+    )
+
+
 def fetch_channels(channel_ids: list[str], state: dict[str, Any]) -> dict[str, dict[str, Any]]:
     channels: dict[str, dict[str, Any]] = {}
     for start in range(0, len(channel_ids), 50):
@@ -588,16 +607,11 @@ def _channel_output(
 ) -> dict[str, Any] | None:
     statistics = channel.get("statistics", {})
     video_count = _number(statistics.get("videoCount"))
-    if not force and (
-        video_count < 1
-        or video_count > 30
-        or _number(statistics.get("subscriberCount")) < 200
-        or statistics.get("hiddenSubscriberCount")
-    ):
+    if not force and not eligible(statistics):
         return None
     long_videos = [video for video in videos if _number(video.get("duration_sec")) >= 90]
-    first = min((_parse_time(video.get("published_at")) for video in long_videos), default=None)
-    if not first or (now - first).days > 365 or len(long_videos) < 1:
+    last = max((_parse_time(video.get("published_at")) for video in long_videos), default=None)
+    if not last or (now - last).days > MAX_INACTIVE_DAYS:
         return None
     found_query = query
     classification = classify(channel, videos, query)
@@ -674,14 +688,22 @@ def merge(
     merged: list[dict[str, Any]] = []
     for channel in current_channels:
         old = next((item for item in previous_channels if item.get("id") == channel.get("id")), None)
-        if _number(channel.get("videos_count")) > 30 and channel.get("id") not in keep_ids:
+        if _number(channel.get("videos_count")) > MAX_VIDEOS and channel.get("id") not in keep_ids:
             added = _parse_time(old.get("added_at")) if old else None
             if not old or not added or (now - added).days >= 90:
                 continue
         result = dict(channel)
         result["added_at"] = old.get("added_at") if old and old.get("added_at") else _iso_date(now)
         result["stale"] = False
-        if _number(channel.get("videos_count")) > 30:
+        if old and old.get("enriched_at"):
+            for key in ENRICHED_KEYS:
+                if key in old:
+                    result[key] = old[key]
+        today = _iso_date(now)[:10]
+        daily = [row for row in (old.get("daily") or [] if old else []) if row and row[0] != today]
+        daily.append([today, _number(channel.get("subs")), _number(channel.get("total_views"))])
+        result["daily"] = daily[-DAILY_KEEP:]
+        if _number(channel.get("videos_count")) > MAX_VIDEOS:
             result["graduated"] = True
         elif old and old.get("graduated"):
             result["graduated"] = True
@@ -811,12 +833,7 @@ def main(argv: list[str] | None = None) -> int:
     for channel_id, channel in channels.items():
         statistics = channel.get("statistics", {})
         force = channel_id in forced_ids
-        if not force and (
-            _number(statistics.get("videoCount")) < 1
-            or _number(statistics.get("videoCount")) > 30
-            or _number(statistics.get("subscriberCount")) < 200
-            or statistics.get("hiddenSubscriberCount")
-        ):
+        if not force and not eligible(statistics):
             _log(f"Skipping ineligible channel {channel_id}")
             continue
         try:

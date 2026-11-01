@@ -170,7 +170,7 @@ class CollectTests(unittest.TestCase):
 
     def test_merge_keep_ids_preserves_graduated_channel(self):
         previous = {"channels": []}
-        current = [{"id": "labeled", "videos_count": 45, "title": "Reference"}]
+        current = [{"id": "labeled", "videos_count": collect.MAX_VIDEOS + 1, "title": "Reference"}]
         result = collect.merge(previous, current, keep_ids={"labeled"})
         self.assertEqual(len(result), 1)
         self.assertTrue(result[0]["graduated"])
@@ -204,6 +204,65 @@ class CollectTests(unittest.TestCase):
         )
         self.assertIsNotNone(output)
         self.assertEqual(output["videos_count_long"], 1)
+
+
+    def test_eligible_accepts_proven_channels_with_many_videos(self):
+        self.assertTrue(collect.eligible({"videoCount": 200, "subscriberCount": 150000}))
+        self.assertFalse(collect.eligible({"videoCount": 400, "subscriberCount": 5000}))
+        self.assertFalse(collect.eligible({"videoCount": 20, "subscriberCount": 500000}))
+        self.assertFalse(collect.eligible({"videoCount": 20, "subscriberCount": 5000, "hiddenSubscriberCount": True}))
+
+    def test_merge_keeps_ai_notes_and_appends_daily_metrics(self):
+        now = dt.datetime(2025, 2, 2, tzinfo=dt.timezone.utc)
+        previous = {"channels": [{
+            "id": "one", "added_at": "2025-01-01", "enriched_at": "2025-01-20",
+            "notes_ru": "Заметки", "subniche_ru": "Военная история",
+            "daily": [["2025-01-31", 100, 1000], ["2025-02-01", 110, 1500]],
+        }]}
+        current = [{"id": "one", "videos_count": 10, "subs": 120, "total_views": 2100, "subniche_ru": "Другое"}]
+        result = collect.merge(previous, current, now=now)[0]
+        self.assertEqual(result["notes_ru"], "Заметки")
+        self.assertEqual(result["subniche_ru"], "Военная история")
+        self.assertEqual(result["daily"][-1], ["2025-02-02", 120, 2100])
+        self.assertEqual(len(result["daily"]), 3)
+
+
+class EnrichTests(unittest.TestCase):
+    def setUp(self):
+        enrich_spec = importlib.util.spec_from_file_location("enrich", os.path.join(COLLECTOR_DIR, "enrich.py"))
+        self.enrich = importlib.util.module_from_spec(enrich_spec)
+        enrich_spec.loader.exec_module(self.enrich)
+        self.channel = {"id": "c", "title": "T", "videos": [
+            {"id": "a", "title": "Small", "views": 10},
+            {"id": "b", "title": "Big Battle", "views": 900, "duration_sec": 900},
+        ]}
+
+    def test_request_watches_first_two_minutes_of_top_video(self):
+        body = self.enrich.request_body(self.channel, watch=True)
+        parts = body["contents"][0]["parts"]
+        self.assertEqual(parts[0]["fileData"]["fileUri"], "https://www.youtube.com/watch?v=b")
+        self.assertEqual(parts[0]["videoMetadata"]["endOffset"], "120s")
+        self.assertIn("Big Battle", parts[1]["text"])
+
+    def test_enrich_falls_back_to_text_and_applies_result(self):
+        calls = []
+
+        def fake(body, key):
+            calls.append(body)
+            if len(calls) == 1:
+                raise ValueError("video not accepted")
+            return {"notes_ru": "О войне.", "production_ru": "Карты (~50%).", "subniche_ru": "Военная история",
+                    "uses_ai": "mix", "difficulty": "medium", "extra_monetization": ["own_product", "none"]}
+
+        now = dt.datetime(2025, 3, 5, tzinfo=dt.timezone.utc)
+        self.assertTrue(self.enrich.enrich(self.channel, "k", now, call=fake))
+        self.assertEqual(len(calls[1]["contents"][0]["parts"]), 1)
+        self.assertEqual(self.channel["subniche_ru"], "Военная история")
+        self.assertEqual(self.channel["extra_monetization"], ["own_product"])
+        self.assertTrue(self.channel["uses_ai"])
+        self.assertEqual(self.channel["difficulty_ru"], "Средняя")
+        self.assertIn("05.03", self.channel["notes_ru"])
+        self.assertEqual(self.channel["notes_source"], "gemini")
 
 
 if __name__ == "__main__":
