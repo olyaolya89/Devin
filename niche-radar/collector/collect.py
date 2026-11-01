@@ -339,7 +339,7 @@ def yt_get(
                 reason = json.loads(body)["error"]["errors"][0].get("reason")
             except (KeyError, IndexError, TypeError, json.JSONDecodeError):
                 reason = None
-            if error.code == 403 and reason == "quotaExceeded":
+            if error.code in (403, 429) and reason in ("quotaExceeded", "rateLimitExceeded", "dailyLimitExceeded"):
                 remaining_keys -= 1
                 state["key_index"] = (key_index + 1) % len(keys)
                 _log("YouTube API key quota exceeded; rotating key")
