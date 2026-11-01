@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-01T17:20:40.734479Z",
+  "generated_at": "2026-11-01T17:38:29.051619Z",
   "channels": [
     {
       "id": "UCAQ3ijMJflppSdHdsB75n9g",
       "subs": 11000,
-      "total_views": 1890637,
+      "total_views": 1892657,
       "videos_count": 84,
       "score": 82,
       "cluster": "jewelry|live|en",
@@ -13,7 +13,7 @@
     },
     {
       "id": "UCzZqLcrq92NWT52GqSMLesw",
-      "subs": 4370,
+      "subs": 4380,
       "total_views": 1616880,
       "videos_count": 59,
       "score": 87,
@@ -144,7 +144,7 @@
     {
       "id": "UC9DltgGxltZs45koX1sDpdA",
       "subs": 5770,
-      "total_views": 1173731,
+      "total_views": 1173699,
       "videos_count": 24,
       "score": 73,
       "cluster": "nostalgia|live|de",
@@ -168,6 +168,46 @@
       "videos_count": 34,
       "score": 77,
       "cluster": "nostalgia|live|de",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCtrNrW5RTVzL7Tj07EExLKg",
+      "subs": 13000,
+      "total_views": 5764788,
+      "videos_count": 11,
+      "score": 73,
+      "cluster": "disasters|live|en",
+      "is_monetized": false,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UC3Bmui01eFYa7JMbOnDIDNg",
+      "subs": 3570,
+      "total_views": 65233,
+      "videos_count": 54,
+      "score": 71,
+      "cluster": "pov_stories|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCqX_HO1AR-1uNx9T41ID9IQ",
+      "subs": 48300,
+      "total_views": 6072038,
+      "videos_count": 80,
+      "score": 67,
+      "cluster": "lifehacks|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCG1FhX9QEcUEqNQEnP1EaiQ",
+      "subs": 156000,
+      "total_views": 21065196,
+      "videos_count": 120,
+      "score": 77,
+      "cluster": "lifehacks|live|en",
       "is_monetized": null,
       "monetization_forecast": "≤30 дн."
     },
@@ -268,16 +308,6 @@
       "videos_count": 5,
       "score": 60,
       "cluster": "pov_stories|ai|bn",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UC3Bmui01eFYa7JMbOnDIDNg",
-      "subs": 3570,
-      "total_views": 65233,
-      "videos_count": 54,
-      "score": 71,
-      "cluster": "pov_stories|live|en",
       "is_monetized": null,
       "monetization_forecast": "≤30 дн."
     },
@@ -2392,16 +2422,6 @@
       "monetization_forecast": "≤30 дн."
     },
     {
-      "id": "UCqX_HO1AR-1uNx9T41ID9IQ",
-      "subs": 48300,
-      "total_views": 6072038,
-      "videos_count": 80,
-      "score": 67,
-      "cluster": "lifehacks|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
       "id": "UCsYETIhxXQVjm9La4wX7Twg",
       "subs": 19800,
       "total_views": 271,
@@ -2419,26 +2439,6 @@
       "score": 72,
       "cluster": "science|live|en",
       "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCG1FhX9QEcUEqNQEnP1EaiQ",
-      "subs": 156000,
-      "total_views": 21065196,
-      "videos_count": 120,
-      "score": 77,
-      "cluster": "lifehacks|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCtrNrW5RTVzL7Tj07EExLKg",
-      "subs": 13000,
-      "total_views": 5764788,
-      "videos_count": 11,
-      "score": 73,
-      "cluster": "disasters|live|en",
-      "is_monetized": false,
       "monetization_forecast": "≤30 дн."
     },
     {
@@ -3666,219 +3666,37 @@
     "jewelry|live|en": {
       "n": 1,
       "share_growing": 0.0,
-      "median_vpv": 45061.18,
+      "median_vpv": 45064.0,
       "entry_score": 53,
       "verdict": "unproven"
     },
     "disasters|live|en": {
       "n": 3,
       "share_growing": 0.667,
-      "median_vpv": 444169.64,
+      "median_vpv": 444169.91,
       "entry_score": 88,
       "verdict": "open"
     },
     "history|live|es": {
       "n": 1,
       "share_growing": 1.0,
-      "median_vpv": 159929.0,
+      "median_vpv": 159943.46,
       "entry_score": 99,
       "verdict": "open"
     },
     "nostalgia|live|de": {
-      "n": 2,
-      "share_growing": 0.5,
-      "median_vpv": 24952.58,
-      "entry_score": 73,
-      "verdict": "open"
-    },
-    "pov_stories|live|en": {
-      "n": 16,
-      "share_growing": 0.625,
-      "median_vpv": 51343.39,
-      "entry_score": 57,
-      "verdict": "crowded"
-    },
-    "pov_stories|ai|en": {
-      "n": 6,
-      "share_growing": 0.333,
-      "median_vpv": 1837.29,
-      "entry_score": 57,
-      "verdict": "unproven"
-    },
-    "pov_stories|ai|bn": {
       "n": 1,
       "share_growing": 1.0,
-      "median_vpv": 284377.75,
-      "entry_score": 100,
-      "verdict": "open"
-    },
-    "auto|live|en": {
-      "n": 15,
-      "share_growing": 0.2,
-      "median_vpv": 1074.0,
-      "entry_score": 41,
-      "verdict": "crowded"
-    },
-    "collectibles|live|en": {
-      "n": 13,
-      "share_growing": 0.385,
-      "median_vpv": 3191.06,
-      "entry_score": 49,
-      "verdict": "crowded"
-    },
-    "auto|ai|en": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 330.53,
-      "entry_score": 32,
-      "verdict": "unproven"
-    },
-    "psychology|live|en": {
-      "n": 33,
-      "share_growing": 0.303,
-      "median_vpv": 7032.07,
-      "entry_score": 36,
-      "verdict": "crowded"
-    },
-    "psychology|ai|en": {
-      "n": 9,
-      "share_growing": 0.222,
-      "median_vpv": 3560.0,
-      "entry_score": 37,
-      "verdict": "crowded"
-    },
-    "psychology|ai|hi": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 3947.91,
-      "entry_score": 56,
-      "verdict": "unproven"
-    },
-    "psychology|ai|ru": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 7443.56,
-      "entry_score": 58,
-      "verdict": "unproven"
-    },
-    "psychology|live|bn": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 2207.6,
-      "entry_score": 47,
-      "verdict": "unproven"
-    },
-    "true_crime|ai|en": {
-      "n": 5,
-      "share_growing": 0.0,
-      "median_vpv": 8133.05,
-      "entry_score": 54,
-      "verdict": "unproven"
-    },
-    "relocation|live|en": {
-      "n": 45,
-      "share_growing": 0.2,
-      "median_vpv": 4049.16,
-      "entry_score": 36,
-      "verdict": "crowded"
-    },
-    "relocation|ai|en": {
-      "n": 5,
-      "share_growing": 0.4,
-      "median_vpv": 3979.82,
-      "entry_score": 70,
-      "verdict": "unproven"
-    },
-    "relocation|live|de": {
-      "n": 2,
-      "share_growing": 0.0,
-      "median_vpv": 5054.44,
-      "entry_score": 57,
-      "verdict": "unproven"
-    },
-    "relocation|live|es": {
-      "n": 2,
-      "share_growing": 0.5,
-      "median_vpv": 19546.79,
-      "entry_score": 77,
-      "verdict": "open"
-    },
-    "relocation|live|fr": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 3399.83,
-      "entry_score": 43,
-      "verdict": "unproven"
-    },
-    "nostalgia|live|en": {
-      "n": 18,
-      "share_growing": 0.056,
-      "median_vpv": 3337.75,
-      "entry_score": 34,
-      "verdict": "crowded"
-    },
-    "nostalgia|ai|en": {
-      "n": 4,
-      "share_growing": 0.5,
-      "median_vpv": 5849.89,
-      "entry_score": 75,
-      "verdict": "unproven"
-    },
-    "history|ai|hi": {
-      "n": 2,
-      "share_growing": 0.5,
-      "median_vpv": 53090.97,
-      "entry_score": 79,
-      "verdict": "open"
-    },
-    "history|ai|en": {
-      "n": 14,
-      "share_growing": 0.571,
-      "median_vpv": 34081.41,
-      "entry_score": 54,
-      "verdict": "crowded"
-    },
-    "history|live|en": {
-      "n": 11,
-      "share_growing": 0.636,
-      "median_vpv": 58113.72,
-      "entry_score": 62,
-      "verdict": "crowded"
-    },
-    "history|live|hi": {
-      "n": 2,
-      "share_growing": 1.0,
-      "median_vpv": 261672.98,
-      "entry_score": 95,
-      "verdict": "open"
-    },
-    "science|ai|en": {
-      "n": 12,
-      "share_growing": 0.75,
-      "median_vpv": 115821.02,
-      "entry_score": 63,
-      "verdict": "crowded"
-    },
-    "history|live|bn": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 171426.88,
-      "entry_score": 99,
-      "verdict": "open"
-    },
-    "science|ai|id": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 37447.0,
+      "median_vpv": 48906.17,
       "entry_score": 96,
       "verdict": "open"
     },
-    "science|live|en": {
+    "pov_stories|live|en": {
       "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 96256.5,
-      "entry_score": 98,
-      "verdict": "open"
+      "share_growing": 0.0,
+      "median_vpv": 1605.32,
+      "entry_score": 36,
+      "verdict": "unproven"
     }
   }
 }
