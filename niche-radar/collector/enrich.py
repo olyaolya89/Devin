@@ -17,8 +17,8 @@ import urllib.error
 import urllib.request
 from typing import Any
 
-MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
-BASE = "https://generativelanguage.googleapis.com/v1beta"
+MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.8-flash")
+BASE = os.environ.get("GEMINI_API_BASE", "https://generativelanguage.googleapis.com/v1beta")
 API = BASE + "/models/{model}:generateContent"
 SKIP_MODELS = ("lite", "image", "tts", "live", "audio", "embedding", "robotics", "computer")
 EXTRA = ("own_product", "affiliate", "sponsors", "membership", "merch", "none")
@@ -128,6 +128,17 @@ def pick_model(names: list[str], preferred: str = MODEL) -> str | None:
     return sorted(stable, key=lambda n: (version(n), "latest" not in n, -len(n)), reverse=True)[0]
 
 
+def switch_model(error_body: str) -> bool:
+    """Follow the API's 'no longer available ... use models/X' hint once per model."""
+    global MODEL
+    hint = re.search(r"use models/([\w.-]+)", error_body)
+    if "no longer available" not in error_body or not hint or hint.group(1) == MODEL:
+        return False
+    print(f"[enrich] model {MODEL} retired, switching to {hint.group(1)}", file=sys.stderr)
+    MODEL = hint.group(1)
+    return True
+
+
 def list_models(key: str) -> list[str]:
     request = urllib.request.Request(BASE + "/models?pageSize=1000", headers={"x-goog-api-key": key})
     with urllib.request.urlopen(request, timeout=60) as response:
@@ -199,7 +210,10 @@ def enrich(channel: dict[str, Any], key: str, now: dt.datetime, call=call_gemini
             result = call(request_body(channel, watch=watch), key)
         except (urllib.error.URLError, ValueError, KeyError, IndexError) as error:
             if isinstance(error, urllib.error.HTTPError):
-                error = f"{error} {error.read().decode('utf-8', 'replace')[:300]}"
+                body = error.read().decode("utf-8", "replace")
+                if switch_model(body):
+                    return enrich(channel, key, now, call)
+                error = f"{error} {body[:300]}"
             print(f"[enrich] {channel.get('id')} watch={watch}: {error}", file=sys.stderr)
             continue
         apply(channel, result, watched=video, now=now)

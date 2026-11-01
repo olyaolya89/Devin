@@ -256,6 +256,14 @@ class EnrichTests(unittest.TestCase):
         self.assertEqual(pick(names, "gemini-2.5-flash"), "gemini-3-flash")
         self.assertIsNone(pick(["models/text-embedding-004"], "gemini-2.5-flash"))
 
+    def test_switch_model_follows_retired_model_hint(self):
+        self.enrich.MODEL = "gemini-2.5-flash"
+        body = '"message": "This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.8-flash for the latest"'
+        self.assertTrue(self.enrich.switch_model(body))
+        self.assertEqual(self.enrich.MODEL, "gemini-3.8-flash")
+        self.assertFalse(self.enrich.switch_model(body.replace("2.5", "3.8")))
+        self.assertFalse(self.enrich.switch_model("quota exceeded"))
+
     def test_request_watches_first_two_minutes_of_top_video(self):
         body = self.enrich.request_body(self.channel, watch=True)
         parts = body["contents"][0]["parts"]
