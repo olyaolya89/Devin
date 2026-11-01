@@ -20,6 +20,10 @@ from typing import Any
 MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.8-flash")
 BASE = os.environ.get("GEMINI_API_BASE", "https://generativelanguage.googleapis.com/v1beta")
 API = BASE + "/models/{model}:generateContent"
+TIMEOUT = float(os.environ.get("GEMINI_TIMEOUT", "180"))
+RETRY_WAITS = tuple(float(x) for x in os.environ.get("GEMINI_RETRY_WAITS", "15,45").split(","))
+RETRY_CODES = (429, 500, 503, 504)
+FALLBACKS: list[str] = []
 SKIP_MODELS = ("lite", "image", "tts", "live", "audio", "embedding", "robotics", "computer")
 EXTRA = ("own_product", "affiliate", "sponsors", "membership", "merch", "none")
 STYLES = (
@@ -128,6 +132,17 @@ def pick_model(names: list[str], preferred: str = MODEL) -> str | None:
     return sorted(stable, key=lambda n: (version(n), "latest" not in n, -len(n)), reverse=True)[0]
 
 
+def flash_candidates(names: list[str]) -> list[str]:
+    """All usable flash models, newest first, for fallback when one is overloaded."""
+    left, out = list(names), []
+    while True:
+        best = pick_model(left, "")
+        if not best:
+            return out
+        out.append(best)
+        left = [n for n in left if n.split("/")[-1] != best]
+
+
 def switch_model(error_body: str) -> bool:
     """Follow the API's 'no longer available ... use models/X' hint once per model."""
     global MODEL
@@ -155,7 +170,7 @@ def call_gemini(body: dict[str, Any], key: str) -> dict[str, Any]:
         data=json.dumps(body).encode(),
         headers={"Content-Type": "application/json", "x-goog-api-key": key},
     )
-    with urllib.request.urlopen(request, timeout=180) as response:
+    with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
         payload = json.load(response)
     text = "".join(
         part.get("text", "")
@@ -201,24 +216,68 @@ def apply(channel: dict[str, Any], result: dict[str, Any], *, watched: dict[str,
     channel["enriched_at"] = now.date().isoformat()
 
 
+class GeminiError(Exception):
+    def __init__(self, code: int, body: str):
+        super().__init__(f"HTTP {code}: {body[:300]}")
+        self.code, self.body = code, body
+
+
+def attempt(call, body: dict[str, Any], key: str) -> dict[str, Any]:
+    """Call Gemini, retrying overload (429/5xx) and timeouts with backoff."""
+    for wait in RETRY_WAITS + (None,):
+        try:
+            return call(body, key)
+        except urllib.error.HTTPError as error:
+            text = error.read().decode("utf-8", "replace")
+            if error.code in RETRY_CODES and wait is not None:
+                time.sleep(wait)
+                continue
+            raise GeminiError(error.code, text) from None
+        except OSError as error:
+            if wait is not None:
+                time.sleep(wait)
+                continue
+            raise GeminiError(0, str(error)) from None
+    raise GeminiError(0, "no attempts")
+
+
+def next_model() -> bool:
+    global MODEL
+    while FALLBACKS:
+        candidate = FALLBACKS.pop(0)
+        if candidate != MODEL:
+            print(f"[enrich] model {MODEL} unavailable, switching to {candidate}", file=sys.stderr)
+            MODEL = candidate
+            return True
+    return False
+
+
 def enrich(channel: dict[str, Any], key: str, now: dt.datetime, call=call_gemini) -> bool:
     for watch in (True, False):
         video = top_video(channel) if watch else None
         if watch and not video:
             continue
         try:
-            result = call(request_body(channel, watch=watch), key)
-        except (urllib.error.URLError, ValueError, KeyError, IndexError) as error:
-            if isinstance(error, urllib.error.HTTPError):
-                body = error.read().decode("utf-8", "replace")
-                if switch_model(body):
-                    return enrich(channel, key, now, call)
-                error = f"{error} {body[:300]}"
+            result = attempt(call, request_body(channel, watch=watch), key)
+        except GeminiError as error:
+            if switch_model(error.body) or (error.code in RETRY_CODES and next_model()):
+                return enrich(channel, key, now, call)
             print(f"[enrich] {channel.get('id')} watch={watch}: {error}", file=sys.stderr)
+            continue
+        except (ValueError, KeyError, IndexError, TypeError) as error:
+            print(f"[enrich] {channel.get('id')} watch={watch}: bad response {error}", file=sys.stderr)
             continue
         apply(channel, result, watched=video, now=now)
         return True
     return False
+
+
+def save(path: str, data: dict[str, Any]) -> None:
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as handle:
+        json.dump(data, handle, ensure_ascii=False, indent=2)
+        handle.write("\n")
+    os.replace(tmp, path)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -235,23 +294,33 @@ def main(argv: list[str] | None = None) -> int:
         data = json.load(handle)
     global MODEL
     try:
-        MODEL = pick_model(list_models(key)) or MODEL
+        names = list_models(key)
+        MODEL = pick_model(names) or MODEL
+        FALLBACKS[:] = [n for n in flash_candidates(names) if n != MODEL]
     except (urllib.error.URLError, ValueError) as error:
         print(f"[enrich] could not list models: {error}", file=sys.stderr)
     print(f"[enrich] model: {MODEL}", file=sys.stderr)
     todo = [c for c in data.get("channels", []) if "verified" not in c and not c.get("graduated")]
     todo.sort(key=lambda c: c.get("score") or 0, reverse=True)
     now = dt.datetime.now(dt.timezone.utc)
-    done = 0
-    for channel in todo[: args.limit]:
-        if enrich(channel, key, now):
-            done += 1
-            print(f"[enrich] {channel.get('title')}: {channel.get('subniche_ru')}", file=sys.stderr)
-        time.sleep(args.pause)
-    with open(args.data, "w", encoding="utf-8") as handle:
-        json.dump(data, handle, ensure_ascii=False, indent=2)
-        handle.write("\n")
-    print(f"[enrich] enriched {done}/{min(len(todo), args.limit)} channels", file=sys.stderr)
+    done = failed = 0
+    batch = todo[: args.limit]
+    try:
+        for channel in batch:
+            if enrich(channel, key, now):
+                done += 1
+                failed = 0
+                print(f"[enrich] {channel.get('title')}: {channel.get('subniche_ru')}", file=sys.stderr)
+                save(args.data, data)
+            else:
+                failed += 1
+                if failed >= 8:
+                    print("[enrich] 8 channels in a row failed - Gemini unavailable, stopping", file=sys.stderr)
+                    break
+            time.sleep(args.pause)
+    finally:
+        save(args.data, data)
+    print(f"[enrich] enriched {done}/{len(batch)} channels with {MODEL}", file=sys.stderr)
     return 0
 
 
