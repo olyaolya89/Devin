@@ -27,6 +27,9 @@ DIFFICULTY_RU = {"low": "Низкая", "medium": "Средняя", "high": "В�
 SCHEMA = {
     "type": "OBJECT",
     "properties": {
+        "fits": {"type": "BOOLEAN"},
+        "reject_reason": {"type": "STRING"},
+        "niche_ru": {"type": "STRING"},
         "notes_ru": {"type": "STRING"},
         "production_ru": {"type": "STRING"},
         "subniche_ru": {"type": "STRING"},
@@ -37,10 +40,17 @@ SCHEMA = {
         "production_styles": {"type": "ARRAY", "items": {"type": "STRING", "enum": list(STYLES)}},
         "categories": {"type": "ARRAY", "items": {"type": "STRING"}},
     },
-    "required": ["notes_ru", "production_ru", "subniche_ru", "uses_ai", "difficulty", "extra_monetization"],
+    "required": ["fits", "niche_ru", "notes_ru", "production_ru", "subniche_ru", "uses_ai", "difficulty", "extra_monetization"],
 }
 PROMPT = """Ты куратор каталога YouTube-ниш для русскоязычных авторов фейслес-каналов.
 Опиши нишу канала по-русски, конкретно, без воды и общих фраз.
+
+Сначала проверь канал. fits: true, только если это канал с оригинальным контентом в понятной нише,
+формат которого можно повторить (фейслес или с ведущим). fits: false — музыка, перезаливы и нарезки чужих
+передач, детский контент, стримы и игры без ниши, личные влоги, новости-агрегаторы, спам, канал не на заявленную тему.
+reject_reason — одно короткое предложение, почему не подходит (пусто, если подходит).
+niche_ru — ниша 1–3 слова: «История», «Военное дело», «Финансы», «Ювелирка», «Животные», «Психология» и т. п.
+Подниша и ниша должны соответствовать тому, что реально в роликах, а не случайным словам из названий.
 
 notes_ru — 2–4 предложения: о чём ролики (с конкретными примерами тем из названий),
 1–2 шаблона заголовков в виде «[Событие]: [интригующий вопрос]», язык, длина роликов в минутах,
@@ -147,6 +157,10 @@ def apply(channel: dict[str, Any], result: dict[str, Any], *, watched: dict[str,
     if isinstance(result.get("has_ai_avatar"), bool):
         channel["has_ai_avatar"] = result["has_ai_avatar"]
     channel["notes_source"] = "gemini+video" if watched else "gemini"
+    channel["verified"] = bool(result.get("fits"))
+    channel["reject_reason"] = "" if channel["verified"] else (result.get("reject_reason") or "").strip()
+    if (result.get("niche_ru") or "").strip():
+        channel["niche_ai_ru"] = result["niche_ru"].strip()
     channel["enriched_at"] = now.date().isoformat()
 
 
@@ -168,7 +182,7 @@ def enrich(channel: dict[str, Any], key: str, now: dt.datetime, call=call_gemini
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", default=os.path.join(os.path.dirname(__file__), "..", "data", "channels.json"))
-    parser.add_argument("--limit", type=int, default=40)
+    parser.add_argument("--limit", type=int, default=100)
     parser.add_argument("--pause", type=float, default=7.0)
     args = parser.parse_args(argv)
     key = os.environ.get("GEMINI_API_KEY", "").strip()
@@ -177,7 +191,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     with open(args.data, encoding="utf-8") as handle:
         data = json.load(handle)
-    todo = [c for c in data.get("channels", []) if not c.get("enriched_at") and not c.get("stale")]
+    todo = [c for c in data.get("channels", []) if "verified" not in c and not c.get("stale")]
     todo.sort(key=lambda c: c.get("score") or 0, reverse=True)
     now = dt.datetime.now(dt.timezone.utc)
     done = 0
