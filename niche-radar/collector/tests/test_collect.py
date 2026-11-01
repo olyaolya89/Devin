@@ -249,6 +249,13 @@ class EnrichTests(unittest.TestCase):
             {"id": "b", "title": "Big Battle", "views": 900, "duration_sec": 900},
         ]}
 
+    def test_pick_model_prefers_configured_then_newest_stable_flash(self):
+        pick = self.enrich.pick_model
+        self.assertEqual(pick(["models/gemini-2.5-flash", "models/gemini-3-flash"], "gemini-2.5-flash"), "gemini-2.5-flash")
+        names = ["models/gemini-2.0-flash", "models/gemini-3-flash", "models/gemini-3-flash-lite", "models/gemini-3.5-flash-preview", "models/gemini-3-pro"]
+        self.assertEqual(pick(names, "gemini-2.5-flash"), "gemini-3-flash")
+        self.assertIsNone(pick(["models/text-embedding-004"], "gemini-2.5-flash"))
+
     def test_request_watches_first_two_minutes_of_top_video(self):
         body = self.enrich.request_body(self.channel, watch=True)
         parts = body["contents"][0]["parts"]

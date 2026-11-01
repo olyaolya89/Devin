@@ -10,6 +10,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
@@ -17,7 +18,9 @@ import urllib.request
 from typing import Any
 
 MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
-API = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+BASE = "https://generativelanguage.googleapis.com/v1beta"
+API = BASE + "/models/{model}:generateContent"
+SKIP_MODELS = ("lite", "image", "tts", "live", "audio", "embedding", "robotics", "computer")
 EXTRA = ("own_product", "affiliate", "sponsors", "membership", "merch", "none")
 STYLES = (
     "stock_footage", "maps_graphics", "ai_images", "2d_animation", "3d_animation", "ai_video", "highlights",
@@ -112,6 +115,29 @@ def request_body(channel: dict[str, Any], *, watch: bool) -> dict[str, Any]:
     return {"contents": [{"parts": parts}], "generationConfig": config}
 
 
+def pick_model(names: list[str], preferred: str = MODEL) -> str | None:
+    """Pick the preferred model if available, else the newest stable Gemini flash model."""
+    short = [n.split("/")[-1] for n in names]
+    if preferred in short:
+        return preferred
+    flash = [n for n in short if "gemini" in n and "flash" in n and not any(s in n for s in SKIP_MODELS)]
+    if not flash:
+        return None
+    version = lambda n: float((re.search(r"gemini-(\d+(?:\.\d+)?)", n) or [0, 0])[1])
+    stable = [n for n in flash if "preview" not in n and "exp" not in n] or flash
+    return sorted(stable, key=lambda n: (version(n), "latest" not in n, -len(n)), reverse=True)[0]
+
+
+def list_models(key: str) -> list[str]:
+    request = urllib.request.Request(BASE + "/models?pageSize=1000", headers={"x-goog-api-key": key})
+    with urllib.request.urlopen(request, timeout=60) as response:
+        payload = json.load(response)
+    return [
+        m.get("name", "") for m in payload.get("models", [])
+        if "generateContent" in (m.get("supportedGenerationMethods") or [])
+    ]
+
+
 def call_gemini(body: dict[str, Any], key: str) -> dict[str, Any]:
     request = urllib.request.Request(
         API.format(model=MODEL),
@@ -172,6 +198,8 @@ def enrich(channel: dict[str, Any], key: str, now: dt.datetime, call=call_gemini
         try:
             result = call(request_body(channel, watch=watch), key)
         except (urllib.error.URLError, ValueError, KeyError, IndexError) as error:
+            if isinstance(error, urllib.error.HTTPError):
+                error = f"{error} {error.read().decode('utf-8', 'replace')[:300]}"
             print(f"[enrich] {channel.get('id')} watch={watch}: {error}", file=sys.stderr)
             continue
         apply(channel, result, watched=video, now=now)
@@ -191,7 +219,13 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     with open(args.data, encoding="utf-8") as handle:
         data = json.load(handle)
-    todo = [c for c in data.get("channels", []) if "verified" not in c and not c.get("stale")]
+    global MODEL
+    try:
+        MODEL = pick_model(list_models(key)) or MODEL
+    except (urllib.error.URLError, ValueError) as error:
+        print(f"[enrich] could not list models: {error}", file=sys.stderr)
+    print(f"[enrich] model: {MODEL}", file=sys.stderr)
+    todo = [c for c in data.get("channels", []) if "verified" not in c and not c.get("graduated")]
     todo.sort(key=lambda c: c.get("score") or 0, reverse=True)
     now = dt.datetime.now(dt.timezone.utc)
     done = 0
