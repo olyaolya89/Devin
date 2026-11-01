@@ -94,6 +94,11 @@
     {"text": "casas baratas no brasil", "niche": "relocation", "lang": "pt"},
     {"text": "japans neue erfindung", "niche": "engineering", "lang": "de"},
     {"text": "megaprojekte der welt doku", "niche": "engineering", "lang": "de"},
-    {"text": "zweiter weltkrieg geschichte doku", "niche": "history", "lang": "de"}
+    {"text": "zweiter weltkrieg geschichte doku", "niche": "history", "lang": "de"},
+    {"text": "histoire de france que personne ne raconte", "niche": "history", "lang": "fr"},
+    {"text": "les plus grandes machines du monde", "niche": "engineering", "lang": "fr"},
+    {"text": "storia d'italia che nessuno racconta", "niche": "history", "lang": "it"},
+    {"text": "le macchine più grandi del mondo", "niche": "engineering", "lang": "it"},
+    {"text": "jubilarse en españa documental", "niche": "relocation", "lang": "es"}
   ]
 }

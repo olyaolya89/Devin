@@ -39,3 +39,4 @@ button,select,input,textarea{font:inherit}button{cursor:pointer}[hidden]{display
 .x{color:var(--red);font-weight:800}.nrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12.5px}.entry{border:1px solid var(--line);border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:5px;align-items:flex-start}
 .btn-comp{border:0;background:#ffe8e6;color:var(--red);border-radius:10px;padding:8px 12px;font-weight:700}.crit{margin:0;padding-left:0;list-style:none}.crit li{padding:3px 0}.crit .ok{color:#1f8a4a}.crit .no{color:#9a2b24}details summary{cursor:pointer;margin-top:8px}
 @media(max-width:900px){.grid,.f-grid,.kpi,.meta-grid,.charts{grid-template-columns:1fr 1fr}.page-head .wrap{flex-direction:column}.search{max-width:none}}
+.notes{white-space:pre-line}

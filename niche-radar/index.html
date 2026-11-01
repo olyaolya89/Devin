@@ -58,6 +58,8 @@
       <label>Без лица в кадре<select id="fFace"><option value="">Любое</option><option value="yes">Без лица</option><option value="no">С лицом</option></select></label>
       <label>Монетизация YouTube<select id="fMon"><option value="">Любое</option><option value="yes">Да</option><option value="soon">Прогноз ≤ 90 дн.</option><option value="no">Нет</option></select></label>
       <label>Дни до монетизации<select id="fDays"><option value="">Дни до монетизации</option><option value="30">≤ 30 дн.</option><option value="90">≤ 90 дн.</option></select></label>
+      <label>Доп. монетизация<select id="fExtra"><option value="">Любая</option></select></label>
+      <label>Мин. ИТВ<select id="fItv"><option value="">Любое</option><option value="20">20+</option><option value="40">40+</option><option value="60">60+</option><option value="80">80+</option></select></label>
     </div>
     <div class="sliders">
       <label>Подписчики <span id="subsLab">0 — max</span><div class="dual"><input id="subsMin" type="range" min="0" max="200000" value="0"><input id="subsMax" type="range" min="0" max="200000" value="200000"></div></label>
@@ -68,7 +70,7 @@
     <div class="f-row">
       <label class="chk"><input type="checkbox" id="onlyNew3"> Только новые за 3 дня</label>
       <label class="chk"><input type="checkbox" id="onlyUnseen"> Только непросмотренные</label>
-      <label class="chk" title="Подписчиков 1–60 тыс., просмотров от 200 тыс., ≥80 просмотров на подписчика, есть ролик-аутлаер ≥2,5×, канал не старше года"><input type="checkbox" id="onlyRef" checked> Только по критериям отбора</label>
+      <label class="chk" title="Подписчиков 500–300 тыс., просмотров от 200 тыс., ≥35 просмотров на подписчика, есть прострел ≥2,5×, свежий ролик за 90 дней"><input type="checkbox" id="onlyRef" checked> Только по критериям отбора</label>
       <button type="button" class="btn" id="resetFilters">Сбросить</button>
     </div>
   </section>
