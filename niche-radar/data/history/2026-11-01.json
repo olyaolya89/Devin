@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-01T17:38:29.051619Z",
+  "generated_at": "2026-11-01T17:42:58.135748Z",
   "channels": [
     {
       "id": "UCAQ3ijMJflppSdHdsB75n9g",
       "subs": 11000,
-      "total_views": 1892657,
+      "total_views": 1890637,
       "videos_count": 84,
       "score": 82,
       "cluster": "jewelry|live|en",
@@ -144,7 +144,7 @@
     {
       "id": "UC9DltgGxltZs45koX1sDpdA",
       "subs": 5770,
-      "total_views": 1173699,
+      "total_views": 1173731,
       "videos_count": 24,
       "score": 73,
       "cluster": "nostalgia|live|de",
@@ -172,6 +172,26 @@
       "monetization_forecast": "≤30 дн."
     },
     {
+      "id": "UCG1FhX9QEcUEqNQEnP1EaiQ",
+      "subs": 156000,
+      "total_views": 21065196,
+      "videos_count": 120,
+      "score": 77,
+      "cluster": "lifehacks|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCqX_HO1AR-1uNx9T41ID9IQ",
+      "subs": 48300,
+      "total_views": 6072038,
+      "videos_count": 80,
+      "score": 67,
+      "cluster": "lifehacks|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
       "id": "UCtrNrW5RTVzL7Tj07EExLKg",
       "subs": 13000,
       "total_views": 5764788,
@@ -188,26 +208,6 @@
       "videos_count": 54,
       "score": 71,
       "cluster": "pov_stories|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCqX_HO1AR-1uNx9T41ID9IQ",
-      "subs": 48300,
-      "total_views": 6072038,
-      "videos_count": 80,
-      "score": 67,
-      "cluster": "lifehacks|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCG1FhX9QEcUEqNQEnP1EaiQ",
-      "subs": 156000,
-      "total_views": 21065196,
-      "videos_count": 120,
-      "score": 77,
-      "cluster": "lifehacks|live|en",
       "is_monetized": null,
       "monetization_forecast": "≤30 дн."
     },
@@ -3666,37 +3666,30 @@
     "jewelry|live|en": {
       "n": 1,
       "share_growing": 0.0,
-      "median_vpv": 45064.0,
+      "median_vpv": 45063.71,
       "entry_score": 53,
       "verdict": "unproven"
     },
     "disasters|live|en": {
       "n": 3,
       "share_growing": 0.667,
-      "median_vpv": 444169.91,
+      "median_vpv": 444169.82,
       "entry_score": 88,
       "verdict": "open"
     },
     "history|live|es": {
       "n": 1,
       "share_growing": 1.0,
-      "median_vpv": 159943.46,
+      "median_vpv": 159946.62,
       "entry_score": 99,
       "verdict": "open"
     },
     "nostalgia|live|de": {
       "n": 1,
       "share_growing": 1.0,
-      "median_vpv": 48906.17,
+      "median_vpv": 48906.25,
       "entry_score": 96,
       "verdict": "open"
-    },
-    "pov_stories|live|en": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 1605.32,
-      "entry_score": 36,
-      "verdict": "unproven"
     }
   }
 }
