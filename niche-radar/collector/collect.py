@@ -24,7 +24,8 @@ RPM_PATH = os.path.join(BASE_DIR, "rpm_baseline.json")
 CACHE_PATH = os.path.join(BASE_DIR, "nexlev_cache.json")
 LABELS_PATH = os.path.join(BASE_DIR, "labels.json")
 API_URL = "https://www.googleapis.com/youtube/v3"
-SEARCH_LIMIT = 4000
+SEARCH_LIMIT = 7500
+SEARCH_WINDOW_DAYS = 120
 ENRICHMENT_LIMIT = 1500
 MAX_VIDEOS = 300
 MAX_SUBS = 300000
@@ -363,17 +364,17 @@ def search(
     now = now or _utc_now()
     if not modifiers:
         modifiers = [""]
-    published_after = (now - dt.timedelta(days=45)).isoformat().replace("+00:00", "Z")
+    published_after = (now - dt.timedelta(days=SEARCH_WINDOW_DAYS)).isoformat().replace("+00:00", "Z")
     texts = [query["text"], f'{query["text"]} {modifiers[query_index % len(modifiers)]}']
-    passes = [(text, "viewCount") for text in texts]
+    passes = [(texts[0], "viewCount", query.get("duration", "medium")), (texts[1], "viewCount", "long")]
     if query.get("lang") == "en":
-        passes.append((query["text"], "date"))
+        passes.append((query["text"], "date", "medium"))
     results = []
-    for text, order in passes:
+    for text, order, duration in passes:
         params = {
             "part": "snippet",
             "type": "video",
-            "videoDuration": "medium",
+            "videoDuration": duration,
             "order": order,
             "publishedAfter": published_after,
             "maxResults": 25,
