@@ -74,28 +74,32 @@
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'labels_export.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
   const SUBNICHES = [
-    ['Истории «Что если» со стикменами', /what if|what would happen|что если|qué pasaría|e se /i],
-    ['Военная история и снаряжение', /\b(war|wwii|ww2|ww1|military|army|soldier|marines?|battle|tank|weapon|navy|pows?|guerra|soldados|krieg|ambush)/i],
-    ['Дикий Запад и фронтир', /wild west|cowboy|frontier|saloon|western|outlaw/i],
-    ['Смерти и трагедии знаменитостей', /tragic|tragedy|celebrit|hollywood|actor|actress|death of|schizophren/i],
-    ['Вулканы и землетрясения', /volcan|earthquake|tecton|eruption|sinkhole|ground (opened|split)|terremoto/i],
-    ['Мегамашины и гигантские конструкции', /biggest|largest|giant|mega ?machine|ship|machines?|cruise|excavator|barco/i],
-    ['Инженерные провалы и мегапроекты', /invent|megaproject|engineer|built a|new .*(plane|car|battery|material)|erfind|invento|megaprojekt|cement|steel/i],
-    ['Инфраструктура и стратегическая география', /infrastructure|canal|dam|bridge|aqueduct|railway|geograph|map|why (so few|nobody) .*live|state makes no sense|acueducto|infraestructura/i],
-    ['Переезд за границу', /relocat|move to|moving to|abroad|expat|living in|retire in|vivir en/i],
-    ['Пожилые люди и подготовка к старости', /senior|retire|over 6\d|elderly|social security|medicare|pension|jubilad|aposentad|después de los 60/i],
-    ['Экономная жизнь и минимализм', /frugal|cheap|budget|save money|minimal|dirt cheap|barat|económic|ahorr/i],
-    ['Питание и здоровье', /health|food|nutrition|vitamin|diet|body|eat|salud|cuerpo|comer/i],
-    ['Ностальгия', /nostalg|retro|195\d|196\d|197\d|198\d|forgotten|old days|olvidad|antes/i],
-    ['Монеты и коллекционирование', /coin|collect|antique|rare|worth|penny|stamp/i],
-    ['Библейские истории и вера', /bible|biblical|jesus|god|church|prayer|faith|christ/i],
-    ['Животные и дикая природа', /animal|wildlife|dog|cat|bird|shark|snake|predator|zoo/i],
-    ['Космос и физика', /space|physics|universe|planet|light|quantum|galaxy|star/i],
-    ['Личные финансы', /money|financ|invest|tax|income|wealth|dinero|negocio/i],
-    ['История цивилизаций', /history|ancient|empire|civilization|historia|geschichte|história|méxico/i],
+    ['Истории «Что если» со стикменами', /\bwhat if\b|what would happen|что если|qué pasaría|\be se\b/i],
+    ['Военная история и снаряжение', /\b(wars?|wwii|ww2|ww1|world war|military|army|soldiers?|marines|battles?|tanks?|weapons?|navy|pows?|guerra|soldados|krieg|ambush\w*)\b/i],
+    ['Дикий Запад и фронтир', /\b(wild west|cowboys?|frontier|saloons?|outlaws?)\b/i],
+    ['Смерти и трагедии знаменитостей', /\b(tragic|tragedy|celebrit\w*|hollywood|actors?|actress\w*|death of|schizophren\w*)\b/i],
+    ['Вулканы и землетрясения', /\b(volcan\w*|earthquakes?|tecton\w*|eruptions?|sinkholes?|terremotos?)\b|ground (opened|split)/i],
+    ['Мегамашины и гигантские конструкции', /\b(biggest|largest|giant|mega ?machines?|ships?|machines?|cruise|excavators?|barcos?)\b/i],
+    ['Инженерные провалы и мегапроекты', /\b(invent\w*|megaprojects?|engineer\w*|erfindung\w*|invento\w*|megaprojekt\w*|cement|steel)\b|built a|new \w+ (plane|car|battery|material)/i],
+    ['Инфраструктура и стратегическая география', /\b(infrastructure|canals?|dams?|bridges?|aqueducts?|railways?|railroads?|geograph\w*|maps?|acueductos?|infraestructura)\b|why (so few|nobody) .*live|state makes no sense/i],
+    ['Переезд за границу', /\b(relocat\w*|move to|moving to|abroad|expats?|retire in|vivir en)\b/i],
+    ['Пожилые люди и подготовка к старости', /\b(seniors?|retire\w*|retirement|over 6\d|elderly|social security|medicare|pensions?|jubilad\w*|jubilarte|aposentad\w*)\b|después de los 60/i],
+    ['Экономная жизнь и минимализм', /\b(frugal\w*|cheap\w*|budget\w*|save money|minimalis\w*|barat\w*|económic\w*|ahorr\w*)\b/i],
+    ['Питание и здоровье', /\b(health\w*|foods?|nutrition|vitamins?|diet|eat|eating|salud|cuerpo|comer)\b/i],
+    ['Ностальгия', /\b(nostalg\w*|retro|19[5-9]0s|forgotten|old days|olvidad\w*)\b/i],
+    ['Ювелирка и драгоценности', /\b(jewel\w*|gemstones?|gems?|pearls?|diamonds?|brooch\w*|earrings?|necklaces?|rings?|jade|gold)\b/i],
+    ['Монеты и коллекционирование', /\b(coins?|collect\w*|antiques?|penny|pennies|stamps?|worth a fortune|vintage)\b/i],
+    ['Библейские истории и вера', /\b(bible|biblical|jesus|god|church|prayer|faith|christian\w*|archangels?|catholic|demons?)\b/i],
+    ['Животные и дикая природа', /\b(animals?|wildlife|dogs?|cats?|kittens?|birds?|sharks?|snakes?|predators?|zoo)\b/i],
+    ['Космос и физика', /\b(space|physics|universe|planets?|quantum|galax\w*|nasa)\b/i],
+    ['Психология и личностный рост', /\b(psycholog\w*|personality|traits?|introverts?|stoic\w*|habits?)\b/i],
+    ['Личные финансы', /\b(money|financ\w*|invest\w*|tax|taxes|income|wealth\w*|dinero|negocios?)\b/i],
+    ['Авто и техника', /\b(cars?|suvs?|trucks?|pickups?|engines?|motorcycles?)\b/i],
+    ['История цивилизаций', /\b(history|historical|ancient|empires?|civilizations?|historia|geschichte|história)\b/i],
   ];
+
   const textOf = c => [...(c.tags || []), c.title, ...(c.videos || []).map(v => v.title)].join(' ');
-  const subniches = c => { if (c.subniche_ru) return c.subniche_ru.split(', '); const t = textOf(c); const hits = SUBNICHES.filter(([, re]) => re.test(t)).map(([n]) => n); return hits.length ? hits : [c.niche_ru || 'Другое']; };
+  const subniches = c => { if (c.subniche_ru) return c.subniche_ru.split(', '); if (c._sub) return c._sub; const texts = [c.title, (c.tags || []).join(' '), ...(c.videos || []).map(v => v.title)].filter(Boolean); const need = (c.videos || []).length >= 5 ? 2 : 1; const hits = SUBNICHES.map(([n, re]) => [n, texts.filter(t => re.test(t)).length]).filter(([, k]) => k >= need).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([n]) => n); c._sub = hits.length ? hits : [c.niche_ru || 'Другое']; return c._sub; };
   const subniche = c => subniches(c).slice(0, 2).join(', ');
   const ageDays = c => { const t = Date.parse(c.first_video_at || ''); return Number.isFinite(t) ? (Date.now() - t) / 864e5 : (c.channel_age_days || 0); };
   const longCount = c => c.videos_count_long ?? c.videos_count ?? 0;
