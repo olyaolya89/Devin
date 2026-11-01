@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-01T17:42:58.135748Z",
+  "generated_at": "2026-11-01T17:47:39.527001Z",
   "channels": [
     {
       "id": "UCAQ3ijMJflppSdHdsB75n9g",
@@ -13,7 +13,7 @@
     },
     {
       "id": "UCzZqLcrq92NWT52GqSMLesw",
-      "subs": 4380,
+      "subs": 4370,
       "total_views": 1616880,
       "videos_count": 59,
       "score": 87,
@@ -34,7 +34,7 @@
     {
       "id": "UCf0VgA4RUAOP1wCXYSLhhyw",
       "subs": 2650,
-      "total_views": 268858,
+      "total_views": 269146,
       "videos_count": 35,
       "score": 84,
       "cluster": "jewelry|live|en",
@@ -144,7 +144,7 @@
     {
       "id": "UC9DltgGxltZs45koX1sDpdA",
       "subs": 5770,
-      "total_views": 1173731,
+      "total_views": 1173699,
       "videos_count": 24,
       "score": 73,
       "cluster": "nostalgia|live|de",
@@ -172,6 +172,36 @@
       "monetization_forecast": "≤30 дн."
     },
     {
+      "id": "UCMbKglgPKR8znXIMPMY_zWA",
+      "subs": 138000,
+      "total_views": 86163462,
+      "videos_count": 139,
+      "score": 62,
+      "cluster": "pov_stories|ai|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCNL4Gq26XURbVkofHc3Eqzg",
+      "subs": 10000,
+      "total_views": 800047,
+      "videos_count": 58,
+      "score": 59,
+      "cluster": "pov_stories|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCOKqP3ENjiJU2W9vQSvcOGg",
+      "subs": 28800,
+      "total_views": 4317674,
+      "videos_count": 23,
+      "score": 63,
+      "cluster": "pov_stories|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
       "id": "UCG1FhX9QEcUEqNQEnP1EaiQ",
       "subs": 156000,
       "total_views": 21065196,
@@ -182,34 +212,24 @@
       "monetization_forecast": "≤30 дн."
     },
     {
-      "id": "UCqX_HO1AR-1uNx9T41ID9IQ",
-      "subs": 48300,
-      "total_views": 6072038,
+      "id": "UCWdV7p3EhlLv0wSMzeymqRA",
+      "subs": 20300,
+      "total_views": 5754841,
       "videos_count": 80,
-      "score": 67,
-      "cluster": "lifehacks|live|en",
+      "score": 64,
+      "cluster": "pov_stories|ai|en",
       "is_monetized": null,
       "monetization_forecast": "≤30 дн."
     },
     {
-      "id": "UCtrNrW5RTVzL7Tj07EExLKg",
-      "subs": 13000,
-      "total_views": 5764788,
-      "videos_count": 11,
-      "score": 73,
-      "cluster": "disasters|live|en",
-      "is_monetized": false,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UC3Bmui01eFYa7JMbOnDIDNg",
-      "subs": 3570,
-      "total_views": 65233,
-      "videos_count": 54,
-      "score": 71,
-      "cluster": "pov_stories|live|en",
+      "id": "UCSbcSqsdnpNSRikqScOwhVg",
+      "subs": 256,
+      "total_views": 21859,
+      "videos_count": 30,
+      "score": 35,
+      "cluster": "pov_stories|ai|en",
       "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
+      "monetization_forecast": "неясно"
     },
     {
       "id": "UCp53SfSiLUCpNKaIoepPmhA",
@@ -217,66 +237,6 @@
       "total_views": 8822683,
       "videos_count": 58,
       "score": 63,
-      "cluster": "pov_stories|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCMiM9wucd3tW0AGYmPNOxFw",
-      "subs": 3470,
-      "total_views": 636449,
-      "videos_count": 5,
-      "score": 62,
-      "cluster": "pov_stories|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCQ5vzVRfjB2euAzlIRume_A",
-      "subs": 6790,
-      "total_views": 703506,
-      "videos_count": 14,
-      "score": 63,
-      "cluster": "pov_stories|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCnlEr7k5MOH89yHYZW8EmkQ",
-      "subs": 20100,
-      "total_views": 2292448,
-      "videos_count": 208,
-      "score": 56,
-      "cluster": "pov_stories|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCs7FrTyz7O3YbuPewFifKGQ",
-      "subs": 38800,
-      "total_views": 1467848,
-      "videos_count": 28,
-      "score": 57,
-      "cluster": "pov_stories|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCXZRMu7QSATVLvgzeczQGwQ",
-      "subs": 30200,
-      "total_views": 5568389,
-      "videos_count": 41,
-      "score": 65,
-      "cluster": "pov_stories|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCltyjwYWQgcH04cwsttsl-A",
-      "subs": 46000,
-      "total_views": 2847270,
-      "videos_count": 16,
-      "score": 57,
       "cluster": "pov_stories|live|en",
       "is_monetized": null,
       "monetization_forecast": "≤30 дн."
@@ -292,70 +252,10 @@
       "monetization_forecast": "≤30 дн."
     },
     {
-      "id": "UCSbcSqsdnpNSRikqScOwhVg",
-      "subs": 256,
-      "total_views": 21834,
-      "videos_count": 30,
-      "score": 35,
-      "cluster": "pov_stories|ai|en",
-      "is_monetized": null,
-      "monetization_forecast": "неясно"
-    },
-    {
-      "id": "UC_y5PaV-vke2LQSuafKANMg",
-      "subs": 14400,
-      "total_views": 6753855,
-      "videos_count": 5,
-      "score": 60,
-      "cluster": "pov_stories|ai|bn",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCWWzJ0uzSHuSeEk4Qhys1wQ",
-      "subs": 375,
-      "total_views": 194965,
-      "videos_count": 13,
-      "score": 60,
-      "cluster": "auto|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤90 дн."
-    },
-    {
-      "id": "UCOKqP3ENjiJU2W9vQSvcOGg",
-      "subs": 28800,
-      "total_views": 4317674,
-      "videos_count": 23,
-      "score": 63,
-      "cluster": "pov_stories|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCERHN-K6_ppNWs3iw0s5gRA",
-      "subs": 775,
-      "total_views": 251018,
-      "videos_count": 25,
-      "score": 60,
-      "cluster": "auto|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "неясно"
-    },
-    {
-      "id": "UCFN3pG3k68mBbspIFoyXGbQ",
-      "subs": 4570,
-      "total_views": 1082740,
-      "videos_count": 50,
-      "score": 39,
-      "cluster": "pov_stories|ai|en",
-      "is_monetized": null,
-      "monetization_forecast": "неясно"
-    },
-    {
-      "id": "UCD-I4RtO34lttls_axnogMg",
-      "subs": 26400,
-      "total_views": 4853406,
-      "videos_count": 117,
+      "id": "UCs7FrTyz7O3YbuPewFifKGQ",
+      "subs": 38800,
+      "total_views": 1467848,
+      "videos_count": 28,
       "score": 57,
       "cluster": "pov_stories|live|en",
       "is_monetized": null,
@@ -372,41 +272,91 @@
       "monetization_forecast": "≤30 дн."
     },
     {
-      "id": "UCDuvc4MmAG7XOgqnJuVixaA",
-      "subs": 533,
-      "total_views": 160803,
-      "videos_count": 26,
-      "score": 59,
-      "cluster": "auto|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "неясно"
-    },
-    {
-      "id": "UCWdV7p3EhlLv0wSMzeymqRA",
-      "subs": 20300,
-      "total_views": 5754841,
-      "videos_count": 80,
-      "score": 64,
-      "cluster": "pov_stories|ai|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCNL4Gq26XURbVkofHc3Eqzg",
-      "subs": 10000,
-      "total_views": 800047,
-      "videos_count": 58,
-      "score": 59,
+      "id": "UC3Bmui01eFYa7JMbOnDIDNg",
+      "subs": 3570,
+      "total_views": 65233,
+      "videos_count": 54,
+      "score": 71,
       "cluster": "pov_stories|live|en",
       "is_monetized": null,
       "monetization_forecast": "≤30 дн."
     },
     {
+      "id": "UCnlEr7k5MOH89yHYZW8EmkQ",
+      "subs": 20100,
+      "total_views": 2292448,
+      "videos_count": 208,
+      "score": 56,
+      "cluster": "pov_stories|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCsLWMpkp65fpsvCA-rVNzWA",
+      "subs": 528,
+      "total_views": 112772,
+      "videos_count": 15,
+      "score": 55,
+      "cluster": "pov_stories|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤90 дн."
+    },
+    {
+      "id": "UC_y5PaV-vke2LQSuafKANMg",
+      "subs": 14400,
+      "total_views": 6753855,
+      "videos_count": 5,
+      "score": 60,
+      "cluster": "pov_stories|ai|bn",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCtrNrW5RTVzL7Tj07EExLKg",
+      "subs": 13000,
+      "total_views": 5764788,
+      "videos_count": 11,
+      "score": 73,
+      "cluster": "disasters|live|en",
+      "is_monetized": false,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
       "id": "UCpYc1AFwYD13CyYOgyH04yw",
       "subs": 25100,
-      "total_views": 2952004,
+      "total_views": 2968020,
       "videos_count": 54,
       "score": 61,
+      "cluster": "pov_stories|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCD-I4RtO34lttls_axnogMg",
+      "subs": 26400,
+      "total_views": 4853406,
+      "videos_count": 117,
+      "score": 57,
+      "cluster": "pov_stories|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCFN3pG3k68mBbspIFoyXGbQ",
+      "subs": 4570,
+      "total_views": 1082740,
+      "videos_count": 50,
+      "score": 39,
+      "cluster": "pov_stories|ai|en",
+      "is_monetized": null,
+      "monetization_forecast": "неясно"
+    },
+    {
+      "id": "UCQ5vzVRfjB2euAzlIRume_A",
+      "subs": 6790,
+      "total_views": 703506,
+      "videos_count": 14,
+      "score": 63,
       "cluster": "pov_stories|live|en",
       "is_monetized": null,
       "monetization_forecast": "≤30 дн."
@@ -422,24 +372,34 @@
       "monetization_forecast": "≤30 дн."
     },
     {
-      "id": "UCsLWMpkp65fpsvCA-rVNzWA",
-      "subs": 527,
-      "total_views": 112772,
-      "videos_count": 15,
-      "score": 55,
+      "id": "UCltyjwYWQgcH04cwsttsl-A",
+      "subs": 46000,
+      "total_views": 2847270,
+      "videos_count": 16,
+      "score": 57,
       "cluster": "pov_stories|live|en",
       "is_monetized": null,
-      "monetization_forecast": "≤90 дн."
+      "monetization_forecast": "≤30 дн."
     },
     {
-      "id": "UCD9NGODi7uayxu-d7C48pew",
-      "subs": 556,
-      "total_views": 713704,
-      "videos_count": 101,
-      "score": 39,
-      "cluster": "pov_stories|ai|en",
+      "id": "UCqX_HO1AR-1uNx9T41ID9IQ",
+      "subs": 48300,
+      "total_views": 6072038,
+      "videos_count": 80,
+      "score": 67,
+      "cluster": "lifehacks|live|en",
       "is_monetized": null,
-      "monetization_forecast": "неясно"
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCXZRMu7QSATVLvgzeczQGwQ",
+      "subs": 30300,
+      "total_views": 5568389,
+      "videos_count": 41,
+      "score": 65,
+      "cluster": "pov_stories|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
     },
     {
       "id": "UCRkVjl8FZYc3Sxhrsoj4P4g",
@@ -452,14 +412,54 @@
       "monetization_forecast": "≤90 дн."
     },
     {
-      "id": "UCMbKglgPKR8znXIMPMY_zWA",
-      "subs": 138000,
-      "total_views": 86163462,
-      "videos_count": 139,
+      "id": "UCMiM9wucd3tW0AGYmPNOxFw",
+      "subs": 3470,
+      "total_views": 638937,
+      "videos_count": 5,
       "score": 62,
-      "cluster": "pov_stories|ai|en",
+      "cluster": "pov_stories|live|en",
       "is_monetized": null,
       "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCD9NGODi7uayxu-d7C48pew",
+      "subs": 556,
+      "total_views": 713726,
+      "videos_count": 101,
+      "score": 39,
+      "cluster": "pov_stories|ai|en",
+      "is_monetized": null,
+      "monetization_forecast": "неясно"
+    },
+    {
+      "id": "UCWWzJ0uzSHuSeEk4Qhys1wQ",
+      "subs": 375,
+      "total_views": 194965,
+      "videos_count": 13,
+      "score": 60,
+      "cluster": "auto|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤90 дн."
+    },
+    {
+      "id": "UCERHN-K6_ppNWs3iw0s5gRA",
+      "subs": 775,
+      "total_views": 251018,
+      "videos_count": 25,
+      "score": 60,
+      "cluster": "auto|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "неясно"
+    },
+    {
+      "id": "UCDuvc4MmAG7XOgqnJuVixaA",
+      "subs": 533,
+      "total_views": 160803,
+      "videos_count": 26,
+      "score": 59,
+      "cluster": "auto|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "неясно"
     },
     {
       "id": "UCI2ExrJkJSF8ThxjRiTsH9w",
@@ -3666,29 +3666,50 @@
     "jewelry|live|en": {
       "n": 1,
       "share_growing": 0.0,
-      "median_vpv": 45063.71,
+      "median_vpv": 45064.35,
       "entry_score": 53,
       "verdict": "unproven"
     },
     "disasters|live|en": {
       "n": 3,
       "share_growing": 0.667,
-      "median_vpv": 444169.82,
+      "median_vpv": 444170.0,
       "entry_score": 88,
       "verdict": "open"
     },
     "history|live|es": {
       "n": 1,
       "share_growing": 1.0,
-      "median_vpv": 159946.62,
+      "median_vpv": 159949.67,
       "entry_score": 99,
       "verdict": "open"
     },
     "nostalgia|live|de": {
       "n": 1,
       "share_growing": 1.0,
-      "median_vpv": 48906.25,
+      "median_vpv": 48906.21,
       "entry_score": 96,
+      "verdict": "open"
+    },
+    "pov_stories|ai|en": {
+      "n": 6,
+      "share_growing": 0.333,
+      "median_vpv": 1838.12,
+      "entry_score": 57,
+      "verdict": "unproven"
+    },
+    "pov_stories|live|en": {
+      "n": 16,
+      "share_growing": 0.625,
+      "median_vpv": 51356.59,
+      "entry_score": 57,
+      "verdict": "crowded"
+    },
+    "pov_stories|ai|bn": {
+      "n": 1,
+      "share_growing": 1.0,
+      "median_vpv": 284378.25,
+      "entry_score": 100,
       "verdict": "open"
     }
   }
