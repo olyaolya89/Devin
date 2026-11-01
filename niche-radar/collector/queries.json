@@ -1,104 +1,872 @@
 {
   "_comment": "Seed-запросы слоя A. niche — ключ из rpm_baseline.json; lang — язык; style_hint — подсказка стиля производства, если запрос сам его подразумевает.",
-  "modifiers": ["explained", "animated", "documentary", "ranked", "in 10 minutes", "the truth about"],
+  "modifiers": [
+    "explained",
+    "animated",
+    "documentary",
+    "ranked",
+    "in 10 minutes",
+    "the truth about"
+  ],
   "queries": [
-    {"text": "the engineering behind", "niche": "engineering", "lang": "en"},
-    {"text": "why this bridge design is genius", "niche": "engineering", "lang": "en"},
-    {"text": "how engineers solved", "niche": "engineering", "lang": "en"},
-    {"text": "overengineered machines explained", "niche": "engineering", "lang": "en"},
-    {"text": "why this country's geography is a curse", "niche": "geography", "lang": "en", "style_hint": "maps_graphics"},
-    {"text": "how rivers shaped civilization", "niche": "geography", "lang": "en", "style_hint": "maps_graphics"},
-    {"text": "why nobody lives here map", "niche": "geography", "lang": "en", "style_hint": "maps_graphics"},
-    {"text": "why this US state makes no sense", "niche": "geography", "lang": "en", "style_hint": "maps_graphics"},
-    {"text": "plate tectonics explained animation", "niche": "science", "lang": "en"},
-    {"text": "most dangerous element documentary", "niche": "science", "lang": "en"},
-    {"text": "history explained stick figures", "niche": "history", "lang": "en", "style_hint": "stickman"},
-    {"text": "animated history war explained", "niche": "history", "lang": "en", "style_hint": "2d_animation"},
-    {"text": "why did japan attack america explained", "niche": "history", "lang": "en"},
-    {"text": "what life was like in medieval", "niche": "history", "lang": "en"},
-    {"text": "empire collapsed because", "niche": "history", "lang": "en"},
-    {"text": "forgotten money saving tricks 1970s", "niche": "nostalgia_finance", "lang": "en"},
-    {"text": "pensioner shopping loopholes", "niche": "nostalgia_finance", "lang": "en"},
-    {"text": "frugal habits that still work", "niche": "nostalgia_finance", "lang": "en"},
-    {"text": "how grandparents saved money", "niche": "nostalgia_finance", "lang": "en"},
-    {"text": "retirement mistakes explained", "niche": "finance", "lang": "en"},
-    {"text": "social security secrets 2026", "niche": "finance", "lang": "en"},
-    {"text": "medicare explained simply", "niche": "finance", "lang": "en"},
-    {"text": "economics explained animation", "niche": "finance", "lang": "en", "style_hint": "2d_animation"},
-    {"text": "every archangel explained", "niche": "religion", "lang": "en", "style_hint": "ai_illustrations"},
-    {"text": "demons of the bible explained", "niche": "religion", "lang": "en", "style_hint": "ai_illustrations"},
-    {"text": "catholic orders explained", "niche": "religion", "lang": "en"},
-    {"text": "stoic rules for life animated", "niche": "psychology", "lang": "en", "style_hint": "stickman"},
-    {"text": "cada arcángel explicado", "niche": "religion", "lang": "es", "style_hint": "ai_illustrations"},
-    {"text": "órdenes católicas explicadas", "niche": "religion", "lang": "es"},
-    {"text": "filosofía estoica explicada", "niche": "psychology", "lang": "es"},
-    {"text": "dog breeds ranked cutest to most dangerous", "niche": "animals", "lang": "en", "style_hint": "ai_illustrations"},
-    {"text": "animals ranked illustrated", "niche": "animals", "lang": "en", "style_hint": "ai_illustrations"},
-    {"text": "razas de perro más tiernas", "niche": "animals", "lang": "es", "style_hint": "ai_illustrations"},
-    {"text": "deep sea creatures explained animation", "niche": "animals", "lang": "en"},
-    {"text": "your life as every level of", "niche": "pov_stories", "lang": "en", "style_hint": "ai_illustrations"},
-    {"text": "levels of wealth explained animation", "niche": "pov_stories", "lang": "en", "style_hint": "2d_animation"},
-    {"text": "from broke to billionaire animated", "niche": "pov_stories", "lang": "en", "style_hint": "2d_animation"},
-    {"text": "why this car failed explained", "niche": "auto", "lang": "en"},
-    {"text": "forgotten engines documentary", "niche": "auto", "lang": "en"},
-    {"text": "most valuable antiques ranked", "niche": "collectibles", "lang": "en"},
-    {"text": "gemstones that became worth a fortune", "niche": "collectibles", "lang": "en"},
-    {"text": "old coins worth a fortune never sell", "niche": "collectibles", "lang": "en"},
-    {"text": "antiques roadshow most expensive finds", "niche": "collectibles", "lang": "en"},
-    {"text": "stickman psychology", "niche": "psychology", "lang": "en", "style_hint": "stickman"},
-    {"text": "dark psychology tricks animated", "niche": "psychology", "lang": "en", "style_hint": "stickman"},
-    {"text": "why you procrastinate animation", "niche": "psychology", "lang": "en", "style_hint": "stickman"},
-    {"text": "habits explained stick figure", "niche": "psychology", "lang": "en", "style_hint": "stickman"},
-    {"text": "unsolved mystery documentary animated map", "niche": "true_crime", "lang": "en"},
-    {"text": "heist explained animation", "niche": "true_crime", "lang": "en", "style_hint": "2d_animation"},
-    {"text": "best countries to live and work 2026", "niche": "relocation", "lang": "en", "style_hint": "stock_footage"},
-    {"text": "highest salary countries europe expats", "niche": "relocation", "lang": "en", "style_hint": "stock_footage"},
-    {"text": "best states to live usa 2026", "niche": "relocation", "lang": "en", "style_hint": "stock_footage"},
-    {"text": "cost of living ranked countries", "niche": "relocation", "lang": "en", "style_hint": "stock_footage"},
-    {"text": "britain in the 70s nostalgia", "niche": "nostalgia", "lang": "en"},
-    {"text": "things only 70s kids remember", "niche": "nostalgia", "lang": "en"},
-    {"text": "lost british shops", "niche": "nostalgia", "lang": "en"},
-    {"text": "forgotten american brands", "niche": "nostalgia", "lang": "en"},
-    {"text": "ai generated history documentary", "niche": "history", "lang": "en", "style_hint": "ai_video"},
-    {"text": "what if scenario animated", "niche": "science", "lang": "en", "style_hint": "2d_animation"},
-    {"text": "space explained animation faceless", "niche": "science", "lang": "en"},
-    {"text": "химические элементы документалка", "niche": "science", "lang": "ru"},
-    {"text": "история объяснение анимация", "niche": "history", "lang": "ru"},
-    {"text": "как устроено инженерия объяснение", "niche": "engineering", "lang": "ru"},
-    {"text": "jewelry history explained", "niche": "jewelry", "lang": "en"},
-    {"text": "why gemstones are valuable", "niche": "jewelry", "lang": "en"},
-    {"text": "gold jewelry secrets", "niche": "jewelry", "lang": "en"},
-    {"text": "natural disasters explained", "niche": "disasters", "lang": "en"},
-    {"text": "what happened in this disaster", "niche": "disasters", "lang": "en"},
-    {"text": "disaster footage explained", "niche": "disasters", "lang": "en"},
-    {"text": "household life hacks that work", "niche": "lifehacks", "lang": "en"},
-    {"text": "everyday life hacks explained", "niche": "lifehacks", "lang": "en"},
-    {"text": "simple home tricks", "niche": "lifehacks", "lang": "en"},
-    {"text": "historia de descubrimientos explicada", "niche": "history", "lang": "es", "style_hint": "ai_video"},
-    {"text": "historia de marcas famosas", "niche": "history", "lang": "es", "style_hint": "ai_video"},
-    {"text": "Nostalgie der 60er 70er 80er", "niche": "nostalgia", "lang": "de", "style_hint": "ai_video"},
-    {"text": "deutsche Erinnerungen aus den 70ern", "niche": "nostalgia", "lang": "de", "style_hint": "ai_video"},
-    {"text": "what if stick figure animation", "niche": "pov_stories", "lang": "en", "style_hint": "stickman"},
-    {"text": "forgotten wwii stories documentary", "niche": "history", "lang": "en"},
-    {"text": "things the wild west actually", "niche": "history", "lang": "en"},
-    {"text": "the tragic story of", "niche": "true_crime", "lang": "en"},
-    {"text": "biggest machines ever built", "niche": "engineering", "lang": "en"},
-    {"text": "seniors over 60 must know", "niche": "finance", "lang": "en"},
-    {"text": "frugal living tips", "niche": "nostalgia_finance", "lang": "en"},
-    {"text": "historia de méxico que no te contaron", "niche": "history", "lang": "es"},
-    {"text": "inventos de japón que cambiarán el mundo", "niche": "engineering", "lang": "es"},
-    {"text": "megaconstrucciones más grandes del mundo", "niche": "engineering", "lang": "es"},
-    {"text": "así se vivía antes", "niche": "nostalgia", "lang": "es"},
-    {"text": "história do brasil que ninguém conta", "niche": "history", "lang": "pt"},
-    {"text": "por que o brasil", "niche": "geography", "lang": "pt", "style_hint": "maps_graphics"},
-    {"text": "casas baratas no brasil", "niche": "relocation", "lang": "pt"},
-    {"text": "japans neue erfindung", "niche": "engineering", "lang": "de"},
-    {"text": "megaprojekte der welt doku", "niche": "engineering", "lang": "de"},
-    {"text": "zweiter weltkrieg geschichte doku", "niche": "history", "lang": "de"},
-    {"text": "histoire de france que personne ne raconte", "niche": "history", "lang": "fr"},
-    {"text": "les plus grandes machines du monde", "niche": "engineering", "lang": "fr"},
-    {"text": "storia d'italia che nessuno racconta", "niche": "history", "lang": "it"},
-    {"text": "le macchine più grandi del mondo", "niche": "engineering", "lang": "it"},
-    {"text": "jubilarse en españa documental", "niche": "relocation", "lang": "es"}
+    {
+      "text": "the engineering behind",
+      "niche": "engineering",
+      "lang": "en"
+    },
+    {
+      "text": "why this bridge design is genius",
+      "niche": "engineering",
+      "lang": "en"
+    },
+    {
+      "text": "how engineers solved",
+      "niche": "engineering",
+      "lang": "en"
+    },
+    {
+      "text": "overengineered machines explained",
+      "niche": "engineering",
+      "lang": "en"
+    },
+    {
+      "text": "why this country's geography is a curse",
+      "niche": "geography",
+      "lang": "en",
+      "style_hint": "maps_graphics"
+    },
+    {
+      "text": "how rivers shaped civilization",
+      "niche": "geography",
+      "lang": "en",
+      "style_hint": "maps_graphics"
+    },
+    {
+      "text": "why nobody lives here map",
+      "niche": "geography",
+      "lang": "en",
+      "style_hint": "maps_graphics"
+    },
+    {
+      "text": "why this US state makes no sense",
+      "niche": "geography",
+      "lang": "en",
+      "style_hint": "maps_graphics"
+    },
+    {
+      "text": "plate tectonics explained animation",
+      "niche": "science",
+      "lang": "en"
+    },
+    {
+      "text": "most dangerous element documentary",
+      "niche": "science",
+      "lang": "en"
+    },
+    {
+      "text": "history explained stick figures",
+      "niche": "history",
+      "lang": "en",
+      "style_hint": "stickman"
+    },
+    {
+      "text": "animated history war explained",
+      "niche": "history",
+      "lang": "en",
+      "style_hint": "2d_animation"
+    },
+    {
+      "text": "why did japan attack america explained",
+      "niche": "history",
+      "lang": "en"
+    },
+    {
+      "text": "what life was like in medieval",
+      "niche": "history",
+      "lang": "en"
+    },
+    {
+      "text": "empire collapsed because",
+      "niche": "history",
+      "lang": "en"
+    },
+    {
+      "text": "forgotten money saving tricks 1970s",
+      "niche": "nostalgia_finance",
+      "lang": "en"
+    },
+    {
+      "text": "pensioner shopping loopholes",
+      "niche": "nostalgia_finance",
+      "lang": "en"
+    },
+    {
+      "text": "frugal habits that still work",
+      "niche": "nostalgia_finance",
+      "lang": "en"
+    },
+    {
+      "text": "how grandparents saved money",
+      "niche": "nostalgia_finance",
+      "lang": "en"
+    },
+    {
+      "text": "retirement mistakes explained",
+      "niche": "finance",
+      "lang": "en"
+    },
+    {
+      "text": "social security secrets 2026",
+      "niche": "finance",
+      "lang": "en"
+    },
+    {
+      "text": "medicare explained simply",
+      "niche": "finance",
+      "lang": "en"
+    },
+    {
+      "text": "economics explained animation",
+      "niche": "finance",
+      "lang": "en",
+      "style_hint": "2d_animation"
+    },
+    {
+      "text": "every archangel explained",
+      "niche": "religion",
+      "lang": "en",
+      "style_hint": "ai_illustrations"
+    },
+    {
+      "text": "demons of the bible explained",
+      "niche": "religion",
+      "lang": "en",
+      "style_hint": "ai_illustrations"
+    },
+    {
+      "text": "catholic orders explained",
+      "niche": "religion",
+      "lang": "en"
+    },
+    {
+      "text": "stoic rules for life animated",
+      "niche": "psychology",
+      "lang": "en",
+      "style_hint": "stickman"
+    },
+    {
+      "text": "cada arcángel explicado",
+      "niche": "religion",
+      "lang": "es",
+      "style_hint": "ai_illustrations"
+    },
+    {
+      "text": "órdenes católicas explicadas",
+      "niche": "religion",
+      "lang": "es"
+    },
+    {
+      "text": "filosofía estoica explicada",
+      "niche": "psychology",
+      "lang": "es"
+    },
+    {
+      "text": "dog breeds ranked cutest to most dangerous",
+      "niche": "animals",
+      "lang": "en",
+      "style_hint": "ai_illustrations"
+    },
+    {
+      "text": "animals ranked illustrated",
+      "niche": "animals",
+      "lang": "en",
+      "style_hint": "ai_illustrations"
+    },
+    {
+      "text": "razas de perro más tiernas",
+      "niche": "animals",
+      "lang": "es",
+      "style_hint": "ai_illustrations"
+    },
+    {
+      "text": "deep sea creatures explained animation",
+      "niche": "animals",
+      "lang": "en"
+    },
+    {
+      "text": "your life as every level of",
+      "niche": "pov_stories",
+      "lang": "en",
+      "style_hint": "ai_illustrations"
+    },
+    {
+      "text": "levels of wealth explained animation",
+      "niche": "pov_stories",
+      "lang": "en",
+      "style_hint": "2d_animation"
+    },
+    {
+      "text": "from broke to billionaire animated",
+      "niche": "pov_stories",
+      "lang": "en",
+      "style_hint": "2d_animation"
+    },
+    {
+      "text": "why this car failed explained",
+      "niche": "auto",
+      "lang": "en"
+    },
+    {
+      "text": "forgotten engines documentary",
+      "niche": "auto",
+      "lang": "en"
+    },
+    {
+      "text": "most valuable antiques ranked",
+      "niche": "collectibles",
+      "lang": "en"
+    },
+    {
+      "text": "gemstones that became worth a fortune",
+      "niche": "collectibles",
+      "lang": "en"
+    },
+    {
+      "text": "old coins worth a fortune never sell",
+      "niche": "collectibles",
+      "lang": "en"
+    },
+    {
+      "text": "antiques roadshow most expensive finds",
+      "niche": "collectibles",
+      "lang": "en"
+    },
+    {
+      "text": "stickman psychology",
+      "niche": "psychology",
+      "lang": "en",
+      "style_hint": "stickman"
+    },
+    {
+      "text": "dark psychology tricks animated",
+      "niche": "psychology",
+      "lang": "en",
+      "style_hint": "stickman"
+    },
+    {
+      "text": "why you procrastinate animation",
+      "niche": "psychology",
+      "lang": "en",
+      "style_hint": "stickman"
+    },
+    {
+      "text": "habits explained stick figure",
+      "niche": "psychology",
+      "lang": "en",
+      "style_hint": "stickman"
+    },
+    {
+      "text": "unsolved mystery documentary animated map",
+      "niche": "true_crime",
+      "lang": "en"
+    },
+    {
+      "text": "heist explained animation",
+      "niche": "true_crime",
+      "lang": "en",
+      "style_hint": "2d_animation"
+    },
+    {
+      "text": "best countries to live and work 2026",
+      "niche": "relocation",
+      "lang": "en",
+      "style_hint": "stock_footage"
+    },
+    {
+      "text": "highest salary countries europe expats",
+      "niche": "relocation",
+      "lang": "en",
+      "style_hint": "stock_footage"
+    },
+    {
+      "text": "best states to live usa 2026",
+      "niche": "relocation",
+      "lang": "en",
+      "style_hint": "stock_footage"
+    },
+    {
+      "text": "cost of living ranked countries",
+      "niche": "relocation",
+      "lang": "en",
+      "style_hint": "stock_footage"
+    },
+    {
+      "text": "britain in the 70s nostalgia",
+      "niche": "nostalgia",
+      "lang": "en"
+    },
+    {
+      "text": "things only 70s kids remember",
+      "niche": "nostalgia",
+      "lang": "en"
+    },
+    {
+      "text": "lost british shops",
+      "niche": "nostalgia",
+      "lang": "en"
+    },
+    {
+      "text": "forgotten american brands",
+      "niche": "nostalgia",
+      "lang": "en"
+    },
+    {
+      "text": "ai generated history documentary",
+      "niche": "history",
+      "lang": "en",
+      "style_hint": "ai_video"
+    },
+    {
+      "text": "what if scenario animated",
+      "niche": "science",
+      "lang": "en",
+      "style_hint": "2d_animation"
+    },
+    {
+      "text": "space explained animation faceless",
+      "niche": "science",
+      "lang": "en"
+    },
+    {
+      "text": "химические элементы документалка",
+      "niche": "science",
+      "lang": "ru"
+    },
+    {
+      "text": "история объяснение анимация",
+      "niche": "history",
+      "lang": "ru"
+    },
+    {
+      "text": "как устроено инженерия объяснение",
+      "niche": "engineering",
+      "lang": "ru"
+    },
+    {
+      "text": "jewelry history explained",
+      "niche": "jewelry",
+      "lang": "en"
+    },
+    {
+      "text": "why gemstones are valuable",
+      "niche": "jewelry",
+      "lang": "en"
+    },
+    {
+      "text": "gold jewelry secrets",
+      "niche": "jewelry",
+      "lang": "en"
+    },
+    {
+      "text": "natural disasters explained",
+      "niche": "disasters",
+      "lang": "en"
+    },
+    {
+      "text": "what happened in this disaster",
+      "niche": "disasters",
+      "lang": "en"
+    },
+    {
+      "text": "disaster footage explained",
+      "niche": "disasters",
+      "lang": "en"
+    },
+    {
+      "text": "household life hacks that work",
+      "niche": "lifehacks",
+      "lang": "en"
+    },
+    {
+      "text": "everyday life hacks explained",
+      "niche": "lifehacks",
+      "lang": "en"
+    },
+    {
+      "text": "simple home tricks",
+      "niche": "lifehacks",
+      "lang": "en"
+    },
+    {
+      "text": "historia de descubrimientos explicada",
+      "niche": "history",
+      "lang": "es",
+      "style_hint": "ai_video"
+    },
+    {
+      "text": "historia de marcas famosas",
+      "niche": "history",
+      "lang": "es",
+      "style_hint": "ai_video"
+    },
+    {
+      "text": "Nostalgie der 60er 70er 80er",
+      "niche": "nostalgia",
+      "lang": "de",
+      "style_hint": "ai_video"
+    },
+    {
+      "text": "deutsche Erinnerungen aus den 70ern",
+      "niche": "nostalgia",
+      "lang": "de",
+      "style_hint": "ai_video"
+    },
+    {
+      "text": "what if stick figure animation",
+      "niche": "pov_stories",
+      "lang": "en",
+      "style_hint": "stickman"
+    },
+    {
+      "text": "forgotten wwii stories documentary",
+      "niche": "history",
+      "lang": "en"
+    },
+    {
+      "text": "things the wild west actually",
+      "niche": "history",
+      "lang": "en"
+    },
+    {
+      "text": "the tragic story of",
+      "niche": "true_crime",
+      "lang": "en"
+    },
+    {
+      "text": "biggest machines ever built",
+      "niche": "engineering",
+      "lang": "en"
+    },
+    {
+      "text": "seniors over 60 must know",
+      "niche": "finance",
+      "lang": "en"
+    },
+    {
+      "text": "frugal living tips",
+      "niche": "nostalgia_finance",
+      "lang": "en"
+    },
+    {
+      "text": "historia de méxico que no te contaron",
+      "niche": "history",
+      "lang": "es"
+    },
+    {
+      "text": "inventos de japón que cambiarán el mundo",
+      "niche": "engineering",
+      "lang": "es"
+    },
+    {
+      "text": "megaconstrucciones más grandes del mundo",
+      "niche": "engineering",
+      "lang": "es"
+    },
+    {
+      "text": "así se vivía antes",
+      "niche": "nostalgia",
+      "lang": "es"
+    },
+    {
+      "text": "história do brasil que ninguém conta",
+      "niche": "history",
+      "lang": "pt"
+    },
+    {
+      "text": "por que o brasil",
+      "niche": "geography",
+      "lang": "pt",
+      "style_hint": "maps_graphics"
+    },
+    {
+      "text": "casas baratas no brasil",
+      "niche": "relocation",
+      "lang": "pt"
+    },
+    {
+      "text": "japans neue erfindung",
+      "niche": "engineering",
+      "lang": "de"
+    },
+    {
+      "text": "megaprojekte der welt doku",
+      "niche": "engineering",
+      "lang": "de"
+    },
+    {
+      "text": "zweiter weltkrieg geschichte doku",
+      "niche": "history",
+      "lang": "de"
+    },
+    {
+      "text": "histoire de france que personne ne raconte",
+      "niche": "history",
+      "lang": "fr"
+    },
+    {
+      "text": "les plus grandes machines du monde",
+      "niche": "engineering",
+      "lang": "fr"
+    },
+    {
+      "text": "storia d'italia che nessuno racconta",
+      "niche": "history",
+      "lang": "it"
+    },
+    {
+      "text": "le macchine più grandi del mondo",
+      "niche": "engineering",
+      "lang": "it"
+    },
+    {
+      "text": "jubilarse en españa documental",
+      "niche": "relocation",
+      "lang": "es"
+    },
+    {
+      "text": "dirt cheap farmhouses with land",
+      "niche": "relocation",
+      "lang": "en"
+    },
+    {
+      "text": "cheapest towns to retire",
+      "niche": "relocation",
+      "lang": "en"
+    },
+    {
+      "text": "highest paying countries for expats",
+      "niche": "relocation",
+      "lang": "en"
+    },
+    {
+      "text": "things cowboys actually carried wild west",
+      "niche": "history",
+      "lang": "en"
+    },
+    {
+      "text": "korean war battle documentary",
+      "niche": "history",
+      "lang": "en"
+    },
+    {
+      "text": "ww2 bomber crew deadliest job",
+      "niche": "history",
+      "lang": "en"
+    },
+    {
+      "text": "what if a modern warship fought",
+      "niche": "history",
+      "lang": "en"
+    },
+    {
+      "text": "how did ancient houses stay warm without electricity",
+      "niche": "history",
+      "lang": "en"
+    },
+    {
+      "text": "civilization older than sumer",
+      "niche": "history",
+      "lang": "en"
+    },
+    {
+      "text": "the tragic story of the forgotten son",
+      "niche": "history",
+      "lang": "en"
+    },
+    {
+      "text": "a full day in 1965 america",
+      "niche": "nostalgia",
+      "lang": "en"
+    },
+    {
+      "text": "games that made 1998 the best year",
+      "niche": "nostalgia",
+      "lang": "en"
+    },
+    {
+      "text": "ps1 games that still impress",
+      "niche": "nostalgia",
+      "lang": "en"
+    },
+    {
+      "text": "forgotten railroad towns",
+      "niche": "geography",
+      "lang": "en"
+    },
+    {
+      "text": "towns the interstate left behind",
+      "niche": "geography",
+      "lang": "en"
+    },
+    {
+      "text": "life inside offshore oil rig",
+      "niche": "engineering",
+      "lang": "en"
+    },
+    {
+      "text": "japan new invention could replace",
+      "niche": "engineering",
+      "lang": "en"
+    },
+    {
+      "text": "china new invention shocks",
+      "niche": "engineering",
+      "lang": "en"
+    },
+    {
+      "text": "why can't we reactivate the battleship",
+      "niche": "engineering",
+      "lang": "en"
+    },
+    {
+      "text": "why general aviation is dying",
+      "niche": "engineering",
+      "lang": "en"
+    },
+    {
+      "text": "if you see these rocks you're rich",
+      "niche": "science",
+      "lang": "en"
+    },
+    {
+      "text": "gold is not as rare as you think",
+      "niche": "science",
+      "lang": "en"
+    },
+    {
+      "text": "every supplement explained in minutes",
+      "niche": "science",
+      "lang": "en"
+    },
+    {
+      "text": "cold case solved after 50 years",
+      "niche": "true_crime",
+      "lang": "en"
+    },
+    {
+      "text": "most disturbing iceberg explained",
+      "niche": "true_crime",
+      "lang": "en"
+    },
+    {
+      "text": "every marvel villain ranked",
+      "niche": "other",
+      "lang": "en"
+    },
+    {
+      "text": "what if marvel and dc",
+      "niche": "other",
+      "lang": "en"
+    },
+    {
+      "text": "gta 5 mystery solved",
+      "niche": "other",
+      "lang": "en"
+    },
+    {
+      "text": "most banned movies in cinema history explained",
+      "niche": "other",
+      "lang": "en"
+    },
+    {
+      "text": "cruise hacks cruise lines hope you never discover",
+      "niche": "other",
+      "lang": "en"
+    },
+    {
+      "text": "mexican tricks for the best beans",
+      "niche": "other",
+      "lang": "en"
+    },
+    {
+      "text": "what if you had 500 iq",
+      "niche": "pov_stories",
+      "lang": "en"
+    },
+    {
+      "text": "inside the life of the richest family",
+      "niche": "finance",
+      "lang": "en"
+    },
+    {
+      "text": "worst business decisions explained",
+      "niche": "finance",
+      "lang": "en"
+    },
+    {
+      "text": "the economics of owning a ship",
+      "niche": "finance",
+      "lang": "en"
+    },
+    {
+      "text": "japanese home ideas americans",
+      "niche": "lifehacks",
+      "lang": "en"
+    },
+    {
+      "text": "things you will never find in a japanese home",
+      "niche": "lifehacks",
+      "lang": "en"
+    },
+    {
+      "text": "toxic kitchen items japanese replace",
+      "niche": "lifehacks",
+      "lang": "en"
+    },
+    {
+      "text": "best seiko watches ranked",
+      "niche": "collectibles",
+      "lang": "en"
+    },
+    {
+      "text": "japanese edc hiding on amazon",
+      "niche": "collectibles",
+      "lang": "en"
+    },
+    {
+      "text": "we tested after 50000 miles",
+      "niche": "auto",
+      "lang": "en"
+    },
+    {
+      "text": "suvs nobody buys but outlast",
+      "niche": "auto",
+      "lang": "en"
+    },
+    {
+      "text": "when ford built the perfect",
+      "niche": "auto",
+      "lang": "en"
+    },
+    {
+      "text": "the storm that drowned an entire state",
+      "niche": "disasters",
+      "lang": "en"
+    },
+    {
+      "text": "moments filmed seconds before disaster aviation",
+      "niche": "disasters",
+      "lang": "en"
+    },
+    {
+      "text": "florida invasive predator everglades",
+      "niche": "animals",
+      "lang": "en"
+    },
+    {
+      "text": "the dog that started every pit bull",
+      "niche": "animals",
+      "lang": "en"
+    },
+    {
+      "text": "heal a sick chicken shepherd method",
+      "niche": "animals",
+      "lang": "en"
+    },
+    {
+      "text": "if you love a tidy home psychology",
+      "niche": "psychology",
+      "lang": "en"
+    },
+    {
+      "text": "lugares más baratos para jubilarte en",
+      "niche": "relocation",
+      "lang": "es"
+    },
+    {
+      "text": "cosas olvidadas de los 80",
+      "niche": "nostalgia",
+      "lang": "es"
+    },
+    {
+      "text": "lo que pasa en tu cuerpo al consumir",
+      "niche": "science",
+      "lang": "es"
+    },
+    {
+      "text": "peinados para cabello fino después de los 60",
+      "niche": "lifehacks",
+      "lang": "es"
+    },
+    {
+      "text": "nuevo invento mexicano",
+      "niche": "engineering",
+      "lang": "es"
+    },
+    {
+      "text": "el último invento de china",
+      "niche": "engineering",
+      "lang": "es"
+    },
+    {
+      "text": "qué pasaba realmente en la antigua roma",
+      "niche": "history",
+      "lang": "es"
+    },
+    {
+      "text": "monstruos prehistóricos más aterradores",
+      "niche": "science",
+      "lang": "es"
+    },
+    {
+      "text": "lugares prohibidos que no puedes visitar",
+      "niche": "geography",
+      "lang": "es"
+    },
+    {
+      "text": "negocios invisibles que ganan más",
+      "niche": "finance",
+      "lang": "es"
+    },
+    {
+      "text": "dinge die 1970 in deutschland normal waren",
+      "niche": "nostalgia",
+      "lang": "de"
+    },
+    {
+      "text": "pflanzen die deinen boden vergiften",
+      "niche": "lifehacks",
+      "lang": "de"
+    },
+    {
+      "text": "japans neue erfindung schockiert",
+      "niche": "engineering",
+      "lang": "de"
+    },
+    {
+      "text": "la chine vient de dévoiler",
+      "niche": "engineering",
+      "lang": "fr"
+    },
+    {
+      "text": "pourquoi les avions ne volent pas plus haut",
+      "niche": "engineering",
+      "lang": "fr"
+    },
+    {
+      "text": "cognomi italiani origine e significato",
+      "niche": "history",
+      "lang": "it"
+    },
+    {
+      "text": "o que acontece no seu corpo quando",
+      "niche": "science",
+      "lang": "pt"
+    },
+    {
+      "text": "abriu uma fenda na terra",
+      "niche": "disasters",
+      "lang": "pt"
+    }
   ]
 }
