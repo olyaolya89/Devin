@@ -28,7 +28,7 @@ jobs:
       - name: Describe new channels with Gemini
         if: ${{ !cancelled() }}
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || secrets.GOOGLE }}
         run: python niche-radar/collector/enrich.py --data niche-radar/data/channels.json --limit 100
       - name: Commit changed data
         if: ${{ !cancelled() }}
