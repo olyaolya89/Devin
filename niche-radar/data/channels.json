@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-01T18:02:17.191638Z",
+  "generated_at": "2026-11-01T18:08:44.440043Z",
   "quota_units_used": 58,
   "queries_run": 0,
   "channels": [
@@ -28,14 +28,14 @@
       "videos_count_long": 30,
       "first_video_at": "2026-08-10T00:54:22Z",
       "channel_age_days": 83.7,
-      "avg_views": 7640.2,
+      "avg_views": 7640.6,
       "median_views": 3498.5,
       "avg_views_first_5": 2953.4,
       "avg_duration_sec": 1362.23,
       "views_per_day": 2737.97,
       "monthly_views_est": 82139,
-      "subs_per_day": 131.4,
-      "watch_hours_est": 29222.92,
+      "subs_per_day": 131.39,
+      "watch_hours_est": 29224.44,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
@@ -53,7 +53,7 @@
           "id": "6kAzn9KNYbs",
           "title": "Inside The Timeless Jewelry Collection of Princess Diana",
           "thumbnail": "https://i.ytimg.com/vi/6kAzn9KNYbs/mqdefault.jpg",
-          "views": 1234,
+          "views": 1235,
           "published_at": "2026-10-03T01:48:24Z",
           "duration_sec": 1175,
           "is_outlier": false
@@ -71,7 +71,7 @@
           "id": "EgtEUNR9B4c",
           "title": "Inside The Jewelry Collection of Queen Elizabeth II",
           "thumbnail": "https://i.ytimg.com/vi/EgtEUNR9B4c/mqdefault.jpg",
-          "views": 553,
+          "views": 554,
           "published_at": "2026-09-30T02:08:22Z",
           "duration_sec": 1190,
           "is_outlier": false
@@ -80,7 +80,7 @@
           "id": "M8FvigXFBmQ",
           "title": "10 Estate Sale Ugly Jewelry Pieces You Should Always Grab (Dealers Hope You Walk Past)",
           "thumbnail": "https://i.ytimg.com/vi/M8FvigXFBmQ/mqdefault.jpg",
-          "views": 7970,
+          "views": 7964,
           "published_at": "2026-09-18T00:08:05Z",
           "duration_sec": 1230,
           "is_outlier": false
@@ -89,7 +89,7 @@
           "id": "XJG95r-B1qM",
           "title": "Nobody Wants Grandma's Ugly Jewelry Pieces Anymore Except These 10 Pieces (Check Before You Donate)",
           "thumbnail": "https://i.ytimg.com/vi/XJG95r-B1qM/mqdefault.jpg",
-          "views": 2052,
+          "views": 2053,
           "published_at": "2026-09-16T23:45:35Z",
           "duration_sec": 1321,
           "is_outlier": false
@@ -107,7 +107,7 @@
           "id": "Cs1TeS9UIEY",
           "title": "10 Estate Sale Bracelets You Should Always Grab (Dealers Don't Know They're Worth a Fortune)",
           "thumbnail": "https://i.ytimg.com/vi/Cs1TeS9UIEY/mqdefault.jpg",
-          "views": 11898,
+          "views": 11894,
           "published_at": "2026-09-14T21:39:32Z",
           "duration_sec": 1282,
           "is_outlier": true
@@ -143,7 +143,7 @@
           "id": "Y_slH_FrWOM",
           "title": "10 Chinese Porcelain Pieces That Look Cheap But Are Worth a Fortune",
           "thumbnail": "https://i.ytimg.com/vi/Y_slH_FrWOM/mqdefault.jpg",
-          "views": 11557,
+          "views": 11558,
           "published_at": "2026-09-10T00:00:47Z",
           "duration_sec": 1410,
           "is_outlier": true
@@ -233,7 +233,7 @@
           "id": "ez12-HgsNqs",
           "title": "7 Jewelry Pieces Dolly Parton Wore That Are Secretly Worth a Fortune",
           "thumbnail": "https://i.ytimg.com/vi/ez12-HgsNqs/mqdefault.jpg",
-          "views": 24605,
+          "views": 24608,
           "published_at": "2026-08-29T19:00:26Z",
           "duration_sec": 1151,
           "is_outlier": true
@@ -260,7 +260,7 @@
           "id": "lTcHmR5WzY4",
           "title": "11 Jade Pieces That Look Cheap But Are Worth A Fortune",
           "thumbnail": "https://i.ytimg.com/vi/lTcHmR5WzY4/mqdefault.jpg",
-          "views": 78862,
+          "views": 78877,
           "published_at": "2026-08-23T16:00:24Z",
           "duration_sec": 1306,
           "is_outlier": true
@@ -362,20 +362,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-08-31T20:00:30Z",
       "channel_age_days": 61.9,
-      "avg_views": 35674.17,
+      "avg_views": 35680.6,
       "median_views": 17960.5,
       "avg_views_first_5": 35442.4,
       "avg_duration_sec": 1251.6,
-      "views_per_day": 17284.58,
-      "monthly_views_est": 518537,
-      "subs_per_day": 70.74,
-      "watch_hours_est": 132438.72,
+      "views_per_day": 17286.45,
+      "monthly_views_est": 518593,
+      "subs_per_day": 70.73,
+      "watch_hours_est": 132462.73,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 14.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 7259.52,
+      "monthly_income_est": 7260.3,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -387,7 +387,7 @@
           "id": "KWL0AqCo3kA",
           "title": "11 Brown Gemstones Ranked By ACTUAL Value — Most Buyers Get This Wrong",
           "thumbnail": "https://i.ytimg.com/vi/KWL0AqCo3kA/mqdefault.jpg",
-          "views": 3374,
+          "views": 3386,
           "published_at": "2026-10-31T20:00:04Z",
           "duration_sec": 1252,
           "is_outlier": false
@@ -396,7 +396,7 @@
           "id": "fi-sMnqAgMY",
           "title": "10 Most Expensive Jade Types on Earth — #1 Can’t Be Bought",
           "thumbnail": "https://i.ytimg.com/vi/fi-sMnqAgMY/mqdefault.jpg",
-          "views": 29623,
+          "views": 29685,
           "published_at": "2026-10-29T20:00:03Z",
           "duration_sec": 1235,
           "is_outlier": false
@@ -405,7 +405,7 @@
           "id": "4a_89FAuPJI",
           "title": "11 Lucky Gemstones Ranked By ACTUAL Power — Most People Get This Wrong",
           "thumbnail": "https://i.ytimg.com/vi/4a_89FAuPJI/mqdefault.jpg",
-          "views": 2973,
+          "views": 2976,
           "published_at": "2026-10-27T21:00:23Z",
           "duration_sec": 1180,
           "is_outlier": false
@@ -414,7 +414,7 @@
           "id": "ctl0FiplwW8",
           "title": "12 Purple Gemstones Ranked By ACTUAL Value — Most Buyers Get This Wrong",
           "thumbnail": "https://i.ytimg.com/vi/ctl0FiplwW8/mqdefault.jpg",
-          "views": 52773,
+          "views": 52822,
           "published_at": "2026-10-25T21:00:33Z",
           "duration_sec": 1372,
           "is_outlier": false
@@ -459,7 +459,7 @@
           "id": "1rc5uZ318xI",
           "title": "10 Most Expensive Gemstones on Earth #1 Can’t Be Bought",
           "thumbnail": "https://i.ytimg.com/vi/1rc5uZ318xI/mqdefault.jpg",
-          "views": 106078,
+          "views": 106107,
           "published_at": "2026-10-15T20:00:19Z",
           "duration_sec": 1188,
           "is_outlier": true
@@ -504,7 +504,7 @@
           "id": "aquTxuVl9E4",
           "title": "10 Gemstones Most Jewelers Never See — You May Own One",
           "thumbnail": "https://i.ytimg.com/vi/aquTxuVl9E4/mqdefault.jpg",
-          "views": 3376,
+          "views": 3380,
           "published_at": "2026-10-03T20:00:12Z",
           "duration_sec": 1251,
           "is_outlier": false
@@ -513,7 +513,7 @@
           "id": "_O_O1IGn1KU",
           "title": "9 Pearl Types Ranked By ACTUAL Value — Most Buyers Get This Wrong",
           "thumbnail": "https://i.ytimg.com/vi/_O_O1IGn1KU/mqdefault.jpg",
-          "views": 216643,
+          "views": 216661,
           "published_at": "2026-10-01T20:00:10Z",
           "duration_sec": 1244,
           "is_outlier": true
@@ -540,7 +540,7 @@
           "id": "kVBOkj5f6lw",
           "title": "11 Black Gemstones Ranked By ACTUAL Value — Most Buyers Get This Wrong",
           "thumbnail": "https://i.ytimg.com/vi/kVBOkj5f6lw/mqdefault.jpg",
-          "views": 115436,
+          "views": 115452,
           "published_at": "2026-09-25T20:00:29Z",
           "duration_sec": 1423,
           "is_outlier": true
@@ -1273,14 +1273,14 @@
       "videos_count_long": 30,
       "first_video_at": "2026-05-25T17:18:53Z",
       "channel_age_days": 160.0,
-      "avg_views": 10806.07,
+      "avg_views": 10806.47,
       "median_views": 1103.5,
       "avg_views_first_5": 1343.8,
       "avg_duration_sec": 588.6,
-      "views_per_day": 2025.76,
+      "views_per_day": 2025.77,
       "monthly_views_est": 60773,
       "subs_per_day": 17.5,
-      "watch_hours_est": 22436.3,
+      "watch_hours_est": 22437.13,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
@@ -1298,7 +1298,7 @@
           "id": "nX35r91nDm4",
           "title": "10 Jewelry Pieces To ALWAYS Grab At Rummage Sales (Dealers Hope You Walk Past)",
           "thumbnail": "https://i.ytimg.com/vi/nX35r91nDm4/mqdefault.jpg",
-          "views": 5082,
+          "views": 5086,
           "published_at": "2026-10-30T03:42:20Z",
           "duration_sec": 943,
           "is_outlier": false
@@ -1361,7 +1361,7 @@
           "id": "_NpI4exBxAg",
           "title": "10 Jewelry Pieces Dealers Buy For $1 And Sell For $1,000",
           "thumbnail": "https://i.ytimg.com/vi/_NpI4exBxAg/mqdefault.jpg",
-          "views": 62965,
+          "views": 62973,
           "published_at": "2026-08-15T13:42:41Z",
           "duration_sec": 634,
           "is_outlier": false
@@ -1370,7 +1370,7 @@
           "id": "4WMlWG6qE7Q",
           "title": "10 Jewelry Pieces To ALWAYS Grab At Estate Sales (Dealers Hope You Walk Past)",
           "thumbnail": "https://i.ytimg.com/vi/4WMlWG6qE7Q/mqdefault.jpg",
-          "views": 17755,
+          "views": 17754,
           "published_at": "2026-08-11T04:11:45Z",
           "duration_sec": 545,
           "is_outlier": true
@@ -1379,7 +1379,7 @@
           "id": "2BCnoxw0Vjk",
           "title": "10 Jewelry Pieces To ALWAYS Grab At Thrift Stores (Dealers Hope You Walk Past)",
           "thumbnail": "https://i.ytimg.com/vi/2BCnoxw0Vjk/mqdefault.jpg",
-          "views": 38703,
+          "views": 38704,
           "published_at": "2026-08-10T03:06:44Z",
           "duration_sec": 596,
           "is_outlier": true
@@ -1388,7 +1388,7 @@
           "id": "-YcrVQZ-ObI",
           "title": "10 Jewelry Pieces To ALWAYS Grab At Yard Sales Dealers Hope You Walk Past",
           "thumbnail": "https://i.ytimg.com/vi/-YcrVQZ-ObI/mqdefault.jpg",
-          "views": 157810,
+          "views": 157808,
           "published_at": "2026-08-01T10:24:02Z",
           "duration_sec": 578,
           "is_outlier": true
@@ -1406,7 +1406,7 @@
           "id": "62i4qYruEjU",
           "title": "10 Ugly Necklaces That Are Secretly Worth A Fortune (You Might Own One)",
           "thumbnail": "https://i.ytimg.com/vi/62i4qYruEjU/mqdefault.jpg",
-          "views": 872,
+          "views": 874,
           "published_at": "2026-07-20T15:37:13Z",
           "duration_sec": 427,
           "is_outlier": false
@@ -1602,25 +1602,25 @@
       "difficulty_ru": "Низкая",
       "solo_friendly": true,
       "subs": 2650,
-      "total_views": 268858,
+      "total_views": 269146,
       "videos_count": 35,
       "videos_count_long": 30,
       "first_video_at": "2026-08-02T18:04:21Z",
       "channel_age_days": 91.0,
-      "avg_views": 8320.67,
+      "avg_views": 8320.8,
       "median_views": 90.5,
-      "avg_views_first_5": 33129.8,
+      "avg_views_first_5": 33131.0,
       "avg_duration_sec": 1205.8,
-      "views_per_day": 2743.12,
-      "monthly_views_est": 82294,
+      "views_per_day": 2743.03,
+      "monthly_views_est": 82291,
       "subs_per_day": 29.12,
-      "watch_hours_est": 31968.71,
+      "watch_hours_est": 31969.07,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 14.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 1152.12,
+      "monthly_income_est": 1152.07,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -1785,7 +1785,7 @@
           "id": "2gUsCwvt24k",
           "title": "These 18 Ugly Old Vases Worth a Fortune",
           "thumbnail": "https://i.ytimg.com/vi/2gUsCwvt24k/mqdefault.jpg",
-          "views": 9606,
+          "views": 9604,
           "published_at": "2026-09-07T02:22:39Z",
           "duration_sec": 1842,
           "is_outlier": false
@@ -1875,7 +1875,7 @@
           "id": "7OE9p-0wej0",
           "title": "These 12 Vintage CorningWare Dishes Worth a Fortune",
           "thumbnail": "https://i.ytimg.com/vi/7OE9p-0wej0/mqdefault.jpg",
-          "views": 155996,
+          "views": 156002,
           "published_at": "2026-08-04T15:11:50Z",
           "duration_sec": 1234,
           "is_outlier": true
@@ -1907,7 +1907,7 @@
         [
           "2026-11-01",
           2650,
-          268858
+          269146
         ]
       ],
       "graduated": true,
@@ -2173,20 +2173,20 @@
       "videos_count_long": 17,
       "first_video_at": "2026-06-19T10:03:08Z",
       "channel_age_days": 135.3,
-      "avg_views": 45066.53,
+      "avg_views": 45071.12,
       "median_views": 5781,
       "avg_views_first_5": 6027.0,
       "avg_duration_sec": 1031.65,
-      "views_per_day": 5661.09,
-      "monthly_views_est": 169833,
+      "views_per_day": 5661.48,
+      "monthly_views_est": 169844,
       "subs_per_day": 46.77,
-      "watch_hours_est": 79634.12,
+      "watch_hours_est": 79643.99,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": false,
       "rpm": 2.8512,
       "rpm_source": "nexlev",
-      "monthly_income_est": 484.23,
+      "monthly_income_est": 484.26,
       "region": "other",
       "region_ru": "Другое",
       "found_by_queries": [
@@ -2207,7 +2207,7 @@
           "id": "nW1N2wJ8SnY",
           "title": "7 Pieces Of Old Jewelry You Should Never Clean Before Selling",
           "thumbnail": "https://i.ytimg.com/vi/nW1N2wJ8SnY/mqdefault.jpg",
-          "views": 4799,
+          "views": 4800,
           "published_at": "2026-08-23T20:34:37Z",
           "duration_sec": 1375,
           "is_outlier": false
@@ -2225,7 +2225,7 @@
           "id": "pu42RLGGyCU",
           "title": "These 7 Thrift Store Pearl Strands Look Fake But Are Worth Thousands",
           "thumbnail": "https://i.ytimg.com/vi/pu42RLGGyCU/mqdefault.jpg",
-          "views": 71338,
+          "views": 71390,
           "published_at": "2026-08-16T17:00:23Z",
           "duration_sec": 1444,
           "is_outlier": true
@@ -2234,7 +2234,7 @@
           "id": "6qanvMYLhqY",
           "title": "8 Vintage Rings Seniors Own That Look Worthless — Secretly Worth A Fortune (You Might Own One)",
           "thumbnail": "https://i.ytimg.com/vi/6qanvMYLhqY/mqdefault.jpg",
-          "views": 5965,
+          "views": 5969,
           "published_at": "2026-08-12T19:15:12Z",
           "duration_sec": 955,
           "is_outlier": false
@@ -2243,7 +2243,7 @@
           "id": "T5MZMBMuIuQ",
           "title": "These 7 Vintage Brooches Look Like Junk — One Sold for $8,400",
           "thumbnail": "https://i.ytimg.com/vi/T5MZMBMuIuQ/mqdefault.jpg",
-          "views": 5416,
+          "views": 5417,
           "published_at": "2026-08-03T17:00:08Z",
           "duration_sec": 1185,
           "is_outlier": false
@@ -2270,7 +2270,7 @@
           "id": "h0OPQaYIoik",
           "title": "These 7 Vintage Jewelry Brands That Look Fake But Are Worth Thousands",
           "thumbnail": "https://i.ytimg.com/vi/h0OPQaYIoik/mqdefault.jpg",
-          "views": 499769,
+          "views": 499789,
           "published_at": "2026-07-22T18:17:09Z",
           "duration_sec": 1003,
           "is_outlier": true
@@ -2389,20 +2389,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-06-11T23:22:18Z",
       "channel_age_days": 142.8,
-      "avg_views": 76064.13,
+      "avg_views": 76065.47,
       "median_views": 15306.5,
-      "avg_views_first_5": 143519.2,
+      "avg_views_first_5": 143520.4,
       "avg_duration_sec": 540.0,
-      "views_per_day": 15982.35,
-      "monthly_views_est": 479470,
-      "subs_per_day": 791.44,
-      "watch_hours_est": 140664.85,
+      "views_per_day": 15982.13,
+      "monthly_views_est": 479464,
+      "subs_per_day": 791.41,
+      "watch_hours_est": 140667.44,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 4.5,
       "rpm_source": "baseline",
-      "monthly_income_est": 2157.62,
+      "monthly_income_est": 2157.59,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -2414,7 +2414,7 @@
           "id": "Kgb8XWIRs1U",
           "title": "People Whose Cats Sleep With Them Often Have These 6 Rare Traits",
           "thumbnail": "https://i.ytimg.com/vi/Kgb8XWIRs1U/mqdefault.jpg",
-          "views": 11206,
+          "views": 11226,
           "published_at": "2026-10-31T23:19:04Z",
           "duration_sec": 553,
           "is_outlier": false
@@ -2441,7 +2441,7 @@
           "id": "eaKTnCB7FU0",
           "title": "If Your Cat Ever Watches You Sleep… DO NOT OPEN YOUR EYES",
           "thumbnail": "https://i.ytimg.com/vi/eaKTnCB7FU0/mqdefault.jpg",
-          "views": 17804,
+          "views": 17810,
           "published_at": "2026-10-16T23:03:15Z",
           "duration_sec": 476,
           "is_outlier": false
@@ -2450,7 +2450,7 @@
           "id": "6hybFNvDLaI",
           "title": "If Your Cat Sleeps in Your Chair, They're Trying to Tell You This...",
           "thumbnail": "https://i.ytimg.com/vi/6hybFNvDLaI/mqdefault.jpg",
-          "views": 7987,
+          "views": 7993,
           "published_at": "2026-10-12T22:56:43Z",
           "duration_sec": 465,
           "is_outlier": false
@@ -2477,7 +2477,7 @@
           "id": "w4ak_mXA6bU",
           "title": "What Your Cat's Sleeping Position Reveals About Their Health and Personality",
           "thumbnail": "https://i.ytimg.com/vi/w4ak_mXA6bU/mqdefault.jpg",
-          "views": 27487,
+          "views": 27489,
           "published_at": "2026-09-19T19:19:59Z",
           "duration_sec": 686,
           "is_outlier": false
@@ -2513,7 +2513,7 @@
           "id": "LUedGKqhki4",
           "title": "Every Sound Your Cat Makes and What It Actually Means",
           "thumbnail": "https://i.ytimg.com/vi/LUedGKqhki4/mqdefault.jpg",
-          "views": 14203,
+          "views": 14204,
           "published_at": "2026-08-26T16:25:30Z",
           "duration_sec": 484,
           "is_outlier": false
@@ -2522,7 +2522,7 @@
           "id": "E_LogG7BvmM",
           "title": "This is Why Your Cat Puts Their Paw on You...",
           "thumbnail": "https://i.ytimg.com/vi/E_LogG7BvmM/mqdefault.jpg",
-          "views": 13718,
+          "views": 13717,
           "published_at": "2026-08-22T21:21:19Z",
           "duration_sec": 453,
           "is_outlier": false
@@ -2666,7 +2666,7 @@
           "id": "WCY8fPx4eTc",
           "title": "Real Meanings Behind 7 Strange Cat Behaviors Explained",
           "thumbnail": "https://i.ytimg.com/vi/WCY8fPx4eTc/mqdefault.jpg",
-          "views": 311708,
+          "views": 311718,
           "published_at": "2026-06-15T21:16:46Z",
           "duration_sec": 642,
           "is_outlier": true
@@ -2675,7 +2675,7 @@
           "id": "HsMJ4vhjfB4",
           "title": "If Your Cat Shows These Signs, Here's What They’re Saying...",
           "thumbnail": "https://i.ytimg.com/vi/HsMJ4vhjfB4/mqdefault.jpg",
-          "views": 42002,
+          "views": 41998,
           "published_at": "2026-06-11T23:22:18Z",
           "duration_sec": 678,
           "is_outlier": false
@@ -2723,20 +2723,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-07-15T20:25:14Z",
       "channel_age_days": 108.9,
-      "avg_views": 66018.77,
-      "median_views": 5271.0,
+      "avg_views": 66019.33,
+      "median_views": 5272.0,
       "avg_views_first_5": 5399.8,
       "avg_duration_sec": 1028.37,
-      "views_per_day": 18186.87,
-      "monthly_views_est": 545606,
-      "subs_per_day": 427.91,
-      "watch_hours_est": 193913.99,
+      "views_per_day": 18186.27,
+      "monthly_views_est": 545588,
+      "subs_per_day": 427.9,
+      "watch_hours_est": 193915.95,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 1.5,
       "rpm_source": "baseline",
-      "monthly_income_est": 818.41,
+      "monthly_income_est": 818.38,
       "region": "ru",
       "region_ru": "Россия/СНГ",
       "found_by_queries": [
@@ -2757,7 +2757,7 @@
           "id": "vRHF_gqbk-U",
           "title": "Your Cat Thinks It’s Your Baby: 8 Hidden Clues",
           "thumbnail": "https://i.ytimg.com/vi/vRHF_gqbk-U/mqdefault.jpg",
-          "views": 3069,
+          "views": 3071,
           "published_at": "2026-10-24T20:11:54Z",
           "duration_sec": 940,
           "is_outlier": false
@@ -2766,7 +2766,7 @@
           "id": "r_B0MWjhQa4",
           "title": "7 Signs Your Cat Loves You ABOVE ANYONE ELSE",
           "thumbnail": "https://i.ytimg.com/vi/r_B0MWjhQa4/mqdefault.jpg",
-          "views": 5275,
+          "views": 5277,
           "published_at": "2026-10-21T19:29:08Z",
           "duration_sec": 1190,
           "is_outlier": false
@@ -2793,7 +2793,7 @@
           "id": "BjVW9uJz4TE",
           "title": "The ONE Thing Your Cat Spends Their Whole Life Waiting For You to Do",
           "thumbnail": "https://i.ytimg.com/vi/BjVW9uJz4TE/mqdefault.jpg",
-          "views": 3574,
+          "views": 3575,
           "published_at": "2026-10-09T20:14:54Z",
           "duration_sec": 950,
           "is_outlier": false
@@ -2811,7 +2811,7 @@
           "id": "dojkFiaCziU",
           "title": "14 Cheap Things That Make Your Cat EXTREMELY Happy — 99% of Owners Don't Know These!",
           "thumbnail": "https://i.ytimg.com/vi/dojkFiaCziU/mqdefault.jpg",
-          "views": 210919,
+          "views": 210921,
           "published_at": "2026-10-02T20:28:54Z",
           "duration_sec": 909,
           "is_outlier": false
@@ -2820,7 +2820,7 @@
           "id": "27M-XyHMJi4",
           "title": "10 MISTAKES That Make Your CAT Think You DON'T LOVE HIM",
           "thumbnail": "https://i.ytimg.com/vi/27M-XyHMJi4/mqdefault.jpg",
-          "views": 27218,
+          "views": 27217,
           "published_at": "2026-09-26T19:28:44Z",
           "duration_sec": 1174,
           "is_outlier": false
@@ -2847,7 +2847,7 @@
           "id": "bheItnkI32s",
           "title": "21 Rare Behaviors Cats Show ONLY When They Love You Deeply",
           "thumbnail": "https://i.ytimg.com/vi/bheItnkI32s/mqdefault.jpg",
-          "views": 133632,
+          "views": 133638,
           "published_at": "2026-09-10T18:45:16Z",
           "duration_sec": 1337,
           "is_outlier": false
@@ -2856,7 +2856,7 @@
           "id": "buZT_4EffU0",
           "title": "10 Heartbreaking Signs Your Cat Is Saying Goodbye",
           "thumbnail": "https://i.ytimg.com/vi/buZT_4EffU0/mqdefault.jpg",
-          "views": 20103,
+          "views": 20106,
           "published_at": "2026-09-07T20:41:21Z",
           "duration_sec": 1297,
           "is_outlier": false
@@ -2874,7 +2874,7 @@
           "id": "4XGzYp-YKts",
           "title": "7 Tests Cats Give Their Favorite Human",
           "thumbnail": "https://i.ytimg.com/vi/4XGzYp-YKts/mqdefault.jpg",
-          "views": 236549,
+          "views": 236546,
           "published_at": "2026-09-01T19:28:31Z",
           "duration_sec": 891,
           "is_outlier": false
@@ -2883,7 +2883,7 @@
           "id": "c-heRFsoFo0",
           "title": "You Talk to Your Cat Every Day… This Is What Actually Happens",
           "thumbnail": "https://i.ytimg.com/vi/c-heRFsoFo0/mqdefault.jpg",
-          "views": 406050,
+          "views": 406052,
           "published_at": "2026-08-29T20:16:52Z",
           "duration_sec": 1100,
           "is_outlier": false
@@ -2946,7 +2946,7 @@
           "id": "5I6YCkhJ1Ac",
           "title": "14 Reasons Black Cats Are Different From Every Other Cat",
           "thumbnail": "https://i.ytimg.com/vi/5I6YCkhJ1Ac/mqdefault.jpg",
-          "views": 127064,
+          "views": 127067,
           "published_at": "2026-08-06T19:35:37Z",
           "duration_sec": 966,
           "is_outlier": true
@@ -3139,20 +3139,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-09-07T17:00:24Z",
       "channel_age_days": 55.0,
-      "avg_views": 3663.97,
-      "median_views": 2532.0,
+      "avg_views": 3663.93,
+      "median_views": 2531.5,
       "avg_views_first_5": 3863.2,
       "avg_duration_sec": 751.07,
-      "views_per_day": 1996.97,
-      "monthly_views_est": 59909,
-      "subs_per_day": 1664.15,
-      "watch_hours_est": 8331.09,
+      "views_per_day": 1996.79,
+      "monthly_views_est": 59904,
+      "subs_per_day": 1664.02,
+      "watch_hours_est": 8331.05,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 4.5,
       "rpm_source": "baseline",
-      "monthly_income_est": 269.59,
+      "monthly_income_est": 269.57,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -3200,7 +3200,7 @@
           "id": "LLVnHkr00uU",
           "title": "How Your Cat REALLY Feels When You Pet Them",
           "thumbnail": "https://i.ytimg.com/vi/LLVnHkr00uU/mqdefault.jpg",
-          "views": 1182,
+          "views": 1183,
           "published_at": "2026-10-27T17:00:05Z",
           "duration_sec": 745,
           "is_outlier": false
@@ -3218,7 +3218,7 @@
           "id": "YfnGSwQWuVE",
           "title": "12 INCREDIBLE Things Your Cat Can See, Hear, and Sense That YOU CAN'T!",
           "thumbnail": "https://i.ytimg.com/vi/YfnGSwQWuVE/mqdefault.jpg",
-          "views": 1511,
+          "views": 1512,
           "published_at": "2026-10-25T17:00:38Z",
           "duration_sec": 648,
           "is_outlier": false
@@ -3254,7 +3254,7 @@
           "id": "0_-6QOwbgUo",
           "title": "5 Signs Your Cat Is Secretly Protecting Your Home",
           "thumbnail": "https://i.ytimg.com/vi/0_-6QOwbgUo/mqdefault.jpg",
-          "views": 3446,
+          "views": 3445,
           "published_at": "2026-10-17T18:17:39Z",
           "duration_sec": 646,
           "is_outlier": false
@@ -3263,7 +3263,7 @@
           "id": "SAdsnkMqCHY",
           "title": "What Really Happens When Your Cat Sleeps Alone in Your Bed",
           "thumbnail": "https://i.ytimg.com/vi/SAdsnkMqCHY/mqdefault.jpg",
-          "views": 3450,
+          "views": 3448,
           "published_at": "2026-10-15T06:32:51Z",
           "duration_sec": 686,
           "is_outlier": false
@@ -3290,7 +3290,7 @@
           "id": "cgBEtSX_T14",
           "title": "If You’re Over 50 and Your Cat Sleeps With You, Watch This Video",
           "thumbnail": "https://i.ytimg.com/vi/cgBEtSX_T14/mqdefault.jpg",
-          "views": 8510,
+          "views": 8511,
           "published_at": "2026-10-11T01:31:24Z",
           "duration_sec": 819,
           "is_outlier": true
@@ -3326,7 +3326,7 @@
           "id": "vB_lE5ioHMk",
           "title": "10 Ways to Tell Your Cat You Love Them (In Their Language)",
           "thumbnail": "https://i.ytimg.com/vi/vB_lE5ioHMk/mqdefault.jpg",
-          "views": 2494,
+          "views": 2493,
           "published_at": "2026-10-05T21:45:29Z",
           "duration_sec": 640,
           "is_outlier": false
@@ -3819,20 +3819,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-08-31T18:19:13Z",
       "channel_age_days": 62.0,
-      "avg_views": 29585.67,
-      "median_views": 4766.0,
-      "avg_views_first_5": 1810.2,
+      "avg_views": 29595.47,
+      "median_views": 4766.5,
+      "avg_views_first_5": 1810.4,
       "avg_duration_sec": 605.83,
-      "views_per_day": 14318.36,
-      "monthly_views_est": 429551,
-      "subs_per_day": 138.57,
-      "watch_hours_est": 58039.22,
+      "views_per_day": 14322.07,
+      "monthly_views_est": 429662,
+      "subs_per_day": 138.56,
+      "watch_hours_est": 58059.8,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 4.5,
       "rpm_source": "baseline",
-      "monthly_income_est": 1932.98,
+      "monthly_income_est": 1933.48,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -3844,7 +3844,7 @@
           "id": "OShL3Ith3u4",
           "title": "If You Drive the Same Car for Years, You Have These Rare Traits",
           "thumbnail": "https://i.ytimg.com/vi/OShL3Ith3u4/mqdefault.jpg",
-          "views": 29722,
+          "views": 29737,
           "published_at": "2026-10-29T18:00:48Z",
           "duration_sec": 545,
           "is_outlier": false
@@ -3853,7 +3853,7 @@
           "id": "RWOqbJ2yHCc",
           "title": "People Who Always Return Their Shopping Cart Share These 3 Traits",
           "thumbnail": "https://i.ytimg.com/vi/RWOqbJ2yHCc/mqdefault.jpg",
-          "views": 143162,
+          "views": 143431,
           "published_at": "2026-10-27T18:01:56Z",
           "duration_sec": 562,
           "is_outlier": true
@@ -3925,7 +3925,7 @@
           "id": "MDlZhrIWHqw",
           "title": "3 Traits of People Who Always Push in Their Chairs When Leaving",
           "thumbnail": "https://i.ytimg.com/vi/MDlZhrIWHqw/mqdefault.jpg",
-          "views": 3759,
+          "views": 3761,
           "published_at": "2026-10-14T18:00:52Z",
           "duration_sec": 676,
           "is_outlier": false
@@ -3934,7 +3934,7 @@
           "id": "3mgvQ0Offhc",
           "title": "7 Hidden Reasons Why You Look Younger Than Your Age",
           "thumbnail": "https://i.ytimg.com/vi/3mgvQ0Offhc/mqdefault.jpg",
-          "views": 3101,
+          "views": 3100,
           "published_at": "2026-10-12T18:00:00Z",
           "duration_sec": 624,
           "is_outlier": false
@@ -3970,7 +3970,7 @@
           "id": "Qz3e6i0pKw0",
           "title": "If Your Cat Walks On You At Night, They're Secretly Telling You THIS",
           "thumbnail": "https://i.ytimg.com/vi/Qz3e6i0pKw0/mqdefault.jpg",
-          "views": 4867,
+          "views": 4868,
           "published_at": "2026-10-02T19:12:00Z",
           "duration_sec": 585,
           "is_outlier": false
@@ -4042,7 +4042,7 @@
           "id": "mq7H2U9KazY",
           "title": "People Who Prefer Being Alone Often Have These 5 Rare Traits",
           "thumbnail": "https://i.ytimg.com/vi/mq7H2U9KazY/mqdefault.jpg",
-          "views": 21126,
+          "views": 21130,
           "published_at": "2026-09-13T19:06:56Z",
           "duration_sec": 700,
           "is_outlier": true
@@ -4051,7 +4051,7 @@
           "id": "qPGMl3bwImU",
           "title": "IF YOU LOVE A TIDY HOME, Here's Why (Psychology Explained)",
           "thumbnail": "https://i.ytimg.com/vi/qPGMl3bwImU/mqdefault.jpg",
-          "views": 418293,
+          "views": 418296,
           "published_at": "2026-09-10T19:03:00Z",
           "duration_sec": 635,
           "is_outlier": true
@@ -4105,7 +4105,7 @@
           "id": "ZyERBTGipJM",
           "title": "Psychology of People Who Rewatch the Same Shows and Movies",
           "thumbnail": "https://i.ytimg.com/vi/ZyERBTGipJM/mqdefault.jpg",
-          "views": 825,
+          "views": 826,
           "published_at": "2026-08-31T18:19:13Z",
           "duration_sec": 493,
           "is_outlier": false
@@ -4377,9 +4377,9 @@
       "production_style": "maps_graphics",
       "style_ru": "Карты и графика",
       "style_group": "live",
-      "uses_ai": true,
-      "difficulty": "medium",
-      "difficulty_ru": "Средняя",
+      "uses_ai": false,
+      "difficulty": "high",
+      "difficulty_ru": "Высокая",
       "solo_friendly": true,
       "subs": 16600,
       "total_views": 4968774,
@@ -4391,16 +4391,16 @@
       "median_views": 39758,
       "avg_views_first_5": 955428.4,
       "avg_duration_sec": 938.82,
-      "views_per_day": 74802.43,
-      "monthly_views_est": 2244073,
-      "subs_per_day": 254.15,
+      "views_per_day": 74797.3,
+      "monthly_views_est": 2243919,
+      "subs_per_day": 254.13,
       "watch_hours_est": 369392.91,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 7.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 15708.51,
+      "monthly_income_est": 15707.43,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -4522,7 +4522,28 @@
       "cluster": "disasters|live|en",
       "entry_verdict": "open",
       "entry_verdict_ru": "Окно открыто",
-      "entry_score": 88
+      "entry_score": 88,
+      "notes_ru": "Визуальные разборы и объяснения крупнейших мировых событий, катастроф и геополитических идей. Автор детально анализирует происшествия, такие как наводнение в Непале или извержение Кракатау, используя научные данные и симуляции. Шаблон заголовка: «[Событие]: [интригующий вопрос]». Видео на английском языке, длительностью 10–20 минут, без лица в кадре, с высокой плотностью графической информации.\n\nСложная 3D-анимация топографических карт и рельефа (~70%), динамическая инфографика и таймлайны (~20%), стоковые видеоматериалы (~10%) и профессиональная озвучка.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Nepal Floods 2026 Explained: What Caused the Deadly Flash Flood?».",
+      "production_methods_ru": "Сложная 3D-анимация топографических карт и рельефа (~70%), динамическая инфографика и таймлайны (~20%), стоковые видеоматериалы (~10%) и профессиональная озвучка.",
+      "subniche_ru": "Анализ природных катастроф и глобальных происшествий",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "maps_graphics",
+        "3d_animation",
+        "stock_footage"
+      ],
+      "categories": [
+        "documentary",
+        "geography",
+        "science"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Документалистика",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCyIYCV-JGBJrfeaezM1ST5w",
@@ -5002,14 +5023,14 @@
       "videos_count_long": 29,
       "first_video_at": "2026-04-07T11:17:00Z",
       "channel_age_days": 208.3,
-      "avg_views": 11719.28,
+      "avg_views": 11719.31,
       "median_views": 365,
       "avg_views_first_5": 781.2,
       "avg_duration_sec": 771.97,
-      "views_per_day": 1631.73,
-      "monthly_views_est": 48952,
+      "views_per_day": 1631.7,
+      "monthly_views_est": 48951,
       "subs_per_day": 9.17,
-      "watch_hours_est": 22589.93,
+      "watch_hours_est": 22590.0,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
@@ -5108,7 +5129,7 @@
           "id": "4Zrpgmojtxk",
           "title": "They Survived Nine Days Beneath Nepal's Flood — How?",
           "thumbnail": "https://i.ytimg.com/vi/4Zrpgmojtxk/mqdefault.jpg",
-          "views": 30425,
+          "views": 30426,
           "published_at": "2026-09-06T11:15:20Z",
           "duration_sec": 692,
           "is_outlier": false
@@ -5743,18 +5764,18 @@
       "channel_age_days": 71.1,
       "avg_views": 120920.09,
       "median_views": 1308,
-      "avg_views_first_5": 1956.2,
+      "avg_views_first_5": 1956.4,
       "avg_duration_sec": 667.17,
-      "views_per_day": 39129.92,
-      "monthly_views_est": 1173897,
-      "subs_per_day": 114.39,
-      "watch_hours_est": 169258.09,
+      "views_per_day": 39127.45,
+      "monthly_views_est": 1173823,
+      "subs_per_day": 114.38,
+      "watch_hours_est": 169258.13,
       "days_to_monetization": 0,
       "monetization_forecast": "уже",
       "is_monetized": true,
       "rpm": 7.46,
       "rpm_source": "nexlev",
-      "monthly_income_est": 8757.27,
+      "monthly_income_est": 8756.72,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -5766,7 +5787,7 @@
           "id": "BPYhkLVQo4M",
           "title": "Dubai's Secret History: How They Built the Future",
           "thumbnail": "https://i.ytimg.com/vi/BPYhkLVQo4M/mqdefault.jpg",
-          "views": 323,
+          "views": 325,
           "published_at": "2026-10-13T17:51:35Z",
           "duration_sec": 599,
           "is_outlier": false
@@ -5910,7 +5931,7 @@
           "id": "IUQvhmXyvwk",
           "title": "The Nepal Disaster: Why the Mountain Turned Into a Tsunami",
           "thumbnail": "https://i.ytimg.com/vi/IUQvhmXyvwk/mqdefault.jpg",
-          "views": 2748549,
+          "views": 2748546,
           "published_at": "2026-08-28T09:41:15Z",
           "duration_sec": 625,
           "is_outlier": true
@@ -5964,7 +5985,7 @@
           "id": "jhm1CekntPU",
           "title": "The Ancient Sea That Once Covered America's Heartland",
           "thumbnail": "https://i.ytimg.com/vi/jhm1CekntPU/mqdefault.jpg",
-          "views": 2135,
+          "views": 2136,
           "published_at": "2026-08-22T16:14:10Z",
           "duration_sec": 600,
           "is_outlier": false
@@ -6055,20 +6076,20 @@
       "videos_count_long": 24,
       "first_video_at": "2026-04-20T15:13:12Z",
       "channel_age_days": 195.1,
-      "avg_views": 159967.62,
+      "avg_views": 159972.83,
       "median_views": 97494.0,
       "avg_views_first_5": 52874.6,
       "avg_duration_sec": 2610.21,
-      "views_per_day": 19676.47,
-      "monthly_views_est": 590294,
+      "views_per_day": 19676.66,
+      "monthly_views_est": 590300,
       "subs_per_day": 86.61,
-      "watch_hours_est": 1180262.89,
+      "watch_hours_est": 1180303.43,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 4.5,
       "rpm_source": "baseline",
-      "monthly_income_est": 2656.32,
+      "monthly_income_est": 2656.35,
       "region": "eu",
       "region_ru": "Европа",
       "found_by_queries": [
@@ -6089,7 +6110,7 @@
           "id": "eXnYtB5-6N0",
           "title": "El Genio Que Convirtió Los Números En Una Forma De Entender El Universo — Pitágoras",
           "thumbnail": "https://i.ytimg.com/vi/eXnYtB5-6N0/mqdefault.jpg",
-          "views": 141438,
+          "views": 141483,
           "published_at": "2026-10-23T16:30:17Z",
           "duration_sec": 2962,
           "is_outlier": false
@@ -6098,7 +6119,7 @@
           "id": "8lquw7nTP8U",
           "title": "El Hombre Que Intentó Explicar La Existencia De Dios Mediante La Razón — La Historia De Spinoza",
           "thumbnail": "https://i.ytimg.com/vi/8lquw7nTP8U/mqdefault.jpg",
-          "views": 44378,
+          "views": 44389,
           "published_at": "2026-10-16T16:00:22Z",
           "duration_sec": 3402,
           "is_outlier": false
@@ -6143,7 +6164,7 @@
           "id": "TymUgNMtbcg",
           "title": "El Hombre Que Inventó Mundos Que Todavía No Existían — La Historia De Julio Verne",
           "thumbnail": "https://i.ytimg.com/vi/TymUgNMtbcg/mqdefault.jpg",
-          "views": 683661,
+          "views": 683666,
           "published_at": "2026-09-08T14:27:24Z",
           "duration_sec": 3264,
           "is_outlier": true
@@ -6152,7 +6173,7 @@
           "id": "mEidL941Bz0",
           "title": "El Hombre Que Quiso Entender Por Qué Existimos — La Historia De Darwin",
           "thumbnail": "https://i.ytimg.com/vi/mEidL941Bz0/mqdefault.jpg",
-          "views": 335533,
+          "views": 335543,
           "published_at": "2026-08-30T10:14:11Z",
           "duration_sec": 2404,
           "is_outlier": true
@@ -6161,7 +6182,7 @@
           "id": "9sLI3d_TQPs",
           "title": "El Hombre Que Quiso Descubrir Cómo Funciona La Mente Humana — La Historia De Sigmund Freud",
           "thumbnail": "https://i.ytimg.com/vi/9sLI3d_TQPs/mqdefault.jpg",
-          "views": 132473,
+          "views": 132476,
           "published_at": "2026-08-24T05:20:48Z",
           "duration_sec": 2587,
           "is_outlier": false
@@ -6170,7 +6191,7 @@
           "id": "82Wa_0rfgCc",
           "title": "El Hombre Que Derrotó A Las Enfermedades Invisibles — La Historia De Louis Pasteur",
           "thumbnail": "https://i.ytimg.com/vi/82Wa_0rfgCc/mqdefault.jpg",
-          "views": 206489,
+          "views": 206496,
           "published_at": "2026-08-14T07:13:51Z",
           "duration_sec": 3156,
           "is_outlier": false
@@ -6188,7 +6209,7 @@
           "id": "C5d25Todoko",
           "title": "El Hombre Que Transformó Su Dolor En Arte Inmortal — La Historia De Vincent Van Gogh",
           "thumbnail": "https://i.ytimg.com/vi/C5d25Todoko/mqdefault.jpg",
-          "views": 179613,
+          "views": 179618,
           "published_at": "2026-08-03T17:47:22Z",
           "duration_sec": 4033,
           "is_outlier": false
@@ -6206,7 +6227,7 @@
           "id": "d4qP9iT1b2w",
           "title": "El Hombre Que Vivió Como Un Mendigo Pero Pensó Como Un Rey — La Historia De Diógenes",
           "thumbnail": "https://i.ytimg.com/vi/d4qP9iT1b2w/mqdefault.jpg",
-          "views": 442847,
+          "views": 442853,
           "published_at": "2026-07-25T14:30:07Z",
           "duration_sec": 3131,
           "is_outlier": true
@@ -6215,7 +6236,7 @@
           "id": "OLyZzqz4DrA",
           "title": "El Hombre Que Descubrió Los Secretos Del Universo Cuando Nadie Los Entendía — Isaac Newton",
           "thumbnail": "https://i.ytimg.com/vi/OLyZzqz4DrA/mqdefault.jpg",
-          "views": 274931,
+          "views": 274933,
           "published_at": "2026-07-16T18:11:12Z",
           "duration_sec": 3195,
           "is_outlier": false
@@ -6224,7 +6245,7 @@
           "id": "_VN-6QaO5EM",
           "title": "El Hombre Que Sabía Demasiado En Una Época Sin Respuestas — La Historia De Leonardo Da Vinci",
           "thumbnail": "https://i.ytimg.com/vi/_VN-6QaO5EM/mqdefault.jpg",
-          "views": 693516,
+          "views": 693547,
           "published_at": "2026-07-05T09:22:21Z",
           "duration_sec": 4218,
           "is_outlier": true
@@ -6334,20 +6355,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-08-02T19:52:00Z",
       "channel_age_days": 90.9,
-      "avg_views": 63156.33,
+      "avg_views": 63156.5,
       "median_views": 1124.5,
       "avg_views_first_5": 344.6,
       "avg_duration_sec": 1565.97,
-      "views_per_day": 20838.22,
-      "monthly_views_est": 625146,
-      "subs_per_day": 499.32,
-      "watch_hours_est": 291144.75,
+      "views_per_day": 20837.24,
+      "monthly_views_est": 625117,
+      "subs_per_day": 499.29,
+      "watch_hours_est": 291145.55,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 6.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 3750.88,
+      "monthly_income_est": 3750.7,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -6359,7 +6380,7 @@
           "id": "Wdy3c0zJvaI",
           "title": "La Increíble Ingeniería de la Corbeta",
           "thumbnail": "https://i.ytimg.com/vi/Wdy3c0zJvaI/mqdefault.jpg",
-          "views": 7731,
+          "views": 7732,
           "published_at": "2026-09-23T13:00:23Z",
           "duration_sec": 1610,
           "is_outlier": false
@@ -6368,7 +6389,7 @@
           "id": "oZb4xL6WEdA",
           "title": "La Increíble Ingeniería del Bergantín",
           "thumbnail": "https://i.ytimg.com/vi/oZb4xL6WEdA/mqdefault.jpg",
-          "views": 14263,
+          "views": 14265,
           "published_at": "2026-09-21T13:00:03Z",
           "duration_sec": 1563,
           "is_outlier": false
@@ -6377,7 +6398,7 @@
           "id": "wnQB3unHgZ0",
           "title": "La Increíble Ingeniería de la Nao — El Barco de Colón y Magallanes",
           "thumbnail": "https://i.ytimg.com/vi/wnQB3unHgZ0/mqdefault.jpg",
-          "views": 24459,
+          "views": 24454,
           "published_at": "2026-09-19T13:00:22Z",
           "duration_sec": 1576,
           "is_outlier": false
@@ -6404,7 +6425,7 @@
           "id": "9aPfkcGmyhs",
           "title": "La Increíble Ingeniería del Santísima Trinidad — El Barco Más Grande del Mundo",
           "thumbnail": "https://i.ytimg.com/vi/9aPfkcGmyhs/mqdefault.jpg",
-          "views": 22798,
+          "views": 22797,
           "published_at": "2026-09-12T13:00:15Z",
           "duration_sec": 1542,
           "is_outlier": false
@@ -6413,7 +6434,7 @@
           "id": "7ZbPmZWdTxI",
           "title": "La Increíble Ingeniería del Galeón de Manila",
           "thumbnail": "https://i.ytimg.com/vi/7ZbPmZWdTxI/mqdefault.jpg",
-          "views": 73394,
+          "views": 73397,
           "published_at": "2026-09-11T13:00:39Z",
           "duration_sec": 1595,
           "is_outlier": false
@@ -6431,7 +6452,7 @@
           "id": "Ne9AQ-3clBA",
           "title": "La Increíble Ingeniería de la Fragata",
           "thumbnail": "https://i.ytimg.com/vi/Ne9AQ-3clBA/mqdefault.jpg",
-          "views": 43352,
+          "views": 43355,
           "published_at": "2026-09-08T13:00:30Z",
           "duration_sec": 1571,
           "is_outlier": true
@@ -6440,7 +6461,7 @@
           "id": "NBJ6UJGr5Aw",
           "title": "La Increíble Ingeniería del Navío de Guerra",
           "thumbnail": "https://i.ytimg.com/vi/NBJ6UJGr5Aw/mqdefault.jpg",
-          "views": 128549,
+          "views": 128542,
           "published_at": "2026-09-07T13:00:11Z",
           "duration_sec": 1545,
           "is_outlier": true
@@ -6458,7 +6479,7 @@
           "id": "gMChglN-QJc",
           "title": "La Increíble Ingeniería del Galeón Español",
           "thumbnail": "https://i.ytimg.com/vi/gMChglN-QJc/mqdefault.jpg",
-          "views": 1468236,
+          "views": 1468245,
           "published_at": "2026-09-06T08:57:01Z",
           "duration_sec": 1585,
           "is_outlier": true
@@ -6663,25 +6684,25 @@
       "difficulty_ru": "Низкая",
       "solo_friendly": true,
       "subs": 5770,
-      "total_views": 1173731,
+      "total_views": 1173699,
       "videos_count": 24,
       "videos_count_long": 24,
       "first_video_at": "2026-07-22T15:00:32Z",
       "channel_age_days": 102.1,
-      "avg_views": 48906.25,
-      "median_views": 17166.0,
-      "avg_views_first_5": 95388.8,
+      "avg_views": 48906.17,
+      "median_views": 17166.5,
+      "avg_views_first_5": 95388.4,
       "avg_duration_sec": 2256.12,
-      "views_per_day": 11493.13,
-      "monthly_views_est": 344794,
+      "views_per_day": 11492.61,
+      "monthly_views_est": 344778,
       "subs_per_day": 56.5,
-      "watch_hours_est": 238296.3,
+      "watch_hours_est": 238295.92,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 6.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 2068.76,
+      "monthly_income_est": 2068.67,
       "region": "eu",
       "region_ru": "Европа",
       "found_by_queries": [
@@ -6702,7 +6723,7 @@
           "id": "_IycUIUT4V4",
           "title": "30 Dinge, die in deutschen Wohnzimmern der 1970er völlig normal waren – heute verschwunden",
           "thumbnail": "https://i.ytimg.com/vi/_IycUIUT4V4/mqdefault.jpg",
-          "views": 18495,
+          "views": 18496,
           "published_at": "2026-09-12T15:00:15Z",
           "duration_sec": 2194,
           "is_outlier": false
@@ -6720,7 +6741,7 @@
           "id": "xsujjJmVfrE",
           "title": "25 Dinge, die deutsche Kinder in den 1970ern draußen taten – heute undenkbar",
           "thumbnail": "https://i.ytimg.com/vi/xsujjJmVfrE/mqdefault.jpg",
-          "views": 52680,
+          "views": 52681,
           "published_at": "2026-09-08T15:00:39Z",
           "duration_sec": 2070,
           "is_outlier": false
@@ -6765,7 +6786,7 @@
           "id": "2UinNt8C2hI",
           "title": "30 Dinge, die sonntags in Deutschland früher selbstverständlich waren – heute fast verschwunden",
           "thumbnail": "https://i.ytimg.com/vi/2UinNt8C2hI/mqdefault.jpg",
-          "views": 27590,
+          "views": 27588,
           "published_at": "2026-08-24T15:00:35Z",
           "duration_sec": 2004,
           "is_outlier": false
@@ -6891,7 +6912,7 @@
           "id": "4wpboHGX6M4",
           "title": "30 Dinge, die jede deutsche Mutter in den 1960ern im Haus hatte",
           "thumbnail": "https://i.ytimg.com/vi/4wpboHGX6M4/mqdefault.jpg",
-          "views": 174543,
+          "views": 174541,
           "published_at": "2026-07-23T15:00:09Z",
           "duration_sec": 2075,
           "is_outlier": true
@@ -6914,7 +6935,7 @@
         [
           "2026-11-01",
           5770,
-          1173731
+          1173699
         ]
       ],
       "cluster": "nostalgia|live|de",
@@ -7327,20 +7348,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-08-22T10:24:41Z",
       "channel_age_days": 71.3,
-      "avg_views": 20637.57,
-      "median_views": 11940.5,
-      "avg_views_first_5": 57218.0,
+      "avg_views": 20636.43,
+      "median_views": 11937.5,
+      "avg_views_first_5": 57216.8,
       "avg_duration_sec": 2107.87,
-      "views_per_day": 8681.24,
-      "monthly_views_est": 260437,
+      "views_per_day": 8680.22,
+      "monthly_views_est": 260407,
       "subs_per_day": 117.64,
-      "watch_hours_est": 135418.02,
+      "watch_hours_est": 135410.99,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 6.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 1562.62,
+      "monthly_income_est": 1562.44,
       "region": "eu",
       "region_ru": "Европа",
       "found_by_queries": [
@@ -7352,7 +7373,7 @@
           "id": "ia25xVe994Q",
           "title": "Fast Food Der 80er-Jahre – So War Es Damals! Wir Vermissen Diese Zeit!",
           "thumbnail": "https://i.ytimg.com/vi/ia25xVe994Q/mqdefault.jpg",
-          "views": 2953,
+          "views": 2946,
           "published_at": "2026-10-12T10:46:55Z",
           "duration_sec": 1750,
           "is_outlier": false
@@ -7397,7 +7418,7 @@
           "id": "GWvL-x-2yI8",
           "title": "20 Dinge, Die Deutsche Mädchen In Den 1950ern Selbst Machten – Heute Kaufen Wir Sie Fertig",
           "thumbnail": "https://i.ytimg.com/vi/GWvL-x-2yI8/mqdefault.jpg",
-          "views": 5904,
+          "views": 5902,
           "published_at": "2026-10-07T09:41:07Z",
           "duration_sec": 1581,
           "is_outlier": false
@@ -7406,7 +7427,7 @@
           "id": "NoHtMVbIA3Q",
           "title": "10 Tricks Von Oma, Die Das Alleinleben Nach 60 Sofort Leichter Machen.",
           "thumbnail": "https://i.ytimg.com/vi/NoHtMVbIA3Q/mqdefault.jpg",
-          "views": 13090,
+          "views": 13088,
           "published_at": "2026-10-06T14:40:49Z",
           "duration_sec": 2249,
           "is_outlier": false
@@ -7415,7 +7436,7 @@
           "id": "0y2QiYVQ7Jo",
           "title": "20 günstige Winter-Überlebenstipps von Oma für alleinlebende Senioren",
           "thumbnail": "https://i.ytimg.com/vi/0y2QiYVQ7Jo/mqdefault.jpg",
-          "views": 7758,
+          "views": 7757,
           "published_at": "2026-10-05T09:53:48Z",
           "duration_sec": 1789,
           "is_outlier": false
@@ -7433,7 +7454,7 @@
           "id": "e7lphtj87Fs",
           "title": "20 Vergessene Ordnungstricks Von Oma, Die Ein Kleines Zuhause Doppelt So Groß Wirken Lassen",
           "thumbnail": "https://i.ytimg.com/vi/e7lphtj87Fs/mqdefault.jpg",
-          "views": 10791,
+          "views": 10787,
           "published_at": "2026-10-02T08:59:37Z",
           "duration_sec": 2100,
           "is_outlier": false
@@ -7469,7 +7490,7 @@
           "id": "6HvslUXcRqk",
           "title": "Warum Frauen In Den 50ern Immer Schlank Blieben – 21 Diätregeln, Die Jede Frau Befolgte",
           "thumbnail": "https://i.ytimg.com/vi/6HvslUXcRqk/mqdefault.jpg",
-          "views": 9529,
+          "views": 9527,
           "published_at": "2026-09-23T10:35:12Z",
           "duration_sec": 1831,
           "is_outlier": false
@@ -7478,7 +7499,7 @@
           "id": "o8U0hJChEx8",
           "title": "15 Vergessene Hobbys, Die Fast Jeder Mann In Den 1950er Jahren Hatte",
           "thumbnail": "https://i.ytimg.com/vi/o8U0hJChEx8/mqdefault.jpg",
-          "views": 6244,
+          "views": 6243,
           "published_at": "2026-09-21T10:54:38Z",
           "duration_sec": 1878,
           "is_outlier": false
@@ -7487,7 +7508,7 @@
           "id": "V-yM1p3ePjU",
           "title": "15 Dinge Aus Den 70ern, Die Fast Jeder Deutsche Haushalt Hatte – Heute Verschwunden!",
           "thumbnail": "https://i.ytimg.com/vi/V-yM1p3ePjU/mqdefault.jpg",
-          "views": 7035,
+          "views": 7036,
           "published_at": "2026-09-19T10:41:29Z",
           "duration_sec": 1640,
           "is_outlier": false
@@ -7523,7 +7544,7 @@
           "id": "lNeaaqe9x3s",
           "title": "20 Vergessene Gewohnheiten Unserer Großeltern Für Ein Immer Ordentliches Zuhause",
           "thumbnail": "https://i.ytimg.com/vi/lNeaaqe9x3s/mqdefault.jpg",
-          "views": 20385,
+          "views": 20387,
           "published_at": "2026-09-11T10:09:01Z",
           "duration_sec": 1900,
           "is_outlier": false
@@ -7541,7 +7562,7 @@
           "id": "v7XiSMmgTs8",
           "title": "15 Vergessene Gewohnheiten Für Eine Küche, Die Nie Chaotisch Wird",
           "thumbnail": "https://i.ytimg.com/vi/v7XiSMmgTs8/mqdefault.jpg",
-          "views": 40633,
+          "views": 40626,
           "published_at": "2026-09-07T10:35:08Z",
           "duration_sec": 1918,
           "is_outlier": true
@@ -7550,7 +7571,7 @@
           "id": "5cZnYp05Nzw",
           "title": "30 Seltsame Hausmerkmale, Die Früher Ganz Normal Waren Und Heute Vergessen Sind",
           "thumbnail": "https://i.ytimg.com/vi/5cZnYp05Nzw/mqdefault.jpg",
-          "views": 15094,
+          "views": 15090,
           "published_at": "2026-09-05T10:35:19Z",
           "duration_sec": 2775,
           "is_outlier": false
@@ -7568,7 +7589,7 @@
           "id": "fVCBI8mFfO4",
           "title": "Mehr Protein als RINDFLEISCH. Nur 5 Minuten Aufwand auf der Fensterbank. Warum baut es niemand an?",
           "thumbnail": "https://i.ytimg.com/vi/fVCBI8mFfO4/mqdefault.jpg",
-          "views": 24521,
+          "views": 24520,
           "published_at": "2026-09-01T09:16:10Z",
           "duration_sec": 2307,
           "is_outlier": false
@@ -7577,7 +7598,7 @@
           "id": "pStLbGV9Y_o",
           "title": "Schmeckt Wie Apfel Und Honig. Oma Pflanzte Es Nur Einmal – Warum Baut Es Heute Niemand Mehr An?",
           "thumbnail": "https://i.ytimg.com/vi/pStLbGV9Y_o/mqdefault.jpg",
-          "views": 152910,
+          "views": 152906,
           "published_at": "2026-08-30T10:28:24Z",
           "duration_sec": 2564,
           "is_outlier": true
@@ -7604,7 +7625,7 @@
           "id": "Kde8r63oXdk",
           "title": "25 Vergessene Winter-Überlebenstipps Aus Der Zeit Unserer Großeltern, Die Heute Noch Funktionieren",
           "thumbnail": "https://i.ytimg.com/vi/Kde8r63oXdk/mqdefault.jpg",
-          "views": 86731,
+          "views": 86729,
           "published_at": "2026-08-24T09:30:15Z",
           "duration_sec": 2529,
           "is_outlier": true
@@ -7661,14 +7682,14 @@
       "videos_count_long": 30,
       "first_video_at": "2026-08-15T15:00:15Z",
       "channel_age_days": 78.1,
-      "avg_views": 26706.93,
-      "median_views": 14244.0,
-      "avg_views_first_5": 30178.6,
+      "avg_views": 26708.57,
+      "median_views": 14247.0,
+      "avg_views_first_5": 30179.2,
       "avg_duration_sec": 2350.63,
-      "views_per_day": 10255.28,
-      "monthly_views_est": 307658,
-      "subs_per_day": 179.2,
-      "watch_hours_est": 164057.89,
+      "views_per_day": 10255.32,
+      "monthly_views_est": 307659,
+      "subs_per_day": 179.19,
+      "watch_hours_est": 164073.3,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
@@ -7686,7 +7707,7 @@
           "id": "e5OHcTw7Egk",
           "title": "17 Günstige Aldi-Produkte, Die Bei Einem Winter-Blackout Plötzlich Unbezahlbar Werden",
           "thumbnail": "https://i.ytimg.com/vi/e5OHcTw7Egk/mqdefault.jpg",
-          "views": 0,
+          "views": 7,
           "published_at": "2026-11-01T18:00:04Z",
           "duration_sec": 2198,
           "is_outlier": false
@@ -7695,7 +7716,7 @@
           "id": "T5eCPdBAvQk",
           "title": "25 Vergessene Bettwärme-Tricks, Die Dich Auch Ohne Heizung Durch Kalte Nächte Bringen",
           "thumbnail": "https://i.ytimg.com/vi/T5eCPdBAvQk/mqdefault.jpg",
-          "views": 14166,
+          "views": 14170,
           "published_at": "2026-10-29T18:37:56Z",
           "duration_sec": 2084,
           "is_outlier": false
@@ -7704,7 +7725,7 @@
           "id": "H2T4HNEHh3g",
           "title": "100 Vergessene Blackout-Tricks Unserer Großeltern, Die Teure Notfallausrüstung Alt Aussehen Lassen",
           "thumbnail": "https://i.ytimg.com/vi/H2T4HNEHh3g/mqdefault.jpg",
-          "views": 2964,
+          "views": 2971,
           "published_at": "2026-10-26T18:00:23Z",
           "duration_sec": 10118,
           "is_outlier": false
@@ -7722,7 +7743,7 @@
           "id": "C1w4m6EYua0",
           "title": "17 Günstige Action-Produkte, Die Dich Warm Halten, Wenn Die Heizung Ausfällt",
           "thumbnail": "https://i.ytimg.com/vi/C1w4m6EYua0/mqdefault.jpg",
-          "views": 22064,
+          "views": 22075,
           "published_at": "2026-10-23T18:00:22Z",
           "duration_sec": 2037,
           "is_outlier": false
@@ -7731,7 +7752,7 @@
           "id": "9Dtq4RWd7bQ",
           "title": "30 Vergessene Winter-Tricks, Die Unsere Großeltern Ohne Strom Durch Die Kälte Brachten",
           "thumbnail": "https://i.ytimg.com/vi/9Dtq4RWd7bQ/mqdefault.jpg",
-          "views": 57660,
+          "views": 57669,
           "published_at": "2026-10-21T18:00:26Z",
           "duration_sec": 2094,
           "is_outlier": false
@@ -7749,7 +7770,7 @@
           "id": "WMajuf1nvVA",
           "title": "20 Alte Notfallhelfer, Die Auch Nach 30 Jahren Ohne Strom Und Batterien Funktionieren",
           "thumbnail": "https://i.ytimg.com/vi/WMajuf1nvVA/mqdefault.jpg",
-          "views": 2940,
+          "views": 2939,
           "published_at": "2026-10-17T18:00:07Z",
           "duration_sec": 2111,
           "is_outlier": false
@@ -7812,7 +7833,7 @@
           "id": "pWZnd2JBBzU",
           "title": "20 Günstige Dinge, Die Dich Bei Einem Winter-Blackout Auch Ohne Heizung Warm Halten",
           "thumbnail": "https://i.ytimg.com/vi/pWZnd2JBBzU/mqdefault.jpg",
-          "views": 14322,
+          "views": 14324,
           "published_at": "2026-10-08T18:00:07Z",
           "duration_sec": 2100,
           "is_outlier": false
@@ -7821,7 +7842,7 @@
           "id": "VTm3IEoBZ_o",
           "title": "20 vergessene Methoden, mit denen deutsche Familien ihr Haus bei einem Blackout nachts sicher hielte",
           "thumbnail": "https://i.ytimg.com/vi/VTm3IEoBZ_o/mqdefault.jpg",
-          "views": 19493,
+          "views": 19494,
           "published_at": "2026-09-17T15:00:08Z",
           "duration_sec": 1884,
           "is_outlier": false
@@ -7830,7 +7851,7 @@
           "id": "I7P07dJVfvY",
           "title": "20 vergessene Hygiene-Tricks unserer Großeltern, die funktionierten, wenn tagelang kein Wasser floss",
           "thumbnail": "https://i.ytimg.com/vi/I7P07dJVfvY/mqdefault.jpg",
-          "views": 29725,
+          "views": 29727,
           "published_at": "2026-09-14T15:00:26Z",
           "duration_sec": 1985,
           "is_outlier": false
@@ -7848,7 +7869,7 @@
           "id": "zPK6Jc-F_Ck",
           "title": "25 vergessene Wärme-Tricks unserer Großeltern, die das Haus auch ohne Strom und Heizung warm hielten",
           "thumbnail": "https://i.ytimg.com/vi/zPK6Jc-F_Ck/mqdefault.jpg",
-          "views": 10522,
+          "views": 10520,
           "published_at": "2026-09-10T15:00:17Z",
           "duration_sec": 2107,
           "is_outlier": false
@@ -7866,7 +7887,7 @@
           "id": "XVbpvHvnwdU",
           "title": "25 Dinge, die deutsche Familien früher taten, wenn Strom, Wasser und Heizung gleichzeitig ausfielena",
           "thumbnail": "https://i.ytimg.com/vi/XVbpvHvnwdU/mqdefault.jpg",
-          "views": 17834,
+          "views": 17833,
           "published_at": "2026-09-05T15:00:13Z",
           "duration_sec": 1979,
           "is_outlier": false
@@ -7875,7 +7896,7 @@
           "id": "qaAjiqQqBEM",
           "title": "25 Dinge, mit denen unsere Großeltern Licht machten, wenn weder Strom noch Batterien funktionierten",
           "thumbnail": "https://i.ytimg.com/vi/qaAjiqQqBEM/mqdefault.jpg",
-          "views": 52254,
+          "views": 52261,
           "published_at": "2026-09-03T15:00:03Z",
           "duration_sec": 2139,
           "is_outlier": true
@@ -7938,7 +7959,7 @@
           "id": "Csz0V-lo1h4",
           "title": "20 vergessene Methoden, mit denen Familien Lebensmittel monatelang ohne Kühlschrank haltbar machten",
           "thumbnail": "https://i.ytimg.com/vi/Csz0V-lo1h4/mqdefault.jpg",
-          "views": 44319,
+          "views": 44321,
           "published_at": "2026-08-18T14:00:21Z",
           "duration_sec": 2021,
           "is_outlier": true
@@ -7947,7 +7968,7 @@
           "id": "6IApprY3EU8",
           "title": "20 einfache Notlösungen, die im Ernstfall mehr wert sind als moderne Technik",
           "thumbnail": "https://i.ytimg.com/vi/6IApprY3EU8/mqdefault.jpg",
-          "views": 46855,
+          "views": 46856,
           "published_at": "2026-08-15T15:00:15Z",
           "duration_sec": 1921,
           "is_outlier": true
@@ -8182,20 +8203,20 @@
       "videos_count_long": 11,
       "first_video_at": "2026-08-19T17:06:12Z",
       "channel_age_days": 74.0,
-      "avg_views": 524310.09,
+      "avg_views": 524312.18,
       "median_views": 81423,
-      "avg_views_first_5": 1132634.4,
+      "avg_views_first_5": 1132638.8,
       "avg_duration_sec": 1246.18,
-      "views_per_day": 77896.99,
-      "monthly_views_est": 2336910,
-      "subs_per_day": 175.58,
-      "watch_hours_est": 831077.15,
+      "views_per_day": 77892.58,
+      "monthly_views_est": 2336777,
+      "subs_per_day": 175.57,
+      "watch_hours_est": 831080.72,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": false,
       "rpm": 4.76,
       "rpm_source": "nexlev",
-      "monthly_income_est": 11123.69,
+      "monthly_income_est": 11123.06,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -8207,7 +8228,7 @@
           "id": "0gP6uOqid9A",
           "title": "How Britain Built the Impossible Antarctic Base That Walks on Skis",
           "thumbnail": "https://i.ytimg.com/vi/0gP6uOqid9A/mqdefault.jpg",
-          "views": 1357,
+          "views": 1359,
           "published_at": "2026-10-29T14:18:07Z",
           "duration_sec": 1198,
           "is_outlier": false
@@ -8216,7 +8237,7 @@
           "id": "a1UObLq3o0s",
           "title": "How China Built a $150M Bridge Above the Clouds",
           "thumbnail": "https://i.ytimg.com/vi/a1UObLq3o0s/mqdefault.jpg",
-          "views": 3042,
+          "views": 3044,
           "published_at": "2026-10-13T18:00:42Z",
           "duration_sec": 1382,
           "is_outlier": false
@@ -8243,7 +8264,7 @@
           "id": "VMdoXghNyv8",
           "title": "How Japan Built a $20B Wall to Avoid a Disaster Like Nepal",
           "thumbnail": "https://i.ytimg.com/vi/VMdoXghNyv8/mqdefault.jpg",
-          "views": 6577,
+          "views": 6574,
           "published_at": "2026-09-30T13:13:30Z",
           "duration_sec": 966,
           "is_outlier": false
@@ -8279,7 +8300,7 @@
           "id": "huP0Yr2PlZ0",
           "title": "Nepal Flood Explained: How a Glacier Became a Wall of Water",
           "thumbnail": "https://i.ytimg.com/vi/huP0Yr2PlZ0/mqdefault.jpg",
-          "views": 222622,
+          "views": 222620,
           "published_at": "2026-09-02T16:56:12Z",
           "duration_sec": 949,
           "is_outlier": false
@@ -8297,7 +8318,7 @@
           "id": "Eg0djVfKXU8",
           "title": "The 400 km Wall Japan Built to Stop the Sea",
           "thumbnail": "https://i.ytimg.com/vi/Eg0djVfKXU8/mqdefault.jpg",
-          "views": 4814607,
+          "views": 4814631,
           "published_at": "2026-08-19T17:06:12Z",
           "duration_sec": 1515,
           "is_outlier": true
@@ -8344,20 +8365,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-10-02T21:30:24Z",
       "channel_age_days": 29.9,
-      "avg_views": 89942.83,
-      "median_views": 9460.5,
-      "avg_views_first_5": 364615.4,
+      "avg_views": 89949.73,
+      "median_views": 9460.0,
+      "avg_views_first_5": 364639.0,
       "avg_duration_sec": 1728.23,
-      "views_per_day": 90378.23,
-      "monthly_views_est": 2711347,
-      "subs_per_day": 1617.79,
-      "watch_hours_est": 446048.07,
+      "views_per_day": 90371.59,
+      "monthly_views_est": 2711148,
+      "subs_per_day": 1617.55,
+      "watch_hours_est": 446085.22,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 6.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 16268.08,
+      "monthly_income_est": 16266.89,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -8369,7 +8390,7 @@
           "id": "--wr8vGNCoI",
           "title": "Stop Buying These 14 Foods Fresh — Frozen Is Cheaper",
           "thumbnail": "https://i.ytimg.com/vi/--wr8vGNCoI/mqdefault.jpg",
-          "views": 4086,
+          "views": 4093,
           "published_at": "2026-10-31T23:45:35Z",
           "duration_sec": 1710,
           "is_outlier": false
@@ -8378,7 +8399,7 @@
           "id": "BQIAuXe0MSg",
           "title": "Don’t Buy Soy Sauce Before Watching This (Check These 5 Things)",
           "thumbnail": "https://i.ytimg.com/vi/BQIAuXe0MSg/mqdefault.jpg",
-          "views": 5070,
+          "views": 5071,
           "published_at": "2026-10-31T01:21:10Z",
           "duration_sec": 2298,
           "is_outlier": false
@@ -8405,7 +8426,7 @@
           "id": "KuIxbMLbRJk",
           "title": "14 \"Poor\" Dollar Tree Foods the Japanese Live On AFTER 50 (They Make You Richer Every Month)",
           "thumbnail": "https://i.ytimg.com/vi/KuIxbMLbRJk/mqdefault.jpg",
-          "views": 9435,
+          "views": 9436,
           "published_at": "2026-10-28T04:35:41Z",
           "duration_sec": 1860,
           "is_outlier": false
@@ -8423,7 +8444,7 @@
           "id": "eB4QCxR_QUA",
           "title": "Don’t Buy Rice Before Watching This — The Only 3 Brands I Recommend",
           "thumbnail": "https://i.ytimg.com/vi/eB4QCxR_QUA/mqdefault.jpg",
-          "views": 147843,
+          "views": 147905,
           "published_at": "2026-10-26T02:48:22Z",
           "duration_sec": 2062,
           "is_outlier": false
@@ -8441,7 +8462,7 @@
           "id": "KxCl45dk20c",
           "title": "7 “Poor” Eating Habits That Will Make You Richer After 50",
           "thumbnail": "https://i.ytimg.com/vi/KxCl45dk20c/mqdefault.jpg",
-          "views": 10660,
+          "views": 10667,
           "published_at": "2026-10-24T00:42:30Z",
           "duration_sec": 1706,
           "is_outlier": false
@@ -8459,7 +8480,7 @@
           "id": "DilFvcqbFJI",
           "title": "22 Cheap Dinners My Japanese Grandparents Ate When Money Ran Out",
           "thumbnail": "https://i.ytimg.com/vi/DilFvcqbFJI/mqdefault.jpg",
-          "views": 12483,
+          "views": 12485,
           "published_at": "2026-10-22T01:31:56Z",
           "duration_sec": 1826,
           "is_outlier": false
@@ -8468,7 +8489,7 @@
           "id": "nPUVjEceJ4I",
           "title": "STOP Buying Snacks From the Store — Make These $1 Japanese Snacks at Home",
           "thumbnail": "https://i.ytimg.com/vi/nPUVjEceJ4I/mqdefault.jpg",
-          "views": 14333,
+          "views": 14335,
           "published_at": "2026-10-21T00:30:10Z",
           "duration_sec": 1645,
           "is_outlier": false
@@ -8486,7 +8507,7 @@
           "id": "hJCEsKGgV4Q",
           "title": "Seriously...15 Groceries Is All You Need Every Week — The Japanese Pantry Method",
           "thumbnail": "https://i.ytimg.com/vi/hJCEsKGgV4Q/mqdefault.jpg",
-          "views": 9237,
+          "views": 9238,
           "published_at": "2026-10-19T02:13:35Z",
           "duration_sec": 1474,
           "is_outlier": false
@@ -8513,7 +8534,7 @@
           "id": "ziivKJteDjU",
           "title": "Cook Once, Spend Less — 5 Easy $1 Pocket Soups",
           "thumbnail": "https://i.ytimg.com/vi/ziivKJteDjU/mqdefault.jpg",
-          "views": 8217,
+          "views": 8219,
           "published_at": "2026-10-15T23:15:20Z",
           "duration_sec": 1456,
           "is_outlier": false
@@ -8522,7 +8543,7 @@
           "id": "rdSEpz8oDZY",
           "title": "15 Overpriced Groceries To Avoid After 50 — Buy These 7 Every Week Instead!",
           "thumbnail": "https://i.ytimg.com/vi/rdSEpz8oDZY/mqdefault.jpg",
-          "views": 5910,
+          "views": 5911,
           "published_at": "2026-10-15T02:33:27Z",
           "duration_sec": 1811,
           "is_outlier": false
@@ -8567,7 +8588,7 @@
           "id": "Yh6lge481fA",
           "title": "How You Can Turn a $5 Costco Chicken Into 3 Easy Meals",
           "thumbnail": "https://i.ytimg.com/vi/Yh6lge481fA/mqdefault.jpg",
-          "views": 12332,
+          "views": 12331,
           "published_at": "2026-10-10T00:30:13Z",
           "duration_sec": 1645,
           "is_outlier": false
@@ -8576,7 +8597,7 @@
           "id": "VZQTpV0l7MU",
           "title": "Why Everyone is Making $1 Pocket Soups (And You Should Too!)",
           "thumbnail": "https://i.ytimg.com/vi/VZQTpV0l7MU/mqdefault.jpg",
-          "views": 362525,
+          "views": 362529,
           "published_at": "2026-10-09T01:30:37Z",
           "duration_sec": 1640,
           "is_outlier": true
@@ -8612,7 +8633,7 @@
           "id": "jh-M3ttnYlU",
           "title": "Save Hundreds on Groceries with these 8 Easy Food Swaps",
           "thumbnail": "https://i.ytimg.com/vi/jh-M3ttnYlU/mqdefault.jpg",
-          "views": 9486,
+          "views": 9484,
           "published_at": "2026-10-05T00:24:01Z",
           "duration_sec": 1587,
           "is_outlier": false
@@ -8621,7 +8642,7 @@
           "id": "ZG1wToD6Q8Q",
           "title": "11 Essential Groceries To Buy Every Week After 50 — That The Japanese Swear By",
           "thumbnail": "https://i.ytimg.com/vi/ZG1wToD6Q8Q/mqdefault.jpg",
-          "views": 1310113,
+          "views": 1310233,
           "published_at": "2026-10-04T01:01:40Z",
           "duration_sec": 1761,
           "is_outlier": true
@@ -8701,20 +8722,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-10-03T01:17:55Z",
       "channel_age_days": 29.7,
-      "avg_views": 66618.77,
-      "median_views": 32589.0,
-      "avg_views_first_5": 192865.0,
+      "avg_views": 66624.37,
+      "median_views": 32601.0,
+      "avg_views_first_5": 192868.4,
       "avg_duration_sec": 1704.1,
-      "views_per_day": 67297.4,
-      "monthly_views_est": 2018922,
-      "subs_per_day": 5252.97,
-      "watch_hours_est": 296762.11,
+      "views_per_day": 67292.9,
+      "monthly_views_est": 2018787,
+      "subs_per_day": 5252.18,
+      "watch_hours_est": 296789.97,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 6.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 12113.53,
+      "monthly_income_est": 12112.72,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -8726,7 +8747,7 @@
           "id": "t-BLnR8CDV8",
           "title": "13 Japanese Home Habits for a Simple, Calm Life",
           "thumbnail": "https://i.ytimg.com/vi/t-BLnR8CDV8/mqdefault.jpg",
-          "views": 6686,
+          "views": 6726,
           "published_at": "2026-11-01T02:07:49Z",
           "duration_sec": 1891,
           "is_outlier": false
@@ -8735,7 +8756,7 @@
           "id": "8za2Tbv2gSo",
           "title": "The Dark Side of Buy-It-For-Life That No One Talks About",
           "thumbnail": "https://i.ytimg.com/vi/8za2Tbv2gSo/mqdefault.jpg",
-          "views": 10400,
+          "views": 10408,
           "published_at": "2026-10-31T02:36:41Z",
           "duration_sec": 1656,
           "is_outlier": false
@@ -8744,7 +8765,7 @@
           "id": "BOrsIxgFs_k",
           "title": "Organization Is Making Us All Messier - The Japanese Do This INSTEAD",
           "thumbnail": "https://i.ytimg.com/vi/BOrsIxgFs_k/mqdefault.jpg",
-          "views": 9581,
+          "views": 9585,
           "published_at": "2026-10-30T02:49:07Z",
           "duration_sec": 1637,
           "is_outlier": false
@@ -8753,7 +8774,7 @@
           "id": "RdxF_9qbUJI",
           "title": "82 Oddly Specific Items to Declutter Today!",
           "thumbnail": "https://i.ytimg.com/vi/RdxF_9qbUJI/mqdefault.jpg",
-          "views": 34463,
+          "views": 34482,
           "published_at": "2026-10-29T02:44:15Z",
           "duration_sec": 2268,
           "is_outlier": false
@@ -8789,7 +8810,7 @@
           "id": "o9cRmx4yROs",
           "title": "I Tried KonMari vs Minimalism vs Death Cleaning – SURPRISING Result!",
           "thumbnail": "https://i.ytimg.com/vi/o9cRmx4yROs/mqdefault.jpg",
-          "views": 30715,
+          "views": 30720,
           "published_at": "2026-10-25T02:00:23Z",
           "duration_sec": 2320,
           "is_outlier": false
@@ -8834,7 +8855,7 @@
           "id": "G-Ji-7m6F4U",
           "title": "10 Minimalist Rules for a Clutter-Free Wardrobe (even if you're not a minimalist)",
           "thumbnail": "https://i.ytimg.com/vi/G-Ji-7m6F4U/mqdefault.jpg",
-          "views": 25618,
+          "views": 25624,
           "published_at": "2026-10-20T01:48:11Z",
           "duration_sec": 1425,
           "is_outlier": false
@@ -8852,7 +8873,7 @@
           "id": "mgIEiFg3fuc",
           "title": "The Dark Side of Thrifting: When Donating Becomes a Problem",
           "thumbnail": "https://i.ytimg.com/vi/mgIEiFg3fuc/mqdefault.jpg",
-          "views": 150140,
+          "views": 150149,
           "published_at": "2026-10-18T01:37:46Z",
           "duration_sec": 1946,
           "is_outlier": true
@@ -8879,7 +8900,7 @@
           "id": "bdx4djyJVQM",
           "title": "What Makes Someone a Hoarder? It's LESS Clutter Than You Think!",
           "thumbnail": "https://i.ytimg.com/vi/bdx4djyJVQM/mqdefault.jpg",
-          "views": 84237,
+          "views": 84248,
           "published_at": "2026-10-15T01:48:53Z",
           "duration_sec": 1739,
           "is_outlier": false
@@ -8897,7 +8918,7 @@
           "id": "kzyCJJWvPPQ",
           "title": "I'm 52 and Japanese — 11 Things I Removed From My Home After 50 (Americans Still Hold On To)",
           "thumbnail": "https://i.ytimg.com/vi/kzyCJJWvPPQ/mqdefault.jpg",
-          "views": 220344,
+          "views": 220380,
           "published_at": "2026-10-13T01:46:58Z",
           "duration_sec": 1295,
           "is_outlier": true
@@ -8906,7 +8927,7 @@
           "id": "hYWjkNpqN5M",
           "title": "11 Things You Should Stop Organizing — That Japanese Homes Remove Instead",
           "thumbnail": "https://i.ytimg.com/vi/hYWjkNpqN5M/mqdefault.jpg",
-          "views": 46327,
+          "views": 46333,
           "published_at": "2026-10-12T02:15:53Z",
           "duration_sec": 1838,
           "is_outlier": false
@@ -8933,7 +8954,7 @@
           "id": "EyoSlEF94dw",
           "title": "Where to Start Decluttering When Everything Feels Like Too Much 🥹",
           "thumbnail": "https://i.ytimg.com/vi/EyoSlEF94dw/mqdefault.jpg",
-          "views": 37927,
+          "views": 37934,
           "published_at": "2026-10-09T02:00:20Z",
           "duration_sec": 1405,
           "is_outlier": false
@@ -8978,7 +8999,7 @@
           "id": "WzxvBmDLcA0",
           "title": "Decluttering Room by Room Is Backwards - In Japan We DO THIS!",
           "thumbnail": "https://i.ytimg.com/vi/WzxvBmDLcA0/mqdefault.jpg",
-          "views": 389480,
+          "views": 389497,
           "published_at": "2026-10-04T01:25:22Z",
           "duration_sec": 1396,
           "is_outlier": true
@@ -28420,10 +28441,10 @@
       "niche": "collectibles",
       "niche_ru": "Коллекционирование",
       "tags": [],
-      "production_style": "screencast_slides",
+      "production_style": "highlights",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
-      "uses_ai": false,
+      "uses_ai": true,
       "difficulty": "low",
       "difficulty_ru": "Низкая",
       "solo_friendly": true,
@@ -28594,7 +28615,26 @@
       "cluster": "collectibles|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал публикует нарезки отрывков из популярного телешоу Antiques Roadshow, рассказывая о стоимости редких вещей (например, гитар Fender, старинных картин и национальных артефактов). Шаблон заголовка: «The Most Expensive [Предмет] Ever Found on Antiques Roadshow!». Видео на английском языке длительностью 7–13 минут, дополнительные источники монетизации не указаны.\n\nИспользование чужого телеконтента (нарезки ТВ-шоу) с дикторским закадровым голосом. Сложность производства низкая.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «The Most Expensive' Guitar Ever Found on Antiques Roadshow !».",
+      "production_methods_ru": "Использование чужого телеконтента (нарезки ТВ-шоу) с дикторским закадровым голосом. Сложность производства низкая.",
+      "subniche_ru": "Оценка редких вещей и коллекционирование",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "highlights"
+      ],
+      "categories": [
+        "antiques",
+        "collectibles",
+        "history"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": false,
+      "reject_reason": "Канал состоит из нарезок и перезаливов телешоу Antiques Roadshow.",
+      "niche_ai_ru": "Антиквариат",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCBgSYKecvKphaiFK-EWfJWw",
@@ -29438,12 +29478,12 @@
       "niche": "collectibles",
       "niche_ru": "Коллекционирование",
       "tags": [],
-      "production_style": "screencast_slides",
+      "production_style": "talking_head",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 22800,
       "total_views": 2377438,
@@ -29756,7 +29796,28 @@
       "cluster": "collectibles|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал помогает зрителям находить скрытые сокровища среди обычных бытовых предметов и старой бижутерии. Автор подробно разбирает признаки ценности старинного хрусталя, жемчуга, часов и текстиля, объясняя, на какие детали и клейма стоит обращать внимание. Шаблон заголовка: «[Количество] [предметов], которые тайно стоят целое состояние: [интрига]». Видео на английском языке, длительностью 15–17 минут, с ведущей в кадре.\n\nСочетание съемок ведущей в домашней обстановке (~30%) с детальным показом фотографий и видео предметов коллекционирования (~70%). Используются макро-снимки клейм и текстур для обучения зрителя идентификации.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «10 Old Cut Crystal Pieces That Are Secretly Worth A Fortune You Might Own One».",
+      "production_methods_ru": "Сочетание съемок ведущей в домашней обстановке (~30%) с детальным показом фотографий и видео предметов коллекционирования (~70%). Используются макро-снимки клейм и текстур для обучения зрителя идентификации.",
+      "subniche_ru": "Оценка и идентификация ценных винтажных предметов",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "talking_head",
+        "photos_stock",
+        "stock_footage"
+      ],
+      "categories": [
+        "antiques",
+        "education",
+        "lifestyle"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Антиквариат",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCyyoPL3c8mXFHpuwWjZNE-g",
@@ -30182,8 +30243,8 @@
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 83700,
       "total_views": 5769658,
@@ -30496,7 +30557,32 @@
       "cluster": "psychology|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Автор публикует обучающие видео о создании вирусного контента для YouTube с помощью бесплатных ИИ-сервисов. В роликах разбираются схемы создания видео в популярных трендовых форматах (аниме-кулинария, стикман-анимации, клонирование успешных каналов). Пример заголовка: «Создание анимаций со стикменами с помощью ИИ: Как запустить вирусный канал бесплатно?». Видео выходят на английском языке продолжительностью 9–16 минут, без присутствия автора в кадре. В описании продвигается закрытое приватное сообщество и указываются контакты для спонсоров.\n\nЗапись экрана с демонстрацией промптов и работы нейросетей (~60%), примеры сгенерированных ИИ-роликов и изображений (~30%), графические вставки и текст (~10%). Закадровый голос. Сложность средняя.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Create This New Ai Niche & Go Viral In 48hrs | 100% FREE Tools».",
+      "production_methods_ru": "Запись экрана с демонстрацией промптов и работы нейросетей (~60%), примеры сгенерированных ИИ-роликов и изображений (~30%), графические вставки и текст (~10%). Закадровый голос. Сложность средняя.",
+      "subniche_ru": "Создание YouTube-контента с помощью ИИ",
+      "uses_ai_mode": "with",
+      "extra_monetization": [
+        "sponsors",
+        "membership"
+      ],
+      "production_styles": [
+        "screencast_slides",
+        "ai_video",
+        "ai_illustrations"
+      ],
+      "categories": [
+        "Tech",
+        "AI",
+        "Business",
+        "Tutorial"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Искусственный интеллект",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCSKVzAfMPLXu0IZ3UBO1ntg",
@@ -40275,8 +40361,8 @@
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 70500,
       "total_views": 3822371,
@@ -40589,7 +40675,28 @@
       "cluster": "psychology|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Пошаговые туториалы по созданию и автоматизации YouTube-каналов с помощью нейросетей. Автор разбирает кейсы популярных каналов (например, ThatGuy) и показывает, как бесплатно генерировать стикмен-анимацию или видео в стиле VOX. Заголовки в стиле: «[Инструмент]: [как создать виральную анимацию?]». Английский язык, видео 15–30 минут, формат скринкаста без лица.\n\nЗапись экрана с процессом настройки нейросетей и промптов (~70%), примеры сгенерированного видео (~30%) и закадровый голос. Средняя сложность из-за необходимости разбираться в ИИ-инструментах.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Create UNLIMITED Stickman Animations with AI | 100% FREE Forever».",
+      "production_methods_ru": "Запись экрана с процессом настройки нейросетей и промптов (~70%), примеры сгенерированного видео (~30%) и закадровый голос. Средняя сложность из-за необходимости разбираться в ИИ-инструментах.",
+      "subniche_ru": "Автоматизация YouTube и ИИ-анимация",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "screencast_slides",
+        "ai_video",
+        "stickman"
+      ],
+      "categories": [
+        "Technology",
+        "Education",
+        "Business"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Нейросети",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UC2j9C2vANDyX2WBzYZFHLxQ",
@@ -40637,10 +40744,10 @@
         "painting valuations",
         "sculptures"
       ],
-      "production_style": "stock_footage",
+      "production_style": "highlights",
       "style_ru": "Стоковый футаж",
       "style_group": "live",
-      "uses_ai": false,
+      "uses_ai": true,
       "difficulty": "low",
       "difficulty_ru": "Низкая",
       "solo_friendly": true,
@@ -40901,7 +41008,26 @@
       "cluster": "collectibles|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал представляет собой нарезки эпизодов телешоу Antiques Roadshow с закадровым голосом. Видео строятся вокруг истории дорогих находок с гаражных распродаж и барахолок. Длина роликов составляет 10–13 минут, контент выходит на английском языке.\n\nВидеоряд полностью состоит из фрагментов стороннего ТВ-шоу (~90%) с поверхностным редактированием (фильтры, субтитры) и закадровым голосом. Уровень сложности производства низкий.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «She Paid $20 for This Jewelry at an Estate Sale... Until This Happened on Antiques Roadshow».",
+      "production_methods_ru": "Видеоряд полностью состоит из фрагментов стороннего ТВ-шоу (~90%) с поверхностным редактированием (фильтры, субтитры) и закадровым голосом. Уровень сложности производства низкий.",
+      "subniche_ru": "Оценка ценных находок и ювелирных изделий",
+      "uses_ai_mode": "with",
+      "extra_monetization": [],
+      "production_styles": [
+        "highlights"
+      ],
+      "categories": [
+        "Antiques",
+        "Entertainment",
+        "Pop Culture"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": false,
+      "reject_reason": "Канал состоит из нарезок чужого контента (телевизионного шоу Antiques Roadshow).",
+      "niche_ai_ru": "Антиквариат",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCDx8_ikIKlvN4Upcn_yEo9g",
@@ -41702,12 +41828,12 @@
         "types of introvert",
         "ways to earn money as a student"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "talking_head",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 166000,
       "total_views": 17768627,
@@ -41912,7 +42038,28 @@
       "cluster": "psychology|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен разбору техник влияния, темной психологии и стратегий поведения на примерах персонажей аниме, кино и мифологии. Примеры тем: «5 стратегий манипуляции Кришны», «Как Аянокоджи создал несокрушимую ауру», «7 техник манипуляции Йохана Либерта». Шаблоны заголовков: «[Персонаж]: [как он управляет людьми?]», «[Состояние]: [как стать неуязвимым?]». Язык английский, ролики длятся 6–15 минут, ведущий присутствует в кадре, видео выходят 2–4 раза в месяц.\n\nСъемка с ведущим (~30%), ИИ-иллюстрации (~40%), нарезки из аниме и фильмов (~20%), стоковые футажи (~10%). Сложность средняя, требует навыков работы с нейросетями для генерации артов и динамичного монтажа.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Lord Krishna’s 5 Dark Manipulation Strategies ».",
+      "production_methods_ru": "Съемка с ведущим (~30%), ИИ-иллюстрации (~40%), нарезки из аниме и фильмов (~20%), стоковые футажи (~10%). Сложность средняя, требует навыков работы с нейросетями для генерации артов и динамичного монтажа.",
+      "subniche_ru": "Темная психология и стратегии манипуляции",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "talking_head",
+        "ai_illustrations",
+        "highlights"
+      ],
+      "categories": [
+        "psychology",
+        "self-improvement",
+        "education"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Психология",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCxUle5C8ytgllEja_WtnDqQ",
@@ -45623,12 +45770,12 @@
         "workplace psychology",
         "worry psychology"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "stickman",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "high",
+      "difficulty_ru": "Высокая",
       "solo_friendly": true,
       "subs": 215000,
       "total_views": 26592247,
@@ -45941,7 +46088,29 @@
       "cluster": "psychology|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Анимированные образовательные видео на тему популярной психологии, саморазвития и социализации. Примеры тем: психология вербального интеллекта, природой харизмы и борьба с зависимостями. Шаблон заголовков: «Psychology of [Тема]: [Интригующее обещание или совет]». Язык — английский, длина ролика составляет 14–18 минут, лица в кадре нет.\n\nУникальная 2D-анимация в стиле отрисованных от руки иллюстраций и человечков (stickman) (~100%), закадровый дикторский голос. Сложность производства высокая из-за объема индивидуальной анимации.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Psychology of Verbal Intelligence: How To Articulate Your Thoughts Intelligently».",
+      "production_methods_ru": "Уникальная 2D-анимация в стиле отрисованных от руки иллюстраций и человечков (stickman) (~100%), закадровый дикторский голос. Сложность производства высокая из-за объема индивидуальной анимации.",
+      "subniche_ru": "Популярная психология и саморазвитие",
+      "uses_ai_mode": "without",
+      "extra_monetization": [
+        "sponsors"
+      ],
+      "production_styles": [
+        "stickman",
+        "2d_animation"
+      ],
+      "categories": [
+        "psychology",
+        "education",
+        "animation"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Психология",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UC5zI-QnE1IZKKRJKwrpF3Sg",
@@ -47047,12 +47216,12 @@
         "yoga to increase height",
         "youth motivation"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "highlights",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
-      "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "uses_ai": true,
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 25800,
       "total_views": 5049952,
@@ -47311,7 +47480,30 @@
       "cluster": "psychology|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал на хинди, ориентированный на подростков и студентов, с советами по саморазвитию и социальной инженерии. Разбираются темы харизмы, уверенности и межличностных отношений, например: «Как привлечь любого в школе» или «Психология магнетической личности». Ролики длятся 5–8 минут, автор не показывает лицо. Шаблон заголовка: «[Навык/Цель]: [интригующий метод]».\n\nДинамичный монтаж с использованием фрагментов аниме (~40%), стоковых видео (~40%) и крупной текстовой графики (~20%) под энергичный закадровый голос. Высокая плотность склеек и звуковых эффектов.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «How to Attract Anyone in School (100% Working Tricks)».",
+      "production_methods_ru": "Динамичный монтаж с использованием фрагментов аниме (~40%), стоковых видео (~40%) и крупной текстовой графики (~20%) под энергичный закадровый голос. Высокая плотность склеек и звуковых эффектов.",
+      "subniche_ru": "Социальные навыки и саморазвитие для подростков",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [
+        "sponsors"
+      ],
+      "production_styles": [
+        "highlights",
+        "stock_footage",
+        "maps_graphics"
+      ],
+      "categories": [
+        "psychology",
+        "education",
+        "lifestyle"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Психология",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCco8WNhxKJS4arCJ-goQ3yw",
@@ -53673,12 +53865,12 @@
         "work visa Pakistan",
         "work visa opportunities"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "talking_head",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 3550,
       "total_views": 316767,
@@ -53883,7 +54075,29 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал иммиграционного консультанта Kaiser Khan с подробными разборами визовых программ, рабочих виз и возможностей переезда за рубеж (преимущественно для граждан Пакистана). В видео обсуждаются визовые правила Новой Зеландии, Канады, Ирландии и стран Европы. Типичные заголовки: «[Страна]: [Возможности получения визы без предоплаты и приглашения]». Видео выходят на урду с фрагментами на английском, длительность от 7 до 15 минут, ведущий постоянно присутствует в кадре. Канал продвигает собственные консультационные услуги агентства.\n\nЗапись реального ведущего в студии на фоне брендированного интерьера (говорящая голова ~90%), дополненная графическими плашками, плавающим текстом и контактной информацией (~10%). Сложность производства средняя.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «No Advance Payment? Get Visa First, Pay Later!».",
+      "production_methods_ru": "Запись реального ведущего в студии на фоне брендированного интерьера (говорящая голова ~90%), дополненная графическими плашками, плавающим текстом и контактной информацией (~10%). Сложность производства средняя.",
+      "subniche_ru": "Визы и переезд за границу",
+      "uses_ai_mode": "without",
+      "extra_monetization": [
+        "own_product"
+      ],
+      "production_styles": [
+        "talking_head",
+        "screencast_slides"
+      ],
+      "categories": [
+        "Immigration",
+        "Travel",
+        "Education"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Иммиграция",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UC4iclU9jXzpNkqr1AUCsOPA",
@@ -56078,12 +56292,12 @@
         "work from anywhere",
         "worldwide data plans"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "talking_head",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 23100,
       "total_views": 1508665,
@@ -56342,7 +56556,31 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал о финансовой грамотности и юридических аспектах жизни за границей для экспатов и цифровых кочевников. Автор дает советы по оптимизации налогов, выбору банковских карт и оформлению документов при переезде. Примеры заголовков: «[Переезд]: Что нужно сделать с деньгами перед отъездом?», «[Налоги]: Как легально не платить подоходный налог штата?». Ролики длятся от 4 до 15 минут, в кадре присутствует ведущий, видео выходят еженедельно. Продвигает собственный сервис по регистрации адреса в США и налоговому консалтингу.\n\nСочетание съемок ведущего (говорящая голова) со стоковыми футажами, инфографикой и скриншотами. Монтаж качественный, требующий хорошего света и микрофона.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Don't leave the US until you do this with your money».",
+      "production_methods_ru": "Сочетание съемок ведущего (говорящая голова) со стоковыми футажами, инфографикой и скриншотами. Монтаж качественный, требующий хорошего света и микрофона.",
+      "subniche_ru": "Налоги и релокация для цифровых кочевников",
+      "uses_ai_mode": "without",
+      "extra_monetization": [
+        "own_product",
+        "affiliate"
+      ],
+      "production_styles": [
+        "talking_head",
+        "stock_footage",
+        "maps_graphics"
+      ],
+      "categories": [
+        "finance",
+        "travel",
+        "lifestyle"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Финансы",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCeHc6dnaruX3eOxXiT8vGUQ",
@@ -56839,12 +57077,12 @@
       "niche": "relocation",
       "niche_ru": "Travel и релокация",
       "tags": [],
-      "production_style": "screencast_slides",
+      "production_style": "talking_head",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "high",
+      "difficulty_ru": "Высокая",
       "solo_friendly": true,
       "subs": 47100,
       "total_views": 10657531,
@@ -56941,7 +57179,29 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал некоммерческой студии, публикующий полнометражные документальные проекты об экологии и короткие промо-ролики к ним (например, «How to Live on Earth | Feature Documentary | Presented by Benedict Cumberbatch»). Тематика посвящена биоразнообразию, климату и устойчивому будущему планеты. Шаблоны заголовков: «[Название фильма] | Feature Documentary | Presented by [Имя звезды]», «Can You Guess [Объект] From [Деталь]?». Язык английский, основной фильм длится 97 минут (короткие видео по 2–3 минуты), голливудский ведущий в кадре, редкие публикации под релизы.\n\nВысокобюджетная кинематографическая натурная съемка по всему миру (~70%), студийные и музейные съемки ведущего (~30%), оркестровый саундтрек без применения ИИ. Сложность крайне высокая.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «How to Live on Earth | Feature Documentary | Presented by Benedict Cumberbatch».",
+      "production_methods_ru": "Высокобюджетная кинематографическая натурная съемка по всему миру (~70%), студийные и музейные съемки ведущего (~30%), оркестровый саундтрек без применения ИИ. Сложность крайне высокая.",
+      "subniche_ru": "Экология и охрана природы",
+      "uses_ai_mode": "without",
+      "extra_monetization": [
+        "sponsors"
+      ],
+      "production_styles": [
+        "talking_head",
+        "stock_footage"
+      ],
+      "categories": [
+        "documentary",
+        "nature",
+        "environment"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": false,
+      "reject_reason": "Высокобюджетное студийное кинопроизводство с привлечением мировых знаменитостей, формат которого невозможно повторить независимому автору.",
+      "niche_ai_ru": "Документалистика",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCghhCdRwJdJNWj-iVi21iDw",
@@ -58577,7 +58837,7 @@
         "world happiness",
         "worst states to live in america"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "stock_footage",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": true,
@@ -58895,7 +59155,26 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал публикует рейтинги стран и городов для путешествий, релокации, иммиграции и выхода на пенсию. Примеры тем: «10 Safest Countries in the World in 2025» и «Best Countries to Live on $1,500/Month in 2025». Шаблоны заголовков: «[Тема рейтинга]: [уточнение или список]». Видео на английском языке длительностью 18–35 минут выходят регулярно, диктор в кадре отсутствует. Явной сторонней монетизации в описаниях нет.\n\nМонтаж стоковых видеофутажей (~90%) с текстовыми плашками и наложениями (~10%), синтезированный ИИ-голос за кадром. Низкая сложность производства.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «10 Safest Countries in the World in 2025 (Live & Visit)».",
+      "production_methods_ru": "Монтаж стоковых видеофутажей (~90%) с текстовыми плашками и наложениями (~10%), синтезированный ИИ-голос за кадром. Низкая сложность производства.",
+      "subniche_ru": "Рейтинги стран для жизни и путешествий",
+      "uses_ai_mode": "with",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage"
+      ],
+      "categories": [
+        "Travel",
+        "Lifestyle",
+        "Documentary"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Туризм",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UC40Xsm8H41AM5-prftTESaA",
@@ -59532,12 +59811,12 @@
         "zelensky",
         "zelenskyy"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "stock_footage",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
-      "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "uses_ai": false,
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 1060,
       "total_views": 140859,
@@ -59805,7 +60084,27 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен экономическим обзорам и рейтингам стран по уровню жизни. В роликах сравниваются лучшие страны для переезда, самые дешевые места для выхода на пенсию и анализируются причины богатства отдельных государств, например, Монако. Шаблон заголовка: «[Страна]: [почему она так богата?]». Видео на английском языке, средняя длина 8–11 минут, без лица в кадре.\n\nМонтаж из стоковых видео (~80%) и анимированных карт (~20%) с наложением закадрового голоса. Сложность средняя, требует качественного подбора визуального ряда под сценарий.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Top 10 Best Countries To Live In The World In 2022».",
+      "production_methods_ru": "Монтаж из стоковых видео (~80%) и анимированных карт (~20%) с наложением закадрового голоса. Сложность средняя, требует качественного подбора визуального ряда под сценарий.",
+      "subniche_ru": "Экономическая география и уровень жизни",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "maps_graphics"
+      ],
+      "categories": [
+        "economics",
+        "geography",
+        "lifestyle"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Экономика",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCehk2OCov0bThQx7BrSOqZQ",
@@ -63874,7 +64173,7 @@
         "world news 2026",
         "world peace index"
       ],
-      "production_style": "maps_graphics",
+      "production_style": "stock_footage",
       "style_ru": "Карты и графика",
       "style_group": "live",
       "uses_ai": true,
@@ -64192,7 +64491,28 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал со списками лучших стран для жизни, работы и выхода на пенсию, с акцентом на визовые правила и стоимость жизни. Темы включают безвизовые направления для определенных групп и влияние политики США на мигрантов. Шаблон заголовка: «7 стран, которые [событие]: [интригующий факт]». Ролики на английском языке, длиной 15–20 минут, без лица, выходят еженедельно.\n\nМонтаж из стоковых видео (~60%), ИИ-изображений (~20%) и графики с картами (~20%) под закадровый голос. Средняя сложность из-за подбора большого объема тематического футажа.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «7 Countries That Welcome CHRISTIANS With OPEN ARMS (Visa-Free in 2026)».",
+      "production_methods_ru": "Монтаж из стоковых видео (~60%), ИИ-изображений (~20%) и графики с картами (~20%) под закадровый голос. Средняя сложность из-за подбора большого объема тематического футажа.",
+      "subniche_ru": "Эмиграция, визовые правила и стоимость жизни",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "ai_images",
+        "maps_graphics"
+      ],
+      "categories": [
+        "travel",
+        "geography",
+        "lifestyle"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Путешествия и миграция",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UC15RKuR7gzpWYa8UbTofjhw",
@@ -67057,8 +67377,8 @@
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 10500,
       "total_views": 2310146,
@@ -67371,7 +67691,27 @@
       "cluster": "relocation|live|es",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен детальным сравнениям стран и городов для эмиграции, работы и жизни на пенсии. Ролики представляют собой топ-10 списков, основанных на экономических показателях, безопасности и качестве жизни. Шаблоны заголовков: «[Список стран]: [интригующее сравнение]», например: «10 стран, где жить лучше, чем в США». Видео на испанском языке, длительностью 30–40 минут, выходят еженедельно.\n\nМонтаж из стоковых видео (~80%), тематических фото (~10%) и инфографики с картами (~10%). Используется профессиональный закадровый голос и динамичные текстовые плашки.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Los 10 Países donde Vivirás MEJOR que en EE.UU. | Sanidad, Seguridad y Costo de Vida».",
+      "production_methods_ru": "Монтаж из стоковых видео (~80%), тематических фото (~10%) и инфографики с картами (~10%). Используется профессиональный закадровый голос и динамичные текстовые плашки.",
+      "subniche_ru": "Рейтинги стран для переезда и жизни",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "maps_graphics"
+      ],
+      "categories": [
+        "travel",
+        "lifestyle",
+        "finance"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "География",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCJqV6uf05Pvukm4maqKyI3A",
@@ -68614,10 +68954,10 @@
         "wrangell alaska",
         "yogyakarta java"
       ],
-      "production_style": "maps_graphics",
+      "production_style": "stock_footage",
       "style_ru": "Карты и графика",
       "style_group": "live",
-      "uses_ai": false,
+      "uses_ai": true,
       "difficulty": "medium",
       "difficulty_ru": "Средняя",
       "solo_friendly": true,
@@ -68932,7 +69272,28 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Честные обзоры и анти-рейтинги туристических направлений, ориентированные на американских туристов и экспатов. Автор анализирует безопасность, инфраструктуру и стоимость жизни, помогая избегать «туристических ловушек». Примеры заголовков: «[Регион]: рейтинг всех стран от худшей к лучшей», «[Место]: почему сюда не стоит ехать в 2026 году». Видео на английском языке, длительностью 30–40 минут, выходят еженедельно, без лица в кадре.\n\nМонтаж из стоковых видео (~75%), анимированных карт и графики (~20%), архивных фото и видео (~5%). Используется качественный закадровый голос (вероятно, ИИ) и текстовые плашки.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Every Southeast Asian Country Ranked WORST to BEST».",
+      "production_methods_ru": "Монтаж из стоковых видео (~75%), анимированных карт и графики (~20%), архивных фото и видео (~5%). Используется качественный закадровый голос (вероятно, ИИ) и текстовые плашки.",
+      "subniche_ru": "Рейтинги туристических направлений и релокация",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "maps_graphics",
+        "highlights"
+      ],
+      "categories": [
+        "travel",
+        "Documentary",
+        "lifestyle"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Путешествия",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCvIgqriG7-BpTNMPAVYDrYA",
@@ -70355,10 +70716,10 @@
         "worst states to live in america",
         "ِEurope"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "stock_footage",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
-      "uses_ai": false,
+      "uses_ai": true,
       "difficulty": "low",
       "difficulty_ru": "Низкая",
       "solo_friendly": true,
@@ -70673,7 +71034,26 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен подборкам и рейтингам лучших стран и городов для жизни, работы и пенсии. Примеры тем: «10 Best Countries to Live and Work in 2026», «10 Highest Salary Paying Countries in Europe for Expats». Шаблон заголовка: «Топ стран для переезда: [как выбрать идеальное место?]». Видео на английском языке, длительностью от 8 до 30 минут, выпускаются без лица в кадре.\n\nВидеоряд собран из стоковых видеороликов и аэросъемок (~90%) с наложением графических текстовых плашек (~10%). За кадром используется синтезированный ИИ-голос.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «10 Best Countries to Live and Work in 2026 (Jobs + Salaries $)».",
+      "production_methods_ru": "Видеоряд собран из стоковых видеороликов и аэросъемок (~90%) с наложением графических текстовых плашек (~10%). За кадром используется синтезированный ИИ-голос.",
+      "subniche_ru": "Рейтинги стран и переезд за границу",
+      "uses_ai_mode": "with",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage"
+      ],
+      "categories": [
+        "Immigration",
+        "Travel",
+        "Lifestyle"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Иммиграция",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCAvqs3iN9EXTl0dupzOlB3Q",
@@ -74790,12 +75170,12 @@
         "world view english",
         "worst financial traps in america"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "stock_footage",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
-      "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "uses_ai": true,
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 3840,
       "total_views": 934532,
@@ -75108,7 +75488,27 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал о поиске доступных и безопасных стран для релокации, жизни на пенсию и цифрового кочевничества. В роликах сравнивается стоимость жизни, визовые правила и инфраструктура разных регионов. Шаблон заголовка: «Не переезжайте в [Страна]: 4 более доступных варианта». Видео на английском языке, длительностью 8–10 минут, без лица в кадре, выходят примерно раз в неделю.\n\nМонтаж из качественных стоковых видео (~90%) с наложением инфографики, карт и текстовых плашек с ценами (~10%). Используется закадровый голос, сложность средняя из-за необходимости подбора тематического футажа.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Don't Move to Thailand Until You See THESE 4 MORE AFFORDABLE Countries».",
+      "production_methods_ru": "Монтаж из качественных стоковых видео (~90%) с наложением инфографики, карт и текстовых плашек с ценами (~10%). Используется закадровый голос, сложность средняя из-за необходимости подбора тематического футажа.",
+      "subniche_ru": "Бюджетная релокация и жизнь на пенсию",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "maps_graphics"
+      ],
+      "categories": [
+        "travel",
+        "lifestyle",
+        "finance"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Путешествия",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCbyW8XO110Mt13Tf2p6T7dA",
@@ -77829,12 +78229,12 @@
         "where to retire abroad",
         "why Americans don't tip abroad"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "talking_head",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 5970,
       "total_views": 776109,
@@ -78147,7 +78547,30 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Практические советы для людей старше 60 лет по переезду за рубеж, фокусирующиеся на стоимости жизни, медицине и визах. Автор — бывший руководитель госпиталя, разбирающийся в страховании и здравоохранении. Примеры тем: «Почему я не останусь в Латинской Америке», «7 стран с самыми простыми пенсионными визами». Английский язык, ролики 8–14 минут, ведущий в кадре, выход 2 раза в неделю, монетизация через спонсорство.\n\nСъемка ведущего в интерьере (~50%), стоковые футажи и фотографии (~40%), текстовая графика и таблицы (~10%). Средняя сложность из-за экспертности контента.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «I Traveled Latin America for 2 Years. Here's Why I'm Not Retiring There».",
+      "production_methods_ru": "Съемка ведущего в интерьере (~50%), стоковые футажи и фотографии (~40%), текстовая графика и таблицы (~10%). Средняя сложность из-за экспертности контента.",
+      "subniche_ru": "Выход на пенсию и жизнь за границей",
+      "uses_ai_mode": "without",
+      "extra_monetization": [
+        "membership"
+      ],
+      "production_styles": [
+        "talking_head",
+        "stock_footage",
+        "photos_stock"
+      ],
+      "categories": [
+        "travel",
+        "finance",
+        "lifestyle"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Путешествия",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCj8SBH9DESbEjlGa72HT6uA",
@@ -84458,12 +84881,12 @@
         "working class history uk",
         "world cup 1966"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "photos_stock",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
-      "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "uses_ai": true,
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 62300,
       "total_views": 19648002,
@@ -84776,7 +85199,28 @@
       "cluster": "nostalgia|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен бытовой и социальной истории Великобритании 1970–1980-х годов, культуре повседневности и ностальгическим воспоминаниям. Примеры тем: как изменился вес британцев со времен 70-х, исчезнувшие бренды, школьное питание и привычки прошлого. Заголовки строятся по типу: «[Феномен прошлого]: [Почему все изменилось]». Ролики выходят на английском языке, длительностью 13–18 минут, без ведущего в кадре. Частота публикаций — несколько раз в неделю. Явная монетизация отсутствует.\n\nМонтаж архивных фотографий и кинохроники (~60%), сгенерированных ИИ-картинок (~30%) и текстовых вставок (~10%) под закадровый ИИ-голос. Сложность средняя.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Brits Were Slim in the 1970s. Seven Things Changed That».",
+      "production_methods_ru": "Монтаж архивных фотографий и кинохроники (~60%), сгенерированных ИИ-картинок (~30%) и текстовых вставок (~10%) под закадровый ИИ-голос. Сложность средняя.",
+      "subniche_ru": "Социальная история Великобритании 20 века",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "photos_stock",
+        "ai_images",
+        "highlights"
+      ],
+      "categories": [
+        "history",
+        "Documentary",
+        "Culture"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "История",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCgk-7pjbA3JoGEPSlGWUPVg",
@@ -84790,12 +85234,12 @@
       "niche": "nostalgia",
       "niche_ru": "Ностальгия",
       "tags": [],
-      "production_style": "screencast_slides",
+      "production_style": "stock_footage",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 36100,
       "total_views": 4785611,
@@ -85108,7 +85552,28 @@
       "cluster": "nostalgia|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен детальной реконструкции быта Великобритании 1970-х годов через призму еды, телевидения и традиций. В роликах вспоминают рождественские деликатесы, меню популярных в прошлом закусочных и культовые телешоу. Шаблон заголовка: «[Тема]: 25 забытых вещей, которые объединяли британские семьи». Видео на английском языке, имеют формат длинных списков (35–45 минут) и выходят часто.\n\nВидеоряд состоит из архивных съемок (~60%), старых фотографий (~30%) и текстовой графики (~10%) с живой закадровой озвучкой. Производство требует тщательного подбора тематического ретро-контента и качественного сценария.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «25 British Christmas Foods From the 1970s We Waited All Year For».",
+      "production_methods_ru": "Видеоряд состоит из архивных съемок (~60%), старых фотографий (~30%) и текстовой графики (~10%) с живой закадровой озвучкой. Производство требует тщательного подбора тематического ретро-контента и качественного сценария.",
+      "subniche_ru": "Британская ностальгия и быт 1970-х",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "photos_stock",
+        "highlights"
+      ],
+      "categories": [
+        "history",
+        "Documentary",
+        "Culture"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "История и культура",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCf5PrndPQrgYpV5vDKV2kxw",
@@ -122092,12 +122557,12 @@
         "your life as every rank",
         "your life at every level"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "2d_animation",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
-      "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "uses_ai": false,
+      "difficulty": "high",
+      "difficulty_ru": "Высокая",
       "solo_friendly": true,
       "subs": 5260,
       "total_views": 854599,
@@ -122295,7 +122760,26 @@
       "cluster": "pov_stories|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен разбору карьерных путей и уровней мастерства в различных технических областях, таких как кибербезопасность, системное администрирование и программирование. Темы включают этапы развития от новичка с одним ноутбуком до эксперта с серверными стойками. Шаблон заголовка: «[Сфера]: ваша жизнь на каждом уровне». Видео на английском языке, длиной 10-20 минут, без лица, с использованием авторской 2D-анимации.\n\nАвторская 2D-анимация в стиле сторителлинга (~100%) с уникальным персонажем и закадровой озвучкой. Сложность высокая из-за необходимости отрисовки большого количества кадров.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Your Life as Every Rank in HomeLab».",
+      "production_methods_ru": "Авторская 2D-анимация в стиле сторителлинга (~100%) с уникальным персонажем и закадровой озвучкой. Сложность высокая из-за необходимости отрисовки большого количества кадров.",
+      "subniche_ru": "Карьерные уровни в IT и инженерии",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "2d_animation",
+        "illustrations"
+      ],
+      "categories": [
+        "education",
+        "technology"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "IT и Карьера",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UC9R9WOh-J-pDVSD4Vvxv9OQ",
@@ -127124,8 +127608,8 @@
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 683,
       "total_views": 170172,
@@ -127314,7 +127798,28 @@
       "cluster": "collectibles|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Образовательный контент о характеристиках, редкости и стоимости драгоценных камней, структурированный по цветам и типам. Рассматриваются такие темы, как «Черный бриллиант: почему он стоит целое состояние» или «Опалы: почему нет двух одинаковых камней». Ролики на английском языке длятся 12–15 минут, выходят 1–2 раза в неделю, лица автора в кадре нет. Шаблон заголовка: «[Цвет] драгоценные камни: [интригующий факт о цене или редкости]».\n\nСочетание качественных стоковых видео (~50%), инфографики и схем (~30%) и макросъемки камней (~20%) с профессиональной озвучкой. Сложность средняя из-за необходимости подбора специфического визуального ряда и работы с графикой.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Every Black Gemstone Explained — Some Are Worth a Fortune».",
+      "production_methods_ru": "Сочетание качественных стоковых видео (~50%), инфографики и схем (~30%) и макросъемки камней (~20%) с профессиональной озвучкой. Сложность средняя из-за необходимости подбора специфического визуального ряда и работы с графикой.",
+      "subniche_ru": "Геммология и драгоценные камни",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "maps_graphics",
+        "photos_stock"
+      ],
+      "categories": [
+        "Education",
+        "Luxury",
+        "Science"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Ювелирка",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCs9Nbq5c7sxH2iNN6HE9Yaw",
@@ -128145,12 +128650,12 @@
         "stories",
         "myths and folktales"
       ],
-      "production_style": "stock_footage",
+      "production_style": "ai_video",
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "high",
+      "difficulty_ru": "Высокая",
       "solo_friendly": true,
       "subs": 4330,
       "total_views": 343125,
@@ -128232,7 +128737,28 @@
       "cluster": "religion|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен глубокому анализу библейских текстов, пророчеств и эсхатологии. В роликах разбираются такие темы, как тысячелетнее царство Христа, книга Еноха и судьба души после смерти. Заголовки строятся по шаблону: «[Библейская тема]: [интригующий вопрос]» (например, «Книга Еноха: почему её нет в Библии?»). Видео на английском языке, имеют большую длительность (30–45 минут), выходят примерно раз в неделю, лица в кадре нет.\n\nВизуальный ряд на 100% состоит из высококачественных ИИ-генераций (картинки и видео), анимированных с помощью инструментов вроде Runway или Luma. Сопровождается профессиональной озвучкой и эпическим саунд-дизайном; сложность высокая из-за хронометража и качества визуала.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «The 1,000-Year Reign of Christ: What Will Life Be Like During the Millennium?».",
+      "production_methods_ru": "Визуальный ряд на 100% состоит из высококачественных ИИ-генераций (картинки и видео), анимированных с помощью инструментов вроде Runway или Luma. Сопровождается профессиональной озвучкой и эпическим саунд-дизайном; сложность высокая из-за хронометража и качества визуала.",
+      "subniche_ru": "Библейские пророчества и толкование Писания",
+      "uses_ai_mode": "with",
+      "extra_monetization": [],
+      "production_styles": [
+        "ai_video",
+        "ai_images",
+        "ai_illustrations"
+      ],
+      "categories": [
+        "Religion",
+        "Documentary",
+        "Educational"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Религия",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCW3f1KjokLV0aANwhvxzQJQ",
@@ -128355,12 +128881,12 @@
         "mythology",
         "history"
       ],
-      "production_style": "stock_footage",
+      "production_style": "ai_illustrations",
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 1130,
       "total_views": 115632,
@@ -128442,7 +128968,27 @@
       "cluster": "religion|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен разбору библейских текстов, персонажей и исторических контекстов в доступной форме. Рассматриваются такие темы, как авторы книг Библии, запрещенные тексты и биографии ключевых фигур (например, жены царя Давида или происхождение Каина). Шаблон заголовка: «[Персонаж/Событие]: [интригующий вопрос или объяснение]». Ролики на английском языке, длительностью 8–23 минуты, лица в кадре нет.\n\nВидеоряд состоит из сгенерированных ИИ иллюстраций в акварельном стиле (~90%) и текстовой инфографики (~10%), сопровождаемых закадровым голосом. Сложность средняя из-за необходимости подбора качественных промптов для генерации и монтажа.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Every writer of the bible explained in 13 minutes ».",
+      "production_methods_ru": "Видеоряд состоит из сгенерированных ИИ иллюстраций в акварельном стиле (~90%) и текстовой инфографики (~10%), сопровождаемых закадровым голосом. Сложность средняя из-за необходимости подбора качественных промптов для генерации и монтажа.",
+      "subniche_ru": "Библеистика и библейские сюжеты",
+      "uses_ai_mode": "with",
+      "extra_monetization": [],
+      "production_styles": [
+        "ai_illustrations",
+        "ai_images"
+      ],
+      "categories": [
+        "religion",
+        "education",
+        "history"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Религия",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCjTUIoAYa6sOIGZOffhKy_Q",
@@ -129720,12 +130266,12 @@
         "education",
         "future & discoveries"
       ],
-      "production_style": "stock_footage",
+      "production_style": "maps_graphics",
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "high",
+      "difficulty_ru": "Высокая",
       "solo_friendly": true,
       "subs": 12500,
       "total_views": 922881,
@@ -129807,7 +130353,28 @@
       "cluster": "history|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен детальному разбору древней истории различных регионов с акцентом на археологию и географию. Темы включают первые поселения в Турции, доримскую Италию и развитие цивилизации на Ниле. Шаблоны заголовков: «[Эпоха]: [как люди перестали кочевать]?», «[Регион]: [что было до великих империй]?». Видео на английском языке, длительностью 15–20 минут, без лица в кадре.\n\nАнимированные карты (40%), фотографии археологических находок и локаций (40%), стоковые видео (20%) и закадровый голос. Высокая сложность из-за детальной проработки исторических карт и сценария.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «When We First Stopped Wandering (9500–6000 BC)».",
+      "production_methods_ru": "Анимированные карты (40%), фотографии археологических находок и локаций (40%), стоковые видео (20%) и закадровый голос. Высокая сложность из-за детальной проработки исторических карт и сценария.",
+      "subniche_ru": "Древняя история и археология на картах",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "maps_graphics",
+        "photos_stock",
+        "stock_footage"
+      ],
+      "categories": [
+        "history",
+        "documentary",
+        "education"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "История",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCOPyBi52v8aKZoRHtM8BQjw",
@@ -130446,12 +131013,12 @@
         "government",
         "retail business"
       ],
-      "production_style": "stock_footage",
+      "production_style": "screencast_slides",
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 2730,
       "total_views": 85112,
@@ -130533,7 +131100,28 @@
       "cluster": "finance|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Видео посвящены изменениям в пенсионной системе США (Social Security), правилам Medicare и налогам на недвижимость для пожилых граждан. Примеры тем: новые правила проверки доходов для Medicare и 5 штатов, где удвоился налог на имущество. Шаблоны заголовков: «[Новое правило Medicare]: [что нужно сделать всем пенсионерам до августа?]», «[Индексация COLA 2027]: [какой прирост выплат никто не ожидал?]». Ролики выходят на английском языке, длительностью 30–33 минуты, без лица в кадре. Публикации происходят 2–3 раза в неделю. Дополнительной монетизации в описании нет.\n\nСлайды с текстом и инфографикой (~50%), стоковые видео/фото (~40%), ИИ-иллюстрации (~10%), закадровый голос диктора. Монтаж средней сложности, основной объем работы приходится на подготовку 30-минутного сценария.\n\nКлассифицировано 01.11 (Gemini) по названиям и описанию канала.",
+      "production_methods_ru": "Слайды с текстом и инфографикой (~50%), стоковые видео/фото (~40%), ИИ-иллюстрации (~10%), закадровый голос диктора. Монтаж средней сложности, основной объем работы приходится на подготовку 30-минутного сценария.",
+      "subniche_ru": "Пенсии и социальные льготы в США",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "screencast_slides",
+        "stock_footage",
+        "ai_images"
+      ],
+      "categories": [
+        "finance",
+        "news",
+        "law"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Финансы",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCMD3MUhQWYvWgoRoSETzgVw",
@@ -130551,12 +131139,12 @@
         "real estate",
         "business"
       ],
-      "production_style": "stock_footage",
+      "production_style": "2d_animation",
       "style_ru": "Стоковый футаж",
       "style_group": "live",
-      "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "uses_ai": false,
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 2360,
       "total_views": 127650,
@@ -130638,7 +131226,26 @@
       "cluster": "finance|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен финансовому планированию и выходу на пенсию в Австралии. Автор разбирает стратегии использования пенсионных накоплений (Superannuation) и расчеты бюджета. Шаблон заголовка: «[Возраст и сумма]: [Хватит ли этого для жизни?]». Видео длятся 13–18 минут, без лица в кадре, с качественным сторителлингом через анимацию.\n\nПерсонажная 2D-анимация (~70%), инфографика и графики (~30%), профессиональный закадровый голос.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Retiring at 60 vs 67: Is $500k Enough to Survive the Gap?».",
+      "production_methods_ru": "Персонажная 2D-анимация (~70%), инфографика и графики (~30%), профессиональный закадровый голос.",
+      "subniche_ru": "Пенсионное планирование и инвестиции в Австралии",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "2d_animation",
+        "maps_graphics"
+      ],
+      "categories": [
+        "finance",
+        "education"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Финансы",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCCPCEUtao-g9_iWYyfF-B1w",
@@ -130971,12 +131578,12 @@
         "business",
         "self improvement"
       ],
-      "production_style": "screencast_slides",
+      "production_style": "2d_animation",
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 1050,
       "total_views": 162888,
@@ -131058,7 +131665,27 @@
       "cluster": "finance|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Видеоролики о пенсионном планировании, финансовых стратегиях и накоплениях. На канале разбираются темы расчета доходности пенсионного капитала («Retirement Income from $500,000»), инвестирования через фонды Vanguard и Fidelity. Шаблоны заголовков: «[Пенсионный капитал]: [сколько реальности даёт $500,000]», «[Инвестиции для пенсии]: [как выйти на пенсию за 10 лет с нуля]». Язык — английский, хронометраж роликoв — 13–29 минут, без ведущего в кадре.\n\nDoodle-анимация (рисование от руки / whiteboard animation ~90%, графический текст ~10%) с закадровым голосом. Монтаж средней сложности.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Retirement Income from $500,000: This is the Retirement Reality».",
+      "production_methods_ru": "Doodle-анимация (рисование от руки / whiteboard animation ~90%, графический текст ~10%) с закадровым голосом. Монтаж средней сложности.",
+      "subniche_ru": "Пенсионное планирование и накопления",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "2d_animation",
+        "illustrations"
+      ],
+      "categories": [
+        "Finance",
+        "Retirement",
+        "Investing"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Финансы",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCbjgf9PwtrWne1ZxNMPj9gw",
@@ -131358,9 +131985,9 @@
       "production_style": "stock_footage",
       "style_ru": "Стоковый футаж",
       "style_group": "live",
-      "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "uses_ai": true,
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 4960,
       "total_views": 95463,
@@ -131433,7 +132060,27 @@
       "cluster": "engineering|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал объясняет принципы работы промышленного оборудования и технологий производства, таких как изготовление радиаторов, шпона или гвоздей. Видео представляют собой тематические компиляции производственных циклов с подробным техническим комментарием за кадром. Шаблон заголовка: «How [Machine] Actually Works: [Process Name]». Ролики на английском языке, без лица, длительностью 15-20 минут.\n\nМонтаж видеофрагментов с заводов и производственных линий (~90%), дополненный текстовой графикой и закадровым голосом. Используется качественная ИИ-озвучка.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «How These Machines Actually Work  20 Minute Industrial Compilation ▶ 2».",
+      "production_methods_ru": "Монтаж видеофрагментов с заводов и производственных линий (~90%), дополненный текстовой графикой и закадровым голосом. Используется качественная ИИ-озвучка.",
+      "subniche_ru": "Промышленное производство и работа станков",
+      "uses_ai_mode": "with",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "highlights"
+      ],
+      "categories": [
+        "technology",
+        "engineering",
+        "manufacturing"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Технологии",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UChcOu7J_AH5wOZuzpzUhQ3A",
@@ -131665,8 +132312,8 @@
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 10600,
       "total_views": 875013,
@@ -131748,7 +132395,28 @@
       "cluster": "engineering|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Популярно-образовательные видео об устройстве самолетов, инженерных секретах и принципах работы авиационных систем. Примеры тем: почему скорость судов и самолетов измеряется в узлах, как устроено торможение тяжелых самолетов, пределы высоты полета коммерческих лайнеров. Шаблоны заголовков: «Why Ships and Planes Use [Unit]?», «How Do [System] Actually Work?». Язык — английский, хронометраж ролик — 10–20 минут, автор в кадре не появляется.\n\nМонтаж из стоковых видеоклипов (~65%), 3D-анимации и наглядной графики (~35%), дикторский закадровый голос и звуковой дизайн. Сложность средняя.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Why Ships and Planes Use 'Knots' Instead of Miles Per Hours? ».",
+      "production_methods_ru": "Монтаж из стоковых видеоклипов (~65%), 3D-анимации и наглядной графики (~35%), дикторский закадровый голос и звуковой дизайн. Сложность средняя.",
+      "subniche_ru": "Инженерия и устройство авиатехники",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "3d_animation",
+        "maps_graphics"
+      ],
+      "categories": [
+        "aviation",
+        "engineering",
+        "technology"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Авиация",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCTtkvdpsod3as7dgC9eHmkA",
@@ -132168,12 +132836,12 @@
         "aviation",
         "technology"
       ],
-      "production_style": "stock_footage",
+      "production_style": "ai_video",
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 3940,
       "total_views": 1104296,
@@ -132255,7 +132923,28 @@
       "cluster": "engineering|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен анализу военной техники, авиации и разбору гипотетических или реальных боевых сценариев. В видео рассматриваются такие темы, как уязвимость американских самолетов в Иране или превосходство истребителя F-22 над ракетными системами. Заголовки строятся по принципу «[Техника/Событие]: [интригующий вопрос]», например: «Ловушка в Иране: почему 8 самолетов США не вернулись домой?». Ролики на английском языке, длятся 8–13 минут, выходят примерно раз в месяц, лицо автора не используется.\n\nВидеоряд почти полностью состоит из генераций ИИ (изображения и видео), дополненных стоковыми кадрами и редкой архивной хроникой. Используется качественная ИИ-озвучка и динамичный монтаж.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «THE IRAN TRAP: Why 8 US Aircraft Never Came Home».",
+      "production_methods_ru": "Видеоряд почти полностью состоит из генераций ИИ (изображения и видео), дополненных стоковыми кадрами и редкой архивной хроникой. Используется качественная ИИ-озвучка и динамичный монтаж.",
+      "subniche_ru": "Военная авиация и геополитические конфликты",
+      "uses_ai_mode": "with",
+      "extra_monetization": [],
+      "production_styles": [
+        "ai_video",
+        "ai_images",
+        "stock_footage"
+      ],
+      "categories": [
+        "Military",
+        "Engineering",
+        "Documentary"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Военное дело",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCZXuk5t0Ew-g4aa74f3dODg",
@@ -132381,9 +133070,9 @@
       "production_style": "stock_footage",
       "style_ru": "Стоковый футаж",
       "style_group": "live",
-      "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "uses_ai": true,
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 3040,
       "total_views": 270181,
@@ -132465,7 +133154,28 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящён подборкам доступных городов и дешёвой недвижимости для выхода на пенсию и релокации, преимущественно на Филиппинах («10 Philippine Towns Where Retirees Are Buying Villas for Under $50,000», «8 Dirt Cheap Philippine Beach Towns Where $1,000 a Month Is Enough»). Шаблон заголовка: «[Количество] Dirt Cheap Philippine Towns Where [условия/стоимость жизни]». Видео выходят на английском языке без лица в кадре, хронометраж составляет 16–27 минут, дополнительная монетизация отсутствует.\n\nСтоковые и туристические видеофутажи (~50%), фотографии недвижимости и рыночных листингов (~35%), анимированные карты и ценовая инфографика (~15%), реалистичная ИИ-озвучка. Сложность средняя.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «10 Philippine Towns Where Retirees Are Buying Villas for Under $50,000».",
+      "production_methods_ru": "Стоковые и туристические видеофутажи (~50%), фотографии недвижимости и рыночных листингов (~35%), анимированные карты и ценовая инфографика (~15%), реалистичная ИИ-озвучка. Сложность средняя.",
+      "subniche_ru": "Дешёвая недвижимость и пенсия на Филиппинах",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "photos_stock",
+        "maps_graphics"
+      ],
+      "categories": [
+        "Real Estate",
+        "Travel",
+        "Finance"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Эмиграция",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCupSrka--V9sBa8DfrVyYVg",
@@ -132592,8 +133302,8 @@
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 5910,
       "total_views": 1398875,
@@ -132675,7 +133385,28 @@
       "cluster": "collectibles|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен жизни мультимиллиардеров, их активам, безопасности и привычкам. В роликах обсуждаются такие темы, как телохранители знаменитостей, дети богачей в Дубае и секретные бункеры. Шаблон заголовка: «[Личность/Объект]: [Интригующий факт или цена]». Видео на английском языке, длительностью 20–30 минут, без лица в кадре.\n\nКачественный монтаж из архивных съемок, новостных репортажей, кадров папарацци (~70%) и стоковых футажей (~30%) с профессиональным закадровым голосом.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «World’s Most Secretive and Powerful Celebrity Bodyguards».",
+      "production_methods_ru": "Качественный монтаж из архивных съемок, новостных репортажей, кадров папарацци (~70%) и стоковых футажей (~30%) с профессиональным закадровым голосом.",
+      "subniche_ru": "Стиль жизни и активы сверхбогатых людей",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "highlights",
+        "maps_graphics"
+      ],
+      "categories": [
+        "lifestyle",
+        "documentary",
+        "finance"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Роскошь",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCfdKjx8zIhZa5koijY_5y6w",
@@ -132801,9 +133532,9 @@
       "production_style": "stock_footage",
       "style_ru": "Стоковый футаж",
       "style_group": "live",
-      "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "uses_ai": true,
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 8530,
       "total_views": 3143164,
@@ -132885,7 +133616,29 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Документальные ролики о культуре, традициях и повседневной жизни разных стран мира (Непал, Афганистан, Бангладеш, Вьетнам). Шаблоны заголовков: «Real Life in [Страна]: [необычные традиции и факты]», «Truth About Life in [Страна]: [интригующий факт]». Язык — английский, длительность видео составляет 30–35 минут. Без ведущего в кадре, частота публикаций — 1-2 раза в неделю.\n\nМонтаж из стоковых видео, документальных съемок и аэроснимков (~80%), графические текстовые плашки и географические метки (~20%), закадровый ИИ-голос. Сложность производства — средняя.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «NEPAL Before the Flood: Brothers Share One Wife, Living Goddesses & Life on Himalayas! Documentary».",
+      "production_methods_ru": "Монтаж из стоковых видео, документальных съемок и аэроснимков (~80%), графические текстовые плашки и географические метки (~20%), закадровый ИИ-голос. Сложность производства — средняя.",
+      "subniche_ru": "Культура и жизнь в разных странах мира",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "highlights",
+        "maps_graphics"
+      ],
+      "categories": [
+        "documentary",
+        "travel",
+        "geography",
+        "culture"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Документалистика",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCrs8AmQ_vAUCURyDPBa1p9g",
@@ -132906,9 +133659,9 @@
       "production_style": "stock_footage",
       "style_ru": "Стоковый футаж",
       "style_group": "live",
-      "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "uses_ai": true,
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 1630,
       "total_views": 244797,
@@ -132990,7 +133743,28 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Ролики о жизни, стоимости проживания и покупке жилья в малых городах штата Теннесси для пенсионеров (например, «7 Tennessee Towns Where Retirees Live Like Millionaires on Just Social Security» и «10 Tennessee Towns Retirees Move To… Then Deeply Regret»). Шаблоны заголовков: «[Число] городов [региона]: [финансовая или социальная выгода]», «[Число] мест для переезда: [причина пожалеть о выборе]». Язык — английский, хронометраж — 16–18 минут, без лица в кадре.\n\nМонтаж из стоковых видео и фотографий городов (~70%), инфографики и анимации карт (~30%), синтезированный закадровый голос. Сложность средняя.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «7 Tennessee Towns Where Retirees Live Like Millionaires on Just Social Security».",
+      "production_methods_ru": "Монтаж из стоковых видео и фотографий городов (~70%), инфографики и анимации карт (~30%), синтезированный закадровый голос. Сложность средняя.",
+      "subniche_ru": "Пенсия и переезд в Теннесси",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "maps_graphics",
+        "photos_stock"
+      ],
+      "categories": [
+        "Real Estate",
+        "Travel & Events",
+        "Finance"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Недвижимость",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCfK5-pfANzKdmb0Umwyd2rg",
@@ -133117,8 +133891,8 @@
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 2390,
       "total_views": 557063,
@@ -133200,7 +133974,28 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен обзорам интересных локаций, рынка недвижимости и скрытых жемчужин Канады. Темы включают города с бесплатной землей, пляжи с «тропической» водой и загадочные древние постройки. Шаблон заголовка: «[Число] мест в Канаде, которые [неожиданное сравнение]: [почему о них не говорят]». Ролики на английском, длиной 15-22 минуты, без ведущего в кадре.\n\nСочетание стоковых футажей (~70%), анимированных карт и графики (~20%), а также фрагментов пользовательских видео (~10%). Закадровый голос звучит естественно, монтаж динамичный с текстовыми вставками.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «10 Canadian Places That Look Like the Caribbean | But No One Talks About Them».",
+      "production_methods_ru": "Сочетание стоковых футажей (~70%), анимированных карт и графики (~20%), а также фрагментов пользовательских видео (~10%). Закадровый голос звучит естественно, монтаж динамичный с текстовыми вставками.",
+      "subniche_ru": "Туризм и жизнь в Канаде",
+      "uses_ai_mode": "without",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "maps_graphics",
+        "highlights"
+      ],
+      "categories": [
+        "Geography",
+        "Travel",
+        "Documentary"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "География",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCePjmj8ikoLqknc8bF0YP4A",
@@ -133222,8 +134017,8 @@
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 12500,
       "total_views": 1249103,
@@ -133305,7 +134100,27 @@
       "cluster": "relocation|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящён доступной недвижимости, жизни на пенсии и пустеющим городам Германии (например, обзоры городков с домами за €19,000 или мест, где пенсионеру хватает €1,180 в месяц). Шаблоны заголовков: «[Количество] Places in Germany Where [Условие]», «EMPTY GERMANY – [Недвижимость по низкой цене], but NO ONE wants them». Язык озвучки немецкий (метаданные на английском), длина роликов 17–27 минут, без лица в кадре, дополнительная монетизация отсутствует.\n\nНарезка стоковых и открытых видеосъёмок городов с дрона и улиц (~80%), статические фото и титры (~20%), закадровый ИИ-голос. Производство средней сложности, доступное для соло-автора.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «EMPTY GERMANY – Houses for €19,000, but NO ONE wants them».",
+      "production_methods_ru": "Нарезка стоковых и открытых видеосъёмок городов с дрона и улиц (~80%), статические фото и титры (~20%), закадровый ИИ-голос. Производство средней сложности, доступное для соло-автора.",
+      "subniche_ru": "Дешёвая недвижимость и переезд в Германии",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "highlights"
+      ],
+      "categories": [
+        "Real Estate",
+        "Documentary",
+        "Travel"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Недвижимость",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCJW25cmhlS0xr_RJ_atjwXQ",
@@ -134971,8 +135786,8 @@
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 1250,
       "total_views": 139712,
@@ -135054,7 +135869,27 @@
       "cluster": "finance|live|en",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Ролики о ювелирной индустрии, рынке алмазов и искусственных бриллиантах (например, «India Just Destroyed the $13 Billion Diamond Cartel Monopoly!», «Why Diamond Prices Plummet by 95%»). Шаблон заголовка: «[Событие]: [интригующий вопрос]» (например, «Крах рынка алмазов: почему ценность бриллиантов упала на 95%?»). Английский язык, хронометраж 15–20 минут, закадровый голос без ведущего в кадре.\n\nМонтаж из стоковых видеоматериалов (~70%), текстовых плашек и вырезок из статей (~20%), схем и 3D-графики (~10%). Закадровое дикторское озвучивание. Сложность средняя.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «India Just Destroyed the $13 Billion Diamond Cartel Monopoly!».",
+      "production_methods_ru": "Монтаж из стоковых видеоматериалов (~70%), текстовых плашек и вырезок из статей (~20%), схем и 3D-графики (~10%). Закадровое дикторское озвучивание. Сложность средняя.",
+      "subniche_ru": "Рынок драгоценных камней и ювелирный бизнес",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "highlights"
+      ],
+      "categories": [
+        "Business",
+        "Documentary",
+        "Economy"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Экономика",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCbJabCmOGVnD7zejw40S08Q",
@@ -135806,12 +136641,12 @@
         "stories",
         "movies"
       ],
-      "production_style": "stock_footage",
+      "production_style": "highlights",
       "style_ru": "Стоковый футаж",
       "style_group": "live",
-      "uses_ai": false,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "uses_ai": true,
+      "difficulty": "high",
+      "difficulty_ru": "Высокая",
       "solo_friendly": true,
       "subs": 7750,
       "total_views": 372958,
@@ -135856,7 +136691,26 @@
       "entry_verdict": null,
       "entry_verdict_ru": null,
       "entry_score": null,
-      "stale": true
+      "stale": true,
+      "notes_ru": "Канал представляет собой сборник китайских вертикальных веб-сериалов (дорам) с французским дубляжем и субтитрами. Ролики представляют собой отрывки и склейки серий длинного хронометража. Контент полностью заимствован из китайских медиа-платформ.\n\nНарезка готовых китайских микро-сериалов с профессиональной съёмкой, актерами и спецэффектами, на которые наложена машинная озвучка или дубляж.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Ils entendent les pensees de leur belle-fille».",
+      "production_methods_ru": "Нарезка готовых китайских микро-сериалов с профессиональной съёмкой, актерами и спецэффектами, на которые наложена машинная озвучка или дубляж.",
+      "subniche_ru": "Китайские короткие сериалы и дорамы",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "highlights"
+      ],
+      "categories": [
+        "entertainment",
+        "Movies",
+        "Drama"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": false,
+      "reject_reason": "Канал состоит из перезаливов китайских веб-сериалов и дорам, не являясь оригинальным контентом.",
+      "niche_ai_ru": "Кинематограф",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCfoG7VIhcbE2uXu2LS-Kt2Q",
@@ -135876,8 +136730,8 @@
       "style_ru": "Стоковый футаж",
       "style_group": "live",
       "uses_ai": true,
-      "difficulty": "low",
-      "difficulty_ru": "Низкая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": true,
       "subs": 2170,
       "total_views": 94274,
@@ -135922,7 +136776,29 @@
       "entry_verdict": null,
       "entry_verdict_ru": null,
       "entry_score": null,
-      "stale": true
+      "stale": true,
+      "notes_ru": "Канал публикует длительные расслабляющие научно-популярные ролики о физике и устроении Вселенной, предназначенные для засыпания и релаксации. Пример темы: «Where Does Light Actually Get Its Speed From?». Шаблоны заголовков: «[Явление]: [Интригующий вопрос для сна]». Видео выходят на английском языке, имеют хронометраж около 1–2 часов, без ведущего в кадре.\n\nВидеоряд собран из стоковых видеороликов (~50%), ИИ-анимаций и ИИ-изображений (~40%), а также космических снимков (~10%), сопровождая тихий закадровый голос и эмбиентную музыку. Сложность средняя.\n\nКлассифицировано 01.11 (Gemini): просмотр 2 мин ролика «Where Does Light Actually Get Its Speed From?».",
+      "production_methods_ru": "Видеоряд собран из стоковых видеороликов (~50%), ИИ-анимаций и ИИ-изображений (~40%), а также космических снимков (~10%), сопровождая тихий закадровый голос и эмбиентную музыку. Сложность средняя.",
+      "subniche_ru": "Научно-популярные лекции для засыпания",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "stock_footage",
+        "ai_video",
+        "ai_images"
+      ],
+      "categories": [
+        "science",
+        "education",
+        "physics",
+        "sleep"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Физика",
+      "enriched_at": "2026-11-01"
     },
     {
       "id": "UCn0tuokLzDxVAGlcLELiSNQ",
@@ -135995,7 +136871,7 @@
     "jewelry|live|en": {
       "n": 1,
       "share_growing": 0.0,
-      "median_vpv": 45066.53,
+      "median_vpv": 45071.12,
       "median_vps": 120.92,
       "newcomers_30d": 0,
       "median_rpm": 2.85,
@@ -136033,7 +136909,7 @@
     "history|live|es": {
       "n": 1,
       "share_growing": 1.0,
-      "median_vpv": 159967.62,
+      "median_vpv": 159972.83,
       "median_vps": 226.82,
       "newcomers_30d": 1,
       "median_rpm": 4.5,
@@ -136051,8 +136927,8 @@
     "nostalgia|live|de": {
       "n": 1,
       "share_growing": 1.0,
-      "median_vpv": 48906.25,
-      "median_vps": 203.42,
+      "median_vpv": 48906.17,
+      "median_vps": 203.41,
       "newcomers_30d": 1,
       "median_rpm": 6.0,
       "niche_ru": "Ностальгия",

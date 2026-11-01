@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-01T18:02:17.191638Z",
+  "generated_at": "2026-11-01T18:08:44.440043Z",
   "channels": [
     {
       "id": "UCAQ3ijMJflppSdHdsB75n9g",
@@ -34,7 +34,7 @@
     {
       "id": "UCf0VgA4RUAOP1wCXYSLhhyw",
       "subs": 2650,
-      "total_views": 268858,
+      "total_views": 269146,
       "videos_count": 35,
       "score": 84,
       "cluster": "jewelry|live|en",
@@ -144,7 +144,7 @@
     {
       "id": "UC9DltgGxltZs45koX1sDpdA",
       "subs": 5770,
-      "total_views": 1173731,
+      "total_views": 1173699,
       "videos_count": 24,
       "score": 73,
       "cluster": "nostalgia|live|de",
@@ -3666,7 +3666,7 @@
     "jewelry|live|en": {
       "n": 1,
       "share_growing": 0.0,
-      "median_vpv": 45066.53,
+      "median_vpv": 45071.12,
       "entry_score": 53,
       "verdict": "unproven"
     },
@@ -3680,14 +3680,14 @@
     "history|live|es": {
       "n": 1,
       "share_growing": 1.0,
-      "median_vpv": 159967.62,
+      "median_vpv": 159972.83,
       "entry_score": 99,
       "verdict": "open"
     },
     "nostalgia|live|de": {
       "n": 1,
       "share_growing": 1.0,
-      "median_vpv": 48906.25,
+      "median_vpv": 48906.17,
       "entry_score": 96,
       "verdict": "open"
     }
