@@ -5,10 +5,30 @@
   const loadSet = k => { try { return new Set(JSON.parse(localStorage.getItem(k) || '[]')); } catch { return new Set(); } };
   const saveSet = (k, set) => localStorage.setItem(k, JSON.stringify([...set]));
   const loadArr = k => { try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch { return []; } };
-  const state = { tab: 'all', q: '', sort: 'rpm', all: [], saved: loadSet(LS.saved), liked: loadSet(LS.liked), seen: loadSet(LS.seen), clusters: {}, size: {}, rpm: null, labels: (() => { try { return JSON.parse(localStorage.getItem('nr:labels') || '{}'); } catch { return {}; } })() };
+  const state = { tab: 'all', q: '', sort: 'new', group: 'channels', all: [], saved: loadSet(LS.saved), liked: loadSet(LS.liked), seen: loadSet(LS.seen), clusters: {}, size: {}, rpm: null, labels: (() => { try { return JSON.parse(localStorage.getItem('nr:labels') || '{}'); } catch { return {}; } })() };
   const LANG = { en: 'Английский', ru: 'Русский', es: 'Испанский', pt: 'Португальский', fr: 'Французский', de: 'Немецкий', it: 'Итальянский' };
   const fmt = n => { n = Number(n) || 0; if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1).replace('.0', '') + ' млн'; if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1).replace('.0', '') + ' тыс.'; return String(Math.round(n)); };
-  const money = n => (Number(n) || 0).toFixed(2) + ' $';
+  const money = n => (Number(n) || 0).toFixed(2).replace('.', ',') + ' $';
+  const num = n => Math.round(Number(n) || 0).toLocaleString('ru-RU');
+  const dateRu = iso => { const d = iso ? new Date(iso) : null; return d && !isNaN(d) ? d.toLocaleDateString('ru-RU') : ''; };
+  const agoRu = iso => { if (!iso) return ''; const d = Math.floor((Date.now() - new Date(iso)) / 864e5); if (d < 1) return 'сегодня'; if (d < 7) return `${d} дн назад`; if (d < 30) return `${Math.floor(d / 7)} нед назад`; if (d < 365) { const m = Math.floor(d / 30); return `${m} ${plural(m, 'месяц', 'месяца', 'месяцев')} назад`; } const y = Math.floor(d / 365); return `${y} ${plural(y, 'год', 'года', 'лет')} назад`; };
+  const handleOf = c => c.handle ? '@' + c.handle.replace(/^@/, '') : '';
+  const countryName = code => { if (!code) return '—'; try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(code) || code; } catch { return code; } };
+  const STYLE_RU = { stock_footage: 'Стоковые видео', maps_graphics: 'Карты / графика', ai_images: 'ИИ-картинки', '2d_animation': '2D-анимация', '3d_animation': '3D-анимация', ai_video: 'ИИ-видео', highlights: 'Нарезки / шоу', illustrations: 'Иллюстрации', photos_stock: 'Фото / стоки', ai_illustrations: 'ИИ-иллюстрации', talking_head: 'Ведущий в кадре', screencast_slides: 'Скринкаст / слайды', stickman: 'Стикмены' };
+  const styles = c => ((c.production_styles || []).length ? c.production_styles : [c.production_style]).filter(Boolean);
+  const styleName = v => STYLE_RU[v] || state.all.find(c => c.production_style === v)?.style_ru || v;
+  const categories = c => ((c.categories || []).length ? c.categories : c.tags || []);
+  const contentType = c => { const v = c.videos || []; if (!v.length) return 'long'; const sh = v.filter(x => (x.duration_sec || 0) > 0 && x.duration_sec <= 60).length / v.length; return sh >= 0.7 ? 'shorts' : sh <= 0.1 ? 'long' : 'mixed'; };
+  const CONTENT_RU = { long: 'Длинные видео', shorts: 'Shorts', mixed: 'Длинные + Shorts' };
+  const aiMode = c => c.uses_ai_mode || (c.uses_ai ? 'with' : 'without');
+  const AI_RU = { with: 'С ИИ', without: 'Без ИИ', mix: 'Микс' };
+  const growth = c => (c.subs_per_day || 0) / Math.max(c.subs || 1, 1);
+  const DIFF_ORDER = { low: 0, medium: 1, high: 2 };
+  const ICON = { heart: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>', save: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>', ext: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>' };
+  const BAND_HINT = { 'Отличный вход': 'Ниша свежая, конкурентов мало — лучший момент зайти.', 'Хороший вход': 'Спрос есть, конкуренция умеренная — заходить можно.', 'Вход с отстройкой': 'Заходить можно, но нужно заметно отличаться от конкурентов.', 'Последний вагон': 'Входить рискованно — рост уже маловероятен.', 'Вход закрыт': 'Ниша переполнена — новичку не пробиться.' };
+  const BAND_COLOR = { 'badge-green': '#22a653', 'badge-blue': '#2c6bed', 'badge-amber': '#f5a623', 'badge-red': '#ff6a2b', 'badge-grey': '#9aa0ab' };
+  const gauge = (v, cls) => { const f = Math.max(0.04, Math.min(1, v / 100)), a = Math.PI * (1 - f); return `<svg viewBox="0 0 36 21" width="30" height="18"><path d="M3 18A15 15 0 0 1 33 18" fill="none" stroke="#eceef2" stroke-width="4.5" stroke-linecap="round"/><path d="M3 18A15 15 0 0 1 ${(18 + 15 * Math.cos(a)).toFixed(2)} ${(18 - 15 * Math.sin(a)).toFixed(2)}" fill="none" stroke="${BAND_COLOR[cls]}" stroke-width="4.5" stroke-linecap="round"/></svg>`; };
+  const topVids = (c, n) => (c.videos || []).slice().sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, n);
   const ago = iso => { if (!iso) return ''; const d = (Date.now() - new Date(iso)) / 86400000; if (d < 1) return 'сегодня'; if (d < 7) return Math.floor(d) + ' дн.'; if (d < 45) return Math.floor(d / 7) + ' нед.'; return Math.floor(d / 30) + ' мес.'; };
   const hash = s => { let h = 2166136261; for (const c of String(s)) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; };
   const rng = seed => { let x = seed || 1; return () => { x = (x * 1664525 + 1013904223) >>> 0; return x / 4294967296; }; };
@@ -79,6 +99,7 @@
   const subniche = c => subniches(c).slice(0, 2).join(', ');
   const ageDays = c => { const t = Date.parse(c.first_video_at || ''); return Number.isFinite(t) ? (Date.now() - t) / 864e5 : (c.channel_age_days || 0); };
   const longCount = c => c.videos_count_long ?? c.videos_count ?? 0;
+  const outliers = c => (c.videos || []).filter(v => outX(c, v) >= 2.5).length;
   const outX = (c, v) => { const m = c.median_views || c.avg_views || 0; return m ? (v.views || 0) / m : 0; };
   const bestX = c => Math.max(0, ...(c.videos || []).map(v => outX(c, v)));
   const vps = c => (c.total_views || 0) / Math.max(c.subs || 1, 1);
@@ -150,7 +171,7 @@
     return out;
   }
   function filtered() {
-    const tag = $('#fTag').value, niche = $('#fNiche').value, sub = $('#fSub').value, cat = $('#fCat').value, lang = $('#fLang').value, format = $('#fFormat').value, style = $('#fStyle').value, diff = $('#fDiff').value, ai = $('#fAi').value, face = $('#fFace').value, mon = $('#fMon').value, days = $('#fDays').value, extra = $('#fExtra').value, itv = $('#fItv').value;
+    const tag = $('#fTag').value, niche = $('#fNiche').value, sub = $('#fSub').value, cat = $('#fCat').value, lang = $('#fLang').value, format = $('#fFormat').value, style = $('#fStyle').value, diff = $('#fDiff').value, ai = $('#fAi').value, avatar = $('#fAvatar').value, face = $('#fFace').value, mon = $('#fMon').value, days = $('#fDays').value, extra = $('#fExtra').value, itv = $('#fItv').value;
     const sMin = +$('#subsMin').value, sMax = +$('#subsMax').value, vMin = +$('#viewsMin').value, vMax = +$('#viewsMax').value, aMin = +$('#avgMin').value, aMax = +$('#avgMax').value, rMin = +$('#rpmMin').value, rMax = +$('#rpmMax').value;
     const q = state.q.trim().toLowerCase();
     let list = state.all.slice();
@@ -159,23 +180,24 @@
     if (state.tab === 'saved') list = list.filter(c => state.saved.has(c.id));
     if (state.tab === 'liked') list = list.filter(c => state.liked.has(c.id));
     list = list.filter(c => {
-      if (q && !`${c.title} ${c.handle} ${(c.tags || []).join(' ')}`.toLowerCase().includes(q)) return false;
+      if (q && !`${c.title} ${c.handle} ${(c.tags || []).join(' ')} ${c.niche_ru || ''} ${subniches(c).join(' ')}`.toLowerCase().includes(q)) return false;
       if (tag && !tagsOf(c).includes(tag)) return false;
       if (extra && !(c.extra_monetization || []).includes(extra)) return false;
       if (itv && (entryIndex(c) ?? -1) < +itv) return false;
       if (niche && c.niche !== niche && c.niche_ru !== niche) return false;
       if (sub && !subniches(c).includes(sub)) return false;
-      if (cat && !(c.tags || []).includes(cat)) return false;
+      if (cat && !categories(c).includes(cat)) return false;
       if (lang && (c.language || '').split('-')[0] !== lang) return false;
-      if (format && c.production_style !== format) return false;
-      if (style && c.production_style !== style) return false;
+      if (format && contentType(c) !== format) return false;
+      if (style && !styles(c).includes(style)) return false;
       if (diff && c.difficulty !== diff) return false;
-      if (ai === 'yes' && !c.uses_ai) return false;
-      if (ai === 'no' && c.uses_ai) return false;
+      if (ai && aiMode(c) !== ai) return false;
+      if (avatar && !!c.has_ai_avatar !== (avatar === 'yes')) return false;
       if (face === 'yes' && !faceless(c)) return false;
       if (face === 'no' && faceless(c)) return false;
-      if (mon === 'yes' && !c.is_monetized) return false;
-      if (mon === 'no' && c.is_monetized) return false;
+      if (mon === 'yes' && c.is_monetized !== true) return false;
+      if (mon === 'no' && c.is_monetized !== false) return false;
+      if (mon === 'unknown' && c.is_monetized != null) return false;
       if (mon === 'soon' && !['≤30 дн.', '≤90 дн.'].includes(c.monetization_forecast)) return false;
       if (days && (c.days_to_monetization || 999) > +days) return false;
       if ((c.subs || 0) < sMin || (c.subs || 0) > sMax) return false;
@@ -187,8 +209,8 @@
       if ($('#onlyRef').checked && state.tab !== 'fire' && !refMatch(c)) return false;
       return true;
     });
-    const sorters = { rpm: (a, b) => (b.rpm || 0) - (a.rpm || 0), new: (a, b) => String(b.added_at || '').localeCompare(String(a.added_at || '')), subs: (a, b) => (b.subs || 0) - (a.subs || 0), views: (a, b) => (b.total_views || 0) - (a.total_views || 0), score: (a, b) => (b.score || 0) - (a.score || 0), income: (a, b) => monthly(b) - monthly(a), entry: (a, b) => (b.entry_score || 0) - (a.entry_score || 0), monetization: (a, b) => (a.days_to_monetization || 9e9) - (b.days_to_monetization || 9e9), minviews: (a, b) => minVideoViews(b) - minVideoViews(a) };
-    list.sort(sorters[state.sort] || sorters.rpm);
+    const sorters = { new: (a, b) => String(b.added_at || '').localeCompare(String(a.added_at || '')) || (b.score || 0) - (a.score || 0), rpm: (a, b) => (b.rpm || 0) - (a.rpm || 0), growth: (a, b) => growth(b) - growth(a), outliers: (a, b) => outliers(b) - outliers(a) || bestX(b) - bestX(a), easy: (a, b) => (DIFF_ORDER[a.difficulty] ?? 1) - (DIFF_ORDER[b.difficulty] ?? 1) || (b.score || 0) - (a.score || 0), entry: (a, b) => (entryIndex(b) ?? -1) - (entryIndex(a) ?? -1), subs: (a, b) => (b.subs || 0) - (a.subs || 0), views: (a, b) => (b.total_views || 0) - (a.total_views || 0), income: (a, b) => monthly(b) - monthly(a), monetization: (a, b) => (a.days_to_monetization || 9e9) - (b.days_to_monetization || 9e9) };
+    list.sort(sorters[state.sort] || sorters.new);
     return list;
   }
   const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
@@ -199,10 +221,10 @@
     fill('#fExtra', Object.keys(EXTRA_RU), v => EXTRA_RU[v]);
     fill('#fNiche', uniq('niche'), v => state.all.find(c => c.niche === v)?.niche_ru || v);
     fill('#fSub', [...new Set(state.all.flatMap(subniches))].sort());
-    fill('#fCat', uniq('tags').slice(0, 30));
+    fill('#fCat', [...new Set(state.all.flatMap(categories))].filter(Boolean).sort().slice(0, 60));
     fill('#fLang', [...new Set(uniq('language').map(l => l.split('-')[0]))], v => LANG[v] || v);
-    fill('#fFormat', uniq('production_style'), v => state.all.find(c => c.production_style === v)?.style_ru || v);
-    fill('#fStyle', uniq('production_style'), v => state.all.find(c => c.production_style === v)?.style_ru || v);
+    fill('#fFormat', ['long', 'mixed', 'shorts'].filter(t => state.all.some(c => contentType(c) === t)), v => CONTENT_RU[v]);
+    fill('#fStyle', [...new Set(state.all.flatMap(styles))].sort(), styleName);
     const maxS = Math.max(1000, ...state.all.map(c => c.subs || 0));
     const maxV = Math.max(1000, ...state.all.map(c => c.total_views || 0));
     const maxA = Math.max(100, ...state.all.map(c => c.avg_views || 0));
@@ -218,12 +240,39 @@
     $('#avgLab').textContent = fmt($('#avgMin').value) + ' — ' + fmt($('#avgMax').value);
     $('#rpmLab').textContent = '$' + $('#rpmMin').value + ' — $' + $('#rpmMax').value;
   }
+  const entryBox = (c, full) => { const v = entryIndex(c); if (v == null) return ''; const [l, cls] = entryLabel(v); return `<div class="entry-box"><small>Индекс точки входа</small><div class="entry-val">${gauge(v, cls)}<b>${l} (${v}/100)</b></div>${full ? `<p class="muted">${esc(BAND_HINT[l] || '')}</p>` : ''}</div>`; };
+  const vthumb = (c, v) => { const x = outX(c, v); return `<a class="vt" href="${vUrl(v.id)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(v.thumbnail || 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg')}" alt=""><p>${x >= 2 ? `<span class="x">${x.toFixed(1)}×</span> ` : ''}${esc(v.title)}</p><small>${fmt(v.views)} просм.</small><small>${agoRu(v.published_at)}</small></a>`; };
   function card(c) {
-    const vids = (c.videos || []).slice(0, 3); const tags = (c.tags || []).slice(0, 4);
-    return `<article class="card" data-open="${esc(c.id)}"><div class="card-top"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div><p class="ttl">${esc(c.title)}</p><div class="handle">${esc(c.handle ? '@' + c.handle.replace(/^@/, '') : c.id)}</div></div><span class="pill pill-lang">${esc(LANG[(c.language || 'en').split('-')[0]] || c.language || 'en')}</span>${isNew(c) ? '<span class="pill pill-new">Новое</span>' : ''}${isFire(c) ? `<span class="pill pill-fire" title="До ${FIRE.videos} роликов, минимум ${fmt(minVideoViews(c))} просмотров на ролике, конкурентов в группе ${rivals(c)}">Стреляет</span>` : ''}</div><div class="thumbs">${vids.map(v => `<a class="thumb" href="${vUrl(v.id)}" target="_blank" rel="noopener"><img src="${esc(v.thumbnail || 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg')}" alt=""><p>${outX(c, v) >= 2 ? `<span class="x">${outX(c, v).toFixed(1)}×</span> ` : ''}${esc(v.title)}</p><small>${fmt(v.views)} просм. · ${ago(v.published_at)}</small></a>`).join('')}</div><div class="nrow"><span class="muted">Ниша</span><span class="tag">${esc(c.niche_ru || 'Другое')}</span></div><div class="nrow"><span class="muted">Подниша</span>${subniche(c).split(', ').map(x => `<span class="tag">${esc(x)}</span>`).join('')}</div><div class="stats"><div><small>Подписчики</small><b>${fmt(c.subs)}</b></div><div><small>Просмотры</small><b>${fmt(c.total_views)}</b></div><div><small>RPM</small><b>${money(c.rpm)}</b></div><div><small>Доход/мес.</small><b>~${fmt(monthly(c))} $</b></div></div>${entryIndex(c) != null ? (() => { const v = entryIndex(c); const [l, cls] = entryLabel(v); return `<div class="entry"><small class="muted">Индекс точки входа</small><span class="badge ${cls}" title="${esc(VERDICT_HINT[c.entry_verdict] || '')}">${l} (${v}/100)</span></div>`; })() : ''}<div class="tags">${flags(c).map(f => `<span class="badge badge-amber">${f}</span>`).join('')}${tags.map((t, i) => `<span class="tag ${i === 1 ? 'tag-g' : i === 2 ? 'tag-p' : ''}">${esc(t)}</span>`).join('')}</div><div class="foot"><button type="button" class="icon ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}">🔖</button><button type="button" class="icon ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}">❤</button><button type="button" class="btn-comp" data-comps="${esc(c.id)}">Конкуренты (${state.all.filter(x => x.niche === c.niche && x.id !== c.id).length})</button><button type="button" class="more" data-open="${esc(c.id)}">Подробнее →</button></div></article>`;
+    const comps = state.all.filter(x => x.niche === c.niche && x.id !== c.id).length;
+    return `<article class="card" data-open="${esc(c.id)}"><div class="card-top"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div class="who"><p class="ttl">${esc(c.title)}</p><div class="handle">${esc(handleOf(c))}</div></div><div class="pills">${isNew(c) ? '<span class="pill pill-new">Новое</span>' : ''}${isFire(c) ? '<span class="pill pill-fire">Стреляет</span>' : ''}<span class="pill">${esc(langName(c.language))}</span></div></div><div class="vts">${topVids(c, 3).map(v => vthumb(c, v)).join('')}</div><div class="nrow"><span>Ниша</span><span class="tag tag-b">${esc(c.niche_ru || 'Другое')}</span></div><div class="nrow"><span>Подниша</span>${subniches(c).slice(0, 2).map(x => `<span class="tag tag-b">${esc(x)}</span>`).join('')}</div><div class="kpis3"><div><small>Подписчики</small><b>${num(c.subs)}</b></div><div><small>Просмотры</small><b>${num(c.total_views)}</b></div><div><small>RPM</small><b>${money(c.rpm)}</b></div></div>${entryBox(c, false)}${flags(c).length ? `<div class="tags">${flags(c).map(f => `<span class="tag tag-o">${f}</span>`).join('')}</div>` : ''}<div class="foot"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><button type="button" class="btn-comp" data-comps="${esc(c.id)}">Конкуренты (${comps})</button><button type="button" class="more" data-open="${esc(c.id)}">Подробнее →</button></div><div class="added">${esc(dateRu(c.added_at))}</div></article>`;
   }
-  function pie(parts, colors) { let a = 0; return `<svg viewBox="0 0 36 36" width="90" height="90">` + parts.map((p, i) => { const x = a; a += p * 360; return `<circle r="16" cx="18" cy="18" fill="transparent" stroke="${colors[i]}" stroke-width="8" stroke-dasharray="${p * 100.5} 100.5" transform="rotate(${x - 90} 18 18)"></circle>`; }).join('') + '</svg>'; }
-  function line(arr, color) { const max = Math.max(...arr, 1); const pts = arr.map((v, i) => `${(i / (arr.length - 1)) * 100},${28 - (v / max) * 24}`).join(' '); return `<svg class="line" viewBox="0 0 100 30" preserveAspectRatio="none"><polyline fill="none" stroke="${color}" stroke-width="1.6" points="${pts}"/></svg>`; }
+
+  function pie(parts, colors) {
+    const tot = parts.reduce((a, b) => a + b, 0) || 1; let a = -Math.PI / 2;
+    return '<svg viewBox="0 0 100 100" width="130" height="130">' + parts.map((p, i) => { const f = p / tot; if (f >= 0.999) return `<circle cx="50" cy="50" r="48" fill="${colors[i]}"/>`; const a2 = a + f * 2 * Math.PI; const d = `M50 50L${(50 + 48 * Math.cos(a)).toFixed(2)} ${(50 + 48 * Math.sin(a)).toFixed(2)}A48 48 0 ${f > 0.5 ? 1 : 0} 1 ${(50 + 48 * Math.cos(a2)).toFixed(2)} ${(50 + 48 * Math.sin(a2)).toFixed(2)}Z`; a = a2; return `<path d="${d}" fill="${colors[i]}" stroke="#fff" stroke-width="1.5"><title>${Math.round(f * 100)}%</title></path>`; }).join('') + '</svg>';
+  }
+  const legend = (names, colors) => `<div class="legend">${names.map((n, i) => `<span><i style="background:${colors[i]}"></i>${esc(n)}</span>`).join('')}</div>`;
+  const MON = ['янв.', 'февр.', 'мар.', 'апр.', 'мая', 'июн.', 'июл.', 'авг.', 'сент.', 'окт.', 'нояб.', 'дек.'];
+  const niceStep = x => { const p = Math.pow(10, Math.floor(Math.log10(Math.max(x, 1)))); const m = x / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p; };
+  function chart(pts, color) {
+    if (pts.length < 2) return '<p class="muted">Мало данных</p>';
+    const W = 640, H = 240, L = 70, B = 28, T = 12, R = 14;
+    const vals = pts.map(p => p[1]); let lo = Math.min(0, ...vals), hi = Math.max(1, ...vals);
+    const step = niceStep((hi - lo) / 4); lo = Math.floor(lo / step) * step; hi = Math.ceil(hi / step) * step;
+    const t0 = Date.parse(pts[0][0]), t1 = Math.max(t0 + 1, Date.parse(pts[pts.length - 1][0]));
+    const X = t => L + (W - L - R) * (t - t0) / (t1 - t0), Y = v => T + (H - T - B) * (1 - (v - lo) / Math.max(1, hi - lo));
+    let g = '';
+    for (let v = lo; v <= hi + 1e-9; v += step) g += `<line x1="${L}" x2="${W - R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" class="gl"/><text x="${L - 10}" y="${(Y(v) + 4).toFixed(1)}" text-anchor="end">${num(v)}</text>`;
+    for (let i = 0; i <= 4; i++) { const t = t0 + (t1 - t0) * i / 4, d = new Date(t); g += `<text x="${X(t).toFixed(1)}" y="${H - 6}" text-anchor="${i === 0 ? 'start' : i === 4 ? 'end' : 'middle'}">${d.getDate()} ${MON[d.getMonth()]}</text>`; }
+    const xy = pts.map(p => [X(Date.parse(p[0])).toFixed(1), Y(p[1]).toFixed(1)]);
+    return `<svg class="chart" viewBox="0 0 ${W} ${H}">${g}<line x1="${L}" x2="${W - R}" y1="${H - B}" y2="${H - B}" stroke="#d9dce3"/><polyline points="${xy.map(q => q.join(',')).join(' ')}" fill="none" stroke="${color}" stroke-width="2"/>${xy.map((q, i) => `<circle cx="${q[0]}" cy="${q[1]}" r="2.8" fill="${color}"><title>${dateRu(pts[i][0])}: ${num(pts[i][1])}</title></circle>`).join('')}</svg>`;
+  }
+  function dated(c, kind) {
+    if (realDaily(c)) { const d = c.daily, out = []; for (let i = 1; i < d.length; i++) out.push([d[i][0], kind === 'subs' ? d[i][1] - d[i - 1][1] : d[i][2] - d[i - 1][2]]); return out; }
+    const s = series(c, kind), now = Date.now();
+    return s.map((v, i) => [new Date(now - (s.length - 1 - i) * 864e5).toISOString().slice(0, 10), Math.round(v)]);
+  }
+
   function entryBlock(c) {
     const g = clusterOf(c); if (!g) return '';
     return `<div class="block"><h3>Вход в нишу</h3><p><span class="badge ${VERDICT_CLASS[g.verdict] || ''}">${esc(g.verdict_ru || g.verdict)}</span> <b>Оценка входа: ${g.entry_score ?? '—'}/100</b></p><p class="muted">${esc(VERDICT_HINT[g.verdict] || '')}</p><div class="meta-grid"><div><small>Каналов в группе</small><b>${g.n}</b></div><div><small>Растут (≥20 тыс. на первых 5)</small><b>${Math.round((g.share_growing || 0) * 100)}%</b></div><div><small>Медиана просм./видео</small><b>${fmt(g.median_vpv)}</b></div><div><small>Новых за 30 дн.</small><b>${g.newcomers_30d}</b></div></div></div>`;
@@ -236,32 +285,63 @@
   function openDrawer(id) {
     const c = state.all.find(x => x.id === id); if (!c) return;
     state.seen.add(id); saveSet(LS.seen, state.seen);
-    const vids = (c.videos || []).slice(0, 10);
+    const vids = topVids(c, 10);
     const comps = state.all.filter(x => x.niche === c.niche && x.id !== c.id).sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 20);
-    const d = demo(c); const banner = vids[0] ? `https://i.ytimg.com/vi/${vids[0].id}/hq720.jpg` : c.thumbnail;
-    $('#drawerPanel').innerHTML = `<img class="banner" src="${esc(banner)}" alt=""><div class="sheet-body"><div class="sheet-head"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div><h2>${esc(c.title)}</h2><div class="handle">${esc(c.handle ? '@' + c.handle.replace(/^@/, '') : '')}</div></div><button type="button" class="close" data-close>Закрыть</button></div><div class="actions"><button type="button" class="icon ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}">❤</button><button type="button" class="icon ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}">🔖</button><a class="btn" href="${yt(c.id, c.handle)}" target="_blank" rel="noopener">YouTube</a><button type="button" class="btn" id="showComps">Конкуренты</button></div><div class="kpi"><div><small>Подписчики</small><b>${fmt(c.subs)}</b></div><div><small>Просмотры</small><b>${fmt(c.total_views)}</b></div><div><small>Видео</small><b>${c.videos_count || 0}</b></div><div><small>RPM</small><b>${money(c.rpm)}</b></div><div><small>RPM Shorts</small><b>${money((c.rpm || 0) * 0.08)}</b></div><div><small>RPM длинных</small><b>${money(c.rpm)}</b></div><div><small>Доход / мес.</small><b>${money(monthly(c))}</b></div><div><small>Аутлаеры</small><b>${(c.videos || []).filter(v => v.is_outlier).length}</b></div></div><div class="meta-grid"><div><small>Страна</small><b>${esc(c.country || '—')}</b></div><div><small>Язык</small><b>${esc(LANG[(c.language || '').split('-')[0]] || c.language || '—')}</b></div><div><small>Стиль</small><b>${esc(c.style_ru || c.production_style || '—')}</b></div><div><small>Сложность</small><b>${esc(c.difficulty_ru || '—')}</b></div><div><small>ИИ</small><b>${c.uses_ai_mode === 'mix' ? 'Микс' : c.uses_ai ? 'С ИИ' : 'Без ИИ'}</b></div><div><small>Монетизация</small><b>${esc(c.monetization_forecast || (c.is_monetized ? 'уже' : 'неясно'))}</b></div><div><small>Доп. монетизация</small><b>${esc((c.extra_monetization || []).map(x => EXTRA_RU[x] || x).join(', ') || '—')}</b></div></div>${risky(c) ? '<div class="warn"><b>Высокие риски.</b> Ниша может чаще получать ограничения монетизации.</div>' : ''}<div class="tags">${(c.tags || []).slice(0, 6).map(t => `<span class="tag">${esc(t)}</span>`).join('')}${c.niche_ru ? `<span class="tag tag-p">${esc(c.niche_ru)}</span>` : ''}</div><p class="muted">Обновлено: ${esc((c.updated_at || '').slice(0, 10))}</p><div class="block"><h3>Описание ниши</h3>${c.notes_ru ? `<p class="notes">${esc(c.notes_ru)}</p><p class="muted">${esc(describeRu(c))}</p>` : `<p>${esc(describeRu(c))}</p>`}${c.description ? `<details><summary class="muted">Оригинальное описание с YouTube</summary><p class="muted">${esc(c.description)}</p></details>` : ''}</div><div class="block"><h3>Критерии отбора</h3><ul class="crit">${CRITERIA.map(([t, f]) => `<li class="${f(c) ? 'ok' : 'no'}">${f(c) ? '✓' : '✗'} ${esc(t)}</li>`).join('')}</ul><p class="muted">Подниша: ${esc(subniche(c))}. Лучший ролик — ${bestX(c).toFixed(1).replace('.', ',')}× от обычного.</p></div><div class="block"><h3>Стреляющий канал</h3><ul class="crit">${FIRE_CRITERIA.map(([t, f]) => `<li class="${f(c) ? 'ok' : 'no'}">${f(c) ? '✓' : '✗'} ${esc(t)}</li>`).join('')}</ul><p class="muted">Слабейший ролик — ${fmt(minVideoViews(c))} просмотров, длинных роликов ${longCount(c)}, конкурентов в группе ${rivals(c)}.</p></div><div class="block"><h3>Топ видео</h3><div class="vids">${vids.map(v => `<a class="thumb" href="${vUrl(v.id)}" target="_blank" rel="noopener"><img src="${esc(v.thumbnail || 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg')}" alt=""><p>${esc(v.title)}</p><small>${fmt(v.views)}</small></a>`).join('')}</div></div><div class="block"><h3>Демография <small class="muted">оценка</small></h3><div class="charts"><div class="chart">Пол<br>${pie([d.male, d.female], ['#4aa3e8', '#e45b7a'])}<div class="muted">Муж ${Math.round(d.male * 100)}% · Жен ${Math.round(d.female * 100)}%</div></div><div class="chart">Возраст<br>${pie(d.ages, ['#8ecae6', '#219ebc', '#023047', '#ffb703', '#fb8500'])}</div><div class="chart">Страны<br>${pie(d.countries.map(x => x[1]), ['#e23b32', '#3b6dff', '#1f8a4a', '#f5a623', '#888'])}<div class="muted">${d.countries.map(x => x[0]).join(', ')}</div></div></div></div><div class="block"><h3>Динамика просмотров${estNote(c)}</h3>${line(series(c, 'views'), '#e23b32')}</div><div class="block"><h3>Прирост подписчиков${estNote(c)}</h3>${line(series(c, 'subs'), '#3b6dff')}</div><div class="block"><h3>Оценка дохода за день${estNote(c)}</h3>${line(series(c, 'rev'), '#f5a623')}</div><div class="block" id="compsBlock" hidden><h3>Конкуренты</h3><p class="muted">Другие молодые каналы той же ниши в базе. Нажми на строку — откроется разбор канала.</p><div class="table-wrap"><table class="comp"><thead><tr><th>Канал</th><th>Подп.</th><th>Видео</th><th>Ср. просм.</th><th>Доход/мес.</th><th>RPM</th><th>Язык</th><th>Score</th></tr></thead><tbody>${comps.map(x => `<tr data-open="${esc(x.id)}"><td>${esc(x.title)}</td><td>${fmt(x.subs)}</td><td>${x.videos_count || 0}</td><td>${fmt(x.avg_views)}</td><td>~${fmt(monthly(x))} $</td><td>${money(x.rpm)}</td><td>${esc(langName(x.language))}</td><td>${x.score ?? '—'}</td></tr>`).join('') || '<tr><td colspan="8">Нет других каналов</td></tr>'}</tbody></table></div></div>${entryBlock(c)}${prospectsBlock(c)}</div>`;
-    $('#drawer').hidden = false;
+    const d = demo(c); const banner = c.banner || (vids[0] ? `https://i.ytimg.com/vi/${vids[0].id}/hq720.jpg` : '');
+    const extra = (c.extra_monetization || []).map(x => EXTRA_RU[x] || x).join(', ');
+    const kpi = [['Подписчики', num(c.subs)], ['Просмотры', num(c.total_views)], ['Видео', num(c.videos_count)], ['RPM', money(c.rpm)], ['RPM Shorts', money(c.rpm_short ?? (c.rpm || 0) * 0.08)], ['RPM длинных видео', money(c.rpm_long ?? c.rpm)], ['Прострелов', outliers(c)], ['Страна', countryName(c.country)], ['Язык', langName(c.language)], ['Сложность производства', c.difficulty_ru || '—'], ['Использование ИИ', AI_RU[aiMode(c)]], ['Доп. монетизация', extra || '—'], ['Доход / мес.', '~' + num(monthly(c)) + ' $'], ['Монетизация YouTube', c.is_monetized ? 'Монетизирован' : c.is_monetized === false ? 'Не монетизирован' : 'Неизвестно'], ['До монетизации', c.is_monetized ? '—' : c.monetization_forecast || '—'], ['Формат контента', CONTENT_RU[contentType(c)]]];
+    const trow = (label, items, cls) => items.length ? `<div class="trow"><span>${label}</span>${items.map(x => `<span class="tag ${cls}">${esc(x)}</span>`).join('')}</div>` : '';
+    const ageN = ['13–17 лет', '18–24 лет', '25–34 лет', '35–44 лет', '45+ лет'], pc = ['#ff3b1f', '#4a86c8', '#e8a93a', '#4caf88', '#9b6fd3', '#9aa0ab'];
+    $('#drawerPanel').innerHTML = `<button type="button" class="x-close" data-close>× Закрыть</button>${banner ? `<img class="banner" src="${esc(banner)}" alt="">` : ''}<div class="m-head"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div><h2>${esc(c.title)}</h2><div class="handle">${esc(handleOf(c))}</div></div><div class="m-act"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><a class="ic" href="${yt(c.id, c.handle)}" target="_blank" rel="noopener" title="Открыть на YouTube">${ICON.ext}</a><button type="button" class="btn-out" id="showComps">Конкуренты</button></div></div>
+<div class="kpi">${kpi.map(([k, v]) => `<div><small>${k}</small><b>${esc(v)}</b></div>`).join('')}</div>${risky(c) ? '<div class="warn"><b>Высокие риски.</b> Ниша может чаще получать ограничения монетизации.</div>' : ''}
+${trow('Стиль производства', styles(c).map(styleName), 'tag-o')}${trow('Категории', categories(c).slice(0, 6), 'tag-g')}${trow('Ниша', [c.niche_ru || 'Другое'], 'tag-b')}${trow('Подниша', subniches(c).slice(0, 3), 'tag-p')}${trow('Метки', flags(c), 'tag-o')}
+<h3 class="h">Описание ниши</h3><p class="notes">${esc(c.notes_ru || describeRu(c))}</p>${c.notes_ru ? `<details><summary class="muted">Сводка по цифрам</summary><p class="notes">${esc(describeRu(c))}</p></details>` : ''}
+<div style="margin-top:18px">${entryBox(c, true)}</div><p class="muted small">Обновлено: ${esc(dateRu(c.updated_at))}</p>
+${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.description)}</p>` : ''}
+<h3 class="h">Топ-10 видео</h3><div class="vts vts-3">${vids.map(v => vthumb(c, v)).join('')}</div>
+<h3 class="h">Демография аудитории <small>оценка по нише и языку</small></h3><div class="demo"><div><b>Пол</b>${pie([d.male, d.female], pc)}${legend(['Муж', 'Жен'], pc)}</div><div><b>Возраст</b>${pie(d.ages, pc)}${legend(ageN, pc)}</div><div><b>Страны аудитории</b>${pie(d.countries.map(x => x[1]), pc)}${legend(d.countries.map(x => x[0]), pc)}</div></div>
+<h3 class="h">Динамика просмотров${estNote(c)}</h3>${chart(dated(c, 'views'), '#ff3b1f')}
+<h3 class="h">Прирост подписчиков за день${estNote(c)}</h3>${chart(dated(c, 'subs'), '#4a86c8')}
+<div class="block" id="compsBlock" hidden><h3>Конкуренты</h3><p class="muted">Другие каналы той же ниши в базе. Нажмите на строку — откроется разбор канала.</p><div class="table-wrap"><table class="comp"><thead><tr><th>Канал</th><th>Подп.</th><th>Видео</th><th>Ср. просм.</th><th>Доход/мес.</th><th>RPM</th><th>Язык</th><th>ИТВ</th></tr></thead><tbody>${comps.map(x => `<tr data-open="${esc(x.id)}"><td>${esc(x.title)}</td><td>${num(x.subs)}</td><td>${x.videos_count || 0}</td><td>${num(x.avg_views)}</td><td>~${num(monthly(x))} $</td><td>${money(x.rpm)}</td><td>${esc(langName(x.language))}</td><td>${entryIndex(x) ?? '—'}</td></tr>`).join('') || '<tr><td colspan="8">Нет других каналов</td></tr>'}</tbody></table></div></div>
+<div class="block"><h3>Критерии отбора</h3><ul class="crit">${CRITERIA.map(([t, f]) => `<li class="${f(c) ? 'ok' : 'no'}">${f(c) ? '✓' : '✗'} ${esc(t)}</li>`).join('')}</ul><p class="muted">Лучший ролик — ${bestX(c).toFixed(1).replace('.', ',')}× от обычного.</p></div>
+<div class="block"><h3>Стреляющий канал</h3><ul class="crit">${FIRE_CRITERIA.map(([t, f]) => `<li class="${f(c) ? 'ok' : 'no'}">${f(c) ? '✓' : '✗'} ${esc(t)}</li>`).join('')}</ul></div>${entryBlock(c)}${prospectsBlock(c)}`;
+    $('#drawer').hidden = false; $('#drawerPanel').scrollTop = 0;
     $('#showComps')?.addEventListener('click', () => { const b = $('#compsBlock'); b.hidden = !b.hidden; if (!b.hidden) b.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   }
+
   function render() {
+    const counts = { new: state.all.filter(isNew).length, all: state.all.length, saved: state.all.filter(c => state.saved.has(c.id)).length, liked: state.all.filter(c => state.liked.has(c.id)).length, fire: state.all.filter(isFire).length };
+    $$('[data-count]').forEach(el => { el.textContent = counts[el.dataset.count] ?? 0; });
+    $$('[data-tab]').forEach(b => b.classList.toggle('is-on', b.dataset.tab === state.tab));
     const nich = state.tab === 'niches';
     $('#niches').hidden = !nich; $('#grid').hidden = nich;
-    if (nich) { $('#niches').innerHTML = nichesTable(); $('#resultsInfo').textContent = Object.keys(state.clusters).length + ' групп ниш'; $('#empty').hidden = true; $$('#tabs .tab').forEach(b => b.classList.toggle('is-on', b.dataset.tab === state.tab)); return; }
+    if (nich) { $('#niches').innerHTML = nichesTable(); $('#resultsInfo').textContent = Object.keys(state.clusters).length + ' групп ниш'; $('#empty').hidden = true; return; }
     const list = filtered();
-    $('#resultsInfo').textContent = list.length + ' каналов' + (state.tab === 'fire' ? ` · до ${FIRE.videos} роликов, от ${fmt(FIRE.views)} просмотров на каждом, не больше ${FIRE.rivals} конкурентов` : '');
-    $('#grid').innerHTML = list.map(card).join('');
+    $('#resultsInfo').textContent = `${list.length} ${plural(list.length, 'канал', 'канала', 'каналов')}` + (state.tab === 'fire' ? ` · до ${FIRE.videos} роликов, от ${fmt(FIRE.views)} просмотров на каждом, не больше ${FIRE.rivals} конкурентов` : '');
+    if (state.group === 'channels') $('#grid').innerHTML = `<div class="cards">${list.map(card).join('')}</div>`;
+    else {
+      const key = state.group === 'niche' ? c => c.niche_ru || 'Другое' : c => { const v = entryIndex(c); return v == null ? 'Без оценки' : entryLabel(v)[0]; };
+      const groups = new Map(); list.forEach(c => { const k = key(c); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(c); });
+      const order = ['Отличный вход', 'Хороший вход', 'Вход с отстройкой', 'Последний вагон', 'Вход закрыт', 'Без оценки'];
+      const entries = [...groups].sort((a, b) => state.group === 'compet' ? order.indexOf(a[0]) - order.indexOf(b[0]) : b[1].length - a[1].length);
+      $('#grid').innerHTML = entries.map(([k, arr]) => `<h2 class="grp">${esc(k)} <span>${arr.length}</span></h2><div class="cards">${arr.map(card).join('')}</div>`).join('');
+    }
     $('#empty').hidden = list.length > 0;
-    $$('#tabs .tab').forEach(b => b.classList.toggle('is-on', b.dataset.tab === state.tab));
   }
+
   function toggle(set, key, id) { if (set.has(id)) set.delete(id); else set.add(id); saveSet(key, set); render(); if (!$('#drawer').hidden) openDrawer(id); }
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-comps],[data-label],[data-niche-open],#exportLabels,[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#liveClear,#supportBtn,#supportSend');
+    const t = e.target.closest('[data-comps],[data-label],[data-niche-open],#exportLabels,[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#liveClear,#supportBtn,#supportSend,#sideToggle,#refreshSide,#supportSide,#burger');
     if (!t) return;
     if (t.dataset.label) { const k = t.dataset.label; if (state.labels[k] === t.dataset.val) delete state.labels[k]; else state.labels[k] = t.dataset.val; localStorage.setItem(LS.labels, JSON.stringify(state.labels)); render(); return; }
     if (t.dataset.nicheOpen) { state.tab = 'all'; $('#fNiche').value = t.dataset.nicheOpen; $('#fLang').value = (t.dataset.nicheLang || '').split('-')[0]; $('#filters').hidden = false; render(); return; }
     if (t.id === 'exportLabels') { exportLabels(); return; }
     if (t.hasAttribute('data-close')) { t.closest('.overlay').hidden = true; return; }
-    if (t.dataset.tab) { state.tab = t.dataset.tab; render(); return; }
+    if (t.id === 'sideToggle') { document.body.classList.toggle('side-min'); return; }
+    if (t.id === 'burger') { document.body.classList.toggle('side-open'); return; }
+    if (t.id === 'refreshSide') { openRefresh(); return; }
+    if (t.id === 'supportSide') { $('#supportModal').hidden = false; return; }
+    if (t.dataset.tab) { state.tab = t.dataset.tab; document.body.classList.remove('side-open'); render(); window.scrollTo({ top: 0 }); return; }
     if (t.dataset.save) { e.stopPropagation(); toggle(state.saved, LS.saved, t.dataset.save); return; }
     if (t.dataset.like) { e.stopPropagation(); toggle(state.liked, LS.liked, t.dataset.like); return; }
     if (t.dataset.comps) { e.stopPropagation(); openDrawer(t.dataset.comps); const b = $('#compsBlock'); if (b) { b.hidden = false; setTimeout(() => b.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); } return; }
@@ -279,7 +359,7 @@
     if (e.target.id === 'maxQueries') $('#maxQueriesVal').textContent = e.target.value;
     if (['subsMin', 'subsMax', 'viewsMin', 'viewsMax', 'avgMin', 'avgMax', 'rpmMin', 'rpmMax'].includes(e.target.id)) { if (+$('#subsMin').value > +$('#subsMax').value) $('#subsMin').value = $('#subsMax').value; labs(); render(); }
   });
-  document.addEventListener('change', e => { if (e.target.id === 'sort') { state.sort = e.target.value; render(); } if (e.target.closest('#filters')) render(); });
+  document.addEventListener('change', e => { if (e.target.id === 'sort') { state.sort = e.target.value; render(); } if (e.target.id === 'group') { state.group = e.target.value; render(); } if (e.target.closest('#filters')) render(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') $$('.overlay').forEach(o => o.hidden = true); });
   function openRefresh() {
     $('#refreshModal').hidden = false;

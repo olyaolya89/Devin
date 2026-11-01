@@ -3,83 +3,103 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>YouTube-каналы</title>
-<meta name="description" content="Каталог YouTube-каналов: ниша, стиль производства, монетизация и рост.">
-<link rel="stylesheet" href="styles.css">
+<title>Поисковик ниш — Niche Radar</title>
+<meta name="description" content="Найдите нишу для своего YouTube-канала: отобранные каналы, их контент, монетизация и динамика роста.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=19">
 </head>
 <body>
-<header class="page-head">
-  <div class="wrap">
-    <div>
-      <h1>YouTube-каналы</h1>
-      <p class="lede">Каталог YouTube-каналов, отобранных куратором: ниша, стиль производства, монетизация и рост — чтобы быстрее найти идею для своего канала.</p>
-    </div>
-    <div class="head-meta">
-      <span class="muted" id="generatedAt"></span>
-      <button type="button" class="btn btn-red" id="refreshBtn">Обновить каналы</button>
-    </div>
-  </div>
+<header class="top">
+  <button type="button" class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+  <a class="logo" href="./"><svg viewBox="0 0 40 40" width="38" height="38"><path d="M20 3a17 17 0 1 0 0 34 17 17 0 0 0 0-34zm0 6.5L31 20 20 30.5" fill="none" stroke="#ff3b1f" stroke-width="5" stroke-linejoin="round"/></svg><b>Niche Radar</b></a>
+  <div class="top-right"><span class="muted" id="generatedAt"></span><button type="button" class="btn btn-red" id="refreshBtn">Обновить каналы</button></div>
 </header>
-<div class="wrap">
-  <nav class="tabs" id="tabs">
-    <button type="button" class="tab" data-tab="new">Недавно добавленные</button>
-    <button type="button" class="tab" data-tab="fire">Стреляющие</button>
-    <button type="button" class="tab is-on" data-tab="all">Все каналы</button>
-    <button type="button" class="tab" data-tab="saved">Сохранённые</button>
-    <button type="button" class="tab" data-tab="liked">Нравится</button>
-    <button type="button" class="tab" data-tab="niches">Ниши</button>
-  </nav>
-  <div class="toolbar">
-    <select id="sort" class="sel">
-      <option value="rpm">По RPM</option>
-      <option value="new">Сначала новые</option>
-      <option value="subs">По подписчикам</option>
-      <option value="views">По просмотрам</option>
-      <option value="score">По Score</option>
-      <option value="income">По доходу/мес.</option>
-      <option value="entry">По оценке входа в нишу</option>
-      <option value="minviews">По минимуму просмотров на видео</option>
-      <option value="monetization">Ближе к монетизации</option>
-    </select>
-    <button type="button" class="btn btn-red" id="filtersToggle">Фильтры</button>
-    <label class="search"><input id="search" type="search" placeholder="Поиск по названию или юзернейму" autocomplete="off"></label>
-  </div>
-  <section class="filters" id="filters" hidden>
-    <div class="f-grid">
-      <label>Теги<select id="fTag"><option value="">Теги</option></select></label>
-      <label>Ниша<select id="fNiche"><option value="">Ниша</option></select></label>
-      <label>Подниша<select id="fSub"><option value="">Подниша</option></select></label>
-      <label>Категории<select id="fCat"><option value="">Категории</option></select></label>
-      <label>Язык<select id="fLang"><option value="">Язык</option></select></label>
-      <label>Формат контента<select id="fFormat"><option value="">Формат контента</option></select></label>
-      <label>Стиль производства<select id="fStyle"><option value="">Стиль производства</option></select></label>
-      <label>Сложность производства<select id="fDiff"><option value="">Любое</option><option value="low">Низкая</option><option value="medium">Средняя</option><option value="high">Высокая</option></select></label>
-      <label>Использование нейросети<select id="fAi"><option value="">Любое</option><option value="yes">Да</option><option value="no">Нет</option></select></label>
-      <label>Без лица в кадре<select id="fFace"><option value="">Любое</option><option value="yes">Без лица</option><option value="no">С лицом</option></select></label>
-      <label>Монетизация YouTube<select id="fMon"><option value="">Любое</option><option value="yes">Да</option><option value="soon">Прогноз ≤ 90 дн.</option><option value="no">Нет</option></select></label>
-      <label>Дни до монетизации<select id="fDays"><option value="">Дни до монетизации</option><option value="30">≤ 30 дн.</option><option value="90">≤ 90 дн.</option></select></label>
-      <label>Доп. монетизация<select id="fExtra"><option value="">Любая</option></select></label>
-      <label>Мин. ИТВ<select id="fItv"><option value="">Любое</option><option value="20">20+</option><option value="40">40+</option><option value="60">60+</option><option value="80">80+</option></select></label>
+<div class="layout">
+  <aside class="side" id="side">
+    <button type="button" class="side-min-btn" id="sideToggle"><span>×</span> Свернуть</button>
+    <nav>
+      <button type="button" class="nav" data-tab="all"><i class="dot"></i><span>Поисковик ниш</span></button>
+      <button type="button" class="nav" data-tab="new"><i>✦</i><span>Недавно добавленные</span></button>
+      <button type="button" class="nav" data-tab="fire"><i>⚡</i><span>Стреляющие каналы</span></button>
+      <button type="button" class="nav" data-tab="niches"><i>▦</i><span>Группы ниш</span><em>ИТВ</em></button>
+      <button type="button" class="nav" data-tab="saved"><i>★</i><span>Сохранённые</span></button>
+      <button type="button" class="nav" data-tab="liked"><i>♥</i><span>Нравятся</span></button>
+      <hr>
+      <button type="button" class="nav" id="refreshSide"><i>↻</i><span>Обновить каналы</span></button>
+      <button type="button" class="nav" id="supportSide"><i>?</i><span>Поддержка</span></button>
+    </nav>
+  </aside>
+  <main class="main">
+    <h1>Поисковик ниш</h1>
+    <p class="lede">Найдите нишу для своего YouTube-канала: изучайте отобранные каналы, их контент, монетизацию и динамику роста.</p>
+    <nav class="tabs" id="tabs">
+      <button type="button" class="tab" data-tab="new">Недавно добавленные (<span data-count="new">0</span>)</button>
+      <button type="button" class="tab is-on" data-tab="all">Все ниши (<span data-count="all">0</span>)</button>
+      <button type="button" class="tab" data-tab="saved">Сохранённые (<span data-count="saved">0</span>)</button>
+      <button type="button" class="tab" data-tab="liked">Нравятся (<span data-count="liked">0</span>)</button>
+      <button type="button" class="tab" data-tab="fire">Стреляющие (<span data-count="fire">0</span>)</button>
+    </nav>
+    <div class="toolbar">
+      <select id="sort" class="sel">
+        <option value="new">Дата добавления</option>
+        <option value="rpm">По RPM</option>
+        <option value="growth">По росту</option>
+        <option value="outliers">По прострелам</option>
+        <option value="easy">По простоте производства</option>
+        <option value="entry">По ИТВ</option>
+        <option value="income">По доходу/мес.</option>
+        <option value="subs">По подписчикам</option>
+        <option value="views">По просмотрам</option>
+        <option value="monetization">Ближе к монетизации</option>
+      </select>
+      <select id="group" class="sel">
+        <option value="channels">По каналам</option>
+        <option value="niche">По нишам</option>
+        <option value="compet">По конкурентности</option>
+      </select>
+      <button type="button" class="btn btn-red btn-filters" id="filtersToggle"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 4h18l-7 9v6l-4 2v-8z" fill="currentColor"/></svg> Фильтры <svg class="chev" viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.5"/></svg></button>
     </div>
-    <div class="sliders">
-      <label>Подписчики <span id="subsLab">0 — max</span><div class="dual"><input id="subsMin" type="range" min="0" max="200000" value="0"><input id="subsMax" type="range" min="0" max="200000" value="200000"></div></label>
-      <label>Всего просмотров <span id="viewsLab">0 — max</span><div class="dual"><input id="viewsMin" type="range" min="0" max="10000000" value="0"><input id="viewsMax" type="range" min="0" max="10000000" value="10000000"></div></label>
-      <label>Средние просмотры на видео <span id="avgLab">0 — max</span><div class="dual"><input id="avgMin" type="range" min="0" max="500000" value="0"><input id="avgMax" type="range" min="0" max="500000" value="500000"></div></label>
-      <label>RPM <span id="rpmLab">$0 — $30</span><div class="dual"><input id="rpmMin" type="range" min="0" max="30" step="0.1" value="0"><input id="rpmMax" type="range" min="0" max="30" step="0.1" value="30"></div></label>
-    </div>
-    <div class="f-row">
-      <label class="chk"><input type="checkbox" id="onlyNew3"> Только новые за 3 дня</label>
-      <label class="chk"><input type="checkbox" id="onlyUnseen"> Только непросмотренные</label>
-      <label class="chk" title="Подписчиков 500–300 тыс., просмотров от 200 тыс., ≥35 просмотров на подписчика, есть прострел ≥2,5×, свежий ролик за 90 дней"><input type="checkbox" id="onlyRef" checked> Только по критериям отбора</label>
-      <button type="button" class="btn" id="resetFilters">Сбросить</button>
-    </div>
-  </section>
-  <p class="muted" id="resultsInfo"></p>
-  <div class="grid" id="grid"></div>
-  <section id="niches" hidden></section>
-  <div class="empty" id="empty" hidden><h3>Ничего не найдено</h3><p>Сбрось фильтры или нажми «Обновить каналы».</p></div>
+    <label class="search"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="11" cy="11" r="7" fill="none" stroke="#9aa0ab" stroke-width="2"/><path d="M20 20l-4-4" stroke="#9aa0ab" stroke-width="2"/></svg><input id="search" type="search" placeholder="Поиск по названию или юзернейму" autocomplete="off"></label>
+    <section class="filters" id="filters" hidden>
+      <div class="f-grid">
+        <label>Теги<select id="fTag"><option value="">Теги</option></select></label>
+        <label>Ниша<select id="fNiche"><option value="">Ниша</option></select></label>
+        <label>Подниша<select id="fSub"><option value="">Подниша</option></select></label>
+        <label>Категории<select id="fCat"><option value="">Категории</option></select></label>
+        <label>Язык<select id="fLang"><option value="">Язык</option></select></label>
+        <label>Формат контента<select id="fFormat"><option value="">Формат контента</option></select></label>
+        <label>Стиль производства<select id="fStyle"><option value="">Стиль производства</option></select></label>
+        <label>Сложность производства<select id="fDiff"><option value="">Любое</option><option value="low">Низкая</option><option value="medium">Средняя</option><option value="high">Высокая</option></select></label>
+        <label>Использование нейросетей<select id="fAi"><option value="">Любое</option><option value="with">С ИИ</option><option value="without">Без ИИ</option><option value="mix">Микс</option></select></label>
+        <label>ИИ-аватар<select id="fAvatar"><option value="">Любое</option><option value="yes">Да</option><option value="no">Нет</option></select></label>
+        <label>Без лица в кадре<select id="fFace"><option value="">Любое</option><option value="yes">Да</option><option value="no">Нет</option></select></label>
+        <label>Монетизация YouTube<select id="fMon"><option value="">Любое</option><option value="yes">Монетизирован</option><option value="no">Не монетизирован</option><option value="unknown">Неизвестно</option><option value="soon">Прогноз ≤ 90 дн.</option></select></label>
+        <label>Мин. ИТВ<select id="fItv"><option value="">Любое</option><option value="20">20+</option><option value="40">40+</option><option value="60">60+</option><option value="80">80+</option></select></label>
+        <label>Доп. монетизация<select id="fExtra"><option value="">Доп. монетизация</option></select></label>
+        <label>Дни до монетизации<select id="fDays"><option value="">Любое</option><option value="30">≤ 30 дн.</option><option value="90">≤ 90 дн.</option></select></label>
+      </div>
+      <div class="sliders">
+        <label>Подписчики <span id="subsLab">0 — max</span><div class="dual"><input id="subsMin" type="range" min="0" max="200000" value="0"><input id="subsMax" type="range" min="0" max="200000" value="200000"></div></label>
+        <label>Всего просмотров <span id="viewsLab">0 — max</span><div class="dual"><input id="viewsMin" type="range" min="0" max="10000000" value="0"><input id="viewsMax" type="range" min="0" max="10000000" value="10000000"></div></label>
+        <label>Средние просмотры на видео <span id="avgLab">0 — max</span><div class="dual"><input id="avgMin" type="range" min="0" max="500000" value="0"><input id="avgMax" type="range" min="0" max="500000" value="500000"></div></label>
+        <label>RPM <span id="rpmLab">$0 — $30</span><div class="dual"><input id="rpmMin" type="range" min="0" max="30" step="0.1" value="0"><input id="rpmMax" type="range" min="0" max="30" step="0.1" value="30"></div></label>
+      </div>
+      <div class="f-row">
+        <b class="f-sub">Показывать только</b>
+        <label class="chk"><input type="checkbox" id="onlyNew3"> Только новые за 3 дня</label>
+        <label class="chk"><input type="checkbox" id="onlyUnseen"> Только непросмотренные</label>
+        <label class="chk" title="Подписчиков 500–300 тыс., просмотров от 200 тыс., ≥35 просмотров на подписчика, есть прострел ≥2,5×, свежий ролик за 90 дней"><input type="checkbox" id="onlyRef" checked> Только по критериям отбора</label>
+        <button type="button" class="btn" id="resetFilters">Сбросить</button>
+      </div>
+    </section>
+    <p class="muted" id="resultsInfo"></p>
+    <div id="grid"></div>
+    <section id="niches" hidden></section>
+    <div class="empty" id="empty" hidden><h3>Ничего не найдено</h3><p>Сбросьте фильтры или нажмите «Обновить каналы».</p></div>
+  </main>
 </div>
-<button type="button" class="support" id="supportBtn">Поддержка</button>
+<button type="button" class="support" id="supportBtn"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 14v-2a8 8 0 0 1 16 0v2M4 14a2 2 0 0 0 2 2h1v-5H6a2 2 0 0 0-2 2zm16 0a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2z" fill="none" stroke="currentColor" stroke-width="2"/></svg> Поддержка</button>
 <div class="overlay" id="drawer" hidden><div class="overlay-bg" data-close></div><aside class="sheet" id="drawerPanel"></aside></div>
 <div class="overlay" id="refreshModal" hidden>
   <div class="overlay-bg" data-close></div>
@@ -102,7 +122,7 @@
   <div class="box">
     <h3>Поддержка</h3>
     <p class="muted">Сообщение сохранится в этом браузере.</p>
-    <textarea id="supportText" rows="5" placeholder="Опиши проблему"></textarea>
+    <textarea id="supportText" rows="5" placeholder="Опишите проблему"></textarea>
     <div class="row-end">
       <button type="button" class="btn" data-close>Закрыть</button>
       <button type="button" class="btn btn-red" id="supportSend">Отправить</button>
@@ -111,6 +131,6 @@
   </div>
 </div>
 <script src="live.js"></script>
-<script src="app.js"></script>
+<script src="app.js?v=19"></script>
 </body>
 </html>

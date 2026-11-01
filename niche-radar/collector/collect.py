@@ -34,6 +34,7 @@ DAILY_KEEP = 120
 ENRICHED_KEYS = (
     "notes_ru", "subniche_ru", "extra_monetization", "enriched_at", "notes_source",
     "uses_ai", "uses_ai_mode", "difficulty", "difficulty_ru", "production_methods_ru",
+    "has_ai_avatar", "production_styles", "categories",
 )
 
 STYLE_KEYWORDS = {
@@ -389,6 +390,11 @@ def search(
     return results
 
 
+def _banner(channel: dict[str, Any]) -> str:
+    url = ((channel.get("brandingSettings") or {}).get("image") or {}).get("bannerExternalUrl") or ""
+    return f"{url}=w1280-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" if url else ""
+
+
 def eligible(statistics: dict[str, Any]) -> bool:
     """Small-but-proven channel: 1..MAX_VIDEOS uploads, 200..MAX_SUBS public subscribers."""
     videos = _number(statistics.get("videoCount"))
@@ -405,7 +411,7 @@ def fetch_channels(channel_ids: list[str], state: dict[str, Any]) -> dict[str, d
     for start in range(0, len(channel_ids), 50):
         payload = yt_get(
             "channels",
-            {"part": "snippet,statistics,contentDetails", "id": ",".join(channel_ids[start : start + 50])},
+            {"part": "snippet,statistics,contentDetails,brandingSettings", "id": ",".join(channel_ids[start : start + 50])},
             state,
         )
         for item in payload.get("items", []):
@@ -631,6 +637,7 @@ def _channel_output(
         "description": channel.get("snippet", {}).get("description", ""),
         "thumbnail": channel.get("snippet", {}).get("thumbnails", {}).get("medium", {}).get("url", ""),
         "country": channel.get("snippet", {}).get("country"),
+        "banner": _banner(channel),
         "language": classification["language"],
         "niche": niche,
         "niche_ru": rpm_data["niches"].get(niche, rpm_data["niches"]["other"])["ru_name"],
@@ -805,7 +812,7 @@ def main(argv: list[str] | None = None) -> int:
             payload = yt_get(
                 "channels",
                 {
-                    "part": "snippet,statistics,contentDetails",
+                    "part": "snippet,statistics,contentDetails,brandingSettings",
                     "forHandle": handle,
                 },
                 state,

@@ -19,6 +19,10 @@ from typing import Any
 MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 API = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 EXTRA = ("own_product", "affiliate", "sponsors", "membership", "merch", "none")
+STYLES = (
+    "stock_footage", "maps_graphics", "ai_images", "2d_animation", "3d_animation", "ai_video", "highlights",
+    "illustrations", "photos_stock", "ai_illustrations", "talking_head", "screencast_slides", "stickman",
+)
 DIFFICULTY_RU = {"low": "Низкая", "medium": "Средняя", "high": "Высокая"}
 SCHEMA = {
     "type": "OBJECT",
@@ -29,6 +33,9 @@ SCHEMA = {
         "uses_ai": {"type": "STRING", "enum": ["with", "without", "mix"]},
         "difficulty": {"type": "STRING", "enum": ["low", "medium", "high"]},
         "extra_monetization": {"type": "ARRAY", "items": {"type": "STRING", "enum": list(EXTRA)}},
+        "has_ai_avatar": {"type": "BOOLEAN"},
+        "production_styles": {"type": "ARRAY", "items": {"type": "STRING", "enum": list(STYLES)}},
+        "categories": {"type": "ARRAY", "items": {"type": "STRING"}},
     },
     "required": ["notes_ru", "production_ru", "subniche_ru", "uses_ai", "difficulty", "extra_monetization"],
 }
@@ -47,6 +54,9 @@ subniche_ru — узкая подниша 2–6 слов, например «В�
 uses_ai: with — ИИ-картинки/видео/голос заметны, mix — частично, without — нет.
 difficulty: насколько трудно повторить формат одному автору.
 extra_monetization: только то, что явно видно в описании; иначе ["none"].
+has_ai_avatar: true, если в кадре ИИ-аватар/цифровой ведущий.
+production_styles: 1–3 основных стиля видеоряда, от главного к второстепенному.
+categories: 2–4 коротких английских категории, например ["history", "Documentary", "Military"].
 
 Данные канала:
 {data}"""
@@ -127,6 +137,15 @@ def apply(channel: dict[str, Any], result: dict[str, Any], *, watched: dict[str,
         channel["difficulty"] = result["difficulty"]
         channel["difficulty_ru"] = DIFFICULTY_RU[result["difficulty"]]
     channel["extra_monetization"] = extra
+    styles = [x for x in result.get("production_styles") or [] if x in STYLES]
+    if styles:
+        channel["production_styles"] = styles
+        channel["production_style"] = styles[0]
+    categories = [str(x).strip() for x in result.get("categories") or [] if str(x).strip()][:4]
+    if categories:
+        channel["categories"] = categories
+    if isinstance(result.get("has_ai_avatar"), bool):
+        channel["has_ai_avatar"] = result["has_ai_avatar"]
     channel["notes_source"] = "gemini+video" if watched else "gemini"
     channel["enriched_at"] = now.date().isoformat()
 
