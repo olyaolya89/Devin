@@ -226,6 +226,18 @@ class CollectTests(unittest.TestCase):
         self.assertEqual(result["daily"][-1], ["2025-02-02", 120, 2100])
         self.assertEqual(len(result["daily"]), 3)
 
+    def test_daily_search_limit_429_stops_search_instead_of_crashing(self):
+        import io
+        import urllib.error
+        from unittest import mock
+        body = json.dumps({"error": {"errors": [{"reason": "rateLimitExceeded"}]}}).encode()
+        def boom(*args, **kwargs):
+            raise urllib.error.HTTPError("u", 429, "Too Many Requests", {}, io.BytesIO(body))
+        state = collect._new_state(["k"])
+        with mock.patch("urllib.request.urlopen", boom):
+            with self.assertRaises(collect.QuotaExhausted):
+                collect.yt_get("search", {}, state, cost=100, is_search=True)
+
 
 class EnrichTests(unittest.TestCase):
     def setUp(self):

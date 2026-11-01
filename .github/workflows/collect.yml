@@ -26,10 +26,12 @@ jobs:
           fi
           python niche-radar/collector/collect.py --out niche-radar/data/channels.json
       - name: Describe new channels with Gemini
+        if: ${{ !cancelled() }}
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python niche-radar/collector/enrich.py --data niche-radar/data/channels.json --limit 100
       - name: Commit changed data
+        if: ${{ !cancelled() }}
         run: |
           git config user.name "niche-radar-bot"
           git config user.email "niche-radar-bot@users.noreply.github.com"
