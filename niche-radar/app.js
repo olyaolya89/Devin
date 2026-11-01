@@ -74,28 +74,32 @@
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'labels_export.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
   const SUBNICHES = [
-    ['Истории «Что если» со стикменами', /what if|what would happen|что если|qué pasaría|e se /i],
-    ['Военная история и снаряжение', /\b(war|wwii|ww2|ww1|military|army|soldier|marines?|battle|tank|weapon|navy|pows?|guerra|soldados|krieg|ambush)/i],
-    ['Дикий Запад и фронтир', /wild west|cowboy|frontier|saloon|western|outlaw/i],
-    ['Смерти и трагедии знаменитостей', /tragic|tragedy|celebrit|hollywood|actor|actress|death of|schizophren/i],
-    ['Вулканы и землетрясения', /volcan|earthquake|tecton|eruption|sinkhole|ground (opened|split)|terremoto/i],
-    ['Мегамашины и гигантские конструкции', /biggest|largest|giant|mega ?machine|ship|machines?|cruise|excavator|barco/i],
-    ['Инженерные провалы и мегапроекты', /invent|megaproject|engineer|built a|new .*(plane|car|battery|material)|erfind|invento|megaprojekt|cement|steel/i],
-    ['Инфраструктура и стратегическая география', /infrastructure|canal|dam|bridge|aqueduct|railway|geograph|map|why (so few|nobody) .*live|state makes no sense|acueducto|infraestructura/i],
-    ['Переезд за границу', /relocat|move to|moving to|abroad|expat|living in|retire in|vivir en/i],
-    ['Пожилые люди и подготовка к старости', /senior|retire|over 6\d|elderly|social security|medicare|pension|jubilad|aposentad|después de los 60/i],
-    ['Экономная жизнь и минимализм', /frugal|cheap|budget|save money|minimal|dirt cheap|barat|económic|ahorr/i],
-    ['Питание и здоровье', /health|food|nutrition|vitamin|diet|body|eat|salud|cuerpo|comer/i],
-    ['Ностальгия', /nostalg|retro|195\d|196\d|197\d|198\d|forgotten|old days|olvidad|antes/i],
-    ['Монеты и коллекционирование', /coin|collect|antique|rare|worth|penny|stamp/i],
-    ['Библейские истории и вера', /bible|biblical|jesus|god|church|prayer|faith|christ/i],
-    ['Животные и дикая природа', /animal|wildlife|dog|cat|bird|shark|snake|predator|zoo/i],
-    ['Космос и физика', /space|physics|universe|planet|light|quantum|galaxy|star/i],
-    ['Личные финансы', /money|financ|invest|tax|income|wealth|dinero|negocio/i],
-    ['История цивилизаций', /history|ancient|empire|civilization|historia|geschichte|história|méxico/i],
+    ['Истории «Что если» со стикменами', /\bwhat if\b|what would happen|что если|qué pasaría|\be se\b/i],
+    ['Военная история и снаряжение', /\b(wars?|wwii|ww2|ww1|world war|military|army|soldiers?|marines|battles?|tanks?|weapons?|navy|pows?|guerra|soldados|krieg|ambush\w*)\b/i],
+    ['Дикий Запад и фронтир', /\b(wild west|cowboys?|frontier|saloons?|outlaws?)\b/i],
+    ['Смерти и трагедии знаменитостей', /\b(tragic|tragedy|celebrit\w*|hollywood|actors?|actress\w*|death of|schizophren\w*)\b/i],
+    ['Вулканы и землетрясения', /\b(volcan\w*|earthquakes?|tecton\w*|eruptions?|sinkholes?|terremotos?)\b|ground (opened|split)/i],
+    ['Мегамашины и гигантские конструкции', /\b(biggest|largest|giant|mega ?machines?|ships?|machines?|cruise|excavators?|barcos?)\b/i],
+    ['Инженерные провалы и мегапроекты', /\b(invent\w*|megaprojects?|engineer\w*|erfindung\w*|invento\w*|megaprojekt\w*|cement|steel)\b|built a|new \w+ (plane|car|battery|material)/i],
+    ['Инфраструктура и стратегическая география', /\b(infrastructure|canals?|dams?|bridges?|aqueducts?|railways?|railroads?|geograph\w*|maps?|acueductos?|infraestructura)\b|why (so few|nobody) .*live|state makes no sense/i],
+    ['Переезд за границу', /\b(relocat\w*|move to|moving to|abroad|expats?|retire in|vivir en)\b/i],
+    ['Пожилые люди и подготовка к старости', /\b(seniors?|retire\w*|retirement|over 6\d|elderly|social security|medicare|pensions?|jubilad\w*|jubilarte|aposentad\w*)\b|después de los 60/i],
+    ['Экономная жизнь и минимализм', /\b(frugal\w*|cheap\w*|budget\w*|save money|minimalis\w*|barat\w*|económic\w*|ahorr\w*)\b/i],
+    ['Питание и здоровье', /\b(health\w*|foods?|nutrition|vitamins?|diet|eat|eating|salud|cuerpo|comer)\b/i],
+    ['Ностальгия', /\b(nostalg\w*|retro|19[5-9]0s|forgotten|old days|olvidad\w*)\b/i],
+    ['Ювелирка и драгоценности', /\b(jewel\w*|gemstones?|gems?|pearls?|diamonds?|brooch\w*|earrings?|necklaces?|rings?|jade|gold)\b/i],
+    ['Монеты и коллекционирование', /\b(coins?|collect\w*|antiques?|penny|pennies|stamps?|worth a fortune|vintage)\b/i],
+    ['Библейские истории и вера', /\b(bible|biblical|jesus|god|church|prayer|faith|christian\w*|archangels?|catholic|demons?)\b/i],
+    ['Животные и дикая природа', /\b(animals?|wildlife|dogs?|cats?|kittens?|birds?|sharks?|snakes?|predators?|zoo)\b/i],
+    ['Космос и физика', /\b(space|physics|universe|planets?|quantum|galax\w*|nasa)\b/i],
+    ['Психология и личностный рост', /\b(psycholog\w*|personality|traits?|introverts?|stoic\w*|habits?)\b/i],
+    ['Личные финансы', /\b(money|financ\w*|invest\w*|tax|taxes|income|wealth\w*|dinero|negocios?)\b/i],
+    ['Авто и техника', /\b(cars?|suvs?|trucks?|pickups?|engines?|motorcycles?)\b/i],
+    ['История цивилизаций', /\b(history|historical|ancient|empires?|civilizations?|historia|geschichte|história)\b/i],
   ];
+
   const textOf = c => [...(c.tags || []), c.title, ...(c.videos || []).map(v => v.title)].join(' ');
-  const subniches = c => { if (c.subniche_ru) return c.subniche_ru.split(', '); const t = textOf(c); const hits = SUBNICHES.filter(([, re]) => re.test(t)).map(([n]) => n); return hits.length ? hits : [c.niche_ru || 'Другое']; };
+  const subniches = c => { if (c.subniche_ru) return c.subniche_ru.split(', '); if (c._sub) return c._sub; const texts = [c.title, (c.tags || []).join(' '), ...(c.videos || []).map(v => v.title)].filter(Boolean); const need = (c.videos || []).length >= 5 ? 2 : 1; const hits = SUBNICHES.map(([n, re]) => [n, texts.filter(t => re.test(t)).length]).filter(([, k]) => k >= need).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([n]) => n); c._sub = hits.length ? hits : [c.niche_ru || 'Другое']; return c._sub; };
   const subniche = c => subniches(c).slice(0, 2).join(', ');
   const ageDays = c => { const t = Date.parse(c.first_video_at || ''); return Number.isFinite(t) ? (Date.now() - t) / 864e5 : (c.channel_age_days || 0); };
   const longCount = c => c.videos_count_long ?? c.videos_count ?? 0;
@@ -207,6 +211,7 @@
       if ($('#onlyNew3').checked && !isNew3(c)) return false;
       if ($('#onlyUnseen').checked && state.seen.has(c.id)) return false;
       if ($('#onlyRef').checked && state.tab !== 'fire' && !refMatch(c)) return false;
+      if ($('#onlyVerified').checked && c.verified !== true) return false;
       return true;
     });
     const sorters = { new: (a, b) => String(b.added_at || '').localeCompare(String(a.added_at || '')) || (b.score || 0) - (a.score || 0), rpm: (a, b) => (b.rpm || 0) - (a.rpm || 0), growth: (a, b) => growth(b) - growth(a), outliers: (a, b) => outliers(b) - outliers(a) || bestX(b) - bestX(a), easy: (a, b) => (DIFF_ORDER[a.difficulty] ?? 1) - (DIFF_ORDER[b.difficulty] ?? 1) || (b.score || 0) - (a.score || 0), entry: (a, b) => (entryIndex(b) ?? -1) - (entryIndex(a) ?? -1), subs: (a, b) => (b.subs || 0) - (a.subs || 0), views: (a, b) => (b.total_views || 0) - (a.total_views || 0), income: (a, b) => monthly(b) - monthly(a), monetization: (a, b) => (a.days_to_monetization || 9e9) - (b.days_to_monetization || 9e9) };
@@ -244,7 +249,7 @@
   const vthumb = (c, v) => { const x = outX(c, v); return `<a class="vt" href="${vUrl(v.id)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(v.thumbnail || 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg')}" alt=""><p>${x >= 2 ? `<span class="x">${x.toFixed(1)}×</span> ` : ''}${esc(v.title)}</p><small>${fmt(v.views)} просм.</small><small>${agoRu(v.published_at)}</small></a>`; };
   function card(c) {
     const comps = state.all.filter(x => x.niche === c.niche && x.id !== c.id).length;
-    return `<article class="card" data-open="${esc(c.id)}"><div class="card-top"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div class="who"><p class="ttl">${esc(c.title)}</p><div class="handle">${esc(handleOf(c))}</div></div><div class="pills">${isNew(c) ? '<span class="pill pill-new">Новое</span>' : ''}${isFire(c) ? '<span class="pill pill-fire">Стреляет</span>' : ''}<span class="pill">${esc(langName(c.language))}</span></div></div><div class="vts">${topVids(c, 3).map(v => vthumb(c, v)).join('')}</div><div class="nrow"><span>Ниша</span><span class="tag tag-b">${esc(c.niche_ru || 'Другое')}</span></div><div class="nrow"><span>Подниша</span>${subniches(c).slice(0, 2).map(x => `<span class="tag tag-b">${esc(x)}</span>`).join('')}</div><div class="kpis3"><div><small>Подписчики</small><b>${num(c.subs)}</b></div><div><small>Просмотры</small><b>${num(c.total_views)}</b></div><div><small>RPM</small><b>${money(c.rpm)}</b></div></div>${entryBox(c, false)}${flags(c).length ? `<div class="tags">${flags(c).map(f => `<span class="tag tag-o">${f}</span>`).join('')}</div>` : ''}<div class="foot"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><button type="button" class="btn-comp" data-comps="${esc(c.id)}">Конкуренты (${comps})</button><button type="button" class="more" data-open="${esc(c.id)}">Подробнее →</button></div><div class="added">${esc(dateRu(c.added_at))}</div></article>`;
+    return `<article class="card" data-open="${esc(c.id)}"><div class="card-top"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div class="who"><p class="ttl">${esc(c.title)}</p><div class="handle">${esc(handleOf(c))}</div></div><div class="pills">${isNew(c) ? '<span class="pill pill-new">Новое</span>' : ''}${isFire(c) ? '<span class="pill pill-fire">Стреляет</span>' : ''}${c.verified ? '<span class="pill pill-ok">Проверено ИИ</span>' : c.verified === false ? '<span class="pill">Отклонён ИИ</span>' : '<span class="pill">Не проверен</span>'}<span class="pill">${esc(langName(c.language))}</span></div></div><div class="vts">${topVids(c, 3).map(v => vthumb(c, v)).join('')}</div><div class="nrow"><span>Ниша</span><span class="tag tag-b">${esc(c.niche_ai_ru || c.niche_ru || 'Другое')}</span></div><div class="nrow"><span>Подниша</span>${subniches(c).slice(0, 2).map(x => `<span class="tag tag-b">${esc(x)}</span>`).join('')}</div><div class="kpis3"><div><small>Подписчики</small><b>${num(c.subs)}</b></div><div><small>Просмотры</small><b>${num(c.total_views)}</b></div><div><small>RPM</small><b>${money(c.rpm)}</b></div></div>${entryBox(c, false)}${flags(c).length ? `<div class="tags">${flags(c).map(f => `<span class="tag tag-o">${f}</span>`).join('')}</div>` : ''}<div class="foot"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><button type="button" class="btn-comp" data-comps="${esc(c.id)}">Конкуренты (${comps})</button><button type="button" class="more" data-open="${esc(c.id)}">Подробнее →</button></div><div class="added">${esc(dateRu(c.added_at))}</div></article>`;
   }
 
   function pie(parts, colors) {
@@ -293,8 +298,8 @@
     const trow = (label, items, cls) => items.length ? `<div class="trow"><span>${label}</span>${items.map(x => `<span class="tag ${cls}">${esc(x)}</span>`).join('')}</div>` : '';
     const ageN = ['13–17 лет', '18–24 лет', '25–34 лет', '35–44 лет', '45+ лет'], pc = ['#ff3b1f', '#4a86c8', '#e8a93a', '#4caf88', '#9b6fd3', '#9aa0ab'];
     $('#drawerPanel').innerHTML = `<button type="button" class="x-close" data-close>× Закрыть</button>${banner ? `<img class="banner" src="${esc(banner)}" alt="">` : ''}<div class="m-head"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div><h2>${esc(c.title)}</h2><div class="handle">${esc(handleOf(c))}</div></div><div class="m-act"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><a class="ic" href="${yt(c.id, c.handle)}" target="_blank" rel="noopener" title="Открыть на YouTube">${ICON.ext}</a><button type="button" class="btn-out" id="showComps">Конкуренты</button></div></div>
-<div class="kpi">${kpi.map(([k, v]) => `<div><small>${k}</small><b>${esc(v)}</b></div>`).join('')}</div>${risky(c) ? '<div class="warn"><b>Высокие риски.</b> Ниша может чаще получать ограничения монетизации.</div>' : ''}
-${trow('Стиль производства', styles(c).map(styleName), 'tag-o')}${trow('Категории', categories(c).slice(0, 6), 'tag-g')}${trow('Ниша', [c.niche_ru || 'Другое'], 'tag-b')}${trow('Подниша', subniches(c).slice(0, 3), 'tag-p')}${trow('Метки', flags(c), 'tag-o')}
+<div class="kpi">${kpi.map(([k, v]) => `<div><small>${k}</small><b>${esc(v)}</b></div>`).join('')}</div>${c.verified === false ? `<div class="warn"><b>Отклонён ИИ.</b> ${esc(c.reject_reason || '')}</div>` : c.verified !== true ? '<div class="warn">Канал ещё не проверен ИИ — ниша и подниша определены автоматически по названиям роликов и могут быть неточными.</div>' : ''}${risky(c) ? '<div class="warn"><b>Высокие риски.</b> Ниша может чаще получать ограничения монетизации.</div>' : ''}
+${trow('Стиль производства', styles(c).map(styleName), 'tag-o')}${trow('Категории', categories(c).slice(0, 6), 'tag-g')}${trow('Ниша', [c.niche_ai_ru || c.niche_ru || 'Другое'], 'tag-b')}${trow('Подниша', subniches(c).slice(0, 3), 'tag-p')}${trow('Метки', flags(c), 'tag-o')}
 <h3 class="h">Описание ниши</h3><p class="notes">${esc(c.notes_ru || describeRu(c))}</p>${c.notes_ru ? `<details><summary class="muted">Сводка по цифрам</summary><p class="notes">${esc(describeRu(c))}</p></details>` : ''}
 <div style="margin-top:18px">${entryBox(c, true)}</div><p class="muted small">Обновлено: ${esc(dateRu(c.updated_at))}</p>
 ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.description)}</p>` : ''}
@@ -317,6 +322,9 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     $('#niches').hidden = !nich; $('#grid').hidden = nich;
     if (nich) { $('#niches').innerHTML = nichesTable(); $('#resultsInfo').textContent = Object.keys(state.clusters).length + ' групп ниш'; $('#empty').hidden = true; return; }
     const list = filtered();
+    const nv = state.all.filter(c => c.verified === true).length, vb = $('#verifyInfo');
+    vb.hidden = !$('#onlyVerified').checked || nv === state.all.length;
+    vb.innerHTML = `<span>Проверено ИИ: <b>${nv}</b> из ${state.all.length} каналов. Каждый день в 7:00 МСК Gemini смотрит ролики ещё ~100 каналов, подтверждает нишу и поднишу и отсеивает неподходящие.</span><button type="button" class="btn" id="showUnverified">Показать непроверенные</button>`;
     $('#resultsInfo').textContent = `${list.length} ${plural(list.length, 'канал', 'канала', 'каналов')}` + (state.tab === 'fire' ? ` · до ${FIRE.videos} роликов, от ${fmt(FIRE.views)} просмотров на каждом, не больше ${FIRE.rivals} конкурентов` : '');
     if (state.group === 'channels') $('#grid').innerHTML = `<div class="cards">${list.map(card).join('')}</div>`;
     else {
@@ -331,12 +339,13 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
 
   function toggle(set, key, id) { if (set.has(id)) set.delete(id); else set.add(id); saveSet(key, set); render(); if (!$('#drawer').hidden) openDrawer(id); }
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-comps],[data-label],[data-niche-open],#exportLabels,[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#liveClear,#supportBtn,#supportSend,#sideToggle,#refreshSide,#supportSide,#burger');
+    const t = e.target.closest('[data-comps],[data-label],[data-niche-open],#exportLabels,[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#liveClear,#supportBtn,#supportSend,#sideToggle,#refreshSide,#supportSide,#burger,#showUnverified');
     if (!t) return;
     if (t.dataset.label) { const k = t.dataset.label; if (state.labels[k] === t.dataset.val) delete state.labels[k]; else state.labels[k] = t.dataset.val; localStorage.setItem(LS.labels, JSON.stringify(state.labels)); render(); return; }
     if (t.dataset.nicheOpen) { state.tab = 'all'; $('#fNiche').value = t.dataset.nicheOpen; $('#fLang').value = (t.dataset.nicheLang || '').split('-')[0]; $('#filters').hidden = false; render(); return; }
     if (t.id === 'exportLabels') { exportLabels(); return; }
     if (t.hasAttribute('data-close')) { t.closest('.overlay').hidden = true; return; }
+    if (t.id === 'showUnverified') { $('#onlyVerified').checked = false; render(); return; }
     if (t.id === 'sideToggle') { document.body.classList.toggle('side-min'); return; }
     if (t.id === 'burger') { document.body.classList.toggle('side-open'); return; }
     if (t.id === 'refreshSide') { openRefresh(); return; }
@@ -347,7 +356,7 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     if (t.dataset.comps) { e.stopPropagation(); openDrawer(t.dataset.comps); const b = $('#compsBlock'); if (b) { b.hidden = false; setTimeout(() => b.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); } return; }
     if (t.dataset.open) { openDrawer(t.dataset.open); return; }
     if (t.id === 'filtersToggle') { $('#filters').hidden = !$('#filters').hidden; return; }
-    if (t.id === 'resetFilters') { $$('#filters select').forEach(s => { s.selectedIndex = 0; }); $('#subsMin').value = 0; $('#subsMax').value = $('#subsMax').max; $('#viewsMin').value = 0; $('#viewsMax').value = $('#viewsMax').max; $('#avgMin').value = 0; $('#avgMax').value = $('#avgMax').max; $('#rpmMin').value = 0; $('#rpmMax').value = 30; $('#onlyNew3').checked = $('#onlyUnseen').checked = false; $('#onlyRef').checked = true; labs(); render(); return; }
+    if (t.id === 'resetFilters') { $$('#filters select').forEach(s => { s.selectedIndex = 0; }); $('#subsMin').value = 0; $('#subsMax').value = $('#subsMax').max; $('#viewsMin').value = 0; $('#viewsMax').value = $('#viewsMax').max; $('#avgMin').value = 0; $('#avgMax').value = $('#avgMax').max; $('#rpmMin').value = 0; $('#rpmMax').value = 30; $('#onlyNew3').checked = $('#onlyUnseen').checked = false; $('#onlyRef').checked = true; $('#onlyVerified').checked = true; labs(); render(); return; }
     if (t.id === 'refreshBtn') { openRefresh(); return; }
     if (t.id === 'liveClear') { localStorage.removeItem(LS.live); localStorage.removeItem(LS.liveAt); location.reload(); return; }
     if (t.id === 'refreshRun') runLive();

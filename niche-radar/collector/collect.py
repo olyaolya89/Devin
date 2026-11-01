@@ -34,7 +34,7 @@ DAILY_KEEP = 120
 ENRICHED_KEYS = (
     "notes_ru", "subniche_ru", "extra_monetization", "enriched_at", "notes_source",
     "uses_ai", "uses_ai_mode", "difficulty", "difficulty_ru", "production_methods_ru",
-    "has_ai_avatar", "production_styles", "categories",
+    "has_ai_avatar", "production_styles", "categories", "verified", "reject_reason", "niche_ai_ru",
 )
 
 STYLE_KEYWORDS = {

@@ -87,12 +87,14 @@
       </div>
       <div class="f-row">
         <b class="f-sub">Показывать только</b>
+        <label class="chk" title="Gemini посмотрел ролик и подтвердил нишу и поднишу"><input type="checkbox" id="onlyVerified" checked> Только проверенные ИИ</label>
         <label class="chk"><input type="checkbox" id="onlyNew3"> Только новые за 3 дня</label>
         <label class="chk"><input type="checkbox" id="onlyUnseen"> Только непросмотренные</label>
         <label class="chk" title="Подписчиков 500–300 тыс., просмотров от 200 тыс., ≥35 просмотров на подписчика, есть прострел ≥2,5×, свежий ролик за 90 дней"><input type="checkbox" id="onlyRef" checked> Только по критериям отбора</label>
         <button type="button" class="btn" id="resetFilters">Сбросить</button>
       </div>
     </section>
+    <div class="verify-info" id="verifyInfo" hidden></div>
     <p class="muted" id="resultsInfo"></p>
     <div id="grid"></div>
     <section id="niches" hidden></section>
