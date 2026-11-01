@@ -252,7 +252,8 @@ class EnrichTests(unittest.TestCase):
             if len(calls) == 1:
                 raise ValueError("video not accepted")
             return {"notes_ru": "О войне.", "production_ru": "Карты (~50%).", "subniche_ru": "Военная история",
-                    "uses_ai": "mix", "difficulty": "medium", "extra_monetization": ["own_product", "none"]}
+                    "uses_ai": "mix", "difficulty": "medium", "extra_monetization": ["own_product", "none"],
+                    "production_styles": ["maps_graphics", "bogus"], "categories": ["history"], "has_ai_avatar": False}
 
         now = dt.datetime(2025, 3, 5, tzinfo=dt.timezone.utc)
         self.assertTrue(self.enrich.enrich(self.channel, "k", now, call=fake))
@@ -263,6 +264,9 @@ class EnrichTests(unittest.TestCase):
         self.assertEqual(self.channel["difficulty_ru"], "Средняя")
         self.assertIn("05.03", self.channel["notes_ru"])
         self.assertEqual(self.channel["notes_source"], "gemini")
+        self.assertEqual(self.channel["production_styles"], ["maps_graphics"])
+        self.assertEqual(self.channel["categories"], ["history"])
+        self.assertFalse(self.channel["has_ai_avatar"])
 
 
 if __name__ == "__main__":
