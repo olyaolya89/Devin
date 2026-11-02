@@ -1,1 +1,38 @@
-{}
+{
+  "engineering|en": {
+    "channels": 47,
+    "videos": 50,
+    "query": "the engineering behind",
+    "checked_at": "2026-11-02"
+  },
+  "geography|en": {
+    "channels": 19,
+    "videos": 19,
+    "query": "why this country's geography is a curse",
+    "checked_at": "2026-11-02"
+  },
+  "science|en": {
+    "channels": 45,
+    "videos": 50,
+    "query": "plate tectonics explained animation",
+    "checked_at": "2026-11-02"
+  },
+  "history|en": {
+    "channels": 46,
+    "videos": 50,
+    "query": "history explained stick figures",
+    "checked_at": "2026-11-02"
+  },
+  "nostalgia_finance|en": {
+    "channels": 7,
+    "videos": 8,
+    "query": "forgotten money saving tricks 1970s",
+    "checked_at": "2026-11-02"
+  },
+  "finance|en": {
+    "channels": 47,
+    "videos": 50,
+    "query": "retirement mistakes explained",
+    "checked_at": "2026-11-02"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-02T10:35:03.471083Z",
+  "generated_at": "2026-11-02T11:48:50.235875Z",
   "channels": [
     {
       "id": "UCAQ3ijMJflppSdHdsB75n9g",
@@ -183,7 +183,7 @@
     },
     {
       "id": "UCtrNrW5RTVzL7Tj07EExLKg",
-      "subs": 13000,
+      "subs": 13100,
       "total_views": 5769666,
       "videos_count": 11,
       "score": 73,
@@ -3664,31 +3664,45 @@
   ],
   "clusters": {
     "jewelry|live|en": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 45266.0,
-      "entry_score": 53,
+      "n": 5,
+      "share_growing": 0.4,
+      "median_vpv": 10905.53,
+      "entry_score": 64,
+      "verdict": "filling"
+    },
+    "animals|live|en": {
+      "n": 4,
+      "share_growing": 0.25,
+      "median_vpv": 48399.45,
+      "entry_score": 66,
       "verdict": "unproven"
     },
     "disasters|live|en": {
-      "n": 3,
-      "share_growing": 0.667,
-      "median_vpv": 444199.0,
-      "entry_score": 88,
-      "verdict": "open"
+      "n": 4,
+      "share_growing": 0.5,
+      "median_vpv": 282560.67,
+      "entry_score": 82,
+      "verdict": "filling"
     },
     "history|live|es": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 160970.0,
-      "entry_score": 99,
+      "n": 2,
+      "share_growing": 0.5,
+      "median_vpv": 112137.87,
+      "entry_score": 74,
       "verdict": "open"
     },
     "nostalgia|live|de": {
+      "n": 3,
+      "share_growing": 1.0,
+      "median_vpv": 26989.6,
+      "entry_score": 90,
+      "verdict": "filling"
+    },
+    "lifehacks|live|en": {
       "n": 1,
       "share_growing": 1.0,
-      "median_vpv": 48909.71,
-      "entry_score": 96,
+      "median_vpv": 74748.13,
+      "entry_score": 90,
       "verdict": "open"
     }
   }

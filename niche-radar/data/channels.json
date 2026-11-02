@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-02T10:35:03.471083Z",
-  "quota_units_used": 58,
+  "generated_at": "2026-11-02T11:48:50.235875Z",
+  "quota_units_used": 658,
   "queries_run": 0,
   "channels": [
     {
@@ -27,21 +27,21 @@
       "videos_count": 84,
       "videos_count_long": 30,
       "first_video_at": "2026-08-10T00:54:22Z",
-      "channel_age_days": 84.4,
-      "avg_views": 7655.6,
-      "median_views": 3505.0,
+      "channel_age_days": 84.5,
+      "avg_views": 7656.4,
+      "median_views": 3505.5,
       "avg_views_first_5": 2955.8,
       "avg_duration_sec": 1362.23,
-      "views_per_day": 2721.08,
-      "monthly_views_est": 81632,
-      "subs_per_day": 130.33,
-      "watch_hours_est": 29280.86,
+      "views_per_day": 2719.71,
+      "monthly_views_est": 81591,
+      "subs_per_day": 130.25,
+      "watch_hours_est": 29283.82,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 14.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 1142.85,
+      "monthly_income_est": 1142.27,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -80,7 +80,7 @@
           "id": "M8FvigXFBmQ",
           "title": "10 Estate Sale Ugly Jewelry Pieces You Should Always Grab (Dealers Hope You Walk Past)",
           "thumbnail": "https://i.ytimg.com/vi/M8FvigXFBmQ/mqdefault.jpg",
-          "views": 8069,
+          "views": 8078,
           "published_at": "2026-09-18T00:08:05Z",
           "duration_sec": 1230,
           "is_outlier": false
@@ -107,7 +107,7 @@
           "id": "Cs1TeS9UIEY",
           "title": "10 Estate Sale Bracelets You Should Always Grab (Dealers Don't Know They're Worth a Fortune)",
           "thumbnail": "https://i.ytimg.com/vi/Cs1TeS9UIEY/mqdefault.jpg",
-          "views": 12059,
+          "views": 12068,
           "published_at": "2026-09-14T21:39:32Z",
           "duration_sec": 1282,
           "is_outlier": true
@@ -125,7 +125,7 @@
           "id": "APoIgFzkErA",
           "title": "7 JCPenney Jewelry Items That EVERYONE IGNORES (But They're Absolute Goldmines)",
           "thumbnail": "https://i.ytimg.com/vi/APoIgFzkErA/mqdefault.jpg",
-          "views": 2858,
+          "views": 2859,
           "published_at": "2026-09-11T21:50:51Z",
           "duration_sec": 1397,
           "is_outlier": false
@@ -134,7 +134,7 @@
           "id": "9f9Qf_CiVno",
           "title": "8 Japanese Antique Pieces That Look Fake But Are Worth a Fortune",
           "thumbnail": "https://i.ytimg.com/vi/9f9Qf_CiVno/mqdefault.jpg",
-          "views": 5548,
+          "views": 5549,
           "published_at": "2026-09-10T23:46:44Z",
           "duration_sec": 1620,
           "is_outlier": false
@@ -206,7 +206,7 @@
           "id": "HS8YIjWvjco",
           "title": "10 Antique Silver Serving Pieces That Look Cheap But Are Secretly Worth a Fortune",
           "thumbnail": "https://i.ytimg.com/vi/HS8YIjWvjco/mqdefault.jpg",
-          "views": 9632,
+          "views": 9634,
           "published_at": "2026-09-02T00:55:53Z",
           "duration_sec": 1242,
           "is_outlier": false
@@ -215,7 +215,7 @@
           "id": "O4TAUbCh8k8",
           "title": "10 Old Military Medals & Decorations That Are Secretly Worth a Fortune (You Might Own One)",
           "thumbnail": "https://i.ytimg.com/vi/O4TAUbCh8k8/mqdefault.jpg",
-          "views": 652,
+          "views": 654,
           "published_at": "2026-08-31T23:43:10Z",
           "duration_sec": 1164,
           "is_outlier": false
@@ -336,11 +336,11 @@
           1894524
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "jewelry|live|en",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "filling",
+      "entry_verdict_ru": "Заполняется",
+      "entry_score": 64
     },
     {
       "id": "UCzZqLcrq92NWT52GqSMLesw",
@@ -366,21 +366,21 @@
       "videos_count": 58,
       "videos_count_long": 30,
       "first_video_at": "2026-08-31T20:00:30Z",
-      "channel_age_days": 62.6,
-      "avg_views": 36320.83,
+      "channel_age_days": 62.7,
+      "avg_views": 36346.87,
       "median_views": 18152.0,
-      "avg_views_first_5": 35601.6,
+      "avg_views_first_5": 35609.0,
       "avg_duration_sec": 1251.6,
-      "views_per_day": 17404.11,
-      "monthly_views_est": 522123,
-      "subs_per_day": 70.44,
-      "watch_hours_est": 134863.12,
+      "views_per_day": 17402.34,
+      "monthly_views_est": 522070,
+      "subs_per_day": 70.38,
+      "watch_hours_est": 134959.45,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 14.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 7309.72,
+      "monthly_income_est": 7308.98,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -392,7 +392,7 @@
           "id": "KWL0AqCo3kA",
           "title": "11 Brown Gemstones Ranked By ACTUAL Value — Most Buyers Get This Wrong",
           "thumbnail": "https://i.ytimg.com/vi/KWL0AqCo3kA/mqdefault.jpg",
-          "views": 5700,
+          "views": 5800,
           "published_at": "2026-10-31T20:00:04Z",
           "duration_sec": 1252,
           "is_outlier": false
@@ -401,7 +401,7 @@
           "id": "fi-sMnqAgMY",
           "title": "10 Most Expensive Jade Types on Earth — #1 Can’t Be Bought",
           "thumbnail": "https://i.ytimg.com/vi/fi-sMnqAgMY/mqdefault.jpg",
-          "views": 33386,
+          "views": 33584,
           "published_at": "2026-10-29T20:00:03Z",
           "duration_sec": 1235,
           "is_outlier": false
@@ -419,7 +419,7 @@
           "id": "ctl0FiplwW8",
           "title": "12 Purple Gemstones Ranked By ACTUAL Value — Most Buyers Get This Wrong",
           "thumbnail": "https://i.ytimg.com/vi/ctl0FiplwW8/mqdefault.jpg",
-          "views": 58848,
+          "views": 58997,
           "published_at": "2026-10-25T21:00:33Z",
           "duration_sec": 1372,
           "is_outlier": false
@@ -437,7 +437,7 @@
           "id": "eYc3nsjmQkM",
           "title": "9 Sapphire Colors Ranked By ACTUAL Value — Most Buyers Get This Wrong!",
           "thumbnail": "https://i.ytimg.com/vi/eYc3nsjmQkM/mqdefault.jpg",
-          "views": 6166,
+          "views": 6180,
           "published_at": "2026-10-21T20:00:25Z",
           "duration_sec": 1258,
           "is_outlier": false
@@ -464,7 +464,7 @@
           "id": "1rc5uZ318xI",
           "title": "10 Most Expensive Gemstones on Earth #1 Can’t Be Bought",
           "thumbnail": "https://i.ytimg.com/vi/1rc5uZ318xI/mqdefault.jpg",
-          "views": 108532,
+          "views": 108688,
           "published_at": "2026-10-15T20:00:19Z",
           "duration_sec": 1188,
           "is_outlier": true
@@ -482,7 +482,7 @@
           "id": "Vp68PMXyAJY",
           "title": "11 Gemstones You Should NEVER Wear Without Knowing This!",
           "thumbnail": "https://i.ytimg.com/vi/Vp68PMXyAJY/mqdefault.jpg",
-          "views": 4692,
+          "views": 4695,
           "published_at": "2026-10-11T20:00:02Z",
           "duration_sec": 1219,
           "is_outlier": false
@@ -518,7 +518,7 @@
           "id": "_O_O1IGn1KU",
           "title": "9 Pearl Types Ranked By ACTUAL Value — Most Buyers Get This Wrong",
           "thumbnail": "https://i.ytimg.com/vi/_O_O1IGn1KU/mqdefault.jpg",
-          "views": 218005,
+          "views": 218056,
           "published_at": "2026-10-01T20:00:10Z",
           "duration_sec": 1244,
           "is_outlier": true
@@ -545,7 +545,7 @@
           "id": "kVBOkj5f6lw",
           "title": "11 Black Gemstones Ranked By ACTUAL Value — Most Buyers Get This Wrong",
           "thumbnail": "https://i.ytimg.com/vi/kVBOkj5f6lw/mqdefault.jpg",
-          "views": 116190,
+          "views": 116234,
           "published_at": "2026-09-25T20:00:29Z",
           "duration_sec": 1423,
           "is_outlier": true
@@ -554,7 +554,7 @@
           "id": "zYP7TOpThyw",
           "title": "11 Gemstones Rising Fast Before 2027 — Watch These Now",
           "thumbnail": "https://i.ytimg.com/vi/zYP7TOpThyw/mqdefault.jpg",
-          "views": 105032,
+          "views": 105051,
           "published_at": "2026-09-23T20:00:05Z",
           "duration_sec": 1234,
           "is_outlier": true
@@ -581,7 +581,7 @@
           "id": "cWdWb70kGMg",
           "title": "12 More Gemstones That Became Worth A Fortune After Their Mines Closed",
           "thumbnail": "https://i.ytimg.com/vi/cWdWb70kGMg/mqdefault.jpg",
-          "views": 4662,
+          "views": 4668,
           "published_at": "2026-09-17T19:30:06Z",
           "duration_sec": 1286,
           "is_outlier": false
@@ -599,7 +599,7 @@
           "id": "ca-QCguTCmw",
           "title": "9 Gemstones That Will Vanish Soon — Buy These INSTEAD",
           "thumbnail": "https://i.ytimg.com/vi/ca-QCguTCmw/mqdefault.jpg",
-          "views": 22883,
+          "views": 22887,
           "published_at": "2026-09-13T20:00:12Z",
           "duration_sec": 1223,
           "is_outlier": false
@@ -617,7 +617,7 @@
           "id": "PyGvJq6ZW2c",
           "title": "10 Gemstones That Will Be Impossible to Buy by 2027 — Get Them Now",
           "thumbnail": "https://i.ytimg.com/vi/PyGvJq6ZW2c/mqdefault.jpg",
-          "views": 36884,
+          "views": 36894,
           "published_at": "2026-09-09T20:00:09Z",
           "duration_sec": 1225,
           "is_outlier": false
@@ -626,7 +626,7 @@
           "id": "8tDQazpexgs",
           "title": "10 Gemstones Worth More Then Diamond - You May Own One!",
           "thumbnail": "https://i.ytimg.com/vi/8tDQazpexgs/mqdefault.jpg",
-          "views": 5854,
+          "views": 5863,
           "published_at": "2026-09-07T20:00:07Z",
           "duration_sec": 1328,
           "is_outlier": false
@@ -644,7 +644,7 @@
           "id": "m9zGQ9WKCJ4",
           "title": "9 Gemstones About to Explode in Value in 2027 — BUY NOW",
           "thumbnail": "https://i.ytimg.com/vi/m9zGQ9WKCJ4/mqdefault.jpg",
-          "views": 100473,
+          "views": 100491,
           "published_at": "2026-09-02T20:00:08Z",
           "duration_sec": 1323,
           "is_outlier": true
@@ -675,11 +675,11 @@
           1632280
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "jewelry|live|en",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "filling",
+      "entry_verdict_ru": "Заполняется",
+      "entry_score": 64
     },
     {
       "id": "UCbaeKRGzo2JEkJ5orygbUwA",
@@ -1282,21 +1282,21 @@
       "videos_count": 32,
       "videos_count_long": 30,
       "first_video_at": "2026-05-25T17:18:53Z",
-      "channel_age_days": 160.7,
-      "avg_views": 10904.27,
+      "channel_age_days": 160.8,
+      "avg_views": 10905.53,
       "median_views": 1105.0,
       "avg_views_first_5": 1344.4,
       "avg_duration_sec": 588.6,
-      "views_per_day": 2035.4,
-      "monthly_views_est": 61062,
+      "views_per_day": 2034.98,
+      "monthly_views_est": 61050,
       "subs_per_day": 17.48,
-      "watch_hours_est": 22659.21,
+      "watch_hours_est": 22662.68,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 14.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 854.87,
+      "monthly_income_est": 854.7,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -1308,7 +1308,7 @@
           "id": "nX35r91nDm4",
           "title": "10 Jewelry Pieces To ALWAYS Grab At Rummage Sales (Dealers Hope You Walk Past)",
           "thumbnail": "https://i.ytimg.com/vi/nX35r91nDm4/mqdefault.jpg",
-          "views": 6175,
+          "views": 6212,
           "published_at": "2026-10-30T03:42:20Z",
           "duration_sec": 943,
           "is_outlier": false
@@ -1434,7 +1434,7 @@
           "id": "UhMRenBjoSc",
           "title": "10 Old Charm Bracelets That Are Secretly Worth A Fortune (You Might Own One)",
           "thumbnail": "https://i.ytimg.com/vi/UhMRenBjoSc/mqdefault.jpg",
-          "views": 1757,
+          "views": 1758,
           "published_at": "2026-07-10T07:46:21Z",
           "duration_sec": 559,
           "is_outlier": false
@@ -1591,11 +1591,11 @@
           327159
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "jewelry|live|en",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "filling",
+      "entry_verdict_ru": "Заполняется",
+      "entry_score": 64
     },
     {
       "id": "UCf0VgA4RUAOP1wCXYSLhhyw",
@@ -1622,20 +1622,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-08-02T18:04:21Z",
       "channel_age_days": 91.7,
-      "avg_views": 8331.03,
+      "avg_views": 8331.3,
       "median_views": 91.5,
-      "avg_views_first_5": 33162.8,
+      "avg_views_first_5": 33164.6,
       "avg_duration_sec": 1205.8,
-      "views_per_day": 2725.89,
-      "monthly_views_est": 81777,
-      "subs_per_day": 28.9,
-      "watch_hours_est": 32009.1,
+      "views_per_day": 2724.45,
+      "monthly_views_est": 81734,
+      "subs_per_day": 28.89,
+      "watch_hours_est": 32009.98,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 14.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 1144.88,
+      "monthly_income_est": 1144.28,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -1800,7 +1800,7 @@
           "id": "2gUsCwvt24k",
           "title": "These 18 Ugly Old Vases Worth a Fortune",
           "thumbnail": "https://i.ytimg.com/vi/2gUsCwvt24k/mqdefault.jpg",
-          "views": 9616,
+          "views": 9615,
           "published_at": "2026-09-07T02:22:39Z",
           "duration_sec": 1842,
           "is_outlier": false
@@ -1890,7 +1890,7 @@
           "id": "7OE9p-0wej0",
           "title": "These 12 Vintage CorningWare Dishes Worth a Fortune",
           "thumbnail": "https://i.ytimg.com/vi/7OE9p-0wej0/mqdefault.jpg",
-          "views": 156094,
+          "views": 156098,
           "published_at": "2026-08-04T15:11:50Z",
           "duration_sec": 1234,
           "is_outlier": true
@@ -1908,7 +1908,7 @@
           "id": "PghEfwQFl9c",
           "title": "These 7 Vintage Jewelry Brands That Look Fake But Are Worth Thousands",
           "thumbnail": "https://i.ytimg.com/vi/PghEfwQFl9c/mqdefault.jpg",
-          "views": 4541,
+          "views": 4546,
           "published_at": "2026-08-02T18:04:21Z",
           "duration_sec": 1200,
           "is_outlier": true
@@ -1930,11 +1930,11 @@
           269368
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "jewelry|live|en",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "filling",
+      "entry_verdict_ru": "Заполняется",
+      "entry_score": 64
     },
     {
       "id": "UCv7mY6CXR9MY912cRKR_y7Q",
@@ -2192,21 +2192,21 @@
       "videos_count": 17,
       "videos_count_long": 17,
       "first_video_at": "2026-06-19T10:03:08Z",
-      "channel_age_days": 136.0,
-      "avg_views": 45266.0,
-      "median_views": 5802,
-      "avg_views_first_5": 6036.2,
+      "channel_age_days": 136.1,
+      "avg_views": 45274.18,
+      "median_views": 5803,
+      "avg_views_first_5": 6036.4,
       "avg_duration_sec": 1031.65,
-      "views_per_day": 5657.33,
-      "monthly_views_est": 169720,
-      "subs_per_day": 46.76,
-      "watch_hours_est": 79994.06,
+      "views_per_day": 5656.22,
+      "monthly_views_est": 169687,
+      "subs_per_day": 46.74,
+      "watch_hours_est": 80008.07,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": false,
       "rpm": 2.8512,
       "rpm_source": "nexlev",
-      "monthly_income_est": 483.91,
+      "monthly_income_est": 483.81,
       "region": "other",
       "region_ru": "Другое",
       "found_by_queries": [
@@ -2218,7 +2218,7 @@
           "id": "kqY4LkhU-5s",
           "title": "These 7 Vintage Trinket Boxes That Look Worthless But Sold for Hundreds",
           "thumbnail": "https://i.ytimg.com/vi/kqY4LkhU-5s/mqdefault.jpg",
-          "views": 5802,
+          "views": 5803,
           "published_at": "2026-08-25T18:33:47Z",
           "duration_sec": 953,
           "is_outlier": false
@@ -2227,7 +2227,7 @@
           "id": "nW1N2wJ8SnY",
           "title": "7 Pieces Of Old Jewelry You Should Never Clean Before Selling",
           "thumbnail": "https://i.ytimg.com/vi/nW1N2wJ8SnY/mqdefault.jpg",
-          "views": 4838,
+          "views": 4843,
           "published_at": "2026-08-23T20:34:37Z",
           "duration_sec": 1375,
           "is_outlier": false
@@ -2245,7 +2245,7 @@
           "id": "pu42RLGGyCU",
           "title": "These 7 Thrift Store Pearl Strands Look Fake But Are Worth Thousands",
           "thumbnail": "https://i.ytimg.com/vi/pu42RLGGyCU/mqdefault.jpg",
-          "views": 71966,
+          "views": 71968,
           "published_at": "2026-08-16T17:00:23Z",
           "duration_sec": 1444,
           "is_outlier": true
@@ -2272,7 +2272,7 @@
           "id": "DRZ_RlglWRs",
           "title": "These 8 Ugly Jewelry Brands From the 70s & 80s — One Is Worth $4,500",
           "thumbnail": "https://i.ytimg.com/vi/DRZ_RlglWRs/mqdefault.jpg",
-          "views": 2588,
+          "views": 2592,
           "published_at": "2026-07-31T17:00:09Z",
           "duration_sec": 845,
           "is_outlier": false
@@ -2281,7 +2281,7 @@
           "id": "hmoa0StlCqE",
           "title": "8 Common Pearl Jewelry Pieces Seniors Own, That Are Secretly Worth A Fortune (You Might Own One)",
           "thumbnail": "https://i.ytimg.com/vi/hmoa0StlCqE/mqdefault.jpg",
-          "views": 106024,
+          "views": 106038,
           "published_at": "2026-07-28T17:00:03Z",
           "duration_sec": 1197,
           "is_outlier": true
@@ -2290,7 +2290,7 @@
           "id": "h0OPQaYIoik",
           "title": "These 7 Vintage Jewelry Brands That Look Fake But Are Worth Thousands",
           "thumbnail": "https://i.ytimg.com/vi/h0OPQaYIoik/mqdefault.jpg",
-          "views": 502158,
+          "views": 502266,
           "published_at": "2026-07-22T18:17:09Z",
           "duration_sec": 1003,
           "is_outlier": true
@@ -2308,7 +2308,7 @@
           "id": "U9LL1jU3Gac",
           "title": "8 Chunky 70s & 80s Jewelry Brands Boomers Inherited — Secretly Worth A Fortune",
           "thumbnail": "https://i.ytimg.com/vi/U9LL1jU3Gac/mqdefault.jpg",
-          "views": 14872,
+          "views": 14873,
           "published_at": "2026-07-17T17:00:20Z",
           "duration_sec": 883,
           "is_outlier": false
@@ -2317,7 +2317,7 @@
           "id": "IJVVdlFwtDk",
           "title": "10 Costume Jewelry Brands Boomers Threw Away — Now Worth $3,000+",
           "thumbnail": "https://i.ytimg.com/vi/IJVVdlFwtDk/mqdefault.jpg",
-          "views": 11661,
+          "views": 11664,
           "published_at": "2026-07-14T17:00:34Z",
           "duration_sec": 1055,
           "is_outlier": false
@@ -2326,7 +2326,7 @@
           "id": "FSPumBHocpA",
           "title": "8 Jewelry Brands Seniors Own — One Is Worth $6,200",
           "thumbnail": "https://i.ytimg.com/vi/FSPumBHocpA/mqdefault.jpg",
-          "views": 16740,
+          "views": 16741,
           "published_at": "2026-07-12T17:00:35Z",
           "duration_sec": 850,
           "is_outlier": false
@@ -2384,10 +2384,11 @@
           767319
         ]
       ],
+      "graduated": false,
       "cluster": "jewelry|live|en",
-      "entry_verdict": "unproven",
-      "entry_verdict_ru": "Спрос не доказан",
-      "entry_score": 53
+      "entry_verdict": "filling",
+      "entry_verdict_ru": "Заполняется",
+      "entry_score": 64
     },
     {
       "id": "UCmKjefsbN1_nOS0rIUdlo9Q",
@@ -2414,20 +2415,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-06-11T23:22:18Z",
       "channel_age_days": 143.5,
-      "avg_views": 76864.5,
-      "median_views": 17079.5,
-      "avg_views_first_5": 143674.8,
+      "avg_views": 76882.4,
+      "median_views": 17080.5,
+      "avg_views_first_5": 143689.4,
       "avg_duration_sec": 540.0,
-      "views_per_day": 16072.91,
-      "monthly_views_est": 482187,
-      "subs_per_day": 787.64,
-      "watch_hours_est": 142286.74,
+      "views_per_day": 16070.91,
+      "monthly_views_est": 482127,
+      "subs_per_day": 787.36,
+      "watch_hours_est": 142323.07,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 4.5,
       "rpm_source": "baseline",
-      "monthly_income_est": 2169.84,
+      "monthly_income_est": 2169.57,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -2439,7 +2440,7 @@
           "id": "Kgb8XWIRs1U",
           "title": "People Whose Cats Sleep With Them Often Have These 6 Rare Traits",
           "thumbnail": "https://i.ytimg.com/vi/Kgb8XWIRs1U/mqdefault.jpg",
-          "views": 30127,
+          "views": 30552,
           "published_at": "2026-10-31T23:19:04Z",
           "duration_sec": 553,
           "is_outlier": false
@@ -2466,7 +2467,7 @@
           "id": "eaKTnCB7FU0",
           "title": "If Your Cat Ever Watches You Sleep… DO NOT OPEN YOUR EYES",
           "thumbnail": "https://i.ytimg.com/vi/eaKTnCB7FU0/mqdefault.jpg",
-          "views": 17826,
+          "views": 17827,
           "published_at": "2026-10-16T23:03:15Z",
           "duration_sec": 476,
           "is_outlier": false
@@ -2484,7 +2485,7 @@
           "id": "xVtwDiB7HYI",
           "title": "What Happens to Your Cat When You Let Them Sleep in Your Bed",
           "thumbnail": "https://i.ytimg.com/vi/xVtwDiB7HYI/mqdefault.jpg",
-          "views": 376667,
+          "views": 376687,
           "published_at": "2026-10-10T22:10:57Z",
           "duration_sec": 491,
           "is_outlier": false
@@ -2511,7 +2512,7 @@
           "id": "eEYdvnrZt9I",
           "title": "6 Tests Cats Use to Choose Their Favorite Human",
           "thumbnail": "https://i.ytimg.com/vi/eEYdvnrZt9I/mqdefault.jpg",
-          "views": 26476,
+          "views": 26479,
           "published_at": "2026-09-15T20:42:46Z",
           "duration_sec": 607,
           "is_outlier": false
@@ -2538,7 +2539,7 @@
           "id": "LUedGKqhki4",
           "title": "Every Sound Your Cat Makes and What It Actually Means",
           "thumbnail": "https://i.ytimg.com/vi/LUedGKqhki4/mqdefault.jpg",
-          "views": 14210,
+          "views": 14211,
           "published_at": "2026-08-26T16:25:30Z",
           "duration_sec": 484,
           "is_outlier": false
@@ -2547,7 +2548,7 @@
           "id": "E_LogG7BvmM",
           "title": "This is Why Your Cat Puts Their Paw on You...",
           "thumbnail": "https://i.ytimg.com/vi/E_LogG7BvmM/mqdefault.jpg",
-          "views": 13742,
+          "views": 13744,
           "published_at": "2026-08-22T21:21:19Z",
           "duration_sec": 453,
           "is_outlier": false
@@ -2556,7 +2557,7 @@
           "id": "EqACw490PIs",
           "title": "Your Cat Sleeps With You for ONE Specific Reason…",
           "thumbnail": "https://i.ytimg.com/vi/EqACw490PIs/mqdefault.jpg",
-          "views": 73670,
+          "views": 73674,
           "published_at": "2026-08-19T17:06:32Z",
           "duration_sec": 464,
           "is_outlier": false
@@ -2592,7 +2593,7 @@
           "id": "7Aiao1Zbk_A",
           "title": "5 Signs Your Cat Considers You Their Mother",
           "thumbnail": "https://i.ytimg.com/vi/7Aiao1Zbk_A/mqdefault.jpg",
-          "views": 124668,
+          "views": 124670,
           "published_at": "2026-08-07T01:08:15Z",
           "duration_sec": 477,
           "is_outlier": true
@@ -2610,7 +2611,7 @@
           "id": "WCKcvqxP2Mw",
           "title": "6 Ways To Keep Your Indoor Cat Happy",
           "thumbnail": "https://i.ytimg.com/vi/WCKcvqxP2Mw/mqdefault.jpg",
-          "views": 8409,
+          "views": 8414,
           "published_at": "2026-07-11T00:52:41Z",
           "duration_sec": 655,
           "is_outlier": false
@@ -2619,7 +2620,7 @@
           "id": "1Fuuf_V7ZJc",
           "title": "If You’re an Indoor Cat Owner, THESE Mistakes Could Be Deadly",
           "thumbnail": "https://i.ytimg.com/vi/1Fuuf_V7ZJc/mqdefault.jpg",
-          "views": 16333,
+          "views": 16334,
           "published_at": "2026-07-08T21:41:38Z",
           "duration_sec": 543,
           "is_outlier": false
@@ -2664,7 +2665,7 @@
           "id": "gGP2CUnWLF8",
           "title": "What Happens to Your Cat When You Feed Them Dry Food Every Day",
           "thumbnail": "https://i.ytimg.com/vi/gGP2CUnWLF8/mqdefault.jpg",
-          "views": 3190,
+          "views": 3191,
           "published_at": "2026-06-21T14:54:18Z",
           "duration_sec": 627,
           "is_outlier": false
@@ -2691,7 +2692,7 @@
           "id": "WCY8fPx4eTc",
           "title": "Real Meanings Behind 7 Strange Cat Behaviors Explained",
           "thumbnail": "https://i.ytimg.com/vi/WCY8fPx4eTc/mqdefault.jpg",
-          "views": 312367,
+          "views": 312434,
           "published_at": "2026-06-15T21:16:46Z",
           "duration_sec": 642,
           "is_outlier": true
@@ -2700,7 +2701,7 @@
           "id": "HsMJ4vhjfB4",
           "title": "If Your Cat Shows These Signs, Here's What They’re Saying...",
           "thumbnail": "https://i.ytimg.com/vi/HsMJ4vhjfB4/mqdefault.jpg",
-          "views": 42037,
+          "views": 42042,
           "published_at": "2026-06-11T23:22:18Z",
           "duration_sec": 678,
           "is_outlier": false
@@ -2722,11 +2723,11 @@
           16007747
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "animals|live|en",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "unproven",
+      "entry_verdict_ru": "Спрос не доказан",
+      "entry_score": 66
     },
     {
       "id": "UCfpr2PTfO5v3w1-emJ-5x7Q",
@@ -2753,20 +2754,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-07-15T20:25:14Z",
       "channel_age_days": 109.6,
-      "avg_views": 66138.53,
+      "avg_views": 66141.2,
       "median_views": 5353.0,
       "avg_views_first_5": 5400.2,
       "avg_duration_sec": 1028.37,
-      "views_per_day": 18105.24,
-      "monthly_views_est": 543157,
-      "subs_per_day": 425.22,
-      "watch_hours_est": 194260.27,
+      "views_per_day": 18097.51,
+      "monthly_views_est": 542925,
+      "subs_per_day": 425.02,
+      "watch_hours_est": 194268.54,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 1.5,
       "rpm_source": "baseline",
-      "monthly_income_est": 814.74,
+      "monthly_income_est": 814.39,
       "region": "ru",
       "region_ru": "Россия/СНГ",
       "found_by_queries": [
@@ -2805,7 +2806,7 @@
           "id": "AI5100LaA_E",
           "title": "If Your Cat Licks Their Paws Like THIS, They’re Asking for Help (Don’t Ignore It!)",
           "thumbnail": "https://i.ytimg.com/vi/AI5100LaA_E/mqdefault.jpg",
-          "views": 1570,
+          "views": 1571,
           "published_at": "2026-10-18T21:12:46Z",
           "duration_sec": 1264,
           "is_outlier": false
@@ -2814,7 +2815,7 @@
           "id": "6oqCPzoC-hQ",
           "title": "5 Creepy Things Your Cat Does While You’re Sleeping (The Last One Is Wild!)",
           "thumbnail": "https://i.ytimg.com/vi/6oqCPzoC-hQ/mqdefault.jpg",
-          "views": 7209,
+          "views": 7211,
           "published_at": "2026-10-14T19:52:25Z",
           "duration_sec": 1031,
           "is_outlier": false
@@ -2850,7 +2851,7 @@
           "id": "27M-XyHMJi4",
           "title": "10 MISTAKES That Make Your CAT Think You DON'T LOVE HIM",
           "thumbnail": "https://i.ytimg.com/vi/27M-XyHMJi4/mqdefault.jpg",
-          "views": 27261,
+          "views": 27263,
           "published_at": "2026-09-26T19:28:44Z",
           "duration_sec": 1174,
           "is_outlier": false
@@ -2877,7 +2878,7 @@
           "id": "bheItnkI32s",
           "title": "21 Rare Behaviors Cats Show ONLY When They Love You Deeply",
           "thumbnail": "https://i.ytimg.com/vi/bheItnkI32s/mqdefault.jpg",
-          "views": 133799,
+          "views": 133817,
           "published_at": "2026-09-10T18:45:16Z",
           "duration_sec": 1337,
           "is_outlier": false
@@ -2940,7 +2941,7 @@
           "id": "G_36VnI8Kao",
           "title": "How Cats Recognize a Bad Person: 12 Silent Signs",
           "thumbnail": "https://i.ytimg.com/vi/G_36VnI8Kao/mqdefault.jpg",
-          "views": 582024,
+          "views": 582076,
           "published_at": "2026-08-22T19:16:10Z",
           "duration_sec": 968,
           "is_outlier": true
@@ -2949,7 +2950,7 @@
           "id": "FU5qm-gv4OU",
           "title": "10 Ways to Say \"I Love You\" in Your Cat's Language",
           "thumbnail": "https://i.ytimg.com/vi/FU5qm-gv4OU/mqdefault.jpg",
-          "views": 16428,
+          "views": 16433,
           "published_at": "2026-08-14T19:15:29Z",
           "duration_sec": 983,
           "is_outlier": true
@@ -3061,11 +3062,11 @@
           8296443
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "animals|live|en",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "unproven",
+      "entry_verdict_ru": "Спрос не доказан",
+      "entry_score": 66
     },
     {
       "id": "UC10ZrtXRUv9zmgrlzw19Uww",
@@ -3173,21 +3174,21 @@
       "videos_count": 53,
       "videos_count_long": 30,
       "first_video_at": "2026-09-10T03:24:47Z",
-      "channel_age_days": 53.3,
-      "avg_views": 3636.3,
+      "channel_age_days": 53.4,
+      "avg_views": 3638.73,
       "median_views": 2395.0,
       "avg_views_first_5": 4141.6,
       "avg_duration_sec": 739.87,
-      "views_per_day": 2046.74,
-      "monthly_views_est": 61402,
-      "subs_per_day": 1718.61,
-      "watch_hours_est": 8210.11,
+      "views_per_day": 2046.15,
+      "monthly_views_est": 61384,
+      "subs_per_day": 1716.96,
+      "watch_hours_est": 8215.41,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 4.5,
       "rpm_source": "baseline",
-      "monthly_income_est": 276.31,
+      "monthly_income_est": 276.23,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -3199,7 +3200,7 @@
           "id": "p2zpf_XQvTI",
           "title": "14 Things Cats Do When They're Happy, Loved, and Spoiled (But 99% of Owners Don't Know!)",
           "thumbnail": "https://i.ytimg.com/vi/p2zpf_XQvTI/mqdefault.jpg",
-          "views": 1716,
+          "views": 1789,
           "published_at": "2026-11-01T20:14:09Z",
           "duration_sec": 581,
           "is_outlier": false
@@ -3482,11 +3483,11 @@
           461484
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "animals|live|en",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "unproven",
+      "entry_verdict_ru": "Спрос не доказан",
+      "entry_score": 66
     },
     {
       "id": "UCobGrgRznm2kcxJfAwjoiPQ",
@@ -3859,20 +3860,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-08-31T18:19:13Z",
       "channel_age_days": 62.7,
-      "avg_views": 30624.4,
+      "avg_views": 30657.7,
       "median_views": 4773.0,
       "avg_views_first_5": 1811.2,
       "avg_duration_sec": 605.83,
-      "views_per_day": 14658.04,
-      "monthly_views_est": 439741,
-      "subs_per_day": 139.12,
-      "watch_hours_est": 60221.13,
+      "views_per_day": 14662.0,
+      "monthly_views_est": 439860,
+      "subs_per_day": 139.01,
+      "watch_hours_est": 60291.11,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 4.5,
       "rpm_source": "baseline",
-      "monthly_income_est": 1978.83,
+      "monthly_income_est": 1979.37,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -3884,7 +3885,7 @@
           "id": "OShL3Ith3u4",
           "title": "If You Drive the Same Car for Years, You Have These Rare Traits",
           "thumbnail": "https://i.ytimg.com/vi/OShL3Ith3u4/mqdefault.jpg",
-          "views": 32098,
+          "views": 32193,
           "published_at": "2026-10-29T18:00:48Z",
           "duration_sec": 545,
           "is_outlier": false
@@ -3893,7 +3894,7 @@
           "id": "RWOqbJ2yHCc",
           "title": "People Who Always Return Their Shopping Cart Share These 3 Traits",
           "thumbnail": "https://i.ytimg.com/vi/RWOqbJ2yHCc/mqdefault.jpg",
-          "views": 170870,
+          "views": 171774,
           "published_at": "2026-10-27T18:01:56Z",
           "duration_sec": 562,
           "is_outlier": true
@@ -4167,11 +4168,11 @@
           1938974
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "animals|live|en",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "unproven",
+      "entry_verdict_ru": "Спрос не доказан",
+      "entry_score": 66
     },
     {
       "id": "UCjw4TogAifphMJ8HfZpk22w",
@@ -4431,21 +4432,21 @@
       "videos_count": 25,
       "videos_count_long": 11,
       "first_video_at": "2026-08-28T10:25:50Z",
-      "channel_age_days": 66.0,
-      "avg_views": 444199.0,
+      "channel_age_days": 66.1,
+      "avg_views": 444200.0,
       "median_views": 39760,
-      "avg_views_first_5": 955490.2,
+      "avg_views_first_5": 955492.4,
       "avg_duration_sec": 938.82,
-      "views_per_day": 74025.98,
-      "monthly_views_est": 2220779,
-      "subs_per_day": 251.49,
-      "watch_hours_est": 369417.5,
+      "views_per_day": 73968.73,
+      "monthly_views_est": 2219062,
+      "subs_per_day": 251.3,
+      "watch_hours_est": 369418.31,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 7.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 15545.45,
+      "monthly_income_est": 15533.43,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -4547,7 +4548,7 @@
           "id": "u5F175REX_U",
           "title": "Nepal Floods 2026 Explained: What Caused the Deadly Flash Flood?",
           "thumbnail": "https://i.ytimg.com/vi/u5F175REX_U/mqdefault.jpg",
-          "views": 4107010,
+          "views": 4107021,
           "published_at": "2026-08-28T10:25:50Z",
           "duration_sec": 751,
           "is_outlier": true
@@ -4590,10 +4591,11 @@
           4969026
         ]
       ],
+      "graduated": false,
       "cluster": "disasters|live|en",
-      "entry_verdict": "open",
-      "entry_verdict_ru": "Окно открыто",
-      "entry_score": 88
+      "entry_verdict": "filling",
+      "entry_verdict_ru": "Заполняется",
+      "entry_score": 82
     },
     {
       "id": "UCyIYCV-JGBJrfeaezM1ST5w",
@@ -5077,8 +5079,8 @@
       "median_views": 365,
       "avg_views_first_5": 781.2,
       "avg_duration_sec": 771.97,
-      "views_per_day": 1626.39,
-      "monthly_views_est": 48792,
+      "views_per_day": 1626.0,
+      "monthly_views_est": 48780,
       "subs_per_day": 9.14,
       "watch_hours_est": 22590.56,
       "days_to_monetization": 0.0,
@@ -5086,7 +5088,7 @@
       "is_monetized": null,
       "rpm": 7.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 341.54,
+      "monthly_income_est": 341.46,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -5372,11 +5374,11 @@
           343145
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "disasters|live|en",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "filling",
+      "entry_verdict_ru": "Заполняется",
+      "entry_score": 82
     },
     {
       "id": "UCSZY6N_fKVbHJXakR-Lscyg",
@@ -5821,16 +5823,16 @@
       "median_views": 1308,
       "avg_views_first_5": 1956.4,
       "avg_duration_sec": 667.17,
-      "views_per_day": 38754.41,
-      "monthly_views_est": 1162632,
-      "subs_per_day": 113.15,
+      "views_per_day": 38726.76,
+      "monthly_views_est": 1161803,
+      "subs_per_day": 113.07,
       "watch_hours_est": 169259.94,
       "days_to_monetization": 0,
       "monetization_forecast": "уже",
       "is_monetized": true,
       "rpm": 7.46,
       "rpm_source": "nexlev",
-      "monthly_income_est": 8673.23,
+      "monthly_income_est": 8667.05,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -6062,10 +6064,11 @@
           2781180
         ]
       ],
+      "graduated": false,
       "cluster": "disasters|live|en",
-      "entry_verdict": "open",
-      "entry_verdict_ru": "Окно открыто",
-      "entry_score": 88
+      "entry_verdict": "filling",
+      "entry_verdict_ru": "Заполняется",
+      "entry_score": 82
     },
     {
       "id": "UCYARYdLq9-UwcTzzMDF_v2Q",
@@ -6135,21 +6138,21 @@
       "videos_count": 24,
       "videos_count_long": 24,
       "first_video_at": "2026-04-20T15:13:12Z",
-      "channel_age_days": 195.8,
-      "avg_views": 160970.0,
-      "median_views": 97971.5,
-      "avg_views_first_5": 52892.6,
+      "channel_age_days": 195.9,
+      "avg_views": 161002.0,
+      "median_views": 97987.5,
+      "avg_views_first_5": 52893.0,
       "avg_duration_sec": 2610.21,
-      "views_per_day": 19730.06,
-      "monthly_views_est": 591902,
-      "subs_per_day": 86.31,
-      "watch_hours_est": 1187656.67,
+      "views_per_day": 19728.82,
+      "monthly_views_est": 591864,
+      "subs_per_day": 86.29,
+      "watch_hours_est": 1187897.46,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 4.5,
       "rpm_source": "baseline",
-      "monthly_income_est": 2663.56,
+      "monthly_income_est": 2663.39,
       "region": "eu",
       "region_ru": "Европа",
       "found_by_queries": [
@@ -6170,7 +6173,7 @@
           "id": "eXnYtB5-6N0",
           "title": "El Genio Que Convirtió Los Números En Una Forma De Entender El Universo — Pitágoras",
           "thumbnail": "https://i.ytimg.com/vi/eXnYtB5-6N0/mqdefault.jpg",
-          "views": 147132,
+          "views": 147285,
           "published_at": "2026-10-23T16:30:17Z",
           "duration_sec": 2962,
           "is_outlier": false
@@ -6179,7 +6182,7 @@
           "id": "8lquw7nTP8U",
           "title": "El Hombre Que Intentó Explicar La Existencia De Dios Mediante La Razón — La Historia De Spinoza",
           "thumbnail": "https://i.ytimg.com/vi/8lquw7nTP8U/mqdefault.jpg",
-          "views": 46087,
+          "views": 46125,
           "published_at": "2026-10-16T16:00:22Z",
           "duration_sec": 3402,
           "is_outlier": false
@@ -6197,7 +6200,7 @@
           "id": "zEv_e0_EboY",
           "title": "El Hombre Que Imaginó Un Motor Sin Chispas Y Terminó Cambiando El Mundo — Rudolf Diesel",
           "thumbnail": "https://i.ytimg.com/vi/zEv_e0_EboY/mqdefault.jpg",
-          "views": 142637,
+          "views": 142724,
           "published_at": "2026-10-02T08:54:52Z",
           "duration_sec": 3498,
           "is_outlier": false
@@ -6206,7 +6209,7 @@
           "id": "DqegAcVuH0s",
           "title": "El Hombre Que Convirtió Su Propia Vida En Una Obra De Arte — La Historia De Salvador Dalí",
           "thumbnail": "https://i.ytimg.com/vi/DqegAcVuH0s/mqdefault.jpg",
-          "views": 84019,
+          "views": 84051,
           "published_at": "2026-09-23T17:30:09Z",
           "duration_sec": 2115,
           "is_outlier": false
@@ -6215,7 +6218,7 @@
           "id": "zWw9kV-Ed2g",
           "title": "El Hombre Que Intentó Descubrir Qué Había Dentro De La Mente Humana — La Historia De Carl Jung",
           "thumbnail": "https://i.ytimg.com/vi/zWw9kV-Ed2g/mqdefault.jpg",
-          "views": 30096,
+          "views": 30098,
           "published_at": "2026-09-16T14:30:05Z",
           "duration_sec": 2438,
           "is_outlier": false
@@ -6224,7 +6227,7 @@
           "id": "TymUgNMtbcg",
           "title": "El Hombre Que Inventó Mundos Que Todavía No Existían — La Historia De Julio Verne",
           "thumbnail": "https://i.ytimg.com/vi/TymUgNMtbcg/mqdefault.jpg",
-          "views": 686142,
+          "views": 686224,
           "published_at": "2026-09-08T14:27:24Z",
           "duration_sec": 3264,
           "is_outlier": true
@@ -6233,7 +6236,7 @@
           "id": "mEidL941Bz0",
           "title": "El Hombre Que Quiso Entender Por Qué Existimos — La Historia De Darwin",
           "thumbnail": "https://i.ytimg.com/vi/mEidL941Bz0/mqdefault.jpg",
-          "views": 337643,
+          "views": 337738,
           "published_at": "2026-08-30T10:14:11Z",
           "duration_sec": 2404,
           "is_outlier": true
@@ -6242,7 +6245,7 @@
           "id": "9sLI3d_TQPs",
           "title": "El Hombre Que Quiso Descubrir Cómo Funciona La Mente Humana — La Historia De Sigmund Freud",
           "thumbnail": "https://i.ytimg.com/vi/9sLI3d_TQPs/mqdefault.jpg",
-          "views": 133540,
+          "views": 133543,
           "published_at": "2026-08-24T05:20:48Z",
           "duration_sec": 2587,
           "is_outlier": false
@@ -6251,7 +6254,7 @@
           "id": "82Wa_0rfgCc",
           "title": "El Hombre Que Derrotó A Las Enfermedades Invisibles — La Historia De Louis Pasteur",
           "thumbnail": "https://i.ytimg.com/vi/82Wa_0rfgCc/mqdefault.jpg",
-          "views": 207014,
+          "views": 207040,
           "published_at": "2026-08-14T07:13:51Z",
           "duration_sec": 3156,
           "is_outlier": false
@@ -6269,7 +6272,7 @@
           "id": "C5d25Todoko",
           "title": "El Hombre Que Transformó Su Dolor En Arte Inmortal — La Historia De Vincent Van Gogh",
           "thumbnail": "https://i.ytimg.com/vi/C5d25Todoko/mqdefault.jpg",
-          "views": 180505,
+          "views": 180544,
           "published_at": "2026-08-03T17:47:22Z",
           "duration_sec": 4033,
           "is_outlier": false
@@ -6278,7 +6281,7 @@
           "id": "s-LnEikWKd0",
           "title": "El Hombre Que Intentó Descubrir La Verdad Oculta Detrás Del Mundo — La Historia De Platón",
           "thumbnail": "https://i.ytimg.com/vi/s-LnEikWKd0/mqdefault.jpg",
-          "views": 44368,
+          "views": 44377,
           "published_at": "2026-07-31T15:32:59Z",
           "duration_sec": 3470,
           "is_outlier": false
@@ -6287,7 +6290,7 @@
           "id": "d4qP9iT1b2w",
           "title": "El Hombre Que Vivió Como Un Mendigo Pero Pensó Como Un Rey — La Historia De Diógenes",
           "thumbnail": "https://i.ytimg.com/vi/d4qP9iT1b2w/mqdefault.jpg",
-          "views": 444336,
+          "views": 444394,
           "published_at": "2026-07-25T14:30:07Z",
           "duration_sec": 3131,
           "is_outlier": true
@@ -6296,7 +6299,7 @@
           "id": "OLyZzqz4DrA",
           "title": "El Hombre Que Descubrió Los Secretos Del Universo Cuando Nadie Los Entendía — Isaac Newton",
           "thumbnail": "https://i.ytimg.com/vi/OLyZzqz4DrA/mqdefault.jpg",
-          "views": 276106,
+          "views": 276143,
           "published_at": "2026-07-16T18:11:12Z",
           "duration_sec": 3195,
           "is_outlier": false
@@ -6305,7 +6308,7 @@
           "id": "_VN-6QaO5EM",
           "title": "El Hombre Que Sabía Demasiado En Una Época Sin Respuestas — La Historia De Leonardo Da Vinci",
           "thumbnail": "https://i.ytimg.com/vi/_VN-6QaO5EM/mqdefault.jpg",
-          "views": 696660,
+          "views": 696764,
           "published_at": "2026-07-05T09:22:21Z",
           "duration_sec": 4218,
           "is_outlier": true
@@ -6314,7 +6317,7 @@
           "id": "lg2cVlC4xZs",
           "title": "Descubrió La Fuerza Invisible Que Cambió El Mundo… Y Fué Olvidado — La Historia De Michael Faraday",
           "thumbnail": "https://i.ytimg.com/vi/lg2cVlC4xZs/mqdefault.jpg",
-          "views": 27047,
+          "views": 27048,
           "published_at": "2026-06-21T07:02:11Z",
           "duration_sec": 1363,
           "is_outlier": false
@@ -6350,7 +6353,7 @@
           "id": "n-Gj-JhojGY",
           "title": "Desbloqueó Los Secretos Del Universo… Y Nadie Lo Entendía — La Historia De Albert Einstein",
           "thumbnail": "https://i.ytimg.com/vi/n-Gj-JhojGY/mqdefault.jpg",
-          "views": 113090,
+          "views": 113092,
           "published_at": "2026-04-28T10:41:19Z",
           "duration_sec": 1611,
           "is_outlier": false
@@ -6390,10 +6393,11 @@
           3848548
         ]
       ],
+      "graduated": false,
       "cluster": "history|live|es",
       "entry_verdict": "open",
       "entry_verdict_ru": "Окно открыто",
-      "entry_score": 99
+      "entry_score": 74
     },
     {
       "id": "UCFpXsCPbQtzpLNFiJlxHYHQ",
@@ -6419,21 +6423,21 @@
       "videos_count": 37,
       "videos_count_long": 30,
       "first_video_at": "2026-08-02T19:52:00Z",
-      "channel_age_days": 91.6,
-      "avg_views": 63272.83,
+      "channel_age_days": 91.7,
+      "avg_views": 63273.73,
       "median_views": 1124.5,
       "avg_views_first_5": 345.8,
       "avg_duration_sec": 1565.97,
-      "views_per_day": 20719.55,
-      "monthly_views_est": 621587,
-      "subs_per_day": 495.56,
-      "watch_hours_est": 291682.6,
+      "views_per_day": 20708.26,
+      "monthly_views_est": 621248,
+      "subs_per_day": 495.28,
+      "watch_hours_est": 291686.7,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 6.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 3729.52,
+      "monthly_income_est": 3727.49,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -6445,7 +6449,7 @@
           "id": "Wdy3c0zJvaI",
           "title": "La Increíble Ingeniería de la Corbeta",
           "thumbnail": "https://i.ytimg.com/vi/Wdy3c0zJvaI/mqdefault.jpg",
-          "views": 7752,
+          "views": 7754,
           "published_at": "2026-09-23T13:00:23Z",
           "duration_sec": 1610,
           "is_outlier": false
@@ -6454,7 +6458,7 @@
           "id": "oZb4xL6WEdA",
           "title": "La Increíble Ingeniería del Bergantín",
           "thumbnail": "https://i.ytimg.com/vi/oZb4xL6WEdA/mqdefault.jpg",
-          "views": 14357,
+          "views": 14360,
           "published_at": "2026-09-21T13:00:03Z",
           "duration_sec": 1563,
           "is_outlier": false
@@ -6463,7 +6467,7 @@
           "id": "wnQB3unHgZ0",
           "title": "La Increíble Ingeniería de la Nao — El Barco de Colón y Magallanes",
           "thumbnail": "https://i.ytimg.com/vi/wnQB3unHgZ0/mqdefault.jpg",
-          "views": 24568,
+          "views": 24575,
           "published_at": "2026-09-19T13:00:22Z",
           "duration_sec": 1576,
           "is_outlier": false
@@ -6472,7 +6476,7 @@
           "id": "_tnbXtCAhrM",
           "title": "La Increíble Ingeniería de la Goleta",
           "thumbnail": "https://i.ytimg.com/vi/_tnbXtCAhrM/mqdefault.jpg",
-          "views": 29157,
+          "views": 29156,
           "published_at": "2026-09-17T19:32:18Z",
           "duration_sec": 1596,
           "is_outlier": false
@@ -6499,7 +6503,7 @@
           "id": "7ZbPmZWdTxI",
           "title": "La Increíble Ingeniería del Galeón de Manila",
           "thumbnail": "https://i.ytimg.com/vi/7ZbPmZWdTxI/mqdefault.jpg",
-          "views": 73446,
+          "views": 73447,
           "published_at": "2026-09-11T13:00:39Z",
           "duration_sec": 1595,
           "is_outlier": false
@@ -6508,7 +6512,7 @@
           "id": "occjBsSpuTo",
           "title": "La Increíble Ingeniería del Navío de Línea",
           "thumbnail": "https://i.ytimg.com/vi/occjBsSpuTo/mqdefault.jpg",
-          "views": 14150,
+          "views": 14151,
           "published_at": "2026-09-09T13:00:13Z",
           "duration_sec": 1550,
           "is_outlier": true
@@ -6517,7 +6521,7 @@
           "id": "Ne9AQ-3clBA",
           "title": "La Increíble Ingeniería de la Fragata",
           "thumbnail": "https://i.ytimg.com/vi/Ne9AQ-3clBA/mqdefault.jpg",
-          "views": 43389,
+          "views": 43390,
           "published_at": "2026-09-08T13:00:30Z",
           "duration_sec": 1571,
           "is_outlier": true
@@ -6526,7 +6530,7 @@
           "id": "NBJ6UJGr5Aw",
           "title": "La Increíble Ingeniería del Navío de Guerra",
           "thumbnail": "https://i.ytimg.com/vi/NBJ6UJGr5Aw/mqdefault.jpg",
-          "views": 128650,
+          "views": 128660,
           "published_at": "2026-09-07T13:00:11Z",
           "duration_sec": 1545,
           "is_outlier": true
@@ -6535,7 +6539,7 @@
           "id": "x8uytaASAks",
           "title": "La Increíble Ingeniería del Cañón Naval",
           "thumbnail": "https://i.ytimg.com/vi/x8uytaASAks/mqdefault.jpg",
-          "views": 51052,
+          "views": 51055,
           "published_at": "2026-09-06T13:00:08Z",
           "duration_sec": 1561,
           "is_outlier": true
@@ -6728,11 +6732,11 @@
           1911115
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "history|live|es",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "open",
+      "entry_verdict_ru": "Окно открыто",
+      "entry_score": 74
     },
     {
       "id": "UC9DltgGxltZs45koX1sDpdA",
@@ -6758,21 +6762,21 @@
       "videos_count": 24,
       "videos_count_long": 24,
       "first_video_at": "2026-07-22T15:00:32Z",
-      "channel_age_days": 102.8,
+      "channel_age_days": 102.9,
       "avg_views": 48909.71,
       "median_views": 17169.0,
       "avg_views_first_5": 95397.0,
       "avg_duration_sec": 2256.12,
-      "views_per_day": 11416.87,
-      "monthly_views_est": 342506,
-      "subs_per_day": 56.12,
+      "views_per_day": 11411.19,
+      "monthly_views_est": 342336,
+      "subs_per_day": 56.09,
       "watch_hours_est": 238313.76,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 6.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 2055.04,
+      "monthly_income_est": 2054.02,
       "region": "eu",
       "region_ru": "Европа",
       "found_by_queries": [
@@ -7013,10 +7017,11 @@
           1173780
         ]
       ],
+      "graduated": false,
       "cluster": "nostalgia|live|de",
-      "entry_verdict": "open",
-      "entry_verdict_ru": "Окно открыто",
-      "entry_score": 96
+      "entry_verdict": "filling",
+      "entry_verdict_ru": "Заполняется",
+      "entry_score": 90
     },
     {
       "id": "UCjQmQuGyQtNpjeROVExuAYw",
@@ -7422,21 +7427,21 @@
       "videos_count": 50,
       "videos_count_long": 30,
       "first_video_at": "2026-08-22T10:24:41Z",
-      "channel_age_days": 72.0,
-      "avg_views": 20666.67,
+      "channel_age_days": 72.1,
+      "avg_views": 20666.7,
       "median_views": 11965.0,
-      "avg_views_first_5": 57253.8,
+      "avg_views_first_5": 57254.0,
       "avg_duration_sec": 2107.87,
-      "views_per_day": 8610.25,
-      "monthly_views_est": 258307,
-      "subs_per_day": 116.65,
-      "watch_hours_est": 135594.85,
+      "views_per_day": 8604.14,
+      "monthly_views_est": 258124,
+      "subs_per_day": 116.57,
+      "watch_hours_est": 135595.1,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 6.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 1549.84,
+      "monthly_income_est": 1548.74,
       "region": "eu",
       "region_ru": "Европа",
       "found_by_queries": [
@@ -7700,7 +7705,7 @@
           "id": "Kde8r63oXdk",
           "title": "25 Vergessene Winter-Überlebenstipps Aus Der Zeit Unserer Großeltern, Die Heute Noch Funktionieren",
           "thumbnail": "https://i.ytimg.com/vi/Kde8r63oXdk/mqdefault.jpg",
-          "views": 86795,
+          "views": 86796,
           "published_at": "2026-08-24T09:30:15Z",
           "duration_sec": 2529,
           "is_outlier": true
@@ -7731,11 +7736,11 @@
           1240559
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "nostalgia|live|de",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "filling",
+      "entry_verdict_ru": "Заполняется",
+      "entry_score": 90
     },
     {
       "id": "UCVAadbBHRm49FvDvEh0Ke5w",
@@ -7761,21 +7766,21 @@
       "videos_count": 35,
       "videos_count_long": 30,
       "first_video_at": "2026-08-15T15:00:15Z",
-      "channel_age_days": 78.8,
-      "avg_views": 26982.07,
-      "median_views": 14469.0,
-      "avg_views_first_5": 30217.6,
+      "channel_age_days": 78.9,
+      "avg_views": 26989.6,
+      "median_views": 14480.5,
+      "avg_views_first_5": 30219.0,
       "avg_duration_sec": 2350.63,
-      "views_per_day": 10270.3,
-      "monthly_views_est": 308109,
-      "subs_per_day": 177.63,
-      "watch_hours_est": 165905.95,
+      "views_per_day": 10266.49,
+      "monthly_views_est": 307995,
+      "subs_per_day": 177.51,
+      "watch_hours_est": 165962.75,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 6.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 1848.65,
+      "monthly_income_est": 1847.97,
       "region": "eu",
       "region_ru": "Европа",
       "found_by_queries": [
@@ -7787,7 +7792,7 @@
           "id": "e5OHcTw7Egk",
           "title": "17 Günstige Aldi-Produkte, Die Bei Einem Winter-Blackout Plötzlich Unbezahlbar Werden",
           "thumbnail": "https://i.ytimg.com/vi/e5OHcTw7Egk/mqdefault.jpg",
-          "views": 3201,
+          "views": 3289,
           "published_at": "2026-11-01T18:00:04Z",
           "duration_sec": 2198,
           "is_outlier": false
@@ -7796,7 +7801,7 @@
           "id": "T5eCPdBAvQk",
           "title": "25 Vergessene Bettwärme-Tricks, Die Dich Auch Ohne Heizung Durch Kalte Nächte Bringen",
           "thumbnail": "https://i.ytimg.com/vi/T5eCPdBAvQk/mqdefault.jpg",
-          "views": 14598,
+          "views": 14621,
           "published_at": "2026-10-29T18:37:56Z",
           "duration_sec": 2084,
           "is_outlier": false
@@ -7805,7 +7810,7 @@
           "id": "H2T4HNEHh3g",
           "title": "100 Vergessene Blackout-Tricks Unserer Großeltern, Die Teure Notfallausrüstung Alt Aussehen Lassen",
           "thumbnail": "https://i.ytimg.com/vi/H2T4HNEHh3g/mqdefault.jpg",
-          "views": 3149,
+          "views": 3162,
           "published_at": "2026-10-26T18:00:23Z",
           "duration_sec": 10118,
           "is_outlier": false
@@ -7823,7 +7828,7 @@
           "id": "C1w4m6EYua0",
           "title": "17 Günstige Action-Produkte, Die Dich Warm Halten, Wenn Die Heizung Ausfällt",
           "thumbnail": "https://i.ytimg.com/vi/C1w4m6EYua0/mqdefault.jpg",
-          "views": 23439,
+          "views": 23463,
           "published_at": "2026-10-23T18:00:22Z",
           "duration_sec": 2037,
           "is_outlier": false
@@ -7832,7 +7837,7 @@
           "id": "9Dtq4RWd7bQ",
           "title": "30 Vergessene Winter-Tricks, Die Unsere Großeltern Ohne Strom Durch Die Kälte Brachten",
           "thumbnail": "https://i.ytimg.com/vi/9Dtq4RWd7bQ/mqdefault.jpg",
-          "views": 59721,
+          "views": 59764,
           "published_at": "2026-10-21T18:00:26Z",
           "duration_sec": 2094,
           "is_outlier": false
@@ -7841,7 +7846,7 @@
           "id": "rLVrn7091Ts",
           "title": "25 Vergessene Selbstversorger-Tricks, Die Unsere Großeltern Von Strom Und Wasser Unabhängig Machten",
           "thumbnail": "https://i.ytimg.com/vi/rLVrn7091Ts/mqdefault.jpg",
-          "views": 2851,
+          "views": 2855,
           "published_at": "2026-10-18T18:00:29Z",
           "duration_sec": 2076,
           "is_outlier": false
@@ -7850,7 +7855,7 @@
           "id": "WMajuf1nvVA",
           "title": "20 Alte Notfallhelfer, Die Auch Nach 30 Jahren Ohne Strom Und Batterien Funktionieren",
           "thumbnail": "https://i.ytimg.com/vi/WMajuf1nvVA/mqdefault.jpg",
-          "views": 2952,
+          "views": 2951,
           "published_at": "2026-10-17T18:00:07Z",
           "duration_sec": 2111,
           "is_outlier": false
@@ -7859,7 +7864,7 @@
           "id": "J0i7jw4IjOs",
           "title": "20 Vergessene Winter-Notlösungen, Die Unsere Großeltern Kannten Und Heute Kaum Jemand Beherrscht",
           "thumbnail": "https://i.ytimg.com/vi/J0i7jw4IjOs/mqdefault.jpg",
-          "views": 4345,
+          "views": 4346,
           "published_at": "2026-10-16T18:00:39Z",
           "duration_sec": 2132,
           "is_outlier": false
@@ -7877,7 +7882,7 @@
           "id": "W8x9QateJhY",
           "title": "15 Günstige Action-Produkte, Die Bei Einem Winter-Blackout Plötzlich Gold Wert Sind",
           "thumbnail": "https://i.ytimg.com/vi/W8x9QateJhY/mqdefault.jpg",
-          "views": 51421,
+          "views": 51424,
           "published_at": "2026-10-14T18:00:01Z",
           "duration_sec": 2095,
           "is_outlier": false
@@ -7886,7 +7891,7 @@
           "id": "kt5blsdKHbk",
           "title": "15 Günstige Discounter-Funde, Die Bei Einem Winter-Blackout Plötzlich Gold Wert Sind",
           "thumbnail": "https://i.ytimg.com/vi/kt5blsdKHbk/mqdefault.jpg",
-          "views": 16960,
+          "views": 16963,
           "published_at": "2026-10-13T18:09:16Z",
           "duration_sec": 2075,
           "is_outlier": false
@@ -7931,7 +7936,7 @@
           "id": "I7P07dJVfvY",
           "title": "20 vergessene Hygiene-Tricks unserer Großeltern, die funktionierten, wenn tagelang kein Wasser floss",
           "thumbnail": "https://i.ytimg.com/vi/I7P07dJVfvY/mqdefault.jpg",
-          "views": 29800,
+          "views": 29806,
           "published_at": "2026-09-14T15:00:26Z",
           "duration_sec": 1985,
           "is_outlier": false
@@ -7949,7 +7954,7 @@
           "id": "zPK6Jc-F_Ck",
           "title": "25 vergessene Wärme-Tricks unserer Großeltern, die das Haus auch ohne Strom und Heizung warm hielten",
           "thumbnail": "https://i.ytimg.com/vi/zPK6Jc-F_Ck/mqdefault.jpg",
-          "views": 10530,
+          "views": 10532,
           "published_at": "2026-09-10T15:00:17Z",
           "duration_sec": 2107,
           "is_outlier": false
@@ -7958,7 +7963,7 @@
           "id": "PNAaS9gEkIo",
           "title": "20 vergessene Methoden, mit denen deutsche Familien Trinkwasser wochenlang sicher aufbewahrten",
           "thumbnail": "https://i.ytimg.com/vi/PNAaS9gEkIo/mqdefault.jpg",
-          "views": 144296,
+          "views": 144304,
           "published_at": "2026-09-07T15:00:28Z",
           "duration_sec": 2133,
           "is_outlier": false
@@ -7985,7 +7990,7 @@
           "id": "QLusQbaTahs",
           "title": "20 vergessene Koch-Tricks, mit denen Familien ohne Strom, Gas oder Herd warme Mahlzeiten machten",
           "thumbnail": "https://i.ytimg.com/vi/QLusQbaTahs/mqdefault.jpg",
-          "views": 9226,
+          "views": 9227,
           "published_at": "2026-08-31T15:00:29Z",
           "duration_sec": 2096,
           "is_outlier": false
@@ -8003,7 +8008,7 @@
           "id": "PulA_eOu-uQ",
           "title": "20 vergessene Wasser-Tricks unserer Großeltern, die im Notfall mehr wert sind als ein voller Keller!",
           "thumbnail": "https://i.ytimg.com/vi/PulA_eOu-uQ/mqdefault.jpg",
-          "views": 114690,
+          "views": 114691,
           "published_at": "2026-08-27T15:00:22Z",
           "duration_sec": 2101,
           "is_outlier": true
@@ -8012,7 +8017,7 @@
           "id": "j_DaJelCcfk",
           "title": "25 Dinge, die in keinem deutschen Vorratskeller für Notzeiten fehlen durften",
           "thumbnail": "https://i.ytimg.com/vi/j_DaJelCcfk/mqdefault.jpg",
-          "views": 11572,
+          "views": 11573,
           "published_at": "2026-08-24T14:00:09Z",
           "duration_sec": 2129,
           "is_outlier": false
@@ -8021,7 +8026,7 @@
           "id": "jlVBt8cD9a4",
           "title": "25 vergessene Küchen-Tricks, mit denen deutsche Familien in Notzeiten aus fast nichts Essen machten",
           "thumbnail": "https://i.ytimg.com/vi/jlVBt8cD9a4/mqdefault.jpg",
-          "views": 4426,
+          "views": 4427,
           "published_at": "2026-08-22T14:00:03Z",
           "duration_sec": 2134,
           "is_outlier": false
@@ -8039,7 +8044,7 @@
           "id": "Csz0V-lo1h4",
           "title": "20 vergessene Methoden, mit denen Familien Lebensmittel monatelang ohne Kühlschrank haltbar machten",
           "thumbnail": "https://i.ytimg.com/vi/Csz0V-lo1h4/mqdefault.jpg",
-          "views": 44373,
+          "views": 44376,
           "published_at": "2026-08-18T14:00:21Z",
           "duration_sec": 2021,
           "is_outlier": true
@@ -8048,7 +8053,7 @@
           "id": "6IApprY3EU8",
           "title": "20 einfache Notlösungen, die im Ernstfall mehr wert sind als moderne Technik",
           "thumbnail": "https://i.ytimg.com/vi/6IApprY3EU8/mqdefault.jpg",
-          "views": 46893,
+          "views": 46895,
           "published_at": "2026-08-15T15:00:15Z",
           "duration_sec": 1921,
           "is_outlier": true
@@ -8070,11 +8075,11 @@
           1952135
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "nostalgia|live|de",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "filling",
+      "entry_verdict_ru": "Заполняется",
+      "entry_score": 90
     },
     {
       "id": "UCqX_HO1AR-1uNx9T41ID9IQ",
@@ -8101,20 +8106,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-10-04T01:01:40Z",
       "channel_age_days": 29.4,
-      "avg_views": 74697.8,
-      "median_views": 9436.5,
-      "avg_views_first_5": 270673.2,
+      "avg_views": 74748.13,
+      "median_views": 9443.0,
+      "avg_views_first_5": 270815.8,
       "avg_duration_sec": 1730.13,
-      "views_per_day": 76226.94,
-      "monthly_views_est": 2286808,
-      "subs_per_day": 1646.36,
-      "watch_hours_est": 378555.0,
+      "views_per_day": 76145.6,
+      "monthly_views_est": 2284368,
+      "subs_per_day": 1643.5,
+      "watch_hours_est": 378820.59,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 6.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 13720.85,
+      "monthly_income_est": 13706.21,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -8126,7 +8131,7 @@
           "id": "zhXqGAlTXM4",
           "title": "NEVER Buy These 9 Things From The Asian Aisle - Buy This Instead",
           "thumbnail": "https://i.ytimg.com/vi/zhXqGAlTXM4/mqdefault.jpg",
-          "views": 4943,
+          "views": 5184,
           "published_at": "2026-11-02T01:30:18Z",
           "duration_sec": 1593,
           "is_outlier": false
@@ -8135,7 +8140,7 @@
           "id": "--wr8vGNCoI",
           "title": "Stop Buying These 14 Foods Fresh — Frozen Is Cheaper",
           "thumbnail": "https://i.ytimg.com/vi/--wr8vGNCoI/mqdefault.jpg",
-          "views": 5584,
+          "views": 5632,
           "published_at": "2026-10-31T23:45:35Z",
           "duration_sec": 1710,
           "is_outlier": false
@@ -8144,7 +8149,7 @@
           "id": "BQIAuXe0MSg",
           "title": "Don’t Buy Soy Sauce Before Watching This (Check These 5 Things)",
           "thumbnail": "https://i.ytimg.com/vi/BQIAuXe0MSg/mqdefault.jpg",
-          "views": 5346,
+          "views": 5343,
           "published_at": "2026-10-31T01:21:10Z",
           "duration_sec": 2298,
           "is_outlier": false
@@ -8153,7 +8158,7 @@
           "id": "570_-PdKBmQ",
           "title": "What Japanese Families Do With Their Freezers That Most Americans Don’t",
           "thumbnail": "https://i.ytimg.com/vi/570_-PdKBmQ/mqdefault.jpg",
-          "views": 6646,
+          "views": 6662,
           "published_at": "2026-10-30T02:05:00Z",
           "duration_sec": 1682,
           "is_outlier": false
@@ -8162,7 +8167,7 @@
           "id": "b6Wsh5WaAs0",
           "title": "11 Cheap Canned Meats Everyone Over 50 Should Stockpile Before Winter",
           "thumbnail": "https://i.ytimg.com/vi/b6Wsh5WaAs0/mqdefault.jpg",
-          "views": 10752,
+          "views": 10789,
           "published_at": "2026-10-29T03:15:16Z",
           "duration_sec": 1965,
           "is_outlier": false
@@ -8171,7 +8176,7 @@
           "id": "KuIxbMLbRJk",
           "title": "14 \"Poor\" Dollar Tree Foods the Japanese Live On AFTER 50 (They Make You Richer Every Month)",
           "thumbnail": "https://i.ytimg.com/vi/KuIxbMLbRJk/mqdefault.jpg",
-          "views": 9657,
+          "views": 9684,
           "published_at": "2026-10-28T04:35:41Z",
           "duration_sec": 1860,
           "is_outlier": false
@@ -8180,7 +8185,7 @@
           "id": "t2n_hdCJlQk",
           "title": "You've Been Overpaying at the Cheap Store...",
           "thumbnail": "https://i.ytimg.com/vi/t2n_hdCJlQk/mqdefault.jpg",
-          "views": 5275,
+          "views": 5278,
           "published_at": "2026-10-27T03:02:52Z",
           "duration_sec": 2047,
           "is_outlier": false
@@ -8189,7 +8194,7 @@
           "id": "eB4QCxR_QUA",
           "title": "Don’t Buy Rice Before Watching This — The Only 3 Brands I Recommend",
           "thumbnail": "https://i.ytimg.com/vi/eB4QCxR_QUA/mqdefault.jpg",
-          "views": 158218,
+          "views": 158592,
           "published_at": "2026-10-26T02:48:22Z",
           "duration_sec": 2062,
           "is_outlier": true
@@ -8198,7 +8203,7 @@
           "id": "44b-AXi3GTI",
           "title": "How the Japanese Turn Meat & Rice Into 12 Meals for $1 Each",
           "thumbnail": "https://i.ytimg.com/vi/44b-AXi3GTI/mqdefault.jpg",
-          "views": 32682,
+          "views": 32684,
           "published_at": "2026-10-24T23:45:11Z",
           "duration_sec": 1531,
           "is_outlier": true
@@ -8207,7 +8212,7 @@
           "id": "KxCl45dk20c",
           "title": "7 “Poor” Eating Habits That Will Make You Richer After 50",
           "thumbnail": "https://i.ytimg.com/vi/KxCl45dk20c/mqdefault.jpg",
-          "views": 10706,
+          "views": 10707,
           "published_at": "2026-10-24T00:42:30Z",
           "duration_sec": 1706,
           "is_outlier": false
@@ -8216,7 +8221,7 @@
           "id": "cldiFcYHSn0",
           "title": "Grocery Shopping After 50 — This Japanese System Stopped Our Bills from Exploding",
           "thumbnail": "https://i.ytimg.com/vi/cldiFcYHSn0/mqdefault.jpg",
-          "views": 6280,
+          "views": 6279,
           "published_at": "2026-10-23T00:30:23Z",
           "duration_sec": 1715,
           "is_outlier": false
@@ -8225,7 +8230,7 @@
           "id": "DilFvcqbFJI",
           "title": "22 Cheap Dinners My Japanese Grandparents Ate When Money Ran Out",
           "thumbnail": "https://i.ytimg.com/vi/DilFvcqbFJI/mqdefault.jpg",
-          "views": 12581,
+          "views": 12590,
           "published_at": "2026-10-22T01:31:56Z",
           "duration_sec": 1826,
           "is_outlier": false
@@ -8234,7 +8239,7 @@
           "id": "nPUVjEceJ4I",
           "title": "STOP Buying Snacks From the Store — Make These $1 Japanese Snacks at Home",
           "thumbnail": "https://i.ytimg.com/vi/nPUVjEceJ4I/mqdefault.jpg",
-          "views": 14485,
+          "views": 14504,
           "published_at": "2026-10-21T00:30:10Z",
           "duration_sec": 1645,
           "is_outlier": false
@@ -8270,7 +8275,7 @@
           "id": "3y7UPxwtmu8",
           "title": "12 Essential Canned Foods You Must Stock After 50 — That The Japanese Swear By",
           "thumbnail": "https://i.ytimg.com/vi/3y7UPxwtmu8/mqdefault.jpg",
-          "views": 7303,
+          "views": 7305,
           "published_at": "2026-10-17T00:45:19Z",
           "duration_sec": 1861,
           "is_outlier": false
@@ -8279,7 +8284,7 @@
           "id": "ziivKJteDjU",
           "title": "Cook Once, Spend Less — 5 Easy $1 Pocket Soups",
           "thumbnail": "https://i.ytimg.com/vi/ziivKJteDjU/mqdefault.jpg",
-          "views": 8238,
+          "views": 8240,
           "published_at": "2026-10-15T23:15:20Z",
           "duration_sec": 1456,
           "is_outlier": false
@@ -8306,7 +8311,7 @@
           "id": "RhaDqOMPCb0",
           "title": "Cook Once, Eat All Month — 30 Freezer Meals for Under $2 Each",
           "thumbnail": "https://i.ytimg.com/vi/RhaDqOMPCb0/mqdefault.jpg",
-          "views": 7773,
+          "views": 7775,
           "published_at": "2026-10-13T03:02:56Z",
           "duration_sec": 1914,
           "is_outlier": false
@@ -8315,7 +8320,7 @@
           "id": "DVFVoPfQiTU",
           "title": "8 High Protein Breakfasts To Buy Every Week After 50 — That the Japanese Swear By",
           "thumbnail": "https://i.ytimg.com/vi/DVFVoPfQiTU/mqdefault.jpg",
-          "views": 12242,
+          "views": 12254,
           "published_at": "2026-10-12T02:45:18Z",
           "duration_sec": 1755,
           "is_outlier": false
@@ -8333,7 +8338,7 @@
           "id": "Yh6lge481fA",
           "title": "How You Can Turn a $5 Costco Chicken Into 3 Easy Meals",
           "thumbnail": "https://i.ytimg.com/vi/Yh6lge481fA/mqdefault.jpg",
-          "views": 12388,
+          "views": 12389,
           "published_at": "2026-10-10T00:30:13Z",
           "duration_sec": 1645,
           "is_outlier": false
@@ -8342,7 +8347,7 @@
           "id": "VZQTpV0l7MU",
           "title": "Why Everyone is Making $1 Pocket Soups (And You Should Too!)",
           "thumbnail": "https://i.ytimg.com/vi/VZQTpV0l7MU/mqdefault.jpg",
-          "views": 363171,
+          "views": 363176,
           "published_at": "2026-10-09T01:30:37Z",
           "duration_sec": 1640,
           "is_outlier": true
@@ -8351,7 +8356,7 @@
           "id": "aBqzL2hbc68",
           "title": "11 Cheap Japanese Dinners for When Money’s Tight",
           "thumbnail": "https://i.ytimg.com/vi/aBqzL2hbc68/mqdefault.jpg",
-          "views": 8062,
+          "views": 8064,
           "published_at": "2026-10-07T23:20:04Z",
           "duration_sec": 1655,
           "is_outlier": false
@@ -8360,7 +8365,7 @@
           "id": "rDv0JXGyEdQ",
           "title": "Most Groceries Are a Trap - Buy These 18 Instead",
           "thumbnail": "https://i.ytimg.com/vi/rDv0JXGyEdQ/mqdefault.jpg",
-          "views": 10966,
+          "views": 10975,
           "published_at": "2026-10-06T22:00:09Z",
           "duration_sec": 1791,
           "is_outlier": false
@@ -8378,7 +8383,7 @@
           "id": "jh-M3ttnYlU",
           "title": "Save Hundreds on Groceries with these 8 Easy Food Swaps",
           "thumbnail": "https://i.ytimg.com/vi/jh-M3ttnYlU/mqdefault.jpg",
-          "views": 9609,
+          "views": 9622,
           "published_at": "2026-10-05T00:24:01Z",
           "duration_sec": 1587,
           "is_outlier": false
@@ -8387,7 +8392,7 @@
           "id": "ZG1wToD6Q8Q",
           "title": "11 Essential Groceries To Buy Every Week After 50 — That The Japanese Swear By",
           "thumbnail": "https://i.ytimg.com/vi/ZG1wToD6Q8Q/mqdefault.jpg",
-          "views": 1317703,
+          "views": 1318392,
           "published_at": "2026-10-04T01:01:40Z",
           "duration_sec": 1761,
           "is_outlier": true
@@ -8409,11 +8414,11 @@
           6098040
         ]
       ],
-      "graduated": true,
+      "graduated": false,
       "cluster": "lifehacks|live|en",
-      "entry_verdict": null,
-      "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_verdict": "open",
+      "entry_verdict_ru": "Окно открыто",
+      "entry_score": 90
     },
     {
       "id": "UCtrNrW5RTVzL7Tj07EExLKg",
@@ -8621,26 +8626,26 @@
       "difficulty": "medium",
       "difficulty_ru": "Средняя",
       "solo_friendly": true,
-      "subs": 13000,
+      "subs": 13100,
       "total_views": 5769666,
       "videos_count": 11,
       "videos_count_long": 11,
       "first_video_at": "2026-08-19T17:06:12Z",
-      "channel_age_days": 74.7,
-      "avg_views": 524920.0,
-      "median_views": 81450,
-      "avg_views_first_5": 1133920.6,
+      "channel_age_days": 74.8,
+      "avg_views": 524964.82,
+      "median_views": 81452,
+      "avg_views_first_5": 1134017.6,
       "avg_duration_sec": 1246.18,
-      "views_per_day": 77268.11,
-      "monthly_views_est": 2318043,
-      "subs_per_day": 173.96,
-      "watch_hours_est": 832037.42,
+      "views_per_day": 77221.76,
+      "monthly_views_est": 2316653,
+      "subs_per_day": 175.18,
+      "watch_hours_est": 832109.87,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": false,
       "rpm": 4.76,
       "rpm_source": "nexlev",
-      "monthly_income_est": 11033.88,
+      "monthly_income_est": 11027.27,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -8652,7 +8657,7 @@
           "id": "0gP6uOqid9A",
           "title": "How Britain Built the Impossible Antarctic Base That Walks on Skis",
           "thumbnail": "https://i.ytimg.com/vi/0gP6uOqid9A/mqdefault.jpg",
-          "views": 1498,
+          "views": 1502,
           "published_at": "2026-10-29T14:18:07Z",
           "duration_sec": 1198,
           "is_outlier": false
@@ -8670,7 +8675,7 @@
           "id": "X7ka1VNmFSg",
           "title": "How the Netherlands Lives Below Sea Level and Doesn't Go Underwater",
           "thumbnail": "https://i.ytimg.com/vi/X7ka1VNmFSg/mqdefault.jpg",
-          "views": 9682,
+          "views": 9683,
           "published_at": "2026-10-08T13:04:49Z",
           "duration_sec": 1123,
           "is_outlier": false
@@ -8679,7 +8684,7 @@
           "id": "ZtS_dtWBkmg",
           "title": "How Burj Khalifa Was Built by Pumping Concrete 606 Meters Into the Sky",
           "thumbnail": "https://i.ytimg.com/vi/ZtS_dtWBkmg/mqdefault.jpg",
-          "views": 2218,
+          "views": 2219,
           "published_at": "2026-10-03T11:52:28Z",
           "duration_sec": 1355,
           "is_outlier": false
@@ -8697,7 +8702,7 @@
           "id": "BEpG765nsdw",
           "title": "Why China Puts Solar Panels on Water Instead of Land",
           "thumbnail": "https://i.ytimg.com/vi/BEpG765nsdw/mqdefault.jpg",
-          "views": 81450,
+          "views": 81452,
           "published_at": "2026-09-25T12:32:07Z",
           "duration_sec": 1191,
           "is_outlier": false
@@ -8706,7 +8711,7 @@
           "id": "06cEGdhL-iA",
           "title": "How South Korea Built a 33 km Wall to Steal Land From the Sea",
           "thumbnail": "https://i.ytimg.com/vi/06cEGdhL-iA/mqdefault.jpg",
-          "views": 186295,
+          "views": 186349,
           "published_at": "2026-09-19T15:19:21Z",
           "duration_sec": 1215,
           "is_outlier": false
@@ -8715,7 +8720,7 @@
           "id": "oHSqe6onipQ",
           "title": "How Egypt Is Digging a 310 km River Into the Sahara Desert",
           "thumbnail": "https://i.ytimg.com/vi/oHSqe6onipQ/mqdefault.jpg",
-          "views": 353900,
+          "views": 354004,
           "published_at": "2026-09-11T13:56:21Z",
           "duration_sec": 1688,
           "is_outlier": true
@@ -8724,7 +8729,7 @@
           "id": "huP0Yr2PlZ0",
           "title": "Nepal Flood Explained: How a Glacier Became a Wall of Water",
           "thumbnail": "https://i.ytimg.com/vi/huP0Yr2PlZ0/mqdefault.jpg",
-          "views": 222644,
+          "views": 222643,
           "published_at": "2026-09-02T16:56:12Z",
           "duration_sec": 949,
           "is_outlier": false
@@ -8733,7 +8738,7 @@
           "id": "0T_KCWIKSbM",
           "title": "The Water Project That Made a Country Rich Without Selling Oil | 4K Documentary",
           "thumbnail": "https://i.ytimg.com/vi/0T_KCWIKSbM/mqdefault.jpg",
-          "views": 87334,
+          "views": 87338,
           "published_at": "2026-08-21T15:17:46Z",
           "duration_sec": 1126,
           "is_outlier": false
@@ -8742,7 +8747,7 @@
           "id": "Eg0djVfKXU8",
           "title": "The 400 km Wall Japan Built to Stop the Sea",
           "thumbnail": "https://i.ytimg.com/vi/Eg0djVfKXU8/mqdefault.jpg",
-          "views": 4819430,
+          "views": 4819754,
           "published_at": "2026-08-19T17:06:12Z",
           "duration_sec": 1515,
           "is_outlier": true
@@ -8760,14 +8765,15 @@
         ],
         [
           "2026-11-02",
-          13000,
+          13100,
           5769666
         ]
       ],
+      "graduated": false,
       "cluster": "disasters|live|en",
-      "entry_verdict": "open",
-      "entry_verdict_ru": "Окно открыто",
-      "entry_score": 88
+      "entry_verdict": "filling",
+      "entry_verdict_ru": "Заполняется",
+      "entry_score": 82
     },
     {
       "id": "UCG1FhX9QEcUEqNQEnP1EaiQ",
@@ -8817,20 +8823,20 @@
       "videos_count_long": 30,
       "first_video_at": "2026-10-04T01:25:22Z",
       "channel_age_days": 29.4,
-      "avg_views": 53551.6,
-      "median_views": 31201.0,
-      "avg_views_first_5": 119228.4,
+      "avg_views": 53592.43,
+      "median_views": 31243.5,
+      "avg_views_first_5": 119278.8,
       "avg_duration_sec": 1714.2,
-      "views_per_day": 54678.47,
-      "monthly_views_est": 1640354,
-      "subs_per_day": 5309.42,
-      "watch_hours_est": 245796.47,
+      "views_per_day": 54624.91,
+      "monthly_views_est": 1638747,
+      "subs_per_day": 5300.18,
+      "watch_hours_est": 246001.63,
       "days_to_monetization": 0.0,
       "monetization_forecast": "≤30 дн.",
       "is_monetized": null,
       "rpm": 6.0,
       "rpm_source": "baseline",
-      "monthly_income_est": 9842.12,
+      "monthly_income_est": 9832.48,
       "region": "us",
       "region_ru": "США/UK",
       "found_by_queries": [
@@ -8842,7 +8848,7 @@
           "id": "AZKfb2KxSNM",
           "title": "7 Japanese Hygiene Habits That Help You Stop Smelling Bad After 45",
           "thumbnail": "https://i.ytimg.com/vi/AZKfb2KxSNM/mqdefault.jpg",
-          "views": 2699,
+          "views": 3001,
           "published_at": "2026-11-02T02:05:59Z",
           "duration_sec": 1662,
           "is_outlier": false
@@ -8851,7 +8857,7 @@
           "id": "t-BLnR8CDV8",
           "title": "13 Japanese Home Habits for a Simple, Calm Life",
           "thumbnail": "https://i.ytimg.com/vi/t-BLnR8CDV8/mqdefault.jpg",
-          "views": 9295,
+          "views": 9345,
           "published_at": "2026-11-01T02:07:49Z",
           "duration_sec": 1891,
           "is_outlier": false
@@ -8860,7 +8866,7 @@
           "id": "8za2Tbv2gSo",
           "title": "The Dark Side of Buy-It-For-Life That No One Talks About",
           "thumbnail": "https://i.ytimg.com/vi/8za2Tbv2gSo/mqdefault.jpg",
-          "views": 11171,
+          "views": 11188,
           "published_at": "2026-10-31T02:36:41Z",
           "duration_sec": 1656,
           "is_outlier": false
@@ -8869,7 +8875,7 @@
           "id": "BOrsIxgFs_k",
           "title": "Organization Is Making Us All Messier - The Japanese Do This INSTEAD",
           "thumbnail": "https://i.ytimg.com/vi/BOrsIxgFs_k/mqdefault.jpg",
-          "views": 9919,
+          "views": 9953,
           "published_at": "2026-10-30T02:49:07Z",
           "duration_sec": 1637,
           "is_outlier": false
@@ -8878,7 +8884,7 @@
           "id": "RdxF_9qbUJI",
           "title": "82 Oddly Specific Items to Declutter Today!",
           "thumbnail": "https://i.ytimg.com/vi/RdxF_9qbUJI/mqdefault.jpg",
-          "views": 37323,
+          "views": 37465,
           "published_at": "2026-10-29T02:44:15Z",
           "duration_sec": 2268,
           "is_outlier": false
@@ -8887,7 +8893,7 @@
           "id": "0of3QOUCtXo",
           "title": "Thrifting Is Just Consumerism With a Better Excuse",
           "thumbnail": "https://i.ytimg.com/vi/0of3QOUCtXo/mqdefault.jpg",
-          "views": 10287,
+          "views": 10309,
           "published_at": "2026-10-28T02:23:21Z",
           "duration_sec": 1892,
           "is_outlier": false
@@ -8896,7 +8902,7 @@
           "id": "ibB_CDns64s",
           "title": "I Tried Every Popular Cleaning Routine So You Don't Have To",
           "thumbnail": "https://i.ytimg.com/vi/ibB_CDns64s/mqdefault.jpg",
-          "views": 9353,
+          "views": 9358,
           "published_at": "2026-10-27T02:35:41Z",
           "duration_sec": 3169,
           "is_outlier": false
@@ -8905,7 +8911,7 @@
           "id": "Xq1sYtQBjYc",
           "title": "There Are 5 Types of Messy. Which One Are You? (And How to Get Organized)",
           "thumbnail": "https://i.ytimg.com/vi/Xq1sYtQBjYc/mqdefault.jpg",
-          "views": 15879,
+          "views": 15918,
           "published_at": "2026-10-26T02:12:59Z",
           "duration_sec": 2344,
           "is_outlier": false
@@ -8914,7 +8920,7 @@
           "id": "o9cRmx4yROs",
           "title": "I Tried KonMari vs Minimalism vs Death Cleaning – SURPRISING Result!",
           "thumbnail": "https://i.ytimg.com/vi/o9cRmx4yROs/mqdefault.jpg",
-          "views": 31554,
+          "views": 31639,
           "published_at": "2026-10-25T02:00:23Z",
           "duration_sec": 2320,
           "is_outlier": false
@@ -8932,7 +8938,7 @@
           "id": "yN_HcCzgihg",
           "title": "You Decluttered It. So Why Is It Still in Your House?",
           "thumbnail": "https://i.ytimg.com/vi/yN_HcCzgihg/mqdefault.jpg",
-          "views": 9971,
+          "views": 9999,
           "published_at": "2026-10-23T01:53:18Z",
           "duration_sec": 1626,
           "is_outlier": false
@@ -8986,7 +8992,7 @@
           "id": "J_lLLactF-8",
           "title": "11 Things Making Your Home Uncomfortable for Guests - That Japanese Homes Replaced",
           "thumbnail": "https://i.ytimg.com/vi/J_lLLactF-8/mqdefault.jpg",
-          "views": 48166,
+          "views": 48198,
           "published_at": "2026-10-17T01:50:40Z",
           "duration_sec": 1657,
           "is_outlier": false
@@ -8995,7 +9001,7 @@
           "id": "o9o3tCN-M7c",
           "title": "13 Things You Bought to Make Life Easier — That Actually Keep Your Home Cluttered",
           "thumbnail": "https://i.ytimg.com/vi/o9o3tCN-M7c/mqdefault.jpg",
-          "views": 22340,
+          "views": 22365,
           "published_at": "2026-10-16T02:09:46Z",
           "duration_sec": 1630,
           "is_outlier": false
@@ -9004,7 +9010,7 @@
           "id": "bdx4djyJVQM",
           "title": "What Makes Someone a Hoarder? It's LESS Clutter Than You Think!",
           "thumbnail": "https://i.ytimg.com/vi/bdx4djyJVQM/mqdefault.jpg",
-          "views": 85055,
+          "views": 85074,
           "published_at": "2026-10-15T01:48:53Z",
           "duration_sec": 1739,
           "is_outlier": false
@@ -9022,7 +9028,7 @@
           "id": "kzyCJJWvPPQ",
           "title": "I'm 52 and Japanese — 11 Things I Removed From My Home After 50 (Americans Still Hold On To)",
           "thumbnail": "https://i.ytimg.com/vi/kzyCJJWvPPQ/mqdefault.jpg",
-          "views": 222705,
+          "views": 222852,
           "published_at": "2026-10-13T01:46:58Z",
           "duration_sec": 1295,
           "is_outlier": true
@@ -9040,7 +9046,7 @@
           "id": "Pwq79fJgmSI",
           "title": "I tried \"Swedish Death Cleaning\" and it CHANGED EVERYTHING! 🤯",
           "thumbnail": "https://i.ytimg.com/vi/Pwq79fJgmSI/mqdefault.jpg",
-          "views": 41807,
+          "views": 41833,
           "published_at": "2026-10-11T01:56:43Z",
           "duration_sec": 1409,
           "is_outlier": false
@@ -9067,7 +9073,7 @@
           "id": "fZaLSCMOCSY",
           "title": "8 Things The Japanese Use to Make Cleaning Easier in Midlife",
           "thumbnail": "https://i.ytimg.com/vi/fZaLSCMOCSY/mqdefault.jpg",
-          "views": 42028,
+          "views": 42062,
           "published_at": "2026-10-08T01:21:33Z",
           "duration_sec": 1511,
           "is_outlier": false
@@ -9076,7 +9082,7 @@
           "id": "XOYwe44TfFk",
           "title": "Stuck in the Decluttering Loop? Here’s How to Break It",
           "thumbnail": "https://i.ytimg.com/vi/XOYwe44TfFk/mqdefault.jpg",
-          "views": 25009,
+          "views": 25028,
           "published_at": "2026-10-07T00:31:30Z",
           "duration_sec": 1555,
           "is_outlier": false
@@ -9085,7 +9091,7 @@
           "id": "IyxnT5a5nqs",
           "title": "Decluttering? Stop Asking “Should I Keep This?” — Ask This Instead",
           "thumbnail": "https://i.ytimg.com/vi/IyxnT5a5nqs/mqdefault.jpg",
-          "views": 74902,
+          "views": 74944,
           "published_at": "2026-10-06T01:34:42Z",
           "duration_sec": 1484,
           "is_outlier": false
@@ -9103,7 +9109,7 @@
           "id": "WzxvBmDLcA0",
           "title": "Decluttering Room by Room Is Backwards - In Japan We DO THIS!",
           "thumbnail": "https://i.ytimg.com/vi/WzxvBmDLcA0/mqdefault.jpg",
-          "views": 390815,
+          "views": 390972,
           "published_at": "2026-10-04T01:25:22Z",
           "duration_sec": 1396,
           "is_outlier": true
@@ -37378,12 +37384,12 @@
         "what if, what if everyone had superpowers, random superpower, superpowers, what if you had superpowers, everyone gets superpowers, superpower animation, what if animation, animated story, story animation, invisible, super speed, super strength, fire powers, what now, max animation, what if scenario, hypothetical, imagination, what if series",
         "what if, what if you could rewind time, rewind 10 seconds, undo mistakes, time travel animation, what if animation, animated story, story animation, regret psychology, talent show, stage fright, friendship story, motivational animation, what now, max animation, what if scenario, hypothetical, imagination, what if series"
       ],
-      "production_style": "2d_animation",
+      "production_style": "code_generated",
       "style_ru": "2D-анимация",
       "style_group": "ai",
       "uses_ai": true,
-      "difficulty": "high",
-      "difficulty_ru": "Высокая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": false,
       "subs": 651,
       "total_views": 129622,
@@ -37570,7 +37576,37 @@
       "cluster": "psychology|ai|ru",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Анимированные истории в формате «Что если...?», раскрывающие психологические гипотезы и научные факты («What If You Could See How Much Everyone Likes You?», «What If You Could Only Say 100 Words a Day?»). Ролики выходят на английском языке длительностью 8–9 минут, без показа лица. В роликах используется синтезированный ИИ-голос и постоянный главный персонаж. Дополнительная монетизация не обнаружена.\n\nФлэт 2D-анимация и процедурная инфографика с векторными персонажами, динамическими числами и графиками, созданная при помощи программных инструментов анимации и ИИ-озвучки. Сложность создания средняя.\n\nКлассифицировано 02.11 (Gemini): просмотр 2 мин ролика «What If You Could See How Much Everyone Likes You?».",
+      "production_methods_ru": "Флэт 2D-анимация и процедурная инфографика с векторными персонажами, динамическими числами и графиками, созданная при помощи программных инструментов анимации и ИИ-озвучки. Сложность создания средняя.",
+      "subniche_ru": "Гипотетические сценарии и мыслительные эксперименты",
+      "uses_ai_mode": "with",
+      "extra_monetization": [],
+      "production_styles": [
+        "code_generated",
+        "2d_animation"
+      ],
+      "production_mix": [
+        {
+          "style": "code_generated",
+          "share": 60
+        },
+        {
+          "style": "2d_animation",
+          "share": 40
+        }
+      ],
+      "categories": [
+        "animation",
+        "education",
+        "psychology"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "Анимация",
+      "enriched_at": "2026-11-02"
     },
     {
       "id": "UC3rhuTQCzYwQeIV_l3lHyJQ",
@@ -107083,12 +107119,12 @@
         "রেফ্রিজারেটর",
         "সংস্কৃতি"
       ],
-      "production_style": "talking_head",
+      "production_style": "ai_illustrations",
       "style_ru": "С лицом",
       "style_group": "live",
       "uses_ai": true,
-      "difficulty": "high",
-      "difficulty_ru": "Высокая",
+      "difficulty": "medium",
+      "difficulty_ru": "Средняя",
       "solo_friendly": false,
       "subs": 3520,
       "total_views": 1356826,
@@ -107203,7 +107239,37 @@
       "cluster": "history|live|bn",
       "entry_verdict": null,
       "entry_verdict_ru": null,
-      "entry_score": null
+      "entry_score": null,
+      "notes_ru": "Канал посвящен истории создания и эволюции повседневных вещей, продуктов и известных брендов. Темы включают историю мотоциклов Royal Enfield, происхождение чая, изобретение колеса и телевидения. Заголовки обычно оформлены как «История [Предмета]: как он появился?». Ролики на бенгальском языке, без лица, средней длины 15–16 минут, выходят примерно раз в неделю.\n\nВидеоряд на 80% состоит из высококачественных ИИ-иллюстраций, оживленных эффектом параллакса, и на 20% из подходящих по смыслу стоковых футажей. Закадровый голос профессиональный, сложность производства средняя.\n\nКлассифицировано 02.11 (Gemini): просмотр 2 мин ролика «বুলেট বাইকের ইতিহাস - বুলেটের জন্ম কিভাবে হয়েছিল ? History of Royal Enfield | Bangla Documentry».",
+      "production_methods_ru": "Видеоряд на 80% состоит из высококачественных ИИ-иллюстраций, оживленных эффектом параллакса, и на 20% из подходящих по смыслу стоковых футажей. Закадровый голос профессиональный, сложность производства средняя.",
+      "subniche_ru": "История изобретений и брендов",
+      "uses_ai_mode": "with",
+      "extra_monetization": [],
+      "production_styles": [
+        "ai_illustrations",
+        "stock_footage"
+      ],
+      "production_mix": [
+        {
+          "style": "ai_illustrations",
+          "share": 80
+        },
+        {
+          "style": "stock_footage",
+          "share": 20
+        }
+      ],
+      "categories": [
+        "history",
+        "documentary",
+        "technology"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "История",
+      "enriched_at": "2026-11-02"
     },
     {
       "id": "UC5nzfFL09CI5XyZ3MsX_RXg",
@@ -137028,78 +137094,125 @@
   ],
   "clusters": {
     "jewelry|live|en": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 45266.0,
+      "n": 5,
+      "share_growing": 0.4,
+      "median_vpv": 10905.53,
       "median_vps": 120.65,
-      "newcomers_30d": 0,
-      "median_rpm": 2.85,
+      "newcomers_30d": 4,
+      "median_rpm": 14.0,
       "niche_ru": "Ювелирка",
       "style_group": "live",
       "language": "en",
       "channel_ids": [
+        "UCAQ3ijMJflppSdHdsB75n9g",
+        "UCzZqLcrq92NWT52GqSMLesw",
+        "UCbaeKRGzo2JEkJ5orygbUwA",
+        "UCf0VgA4RUAOP1wCXYSLhhyw",
         "UCv7mY6CXR9MY912cRKR_y7Q"
       ],
-      "entry_score": 53,
+      "entry_score": 64,
+      "verdict": "filling",
+      "verdict_ru": "Заполняется",
+      "label": "good"
+    },
+    "animals|live|en": {
+      "n": 4,
+      "share_growing": 0.25,
+      "median_vpv": 48399.45,
+      "median_vps": 159.85,
+      "newcomers_30d": 4,
+      "median_rpm": 4.5,
+      "niche_ru": "Животные",
+      "style_group": "live",
+      "language": "en",
+      "channel_ids": [
+        "UCmKjefsbN1_nOS0rIUdlo9Q",
+        "UCfpr2PTfO5v3w1-emJ-5x7Q",
+        "UC10ZrtXRUv9zmgrlzw19Uww",
+        "UCobGrgRznm2kcxJfAwjoiPQ"
+      ],
+      "entry_score": 66,
       "verdict": "unproven",
       "verdict_ru": "Спрос не доказан",
       "label": "good"
     },
     "disasters|live|en": {
-      "n": 3,
-      "share_growing": 0.667,
-      "median_vpv": 444199.0,
-      "median_vps": 342.51,
-      "newcomers_30d": 2,
+      "n": 4,
+      "share_growing": 0.5,
+      "median_vpv": 282560.67,
+      "median_vps": 320.92,
+      "newcomers_30d": 3,
       "median_rpm": 7.0,
       "niche_ru": "Природные катастрофы",
       "style_group": "live",
       "language": "en",
       "channel_ids": [
         "UCjw4TogAifphMJ8HfZpk22w",
+        "UCyIYCV-JGBJrfeaezM1ST5w",
         "UCSZY6N_fKVbHJXakR-Lscyg",
         "UCtrNrW5RTVzL7Tj07EExLKg"
       ],
-      "entry_score": 88,
-      "verdict": "open",
-      "verdict_ru": "Окно открыто",
+      "entry_score": 82,
+      "verdict": "filling",
+      "verdict_ru": "Заполняется",
       "label": "good"
     },
     "history|live|es": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 160970.0,
-      "median_vps": 227.72,
-      "newcomers_30d": 1,
-      "median_rpm": 4.5,
+      "n": 2,
+      "share_growing": 0.5,
+      "median_vpv": 112137.87,
+      "median_vps": 134.91,
+      "newcomers_30d": 2,
+      "median_rpm": 5.25,
       "niche_ru": "История и геополитика",
       "style_group": "live",
       "language": "es",
       "channel_ids": [
-        "UCYARYdLq9-UwcTzzMDF_v2Q"
+        "UCYARYdLq9-UwcTzzMDF_v2Q",
+        "UCFpXsCPbQtzpLNFiJlxHYHQ"
       ],
-      "entry_score": 99,
+      "entry_score": 74,
       "verdict": "open",
       "verdict_ru": "Окно открыто",
       "label": null
     },
     "nostalgia|live|de": {
-      "n": 1,
+      "n": 3,
       "share_growing": 1.0,
-      "median_vpv": 48909.71,
-      "median_vps": 203.43,
-      "newcomers_30d": 1,
+      "median_vpv": 26989.6,
+      "median_vps": 147.69,
+      "newcomers_30d": 3,
       "median_rpm": 6.0,
       "niche_ru": "Ностальгия",
       "style_group": "live",
       "language": "de",
       "channel_ids": [
-        "UC9DltgGxltZs45koX1sDpdA"
+        "UC9DltgGxltZs45koX1sDpdA",
+        "UCjQmQuGyQtNpjeROVExuAYw",
+        "UCVAadbBHRm49FvDvEh0Ke5w"
       ],
-      "entry_score": 96,
+      "entry_score": 90,
+      "verdict": "filling",
+      "verdict_ru": "Заполняется",
+      "label": null
+    },
+    "lifehacks|live|en": {
+      "n": 1,
+      "share_growing": 1.0,
+      "median_vpv": 74748.13,
+      "median_vps": 125.99,
+      "newcomers_30d": 1,
+      "median_rpm": 6.0,
+      "niche_ru": "Бытовые лайфхаки",
+      "style_group": "live",
+      "language": "en",
+      "channel_ids": [
+        "UCqX_HO1AR-1uNx9T41ID9IQ"
+      ],
+      "entry_score": 90,
       "verdict": "open",
       "verdict_ru": "Окно открыто",
-      "label": null
+      "label": "good"
     }
   }
 }
