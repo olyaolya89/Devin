@@ -29,7 +29,7 @@ SKIP_MODELS = ("lite", "image", "tts", "live", "audio", "embedding", "robotics",
 EXTRA = ("own_product", "affiliate", "sponsors", "membership", "merch", "none")
 STYLES = (
     "stock_footage", "maps_graphics", "ai_images", "2d_animation", "3d_animation", "ai_video", "highlights",
-    "illustrations", "photos_stock", "ai_illustrations", "talking_head", "screencast_slides", "stickman",
+    "illustrations", "photos_stock", "ai_illustrations", "talking_head", "screencast_slides", "stickman", "code_generated",
 )
 DIFFICULTY_RU = {"low": "Низкая", "medium": "Средняя", "high": "Высокая"}
 SCHEMA = {
@@ -73,7 +73,8 @@ uses_ai: with — ИИ-картинки/видео/голос заметны, mi
 difficulty: насколько трудно повторить формат одному автору.
 extra_monetization: только то, что явно видно в описании; иначе ["none"].
 has_ai_avatar: true, если в кадре ИИ-аватар/цифровой ведущий.
-production_styles: 1–3 основных стиля видеоряда, от главного к второстепенному.
+production_styles: 1–3 основных стиля видеоряда, от главного к второстепенному. code_generated — видео собрано программно
+(код/Remotion/Manim/скрипты генерируют графику, текст, диаграммы и анимацию по данным).
 categories: 2–4 коротких английских категории, например ["history", "Documentary", "Military"].
 
 Данные канала:
