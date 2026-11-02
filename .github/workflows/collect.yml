@@ -39,4 +39,5 @@ jobs:
           git add niche-radar/data/history
           git diff --cached --quiet && exit 0
           git commit -m "Update niche-radar channel data"
+          git pull --rebase
           git push

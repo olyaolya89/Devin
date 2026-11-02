@@ -25,6 +25,7 @@ RETRY_WAITS = tuple(float(x) for x in os.environ.get("GEMINI_RETRY_WAITS", "15,4
 RETRY_CODES = (429, 500, 503, 504)
 FALLBACKS: list[str] = []
 RETIRED: set[str] = set()
+QUOTA_EXHAUSTED = False
 SKIP_MODELS = ("lite", "image", "tts", "live", "audio", "embedding", "robotics", "computer")
 EXTRA = ("own_product", "affiliate", "sponsors", "membership", "merch", "none")
 STYLES = (
@@ -252,6 +253,11 @@ class GeminiError(Exception):
         self.code, self.body = code, body
 
 
+def is_quota_error(code: int, body: str) -> bool:
+    """Daily/billing quota of the key is used up: waiting a minute will not help."""
+    return code == 429 and "exceeded your current quota" in (body or "")
+
+
 def attempt(call, body: dict[str, Any], key: str) -> dict[str, Any]:
     """Call Gemini, retrying overload (429/5xx) and timeouts with backoff."""
     for wait in RETRY_WAITS + (None,):
@@ -259,7 +265,7 @@ def attempt(call, body: dict[str, Any], key: str) -> dict[str, Any]:
             return call(body, key)
         except urllib.error.HTTPError as error:
             text = error.read().decode("utf-8", "replace")
-            if error.code in RETRY_CODES and wait is not None:
+            if error.code in RETRY_CODES and wait is not None and not is_quota_error(error.code, text):
                 time.sleep(wait)
                 continue
             raise GeminiError(error.code, text) from None
@@ -292,6 +298,11 @@ def enrich(channel: dict[str, Any], key: str, now: dt.datetime, call=call_gemini
         except GeminiError as error:
             if switch_model(error.body) or (error.code in RETRY_CODES and next_model()):
                 return enrich(channel, key, now, call)
+            if is_quota_error(error.code, error.body):
+                global QUOTA_EXHAUSTED
+                QUOTA_EXHAUSTED = True
+                print("[enrich] Gemini key quota exhausted on all models", file=sys.stderr)
+                return False
             print(f"[enrich] {channel.get('id')} watch={watch}: {error}", file=sys.stderr)
             continue
         except (ValueError, KeyError, IndexError, TypeError) as error:
@@ -364,6 +375,9 @@ def main(argv: list[str] | None = None) -> int:
                 failed = 0
                 print(f"[enrich] {channel.get('title')}: {channel.get('subniche_ru')}", file=sys.stderr)
                 save(args.data, data)
+            elif QUOTA_EXHAUSTED:
+                print("[enrich] stopping: the Gemini key has no quota left (free tier daily limit or billing)", file=sys.stderr)
+                break
             else:
                 failed += 1
                 if failed >= 8:

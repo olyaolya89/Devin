@@ -299,6 +299,17 @@ class EnrichTests(unittest.TestCase):
         self.assertEqual(pick(names, "gemini-2.5-flash"), "gemini-3-flash")
         self.assertIsNone(pick(["models/text-embedding-004"], "gemini-2.5-flash"))
 
+    def test_attempt_does_not_wait_on_exhausted_quota(self):
+        import io, urllib.error
+        calls = []
+        def call(body, key):
+            calls.append(1)
+            raise urllib.error.HTTPError("u", 429, "q", {}, io.BytesIO(b'{"message": "You exceeded your current quota, please check your plan"}'))
+        with mock.patch.object(self.enrich.time, "sleep") as sleep:
+            with self.assertRaises(self.enrich.GeminiError):
+                self.enrich.attempt(call, {}, "k")
+        self.assertEqual((len(calls), sleep.call_count), (1, 0))
+
     def test_switch_model_follows_retired_model_hint(self):
         self.enrich.MODEL = "gemini-2.5-flash"
         body = '"message": "This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.8-flash for the latest"'
