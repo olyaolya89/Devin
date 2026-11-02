@@ -16,7 +16,7 @@
   const compCount = c => c._comp ?? (c._comp = state.all.filter(x => x.niche === c.niche && x.id !== c.id && sameLang(x, c)).length);
   const handleOf = c => c.handle ? '@' + c.handle.replace(/^@/, '') : '';
   const countryName = code => { if (!code) return '—'; try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(code) || code; } catch { return code; } };
-  const STYLE_RU = { stock_footage: 'Стоковые видео', maps_graphics: 'Карты / графика', ai_images: 'ИИ-картинки', '2d_animation': '2D-анимация', '3d_animation': '3D-анимация', ai_video: 'ИИ-видео', highlights: 'Нарезки / шоу', illustrations: 'Иллюстрации', photos_stock: 'Фото / стоки', ai_illustrations: 'ИИ-иллюстрации', talking_head: 'Ведущий в кадре', screencast_slides: 'Скринкаст / слайды', stickman: 'Стикмены' };
+  const STYLE_RU = { stock_footage: 'Стоковые видео', maps_graphics: 'Карты / графика', ai_images: 'ИИ-картинки', '2d_animation': '2D-анимация', '3d_animation': '3D-анимация', ai_video: 'ИИ-видео', highlights: 'Нарезки / шоу', illustrations: 'Иллюстрации', photos_stock: 'Фото / стоки', ai_illustrations: 'ИИ-иллюстрации', talking_head: 'Ведущий в кадре', screencast_slides: 'Скринкаст / слайды', stickman: 'Стикмены', code_generated: 'Производство кодом' };
   const styles = c => ((c.production_styles || []).length ? c.production_styles : [c.production_style]).filter(Boolean);
   const styleName = v => STYLE_RU[v] || state.all.find(c => c.production_style === v)?.style_ru || v;
   const categories = c => ((c.categories || []).length ? c.categories : c.tags || []);
@@ -233,7 +233,7 @@
     fill('#fCat', [...new Set(state.all.flatMap(categories))].filter(Boolean).sort().slice(0, 60));
     fill('#fLang', [...new Set(uniq('language').map(l => l.split('-')[0]))], v => LANG[v] || v);
     fill('#fFormat', ['long', 'mixed', 'shorts'].filter(t => state.all.some(c => contentType(c) === t)), v => CONTENT_RU[v]);
-    fill('#fStyle', [...new Set(state.all.flatMap(styles))].sort(), styleName);
+    fill('#fStyle', [...new Set([...Object.keys(STYLE_RU), ...state.all.flatMap(styles)])].sort((a, b) => styleName(a).localeCompare(styleName(b), 'ru')), styleName);
     const maxS = Math.max(1000, ...state.all.map(c => c.subs || 0));
     const maxV = Math.max(1000, ...state.all.map(c => c.total_views || 0));
     const maxA = Math.max(100, ...state.all.map(c => c.avg_views || 0));
