@@ -207,7 +207,8 @@ class CollectTests(unittest.TestCase):
 
 
     def test_eligible_accepts_proven_channels_with_many_videos(self):
-        self.assertTrue(collect.eligible({"videoCount": 200, "subscriberCount": 150000}))
+        self.assertTrue(collect.eligible({"videoCount": 60, "subscriberCount": 150000}))
+        self.assertFalse(collect.eligible({"videoCount": 61, "subscriberCount": 150000}))
         self.assertFalse(collect.eligible({"videoCount": 400, "subscriberCount": 5000}))
         self.assertFalse(collect.eligible({"videoCount": 20, "subscriberCount": 500000}))
         self.assertFalse(collect.eligible({"videoCount": 20, "subscriberCount": 5000, "hiddenSubscriberCount": True}))
