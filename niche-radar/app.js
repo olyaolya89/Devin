@@ -103,6 +103,15 @@
     ['Психология и личностный рост', /\b(psycholog\w*|personality|traits?|introverts?|stoic\w*|habits?)\b/i],
     ['Личные финансы', /\b(money|financ\w*|invest\w*|tax|taxes|income|wealth\w*|dinero|negocios?)\b/i],
     ['Авто и техника', /\b(cars?|suvs?|trucks?|pickups?|engines?|motorcycles?)\b/i],
+    ['Авиация и самолёты', /\b(aviation|aircraft|planes?|airplanes?|pilots?|airlines?|aviação|avión|aviones|l'aviation)\b/i],
+    ['Недвижимость и дома', /\b(real estate|houses?|homes?|farmhouses?|mansions?|acreage|land for sale|casas?|terreno)\b/i],
+    ['Компании и бренды', /\b(compan(y|ies)|brands?|rise and fall|billionaires?|richest|factor(y|ies)|empresas?|firma)\b/i],
+    ['Кулинария и продукты', /\b(cooking|recipes?|meats?|butcher|kitchen|beans|cocina|recetas?)\b/i],
+    ['Сад и хозяйство', /\b(garden\w*|chickens?|homestead\w*|plants?|farm\w*|huerto)\b/i],
+    ['Кино и сериалы', /\b(movies?|films?|ending explained|cinema|película|banned movies?)\b/i],
+    ['Игры и лор', /\b(gta|games?|gaming|lore|easter eggs?|retro games?)\b/i],
+    ['Marvel и DC', /\b(marvel|dc|villains?|superheroes?|avengers|batman|spider-?man)\b/i],
+    ['Часы и обзоры вещей', /\b(watches|seiko|rolex|ranked by price|budget tools?)\b/i],
     ['История цивилизаций', /\b(history|historical|ancient|empires?|civilizations?|historia|geschichte|história)\b/i],
   ];
 
