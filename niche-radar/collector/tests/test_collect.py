@@ -280,6 +280,15 @@ class EnrichTests(unittest.TestCase):
         self.assertFalse(self.enrich.switch_model(body.replace("2.5", "3.8")))
         self.assertFalse(self.enrich.switch_model("quota exceeded"))
 
+    def test_apply_saves_mixed_production_shares(self):
+        channel = {"id": "a"}
+        result = {"fits": True, "niche_ru": "История", "notes_ru": "n", "production_ru": "p", "subniche_ru": "s",
+                  "uses_ai": "mixed", "difficulty": "medium", "extra_monetization": ["none"],
+                  "production_mix": [{"style": "stock_footage", "share": 30}, {"style": "ai_images", "share": 50},
+                                     {"style": "bogus", "share": 20}]}
+        self.enrich.apply(channel, result, watched=None, now=dt.datetime(2026, 1, 1, tzinfo=dt.timezone.utc))
+        self.assertEqual(channel["production_mix"], [{"style": "ai_images", "share": 50}, {"style": "stock_footage", "share": 30}])
+
     def test_competitor_counts_by_niche_and_language(self):
         chans = [{"id": "a", "niche": "history", "language": "en"}, {"id": "b", "niche": "history", "language": "en-US"},
                  {"id": "c", "niche": "history", "language": "es"}]

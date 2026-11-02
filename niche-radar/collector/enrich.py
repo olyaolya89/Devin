@@ -46,6 +46,8 @@ SCHEMA = {
         "extra_monetization": {"type": "ARRAY", "items": {"type": "STRING", "enum": list(EXTRA)}},
         "has_ai_avatar": {"type": "BOOLEAN"},
         "production_styles": {"type": "ARRAY", "items": {"type": "STRING", "enum": list(STYLES)}},
+        "production_mix": {"type": "ARRAY", "items": {"type": "OBJECT", "properties": {
+            "style": {"type": "STRING", "enum": list(STYLES)}, "share": {"type": "INTEGER"}}, "required": ["style", "share"]}},
         "categories": {"type": "ARRAY", "items": {"type": "STRING"}},
     },
     "required": ["fits", "niche_ru", "notes_ru", "production_ru", "subniche_ru", "uses_ai", "difficulty", "extra_monetization"],
@@ -89,6 +91,9 @@ code_generated («производство кодом») — КАЖДЫЙ кад
 Не ставь code_generated, если видео — нарезка стоков/фото, ИИ-картинки с наездом камеры (это ai_illustrations),
 говорящая голова, запись экрана или рисованная от руки покадровая анимация с живой неровной линией.
 Вместе с code_generated укажи и сам вид картинки (например stickman или 2d_animation).
+production_mix: из чего состоит видеоряд в процентах (сумма 100): каждый способ производства с долей от 10%,
+например ai_images 50, stock_footage 30, maps_graphics 20. Смотри весь ролик и названия других роликов: если ИИ, стоки
+и графика смешаны — перечисли все. Если способ один — один элемент со share 100.
 categories: 2–4 коротких английских категории, например ["history", "Documentary", "Military"].
 
 Данные канала:
@@ -220,6 +225,12 @@ def apply(channel: dict[str, Any], result: dict[str, Any], *, watched: dict[str,
     if styles:
         channel["production_styles"] = styles
         channel["production_style"] = styles[0]
+    mix = [
+        {"style": x.get("style"), "share": int(x.get("share") or 0)}
+        for x in result.get("production_mix") or [] if x.get("style") in STYLES and int(x.get("share") or 0) > 0
+    ]
+    if mix:
+        channel["production_mix"] = sorted(mix, key=lambda x: -x["share"])
     categories = [str(x).strip() for x in result.get("categories") or [] if str(x).strip()][:4]
     if categories:
         channel["categories"] = categories
@@ -332,7 +343,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"[enrich] model: {MODEL}", file=sys.stderr)
     todo = [
         c for c in data.get("channels", [])
-        if "verified" not in c and not c.get("graduated") and (c.get("videos_count") or 0) <= MAX_VIDEOS
+        if ("verified" not in c or (c.get("verified") and "production_mix" not in c)) and not c.get("graduated") and (c.get("videos_count") or 0) <= MAX_VIDEOS
     ]
     counts = competitor_counts(data.get("channels", []))
     crowded = [c for c in todo if counts.get(c.get("id"), 0) > MAX_COMPETITORS]
