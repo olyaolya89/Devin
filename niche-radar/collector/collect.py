@@ -28,6 +28,8 @@ SEARCH_LIMIT = 7500
 SEARCH_WINDOW_DAYS = 120
 ENRICHMENT_LIMIT = 1500
 MAX_VIDEOS = 300
+LANG_CHECKS_PER_RUN = 8
+LANG_CHECKS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "lang_checks.json")
 MAX_SUBS = 300000
 MAX_INACTIVE_DAYS = 120
 DAILY_KEEP = 120
@@ -393,6 +395,42 @@ def search(
 def _banner(channel: dict[str, Any]) -> str:
     url = ((channel.get("brandingSettings") or {}).get("image") or {}).get("bannerExternalUrl") or ""
     return f"{url}=w1280-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" if url else ""
+
+
+def run_lang_checks(
+    queries: list[dict[str, Any]],
+    state: dict[str, Any],
+    now: dt.datetime,
+    *,
+    path: str = LANG_CHECKS_PATH,
+    per_run: int = LANG_CHECKS_PER_RUN,
+) -> dict[str, Any]:
+    """Count real YouTube channels per niche x language (top 50 videos of the last 90 days)."""
+    checks = _load_json(path, {})
+    pairs: dict[tuple[str, str], str] = {}
+    for query in queries:
+        pairs.setdefault((query.get("niche", "other"), query.get("lang", "en")), query["text"])
+    order = sorted(pairs, key=lambda pair: checks.get(f"{pair[0]}|{pair[1]}", {}).get("checked_at") or "")
+    after = (now - dt.timedelta(days=90)).isoformat().replace("+00:00", "Z")
+    for niche, lang in order[:per_run]:
+        params = {
+            "part": "snippet", "type": "video", "q": pairs[(niche, lang)], "relevanceLanguage": lang,
+            "publishedAfter": after, "order": "viewCount", "maxResults": 50,
+        }
+        try:
+            payload = yt_get("search", params, state, cost=100, is_search=True)
+        except QuotaExhausted:
+            break
+        except urllib.error.HTTPError:
+            continue
+        items = payload.get("items", [])
+        channels = {item.get("snippet", {}).get("channelId") for item in items} - {None}
+        checks[f"{niche}|{lang}"] = {
+            "channels": len(channels), "videos": len(items), "query": pairs[(niche, lang)],
+            "checked_at": now.date().isoformat(),
+        }
+    _write_output(path, checks)
+    return checks
 
 
 def eligible(statistics: dict[str, Any]) -> bool:
@@ -771,6 +809,7 @@ def main(argv: list[str] | None = None) -> int:
     cache = _load_json(CACHE_PATH, {})
     rpm_data = _load_json(RPM_PATH, {})
     queries = rotate_queries(queries_data.get("queries", []), now)
+    run_lang_checks(queries_data.get("queries", []), state, now)
     if args.max_queries is not None:
         queries = queries[: max(0, args.max_queries)]
     candidates: dict[str, tuple[dict[str, Any], dict[str, Any]]] = {}

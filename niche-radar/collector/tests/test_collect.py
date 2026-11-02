@@ -238,6 +238,21 @@ class CollectTests(unittest.TestCase):
             with self.assertRaises(collect.QuotaExhausted):
                 collect.yt_get("search", {}, state, cost=100, is_search=True)
 
+    def test_lang_checks_count_channels_and_rotate_oldest_first(self):
+        from unittest import mock
+        queries = [{"text": "a", "niche": "history", "lang": "en"}, {"text": "b", "niche": "history", "lang": "de"}]
+        payload = {"items": [{"snippet": {"channelId": "x"}}, {"snippet": {"channelId": "x"}}, {"snippet": {"channelId": "y"}}]}
+        now = dt.datetime(2026, 1, 2, tzinfo=dt.timezone.utc)
+        with tempfile.TemporaryDirectory() as directory:
+            path = os.path.join(directory, "lc.json")
+            with open(path, "w", encoding="utf-8") as handle:
+                json.dump({"history|en": {"channels": 9, "checked_at": "2026-01-01"}}, handle)
+            with mock.patch.object(collect, "yt_get", return_value=payload) as call:
+                checks = collect.run_lang_checks(queries, {}, now, path=path, per_run=1)
+            self.assertEqual(call.call_args[0][1]["relevanceLanguage"], "de")
+            self.assertEqual(checks["history|de"]["channels"], 2)
+            self.assertEqual(checks["history|en"]["channels"], 9)
+
 
 class EnrichTests(unittest.TestCase):
     def setUp(self):
