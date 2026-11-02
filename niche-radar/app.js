@@ -13,6 +13,7 @@
   const dateRu = iso => { const d = iso ? new Date(iso) : null; return d && !isNaN(d) ? d.toLocaleDateString('ru-RU') : ''; };
   const agoRu = iso => { if (!iso) return ''; const d = Math.floor((Date.now() - new Date(iso)) / 864e5); if (d < 1) return 'сегодня'; if (d < 7) return `${d} дн назад`; if (d < 30) return `${Math.floor(d / 7)} нед назад`; if (d < 365) { const m = Math.floor(d / 30); return `${m} ${plural(m, 'месяц', 'месяца', 'месяцев')} назад`; } const y = Math.floor(d / 365); return `${y} ${plural(y, 'год', 'года', 'лет')} назад`; };
   const sameLang = (a, b) => (a.language || 'en').split('-')[0] === (b.language || 'en').split('-')[0];
+  const compCount = c => c._comp ?? (c._comp = state.all.filter(x => x.niche === c.niche && x.id !== c.id && sameLang(x, c)).length);
   const handleOf = c => c.handle ? '@' + c.handle.replace(/^@/, '') : '';
   const countryName = code => { if (!code) return '—'; try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(code) || code; } catch { return code; } };
   const STYLE_RU = { stock_footage: 'Стоковые видео', maps_graphics: 'Карты / графика', ai_images: 'ИИ-картинки', '2d_animation': '2D-анимация', '3d_animation': '3D-анимация', ai_video: 'ИИ-видео', highlights: 'Нарезки / шоу', illustrations: 'Иллюстрации', photos_stock: 'Фото / стоки', ai_illustrations: 'ИИ-иллюстрации', talking_head: 'Ведущий в кадре', screencast_slides: 'Скринкаст / слайды', stickman: 'Стикмены' };
@@ -55,10 +56,11 @@
     Object.entries(REGION_LANGS).forEach(([region, langs]) => langs.forEach(l => {
       const rpm = nicheRpm[region] ?? nicheRpm.other; const n = byLang[l] || 0;
       const income = Math.round(monthlyViews(c) / 1000 * rpm);
-      const verdict = n === 0 && rpm >= 5 ? ['badge-green', 'Свободно, высокий RPM'] : n === 0 ? ['badge-amber', 'Свободно, низкий RPM'] : n < 3 ? ['badge-amber', `Мало конкурентов (${n})`] : ['badge-red', `Конкурентно (${n})`];
-      rows.push({ l, region, region_ru: (state.rpm.region_ru || {})[region] || region, rpm, n, income, verdict, cur: l === (c.language || '').split('-')[0] });
+      const ck = (state.langChecks || {})[`${c.niche}|${l}`];
+      const verdict = !ck ? ['badge-grey', 'Не проверено на YouTube'] : ck.channels <= 10 ? ['badge-green', 'Свободно (YouTube)'] : ck.channels <= 25 ? ['badge-amber', 'Средняя конкуренция (YouTube)'] : ['badge-red', 'Конкурентно (YouTube)'];
+      rows.push({ l, region, region_ru: (state.rpm.region_ru || {})[region] || region, rpm, n, ck, income, verdict, cur: l === (c.language || '').split('-')[0] });
     }));
-    return rows.sort((a, b) => (a.n - b.n) || (b.rpm - a.rpm));
+    return rows.sort((a, b) => ((a.ck ? a.ck.channels : 999) - (b.ck ? b.ck.channels : 999)) || (b.rpm - a.rpm));
   }
   function nichesTable() {
     const styleNames = { live: 'Живое видео', ai: 'ИИ' };
@@ -189,6 +191,7 @@
       if (tag && !tagsOf(c).includes(tag)) return false;
       if (extra && !(c.extra_monetization || []).includes(extra)) return false;
       if (itv && (entryIndex(c) ?? -1) < +itv) return false;
+      const fc = $('#fComp').value; if (fc) { const [lo, hi] = fc.split('-').map(Number); const k = compCount(c); if (k < lo || (hi >= 0 && k > hi)) return false; }
       if (niche && c.niche !== niche && c.niche_ru !== niche) return false;
       if (sub && !subniches(c).includes(sub)) return false;
       if (cat && !categories(c).includes(cat)) return false;
@@ -249,7 +252,7 @@
   const entryBox = (c, full) => { const v = entryIndex(c); if (v == null) return ''; const [l, cls] = entryLabel(v); return `<div class="entry-box"><small>Индекс точки входа</small><div class="entry-val">${gauge(v, cls)}<b>${l} (${v}/100)</b></div>${full ? `<p class="muted">${esc(BAND_HINT[l] || '')}</p>` : ''}</div>`; };
   const vthumb = (c, v) => { const x = outX(c, v); return `<a class="vt" href="${vUrl(v.id)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(v.thumbnail || 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg')}" alt=""><p>${x >= 2 ? `<span class="x">${x.toFixed(1)}×</span> ` : ''}${esc(v.title)}</p><small>${fmt(v.views)} просм.</small><small>${agoRu(v.published_at)}</small></a>`; };
   function card(c) {
-    const comps = state.all.filter(x => x.niche === c.niche && x.id !== c.id && sameLang(x, c)).length;
+    const comps = compCount(c);
     return `<article class="card" data-open="${esc(c.id)}"><div class="card-top"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div class="who"><p class="ttl">${esc(c.title)}</p><div class="handle">${esc(handleOf(c))}</div></div><div class="pills">${isNew(c) ? '<span class="pill pill-new">Новое</span>' : ''}${isFire(c) ? '<span class="pill pill-fire">Стреляет</span>' : ''}${c.verified ? '<span class="pill pill-ok">Проверено ИИ</span>' : c.verified === false ? '<span class="pill">Отклонён ИИ</span>' : '<span class="pill">Не проверен</span>'}<span class="pill">${esc(langName(c.language))}</span></div></div><div class="vts">${topVids(c, 3).map(v => vthumb(c, v)).join('')}</div><div class="nrow"><span>Ниша</span><span class="tag tag-b">${esc(c.niche_ai_ru || c.niche_ru || 'Другое')}</span></div><div class="nrow"><span>Подниша</span>${subniches(c).slice(0, 2).map(x => `<span class="tag tag-b">${esc(x)}</span>`).join('')}</div><div class="kpis3"><div><small>Подписчики</small><b>${num(c.subs)}</b></div><div><small>Просмотры</small><b>${num(c.total_views)}</b></div><div><small>RPM</small><b>${money(c.rpm)}</b></div></div>${entryBox(c, false)}${flags(c).length ? `<div class="tags">${flags(c).map(f => `<span class="tag tag-o">${f}</span>`).join('')}</div>` : ''}<div class="foot"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><button type="button" class="btn-comp" data-comps="${esc(c.id)}">Конкуренты (${comps})</button><button type="button" class="more" data-open="${esc(c.id)}">Подробнее →</button></div><div class="added">${esc(dateRu(c.added_at))}</div></article>`;
   }
 
@@ -286,7 +289,7 @@
   function prospectsBlock(c) {
     const rows = prospects(c); if (!rows.length) return '';
     const mv = monthlyViews(c);
-    return `<div class="block"><h3>Перспективы на другом языке</h3><p class="muted">Та же ниша на других языках: RPM региона, сколько таких каналов уже в базе и сколько принесли бы текущие ${fmt(mv)} просмотров в месяц.</p><div class="table-wrap"><table class="comp"><thead><tr><th>Язык</th><th>Регион</th><th>RPM</th><th>Конкурентов</th><th>Доход/мес.</th><th>Вывод</th></tr></thead><tbody>${rows.map(r => `<tr${r.cur ? ' class="cur"' : ''}><td>${esc(langName(r.l))}${r.cur ? ' <small class="muted">(сейчас)</small>' : ''}</td><td>${esc(r.region_ru)}</td><td>${money(r.rpm)}</td><td>${r.n}</td><td>~${fmt(r.income)} $</td><td><span class="badge ${r.verdict[0]}">${esc(r.verdict[1])}</span></td></tr>`).join('')}</tbody></table></div></div>`;
+    return `<div class="block"><h3>Перспективы на другом языке</h3><p class="muted">Сколько каналов этой ниши реально выпускают ролики на YouTube на каждом языке: сборщик ищет нишу на YouTube и считает разные каналы среди 50 самых популярных роликов за 90 дней. RPM и доход (при текущих ${fmt(mv)} просмотрах в месяц) — оценка по средним RPM региона.</p><div class="table-wrap"><table class="comp"><thead><tr><th>Язык</th><th>Регион</th><th>RPM (оценка)</th><th>Каналов на YouTube</th><th>Доход/мес. (оценка)</th><th>Вывод</th></tr></thead><tbody>${rows.map(r => `<tr${r.cur ? ' class="cur"' : ''}><td>${esc(langName(r.l))}${r.cur ? ' <small class="muted">(сейчас)</small>' : ''}</td><td>${esc(r.region_ru)}</td><td>${money(r.rpm)}</td><td>${r.ck ? `${r.ck.channels} <small class="muted">${esc(dateRu(r.ck.checked_at))}</small>` : '—'}</td><td>~${fmt(r.income)} $</td><td><span class="badge ${r.verdict[0]}">${esc(r.verdict[1])}</span></td></tr>`).join('')}</tbody></table></div></div>`;
   }
   function openDrawer(id) {
     const c = state.all.find(x => x.id === id); if (!c) return;
@@ -340,12 +343,13 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
 
   function toggle(set, key, id) { if (set.has(id)) set.delete(id); else set.add(id); saveSet(key, set); render(); if (!$('#drawer').hidden) openDrawer(id); }
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-comps],[data-label],[data-niche-open],#exportLabels,[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#liveClear,#supportBtn,#supportSend,#sideToggle,#refreshSide,#supportSide,#burger,#showUnverified');
+    const t = e.target.closest('[data-comps],[data-label],[data-niche-open],#exportLabels,[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#liveClear,#supportBtn,#supportSend,#sideToggle,#refreshSide,#supportSide,#burger,#showUnverified,#toTop');
     if (!t) return;
     if (t.dataset.label) { const k = t.dataset.label; if (state.labels[k] === t.dataset.val) delete state.labels[k]; else state.labels[k] = t.dataset.val; localStorage.setItem(LS.labels, JSON.stringify(state.labels)); render(); return; }
     if (t.dataset.nicheOpen) { state.tab = 'all'; $('#fNiche').value = t.dataset.nicheOpen; $('#fLang').value = (t.dataset.nicheLang || '').split('-')[0]; $('#filters').hidden = false; render(); return; }
     if (t.id === 'exportLabels') { exportLabels(); return; }
     if (t.hasAttribute('data-close')) { t.closest('.overlay').hidden = true; return; }
+    if (t.id === 'toTop') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
     if (t.id === 'showUnverified') { $('#onlyVerified').checked = false; render(); return; }
     if (t.id === 'sideToggle') { document.body.classList.toggle('side-min'); return; }
     if (t.id === 'burger') { document.body.classList.toggle('side-open'); return; }
@@ -400,6 +404,7 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     let data = { channels: [], generated_at: null };
     try { const r = await fetch('data/channels.json', { cache: 'no-store' }); if (r.ok) data = await r.json(); } catch {}
     try { const r = await fetch('collector/rpm_baseline.json', { cache: 'no-store' }); if (r.ok) state.rpm = await r.json(); } catch {}
+    try { const r = await fetch('data/lang_checks.json', { cache: 'no-store' }); if (r.ok) state.langChecks = await r.json(); } catch {}
     state.clusters = data.clusters || {};
     const live = loadArr(LS.live).filter(c => c && c.id);
     const fresh = new Map(live.map(c => [c.id, c]));
@@ -415,5 +420,6 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     $('#generatedAt').textContent = when ? 'Обновлено ' + when.toLocaleString('ru-RU') + (when === liveAt ? ' · в браузере: ' + live.length : '') : '';
     fillSelects(); render();
   }
+  window.addEventListener('scroll', () => { $('#toTop').hidden = window.scrollY < 600; }, { passive: true });
   boot();
 })();
