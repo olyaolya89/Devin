@@ -152,6 +152,42 @@ def rotate_queries(queries: list[dict[str, Any]], now: dt.datetime) -> list[dict
     return queries[offset:] + queries[:offset]
 
 
+SNOWBALL_PER_RUN = 30
+_TITLE_NOISE = re.compile(r"[^\w\s']|\d+|_", re.UNICODE)
+
+
+def title_query(title: str, words: int = 6) -> str:
+    """Turn a hit video title into a short search query (no numbers, punctuation or emoji)."""
+    tokens = [w.strip("'") for w in _TITLE_NOISE.sub(" ", title or "").lower().split()]
+    return " ".join([w for w in tokens if len(w) > 1 or w in ("a", "i", "y", "e", "o")][:words])
+
+
+def snowball_queries(
+    channels: list[dict[str, Any]], now: dt.datetime, limit: int = SNOWBALL_PER_RUN
+) -> list[dict[str, Any]]:
+    """Queries from outlier titles of AI-verified channels: finds more channels of the same kind."""
+    seen: set[str] = set()
+    pool: list[dict[str, Any]] = []
+    for channel in channels:
+        if not channel.get("verified") or _number(channel.get("videos_count")) > MAX_VIDEOS:
+            continue
+        hits = sorted(channel.get("videos") or [], key=lambda v: -_number(v.get("views")))
+        for video in [v for v in hits if v.get("is_outlier")][:2] or hits[:1]:
+            text = title_query(video.get("title", ""))
+            if len(text.split()) >= 3 and text not in seen:
+                seen.add(text)
+                pool.append({
+                    "text": text,
+                    "niche": channel.get("niche", "other"),
+                    "lang": (channel.get("language") or "en").split("-")[0],
+                    "snowball": True,
+                })
+    if not pool:
+        return []
+    offset = (now.timetuple().tm_yday * limit) % len(pool)
+    return (pool[offset:] + pool[:offset])[:limit]
+
+
 def cluster_key(channel: dict[str, Any]) -> str:
     return f"{channel.get('niche', '')}|{channel.get('style_group', '')}|{channel.get('language', '')}"
 
@@ -369,10 +405,8 @@ def search(
     if not modifiers:
         modifiers = [""]
     published_after = (now - dt.timedelta(days=SEARCH_WINDOW_DAYS)).isoformat().replace("+00:00", "Z")
-    texts = [query["text"], f'{query["text"]} {modifiers[query_index % len(modifiers)]}']
-    passes = [(texts[0], "viewCount", query.get("duration", "medium")), (texts[1], "viewCount", "long")]
-    if query.get("lang") == "en":
-        passes.append((query["text"], "date", "medium"))
+    duration = query.get("duration") or ("medium" if query_index % 2 == 0 else "long")
+    passes = [(query["text"], "viewCount", duration)]
     results = []
     for text, order, duration in passes:
         params = {
@@ -809,7 +843,7 @@ def main(argv: list[str] | None = None) -> int:
     state = _new_state()
     cache = _load_json(CACHE_PATH, {})
     rpm_data = _load_json(RPM_PATH, {})
-    queries = rotate_queries(queries_data.get("queries", []), now)
+    queries = snowball_queries(previous.get("channels", []), now) + rotate_queries(queries_data.get("queries", []), now)
     run_lang_checks(queries_data.get("queries", []), state, now)
     if args.max_queries is not None:
         queries = queries[: max(0, args.max_queries)]
