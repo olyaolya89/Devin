@@ -24,6 +24,7 @@ TIMEOUT = float(os.environ.get("GEMINI_TIMEOUT", "180"))
 RETRY_WAITS = tuple(float(x) for x in os.environ.get("GEMINI_RETRY_WAITS", "15,45").split(","))
 RETRY_CODES = (429, 500, 503, 504)
 FALLBACKS: list[str] = []
+RETIRED: set[str] = set()
 SKIP_MODELS = ("lite", "image", "tts", "live", "audio", "embedding", "robotics", "computer")
 EXTRA = ("own_product", "affiliate", "sponsors", "membership", "merch", "none")
 STYLES = (
@@ -150,6 +151,7 @@ def switch_model(error_body: str) -> bool:
     if "no longer available" not in error_body or not hint or hint.group(1) == MODEL:
         return False
     print(f"[enrich] model {MODEL} retired, switching to {hint.group(1)}", file=sys.stderr)
+    RETIRED.add(MODEL)
     MODEL = hint.group(1)
     return True
 
@@ -245,7 +247,7 @@ def next_model() -> bool:
     global MODEL
     while FALLBACKS:
         candidate = FALLBACKS.pop(0)
-        if candidate != MODEL:
+        if candidate != MODEL and candidate not in RETIRED:
             print(f"[enrich] model {MODEL} unavailable, switching to {candidate}", file=sys.stderr)
             MODEL = candidate
             return True
