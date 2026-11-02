@@ -5,6 +5,7 @@ import os
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 
 COLLECTOR_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -109,6 +110,32 @@ class CollectTests(unittest.TestCase):
         self.assertEqual(by_id["same"]["added_at"], "2025-01-01")
         self.assertTrue(by_id["recent"]["stale"])
         self.assertNotIn("expired", by_id)
+
+    def test_title_query_strips_numbers_and_punctuation(self):
+        self.assertEqual(
+            collect.title_query("10 Pieces Of Old Carnival Glass That Are Secretly Worth A Fortune!"),
+            "pieces of old carnival glass that",
+        )
+
+    def test_snowball_queries_use_verified_outlier_titles(self):
+        now = dt.datetime(2026, 1, 1, tzinfo=dt.timezone.utc)
+        channels = [
+            {"id": "a", "verified": True, "niche": "history", "language": "es", "videos_count": 20,
+             "videos": [{"title": "La batalla olvidada de 1942", "views": 900, "is_outlier": True},
+                        {"title": "Otro video normal aqui", "views": 10}]},
+            {"id": "b", "verified": False, "niche": "history", "videos": [{"title": "Rejected channel big hit", "views": 9}]},
+            {"id": "c", "verified": True, "niche": "x", "videos_count": 80, "videos": [{"title": "Too many videos here", "views": 9}]},
+        ]
+        self.assertEqual(
+            collect.snowball_queries(channels, now),
+            [{"text": "la batalla olvidada de", "niche": "history", "lang": "es", "snowball": True}],
+        )
+
+    def test_search_uses_one_pass_per_query(self):
+        calls = []
+        with mock.patch.object(collect, "yt_get", side_effect=lambda *a, **k: calls.append(a[1]) or {"items": []}):
+            collect.search({"text": "q", "lang": "en"}, 1, collect._new_state(), ["explained"])
+        self.assertEqual([(c["q"], c["videoDuration"]) for c in calls], [("q", "long")])
 
     def test_rotate_queries_changes_daily_start(self):
         queries = [{"text": str(index)} for index in range(40)]
