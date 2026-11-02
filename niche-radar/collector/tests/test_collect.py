@@ -124,7 +124,7 @@ class CollectTests(unittest.TestCase):
              "videos": [{"title": "La batalla olvidada de 1942", "views": 900, "is_outlier": True},
                         {"title": "Otro video normal aqui", "views": 10}]},
             {"id": "b", "verified": False, "niche": "history", "videos": [{"title": "Rejected channel big hit", "views": 9}]},
-            {"id": "c", "verified": True, "niche": "x", "videos_count": 80, "videos": [{"title": "Too many videos here", "views": 9}]},
+            {"id": "c", "verified": True, "niche": "x", "videos_count": 120, "videos": [{"title": "Too many videos here", "views": 9}]},
         ]
         self.assertEqual(
             collect.snowball_queries(channels, now),
@@ -234,8 +234,8 @@ class CollectTests(unittest.TestCase):
 
 
     def test_eligible_accepts_proven_channels_with_many_videos(self):
-        self.assertTrue(collect.eligible({"videoCount": 60, "subscriberCount": 150000}))
-        self.assertFalse(collect.eligible({"videoCount": 61, "subscriberCount": 150000}))
+        self.assertTrue(collect.eligible({"videoCount": 100, "subscriberCount": 150000}))
+        self.assertFalse(collect.eligible({"videoCount": 101, "subscriberCount": 150000}))
         self.assertFalse(collect.eligible({"videoCount": 400, "subscriberCount": 5000}))
         self.assertFalse(collect.eligible({"videoCount": 20, "subscriberCount": 500000}))
         self.assertFalse(collect.eligible({"videoCount": 20, "subscriberCount": 5000, "hiddenSubscriberCount": True}))

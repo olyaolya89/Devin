@@ -56,8 +56,10 @@ PROMPT = """Ты куратор каталога YouTube-ниш для русс�
 Опиши нишу канала по-русски, конкретно, без воды и общих фраз.
 
 Сначала проверь канал. fits: true, только если это канал с оригинальным контентом в понятной нише,
-формат которого можно повторить (фейслес или с ведущим). fits: false — музыка, перезаливы и нарезки чужих
-передач, детский контент, стримы и игры без ниши, личные влоги, новости-агрегаторы, спам, канал не на заявленную тему.
+формат которого можно повторить (фейслес или с ведущим). fits: false — музыка, перезаливы целых чужих
+фильмов и сериалов, детский контент, стримы и игры без ниши, личные влоги, новости-агрегаторы, спам, канал не на заявленную тему.
+Нарезки ТВ-шоу и передач с закадровым разбором (например, лучшие находки Antiques Roadshow) — подходят:
+это формат, который можно повторить, ставь стиль highlights.
 reject_reason — одно короткое предложение, почему не подходит (пусто, если подходит).
 niche_ru — ниша 1–3 слова: «История», «Военное дело», «Финансы», «Ювелирка», «Животные», «Психология» и т. п.
 Подниша и ниша должны соответствовать тому, что реально в роликах, а не случайным словам из названий.
@@ -309,7 +311,8 @@ def save(path: str, data: dict[str, Any]) -> None:
 
 
 MAX_COMPETITORS = 20
-MAX_VIDEOS = 60
+SHOW_CLIPS_REJECT = re.compile(r"нарез|шоу|передач", re.IGNORECASE)
+MAX_VIDEOS = 100
 
 
 def competitor_counts(channels: list[dict[str, Any]]) -> dict[str, int]:
@@ -343,7 +346,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"[enrich] model: {MODEL}", file=sys.stderr)
     todo = [
         c for c in data.get("channels", [])
-        if ("verified" not in c or (c.get("verified") and "production_mix" not in c)) and not c.get("graduated") and (c.get("videos_count") or 0) <= MAX_VIDEOS
+        if ("verified" not in c or (c.get("verified") and "production_mix" not in c) or SHOW_CLIPS_REJECT.search(c.get("reject_reason") or ""))
+        and not c.get("graduated") and (c.get("videos_count") or 0) <= MAX_VIDEOS
     ]
     counts = competitor_counts(data.get("channels", []))
     crowded = [c for c in todo if counts.get(c.get("id"), 0) > MAX_COMPETITORS]

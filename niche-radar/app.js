@@ -14,7 +14,7 @@
   const agoRu = iso => { if (!iso) return ''; const d = Math.floor((Date.now() - new Date(iso)) / 864e5); if (d < 1) return 'сегодня'; if (d < 7) return `${d} дн назад`; if (d < 30) return `${Math.floor(d / 7)} нед назад`; if (d < 365) { const m = Math.floor(d / 30); return `${m} ${plural(m, 'месяц', 'месяца', 'месяцев')} назад`; } const y = Math.floor(d / 365); return `${y} ${plural(y, 'год', 'года', 'лет')} назад`; };
   const sameLang = (a, b) => (a.language || 'en').split('-')[0] === (b.language || 'en').split('-')[0];
   const MAX_COMPETITORS = 20;
-  const MAX_VIDEOS = 60;
+  const MAX_VIDEOS = 100;
   const compCount = c => c._comp ?? (c._comp = state.all.filter(x => x.niche === c.niche && x.id !== c.id && sameLang(x, c)).length);
   const handleOf = c => c.handle ? '@' + c.handle.replace(/^@/, '') : '';
   const countryName = code => { if (!code) return '—'; try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(code) || code; } catch { return code; } };
