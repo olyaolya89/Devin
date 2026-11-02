@@ -284,6 +284,7 @@ def save(path: str, data: dict[str, Any]) -> None:
 
 
 MAX_COMPETITORS = 20
+MAX_VIDEOS = 60
 
 
 def competitor_counts(channels: list[dict[str, Any]]) -> dict[str, int]:
@@ -315,7 +316,10 @@ def main(argv: list[str] | None = None) -> int:
     except (urllib.error.URLError, ValueError) as error:
         print(f"[enrich] could not list models: {error}", file=sys.stderr)
     print(f"[enrich] model: {MODEL}", file=sys.stderr)
-    todo = [c for c in data.get("channels", []) if "verified" not in c and not c.get("graduated")]
+    todo = [
+        c for c in data.get("channels", [])
+        if "verified" not in c and not c.get("graduated") and (c.get("videos_count") or 0) <= MAX_VIDEOS
+    ]
     counts = competitor_counts(data.get("channels", []))
     crowded = [c for c in todo if counts.get(c.get("id"), 0) > MAX_COMPETITORS]
     todo = [c for c in todo if counts.get(c.get("id"), 0) <= MAX_COMPETITORS]
