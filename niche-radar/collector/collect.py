@@ -37,7 +37,7 @@ ENRICHED_KEYS = (
     "production_mix",
     "notes_ru", "subniche_ru", "extra_monetization", "enriched_at", "notes_source",
     "uses_ai", "uses_ai_mode", "difficulty", "difficulty_ru", "production_methods_ru",
-    "has_ai_avatar", "production_styles", "categories", "verified", "reject_reason", "niche_ai_ru",
+    "has_ai_avatar", "production_styles", "categories", "verified", "reject_reason", "niche_ai_ru", "niche_ai",
 )
 
 STYLE_KEYWORDS = {
@@ -918,6 +918,9 @@ def main(argv: list[str] | None = None) -> int:
         try:
             videos = fetch_videos(channel, state)
             query = candidates[channel_id][0]
+            ai_niche = next((c.get("niche_ai") for c in previous.get("channels", []) if c.get("id") == channel_id), None)
+            if ai_niche:
+                query = {**query, "niche": ai_niche}
             result = _channel_output(channel, videos, query, rpm_data, cache, now, force=force)
             if result:
                 if force:

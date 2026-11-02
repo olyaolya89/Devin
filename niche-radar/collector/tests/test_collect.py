@@ -318,6 +318,19 @@ class EnrichTests(unittest.TestCase):
         self.assertFalse(self.enrich.switch_model(body.replace("2.5", "3.8")))
         self.assertFalse(self.enrich.switch_model("quota exceeded"))
 
+    def test_apply_sets_niche_from_gemini_key_and_rpm(self):
+        channel = {"niche": "history", "niche_ru": "История", "rpm_source": "baseline", "region": "us", "rpm": 6.0, "monthly_views_est": 100000}
+        result = {"fits": True, "niche_key": "military", "notes_ru": "x", "production_ru": "y", "subniche_ru": "z"}
+        self.enrich.apply(channel, result, watched=None, now=dt.datetime(2026, 1, 1, tzinfo=dt.timezone.utc))
+        self.assertEqual((channel["niche"], channel["niche_ru"], channel["niche_ai"]), ("military", "Военное дело", "military"))
+        self.assertEqual((channel["rpm"], channel["monthly_income_est"]), (7.0, 700.0))
+
+    def test_every_query_niche_has_rpm_baseline(self):
+        base = os.path.join(os.path.dirname(os.path.abspath(collect.__file__)))
+        niches = json.load(open(os.path.join(base, "rpm_baseline.json"), encoding="utf-8"))["niches"]
+        queries = json.load(open(os.path.join(base, "queries.json"), encoding="utf-8"))["queries"]
+        self.assertEqual([q for q in queries if q["niche"] not in niches], [])
+
     def test_apply_saves_mixed_production_shares(self):
         channel = {"id": "a"}
         result = {"fits": True, "niche_ru": "История", "notes_ru": "n", "production_ru": "p", "subniche_ru": "s",

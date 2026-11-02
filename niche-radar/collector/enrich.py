@@ -33,12 +33,20 @@ STYLES = (
     "illustrations", "photos_stock", "ai_illustrations", "talking_head", "screencast_slides", "stickman", "code_generated",
 )
 DIFFICULTY_RU = {"low": "Низкая", "medium": "Средняя", "high": "Высокая"}
+NICHES = {
+    key: value["ru_name"]
+    for key, value in json.load(
+        open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "rpm_baseline.json"), encoding="utf-8")
+    )["niches"].items()
+}
+RPM = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "rpm_baseline.json"), encoding="utf-8"))["niches"]
 SCHEMA = {
     "type": "OBJECT",
     "properties": {
         "fits": {"type": "BOOLEAN"},
         "reject_reason": {"type": "STRING"},
         "niche_ru": {"type": "STRING"},
+        "niche_key": {"type": "STRING", "enum": list(NICHES)},
         "notes_ru": {"type": "STRING"},
         "production_ru": {"type": "STRING"},
         "subniche_ru": {"type": "STRING"},
@@ -63,6 +71,9 @@ PROMPT = """Ты куратор каталога YouTube-ниш для русс�
 это формат, который можно повторить, ставь стиль highlights.
 reject_reason — одно короткое предложение, почему не подходит (пусто, если подходит).
 niche_ru — ниша 1–3 слова: «История», «Военное дело», «Финансы», «Ювелирка», «Животные», «Психология» и т. п.
+niche_key — ключ ниши из списка, самый точный по реальным роликам: {niche_keys}.
+Военные темы — military, а не history; новые изобретения и техника — tech; авиация — aviation;
+компании и богатые семьи — business; дома, земля, переезд пенсионеров — real_estate; Marvel/DC — comics.
 Подниша и ниша должны соответствовать тому, что реально в роликах, а не случайным словам из названий.
 
 notes_ru — 2–4 предложения: о чём ролики (с конкретными примерами тем из названий),
@@ -136,7 +147,7 @@ def request_body(channel: dict[str, Any], *, watch: bool) -> dict[str, Any]:
             "fileData": {"fileUri": f"https://www.youtube.com/watch?v={video['id']}"},
             "videoMetadata": {"startOffset": "0s", "endOffset": "120s"},
         })
-    parts.append({"text": PROMPT.format(data=channel_data(channel))})
+    parts.append({"text": PROMPT.format(data=channel_data(channel), niche_keys="; ".join(f"{k} — {v}" for k, v in NICHES.items()))})
     config: dict[str, Any] = {"responseMimeType": "application/json", "responseSchema": SCHEMA, "temperature": 0.4}
     if video:
         config["mediaResolution"] = "MEDIA_RESOLUTION_LOW"
@@ -244,6 +255,14 @@ def apply(channel: dict[str, Any], result: dict[str, Any], *, watched: dict[str,
     channel["reject_reason"] = "" if channel["verified"] else (result.get("reject_reason") or "").strip()
     if (result.get("niche_ru") or "").strip():
         channel["niche_ai_ru"] = result["niche_ru"].strip()
+    key = result.get("niche_key")
+    if key in NICHES and key != "other":
+        channel["niche_ai"] = key
+        channel["niche"], channel["niche_ru"] = key, NICHES[key]
+        if channel.get("rpm_source") == "baseline" and channel.get("region"):
+            rates = RPM[key]
+            channel["rpm"] = float(rates.get(channel["region"], rates["other"]))
+            channel["monthly_income_est"] = round((channel.get("monthly_views_est") or 0) / 1000 * channel["rpm"], 2)
     channel["enriched_at"] = now.date().isoformat()
 
 
@@ -357,7 +376,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"[enrich] model: {MODEL}", file=sys.stderr)
     todo = [
         c for c in data.get("channels", [])
-        if ("verified" not in c or (c.get("verified") and "production_mix" not in c) or SHOW_CLIPS_REJECT.search(c.get("reject_reason") or ""))
+        if ("verified" not in c or (c.get("verified") and ("production_mix" not in c or "niche_ai" not in c)) or SHOW_CLIPS_REJECT.search(c.get("reject_reason") or ""))
         and not c.get("graduated") and (c.get("videos_count") or 0) <= MAX_VIDEOS
     ]
     counts = competitor_counts(data.get("channels", []))
