@@ -283,6 +283,18 @@ def save(path: str, data: dict[str, Any]) -> None:
     os.replace(tmp, path)
 
 
+MAX_COMPETITORS = 20
+
+
+def competitor_counts(channels: list[dict[str, Any]]) -> dict[str, int]:
+    """Competitors = other channels with the same niche and primary language (matches the site)."""
+    groups: dict[tuple[str, str], int] = {}
+    key = lambda c: (c.get("niche") or "", (c.get("language") or "en").split("-")[0])
+    for channel in channels:
+        groups[key(channel)] = groups.get(key(channel), 0) + 1
+    return {c.get("id"): groups[key(c)] - 1 for c in channels}
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", default=os.path.join(os.path.dirname(__file__), "..", "data", "channels.json"))
@@ -304,7 +316,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[enrich] could not list models: {error}", file=sys.stderr)
     print(f"[enrich] model: {MODEL}", file=sys.stderr)
     todo = [c for c in data.get("channels", []) if "verified" not in c and not c.get("graduated")]
-    todo.sort(key=lambda c: c.get("score") or 0, reverse=True)
+    counts = competitor_counts(data.get("channels", []))
+    crowded = [c for c in todo if counts.get(c.get("id"), 0) > MAX_COMPETITORS]
+    todo = [c for c in todo if counts.get(c.get("id"), 0) <= MAX_COMPETITORS]
+    print(f"[enrich] skipping {len(crowded)} channels with more than {MAX_COMPETITORS} competitors", file=sys.stderr)
+    todo.sort(key=lambda c: (counts.get(c.get("id"), 0), -(c.get("score") or 0)))
     now = dt.datetime.now(dt.timezone.utc)
     done = failed = 0
     batch = todo[: args.limit]

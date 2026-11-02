@@ -279,6 +279,11 @@ class EnrichTests(unittest.TestCase):
         self.assertFalse(self.enrich.switch_model(body.replace("2.5", "3.8")))
         self.assertFalse(self.enrich.switch_model("quota exceeded"))
 
+    def test_competitor_counts_by_niche_and_language(self):
+        chans = [{"id": "a", "niche": "history", "language": "en"}, {"id": "b", "niche": "history", "language": "en-US"},
+                 {"id": "c", "niche": "history", "language": "es"}]
+        self.assertEqual(self.enrich.competitor_counts(chans), {"a": 1, "b": 1, "c": 0})
+
     def test_request_watches_first_two_minutes_of_top_video(self):
         body = self.enrich.request_body(self.channel, watch=True)
         parts = body["contents"][0]["parts"]
