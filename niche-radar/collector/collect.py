@@ -27,7 +27,7 @@ API_URL = "https://www.googleapis.com/youtube/v3"
 SEARCH_LIMIT = 7500
 SEARCH_WINDOW_DAYS = 120
 ENRICHMENT_LIMIT = 1500
-MAX_VIDEOS = 60
+MAX_VIDEOS = 100
 LANG_CHECKS_PER_RUN = 8
 LANG_CHECKS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "lang_checks.json")
 MAX_SUBS = 300000
@@ -784,10 +784,7 @@ def merge(
         daily = [row for row in (old.get("daily") or [] if old else []) if row and row[0] != today]
         daily.append([today, _number(channel.get("subs")), _number(channel.get("total_views"))])
         result["daily"] = daily[-DAILY_KEEP:]
-        if _number(channel.get("videos_count")) > MAX_VIDEOS:
-            result["graduated"] = True
-        elif old and old.get("graduated"):
-            result["graduated"] = True
+        result["graduated"] = _number(channel.get("videos_count")) > MAX_VIDEOS
         merged.append(result)
     for old in previous_channels:
         if old.get("id") in current_by_id:
