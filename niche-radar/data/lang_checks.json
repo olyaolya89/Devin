@@ -34,5 +34,53 @@
     "videos": 50,
     "query": "retirement mistakes explained",
     "checked_at": "2026-11-02"
+  },
+  "religion|en": {
+    "channels": 17,
+    "videos": 29,
+    "query": "every archangel explained",
+    "checked_at": "2026-11-03"
+  },
+  "psychology|en": {
+    "channels": 17,
+    "videos": 19,
+    "query": "stoic rules for life animated",
+    "checked_at": "2026-11-03"
+  },
+  "religion|es": {
+    "channels": 6,
+    "videos": 6,
+    "query": "cada arcángel explicado",
+    "checked_at": "2026-11-03"
+  },
+  "psychology|es": {
+    "channels": 28,
+    "videos": 31,
+    "query": "filosofía estoica explicada",
+    "checked_at": "2026-11-03"
+  },
+  "animals|en": {
+    "channels": 17,
+    "videos": 17,
+    "query": "dog breeds ranked cutest to most dangerous",
+    "checked_at": "2026-11-03"
+  },
+  "animals|es": {
+    "channels": 24,
+    "videos": 27,
+    "query": "razas de perro más tiernas",
+    "checked_at": "2026-11-03"
+  },
+  "pov_stories|en": {
+    "channels": 29,
+    "videos": 50,
+    "query": "your life as every level of",
+    "checked_at": "2026-11-03"
+  },
+  "auto|en": {
+    "channels": 46,
+    "videos": 50,
+    "query": "why this car failed explained",
+    "checked_at": "2026-11-03"
   }
 }
