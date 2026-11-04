@@ -82,5 +82,53 @@
     "videos": 50,
     "query": "why this car failed explained",
     "checked_at": "2026-11-03"
+  },
+  "collectibles|en": {
+    "channels": 6,
+    "videos": 6,
+    "query": "most valuable antiques ranked",
+    "checked_at": "2026-11-04"
+  },
+  "true_crime|en": {
+    "channels": 2,
+    "videos": 4,
+    "query": "unsolved mystery documentary animated map",
+    "checked_at": "2026-11-04"
+  },
+  "relocation|en": {
+    "channels": 45,
+    "videos": 50,
+    "query": "best countries to live and work 2026",
+    "checked_at": "2026-11-04"
+  },
+  "nostalgia|en": {
+    "channels": 25,
+    "videos": 50,
+    "query": "britain in the 70s nostalgia",
+    "checked_at": "2026-11-04"
+  },
+  "science|ru": {
+    "channels": 1,
+    "videos": 1,
+    "query": "химические элементы документалка",
+    "checked_at": "2026-11-04"
+  },
+  "history|ru": {
+    "channels": 11,
+    "videos": 12,
+    "query": "история объяснение анимация",
+    "checked_at": "2026-11-04"
+  },
+  "engineering|ru": {
+    "channels": 10,
+    "videos": 17,
+    "query": "как устроено инженерия объяснение",
+    "checked_at": "2026-11-04"
+  },
+  "jewelry|en": {
+    "channels": 45,
+    "videos": 50,
+    "query": "jewelry history explained",
+    "checked_at": "2026-11-04"
   }
 }
