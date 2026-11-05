@@ -130,5 +130,53 @@
     "videos": 50,
     "query": "jewelry history explained",
     "checked_at": "2026-11-04"
+  },
+  "disasters|en": {
+    "channels": 43,
+    "videos": 50,
+    "query": "natural disasters explained",
+    "checked_at": "2026-11-05"
+  },
+  "lifehacks|en": {
+    "channels": 35,
+    "videos": 50,
+    "query": "household life hacks that work",
+    "checked_at": "2026-11-05"
+  },
+  "history|es": {
+    "channels": 14,
+    "videos": 14,
+    "query": "historia de descubrimientos explicada",
+    "checked_at": "2026-11-05"
+  },
+  "nostalgia|de": {
+    "channels": 15,
+    "videos": 50,
+    "query": "Nostalgie der 60er 70er 80er",
+    "checked_at": "2026-11-05"
+  },
+  "engineering|es": {
+    "channels": 3,
+    "videos": 3,
+    "query": "inventos de japón que cambiarán el mundo",
+    "checked_at": "2026-11-05"
+  },
+  "nostalgia|es": {
+    "channels": 45,
+    "videos": 50,
+    "query": "así se vivía antes",
+    "checked_at": "2026-11-05"
+  },
+  "history|pt": {
+    "channels": 32,
+    "videos": 36,
+    "query": "história do brasil que ninguém conta",
+    "checked_at": "2026-11-05"
+  },
+  "geography|pt": {
+    "channels": 46,
+    "videos": 50,
+    "query": "por que o brasil",
+    "checked_at": "2026-11-05"
   }
 }
