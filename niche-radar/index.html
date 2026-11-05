@@ -7,7 +7,7 @@
 <meta name="description" content="Найдите нишу для своего YouTube-канала: отобранные каналы, их контент, монетизация и динамика роста.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=34">
+<link rel="stylesheet" href="styles.css?v=35">
 </head>
 <body>
 <header class="top">
@@ -48,6 +48,8 @@
         <option value="outliers">По прострелам</option>
         <option value="easy">По простоте производства</option>
         <option value="entry">По ИТВ</option>
+        <option value="freeTopic">Свободные темы вперёд</option>
+        <option value="competition">Конкурентные темы вперёд</option>
         <option value="income">По доходу/мес.</option>
         <option value="subs">По подписчикам</option>
         <option value="views">По просмотрам</option>
@@ -78,7 +80,8 @@
         <label>Монетизация YouTube<select id="fMon"><option value="">Любое</option><option value="yes">Монетизирован</option><option value="no">Не монетизирован</option><option value="unknown">Неизвестно</option><option value="soon">Прогноз ≤ 90 дн.</option></select></label>
         <label>Мин. ИТВ<select id="fItv"><option value="">Любое</option><option value="20">20+</option><option value="40">40+</option><option value="60">60+</option><option value="80">80+</option></select></label>
         <label>Доп. монетизация<select id="fExtra"><option value="">Доп. монетизация</option></select></label>
-        <label>Конкурентов (ниша + язык)<select id="fComp"><option value="">Любое</option><option value="0-3">0–3</option><option value="4-10">4–10</option><option value="11-20">11–20</option></select></label>
+        <label>Конкурентов в базе (ниша)<select id="fComp"><option value="">Любое</option><option value="0-3">0–3</option><option value="4-10">4–10</option><option value="11-20">11–20</option><option value="21-99999">21 и больше</option></select></label>
+        <label title="Сборщик ищет на YouTube заголовки роликов этого канала и считает, сколько других каналов выпускают то же самое">Конкуренция на YouTube<select id="fRealComp"><option value="">Любое</option><option value="25">Свободно (до 25)</option><option value="50">Умеренно (до 50)</option><option value="75">Конкурентно (до 75)</option></select></label>
         <label>Дни до монетизации<select id="fDays"><option value="">Любое</option><option value="30">≤ 30 дн.</option><option value="90">≤ 90 дн.</option></select></label>
       </div>
       <div class="sliders">
@@ -92,6 +95,7 @@
         <label class="chk" title="Gemini посмотрел ролик и подтвердил нишу и поднишу"><input type="checkbox" id="onlyVerified" checked> Только проверенные ИИ</label>
         <label class="chk"><input type="checkbox" id="onlyNew3"> Только новые за 3 дня</label>
         <label class="chk"><input type="checkbox" id="onlyUnseen"> Только непросмотренные</label>
+        <label class="chk" title="Прячет каналы, чьи темы уже переполнены на YouTube. Каналы без проверки остаются в выдаче."><input type="checkbox" id="onlyFree"> Только свободные темы</label>
         <label class="chk" title="Подписчиков 500–300 тыс., просмотров от 200 тыс., ≥35 просмотров на подписчика, есть прострел ≥2,5×, свежий ролик за 90 дней"><input type="checkbox" id="onlyRef" checked> Только по критериям отбора</label>
         <button type="button" class="btn" id="resetFilters">Сбросить</button>
       </div>
@@ -110,9 +114,9 @@
   <div class="overlay-bg" data-close></div>
   <div class="box">
     <h3>Обновить список каналов</h3>
-    <p class="muted">Ключ хранится только в браузере.</p>
+    <p class="muted">Из каждых трёх запросов два идут вглубь: берут заголовки, которые уже выстрелили у каналов из базы, и ищут, кто ещё делает то же самое — так находятся соседи по кластеру и сразу считается конкуренция на YouTube. Третий запрос уходит на разведку новых ниш. Если в фильтрах выбрана ниша или язык, поиск идёт только по ним. Ключ хранится только в браузере.</p>
     <label>Ключ YouTube Data API v3<input id="apiKey" type="password" placeholder="AIza…" autocomplete="off"></label>
-    <label>Поисковых запросов: <b id="maxQueriesVal">6</b><input id="maxQueries" type="range" min="1" max="20" value="6"></label>
+    <label>Поисковых запросов: <b id="maxQueriesVal">9</b> <small class="muted">(по 100 ед. квоты, бесплатный ключ — 10 000 в день)</small><input id="maxQueries" type="range" min="1" max="30" value="9"></label>
     <div class="progress" id="refreshProgress" hidden><i id="refreshBar"></i></div>
     <p class="muted" id="refreshLog"></p>
     <div class="row-end">
@@ -135,7 +139,7 @@
     <p class="muted" id="supportOk" hidden>Сообщение сохранено.</p>
   </div>
 </div>
-<script src="live.js"></script>
-<script src="app.js?v=36"></script>
+<script src="live.js?v=2"></script>
+<script src="app.js?v=39"></script>
 </body>
 </html>

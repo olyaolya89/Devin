@@ -379,5 +379,74 @@ class EnrichTests(unittest.TestCase):
         self.assertEqual(self.channel["niche_ai_ru"], "Военное дело")
 
 
+class AudienceLanguageTests(unittest.TestCase):
+    """Guards the bug that made an English channel aimed at the US read as Spanish.
+
+    Civilization Engine (@CivMechanica) keeps Spanish as its default metadata locale and
+    ships an English localization. The old code read the first upload's
+    ``defaultAudioLanguage`` and labelled the channel ``es``; the site then grouped it by
+    niche+language, found no other ``engineering|es`` channel in the catalogue, and
+    displayed "Конкуренты (0)" — while 13 ``engineering|en`` channels sat right there.
+    """
+
+    def test_english_localization_in_an_english_market_wins(self):
+        result = collect._audience_language(
+            ["es"] * 10, ["es"] * 10, en_localized=10, video_count=10, country="US", fallback="es"
+        )
+        self.assertEqual(result["language"], "en")
+        self.assertEqual(result["source"], "en_localization")
+        self.assertTrue(result["is_multilang"])
+        self.assertIn("es", result["languages"])
+
+    def test_spanish_channel_in_a_spanish_market_stays_spanish(self):
+        result = collect._audience_language(
+            ["es"] * 8, ["es"] * 8, en_localized=0, video_count=8, country="ES", fallback="en"
+        )
+        self.assertEqual(result["language"], "es")
+        self.assertFalse(result["is_multilang"])
+
+    def test_majority_vote_survives_one_mislabelled_upload(self):
+        result = collect._audience_language(
+            ["en"] * 9 + ["de"], [], en_localized=0, video_count=10, country="US", fallback="en"
+        )
+        self.assertEqual(result["language"], "en")
+        self.assertEqual(result["source"], "audio_majority")
+        self.assertEqual(result["languages"], ["en", "de"])
+
+    def test_a_single_localized_upload_is_not_a_second_language(self):
+        result = collect._audience_language(
+            ["pt"] * 10, ["pt"] * 10, en_localized=1, video_count=10, country="BR", fallback="pt"
+        )
+        self.assertEqual(result["language"], "pt")
+
+    def test_falls_back_to_the_query_language_when_youtube_says_nothing(self):
+        result = collect._audience_language(
+            [], [], en_localized=0, video_count=5, country=None, fallback="ru"
+        )
+        self.assertEqual(result["language"], "ru")
+        self.assertEqual(result["source"], "query_fallback")
+        self.assertEqual(result["languages"], ["ru"])
+
+    def test_classify_exposes_the_language_fields(self):
+        videos = [
+            {
+                "title": "How 10,000 People Live on the World's Biggest Cruise Ship",
+                "description": "",
+                "tags": [],
+                "audio_language": "es",
+                "text_language": "es",
+                "has_en_localization": True,
+            }
+        ] * 4
+        result = collect.classify(
+            {"title": "Civilization Engine", "description": "", "snippet": {"country": "US"}},
+            videos,
+            {"lang": "es", "niche": "engineering"},
+        )
+        self.assertEqual(result["language"], "en")
+        self.assertTrue(result["is_multilang"])
+        self.assertEqual(result["audio_language"], "es")
+
+
 if __name__ == "__main__":
     unittest.main()

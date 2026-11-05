@@ -25,6 +25,20 @@ jobs:
             exit 0
           fi
           python niche-radar/collector/collect.py --out niche-radar/data/channels.json
+      - name: Measure competition on YouTube
+        # Runs after collection so new channels get probed on the same day. The collector's
+        # own search budget is already spent by then, so this gets its own allowance; at
+        # 100 units per probe it covers ~18 channels and picks the least recently checked,
+        # which sweeps the catalogue over a couple of weeks.
+        if: ${{ !cancelled() }}
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          if [ -z "$YOUTUBE_API_KEY" ]; then
+            echo "::warning::YOUTUBE_API_KEY secret is not set - skipping competition probe"
+            exit 0
+          fi
+          python niche-radar/collector/competition.py --data niche-radar/data/channels.json --budget 2000
       - name: Describe new channels with Gemini
         if: ${{ !cancelled() }}
         env:

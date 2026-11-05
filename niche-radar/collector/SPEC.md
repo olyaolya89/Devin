@@ -31,7 +31,21 @@ Then fetch all uploads via `playlistItems.list` (uploads playlist, ≤ 30 ids) a
 `style_group` = "ai" if style in (stickman, 2d_animation, ai_illustrations, ai_video) else "live".
 `difficulty`: low = stock_footage, screencast_slides, ai_illustrations; medium = maps_graphics, stickman, ai_video; high = 2d_animation, talking_head.
 `solo_friendly` = difficulty != high.
-`language`: from `snippet.defaultLanguage` / `defaultAudioLanguage` of videos, else query lang.
+`language`: the language the channel sells to, not the first tag YouTube returns. All metadata
+requests pass `hl=en`, so `snippet.localized` holds the English branding when the channel ships
+an English localization and `snippet.title` holds its own default locale; a difference between
+the two marks a multi-language channel. Then:
+1. majority vote over the uploads' `defaultAudioLanguage`, and separately over `defaultLanguage`;
+2. if an English localization is present on at least half the uploads **and** the channel country
+   is an English market (`US GB CA AU NZ IE`) or the audio majority is already English →
+   `language = "en"`;
+3. else the audio majority, else the text majority, else the query language.
+
+Also emits `languages` (every language found, primary first), `audio_language`, `is_multilang`
+and `language_source` (`en_localization` | `audio_majority` | `text_majority` | `query_fallback`).
+Taking `languages[0]` from the first upload — the previous rule — filed a US-facing English
+channel under Spanish, which left it alone in its `niche|language` bucket and made the site
+report zero competitors.
 `niche` = query.niche of the query that found it (first hit). `niche_ru` from rpm_baseline.
 
 ## Metrics
@@ -56,6 +70,35 @@ repl = {"low":1, "medium":0.6, "high":0.2}[difficulty]
 fresh = 1 if age ≤ 90 else 0.7 if ≤ 180 else 0.4
 score = round(30*velocity + 25*rpm_norm + 20*mon + 15*repl + 10*fresh)
 ```
+
+## Competition on YouTube (`competition.py`)
+
+Separate script, separate run. Measures how crowded a channel's *own topics* are instead of
+counting catalogue neighbours.
+
+For each channel (oldest `competition.checked_at` first, `--budget` units per run, 100 per probe):
+1. take up to 2 of its own best titles, outliers first, shortened to 7 words by `title_query`;
+2. `search.list part=snippet type=video order=relevance maxResults=50 publishedAfter=now-180d
+   relevanceLanguage=<channel language>`;
+3. for every result, `title_overlap(own_title, rival_title)` = share of the own title's
+   meaningful words the rival reuses. `< 0.4` is discarded as unrelated, `>= 0.7` counts as a
+   copy of the title, in between as the same subject;
+4. `channels.list part=statistics` on the rivals (1 unit per 50) for subscriber counts.
+
+Overlap is deliberately asymmetric. Jaccard rates a word-for-word copy padded with
+`| Inside This Floating City` at 0.45 and would miss it; containment rates it 0.83.
+
+```
+index = 40*clamp(clone_channels/8) + 25*clamp(clone_share/0.25)
+      + 20*clamp(rival_channels/15) + 15*clamp(big_rivals/6)
+```
+`clone_share` = copies ÷ results seen; `big_rivals` = rivals with ≥100 000 subscribers.
+Verdicts: ≤25 `free`, ≤50 `moderate`, ≤75 `competitive`, else `saturated`.
+
+Writes `competition` (`queries, videos_seen, rival_channels, clone_channels, clone_videos,
+clone_share, clones_30d, big_rivals, median_rival_subs, top_rivals[], clone_examples[], index,
+verdict, verdict_ru, window_days, checked_at`) plus flat `competition_index`,
+`competition_verdict`, `competition_verdict_ru`.
 
 ## Output `data/channels.json`
 ```

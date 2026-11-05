@@ -311,10 +311,16 @@ def _api_item_video(item: dict[str, Any]) -> dict[str, Any]:
     snippet = item.get("snippet", {})
     statistics = item.get("statistics", {})
     details = item.get("contentDetails", {})
+    localized = snippet.get("localized") or {}
+    # Requests are made with hl=en, so `localized` holds the English metadata when the
+    # channel publishes an English localization and `snippet.title` holds the channel's
+    # own default-language text. A difference between the two means the video ships
+    # several title languages, which is what multi-language channels look like.
     return {
         "id": item.get("id") if isinstance(item.get("id"), str) else item.get("id", {}).get("videoId"),
-        "title": snippet.get("title", ""),
-        "description": snippet.get("description", ""),
+        "title": localized.get("title") or snippet.get("title", ""),
+        "title_original": snippet.get("title", ""),
+        "description": localized.get("description") or snippet.get("description", ""),
         "tags": snippet.get("tags", []),
         "thumbnail": snippet.get("thumbnails", {}).get("medium", {}).get(
             "url", snippet.get("thumbnails", {}).get("default", {}).get("url", "")
@@ -323,6 +329,11 @@ def _api_item_video(item: dict[str, Any]) -> dict[str, Any]:
         "views": _number(statistics.get("viewCount")),
         "duration_sec": _duration_seconds(details.get("duration")),
         "default_language": snippet.get("defaultLanguage") or snippet.get("defaultAudioLanguage"),
+        "audio_language": snippet.get("defaultAudioLanguage"),
+        "text_language": snippet.get("defaultLanguage"),
+        "has_en_localization": bool(
+            localized.get("title") and localized.get("title") != snippet.get("title")
+        ),
     }
 
 
@@ -484,7 +495,11 @@ def fetch_channels(channel_ids: list[str], state: dict[str, Any]) -> dict[str, d
     for start in range(0, len(channel_ids), 50):
         payload = yt_get(
             "channels",
-            {"part": "snippet,statistics,contentDetails,brandingSettings", "id": ",".join(channel_ids[start : start + 50])},
+            {
+                "part": "snippet,statistics,contentDetails,brandingSettings",
+                "id": ",".join(channel_ids[start : start + 50]),
+                "hl": "en",
+            },
             state,
         )
         for item in payload.get("items", []):
@@ -513,11 +528,78 @@ def fetch_videos(channel: dict[str, Any], state: dict[str, Any]) -> list[dict[st
     for start in range(0, len(ids), 50):
         details = yt_get(
             "videos",
-            {"part": "snippet,statistics,contentDetails", "id": ",".join(ids[start : start + 50])},
+            {
+                "part": "snippet,statistics,contentDetails",
+                "id": ",".join(ids[start : start + 50]),
+                "hl": "en",
+            },
             state,
         )
         videos.extend(_api_item_video(item) for item in details.get("items", []))
     return videos
+
+
+# Countries where an English localization means the channel is aimed at an English audience.
+EN_MARKETS = {"US", "GB", "CA", "AU", "NZ", "IE"}
+
+
+def _audience_language(
+    audio_langs: list[str],
+    text_langs: list[str],
+    *,
+    en_localized: int,
+    video_count: int,
+    country: str | None,
+    fallback: str,
+) -> dict[str, Any]:
+    """Pick the language the channel actually sells to, not the first tag YouTube returned.
+
+    Three things used to go wrong here:
+
+    1. the old code took ``languages[0]`` — one mislabelled upload renamed the whole channel;
+    2. ``defaultAudioLanguage`` is the *original* audio of a multi-language channel, so a
+       channel dubbed into English for a US audience still read as its source language;
+    3. metadata was requested without ``hl``, so YouTube answered in the channel's own
+       default locale and the stored titles were in that language too.
+
+    The fix: vote across all uploads, keep every language found, and when the channel ships
+    an English localization to an English-speaking market, treat English as the audience
+    language while remembering the rest in ``languages``.
+    """
+
+    def majority(values: list[str]) -> str | None:
+        return Counter(values).most_common(1)[0][0] if values else None
+
+    audio = majority(audio_langs)
+    text = majority(text_langs)
+    found: list[str] = []
+    for value in audio_langs + text_langs:
+        if value and value not in found:
+            found.append(value)
+    # A localization on at least half the uploads is a deliberate second language,
+    # not a one-off experiment.
+    ships_english = video_count > 0 and en_localized * 2 >= video_count
+    if ships_english and "en" not in found:
+        found.append("en")
+
+    if ships_english and ((country or "").upper() in EN_MARKETS or audio == "en"):
+        language, source = "en", "en_localization"
+    elif audio:
+        language, source = audio, "audio_majority"
+    elif text:
+        language, source = text, "text_majority"
+    else:
+        language, source = (fallback or "en").split("-")[0], "query_fallback"
+
+    if language not in found:
+        found.insert(0, language)
+    return {
+        "language": language,
+        "languages": [language] + [value for value in found if value != language],
+        "audio_language": audio,
+        "is_multilang": len(found) > 1,
+        "source": source,
+    }
 
 
 def classify(
@@ -534,7 +616,9 @@ def classify(
         str(snippet.get("description", "")),
     ]
     video_parts: list[str] = []
-    languages: list[str] = []
+    audio_langs: list[str] = []
+    text_langs: list[str] = []
+    en_localized = 0
     tags: list[str] = []
     for video in videos:
         if "snippet" in video:
@@ -543,9 +627,23 @@ def classify(
             [str(video.get("title", "")), str(video.get("description", ""))]
             + [str(tag) for tag in video.get("tags", [])]
         )
-        if video.get("default_language"):
-            languages.append(video["default_language"].split("-")[0])
+        if video.get("audio_language"):
+            audio_langs.append(str(video["audio_language"]).split("-")[0])
+        if video.get("text_language"):
+            text_langs.append(str(video["text_language"]).split("-")[0])
+        elif video.get("default_language"):
+            text_langs.append(str(video["default_language"]).split("-")[0])
+        if video.get("has_en_localization"):
+            en_localized += 1
         tags.extend(str(tag) for tag in video.get("tags", []))
+    lang_info = _audience_language(
+        audio_langs,
+        text_langs,
+        en_localized=en_localized,
+        video_count=len(videos),
+        country=snippet.get("country") or channel.get("country"),
+        fallback=(query or {}).get("lang", "en"),
+    )
     scores: Counter[str] = Counter()
     for style, keywords in STYLE_KEYWORDS.items():
         for keyword in keywords:
@@ -568,7 +666,11 @@ def classify(
         "difficulty": difficulty,
         "difficulty_ru": DIFFICULTY_RU[difficulty],
         "solo_friendly": difficulty != "high",
-        "language": languages[0] if languages else (query or {}).get("lang", "en"),
+        "language": lang_info["language"],
+        "languages": lang_info["languages"],
+        "audio_language": lang_info["audio_language"],
+        "is_multilang": lang_info["is_multilang"],
+        "language_source": lang_info["source"],
         "tags": sorted(set(tags)),
     }
 
@@ -706,12 +808,23 @@ def _channel_output(
     result = {
         "id": channel.get("id"),
         "handle": channel.get("snippet", {}).get("customUrl", ""),
-        "title": channel.get("snippet", {}).get("title", ""),
-        "description": channel.get("snippet", {}).get("description", ""),
+        # hl=en above means `localized` carries the English branding when the channel has
+        # it; `snippet.title` is the channel's own default locale. Showing the localized
+        # text keeps a channel that sells to the US from being displayed in its source
+        # language, while `title_original` keeps what the channel calls itself.
+        "title": (channel.get("snippet", {}).get("localized") or {}).get("title")
+        or channel.get("snippet", {}).get("title", ""),
+        "title_original": channel.get("snippet", {}).get("title", ""),
+        "description": (channel.get("snippet", {}).get("localized") or {}).get("description")
+        or channel.get("snippet", {}).get("description", ""),
         "thumbnail": channel.get("snippet", {}).get("thumbnails", {}).get("medium", {}).get("url", ""),
         "country": channel.get("snippet", {}).get("country"),
         "banner": _banner(channel),
         "language": classification["language"],
+        "languages": classification.get("languages") or [classification["language"]],
+        "audio_language": classification.get("audio_language"),
+        "is_multilang": classification.get("is_multilang", False),
+        "language_source": classification.get("language_source"),
         "niche": niche,
         "niche_ru": rpm_data["niches"].get(niche, rpm_data["niches"]["other"])["ru_name"],
         "tags": classification["tags"],
@@ -885,6 +998,7 @@ def main(argv: list[str] | None = None) -> int:
                 {
                     "part": "snippet,statistics,contentDetails,brandingSettings",
                     "forHandle": handle,
+                    "hl": "en",
                 },
                 state,
             )

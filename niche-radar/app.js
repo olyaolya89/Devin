@@ -12,10 +12,47 @@
   const num = n => Math.round(Number(n) || 0).toLocaleString('ru-RU');
   const dateRu = iso => { const d = iso ? new Date(iso) : null; return d && !isNaN(d) ? d.toLocaleDateString('ru-RU') : ''; };
   const agoRu = iso => { if (!iso) return ''; const d = Math.floor((Date.now() - new Date(iso)) / 864e5); if (d < 1) return 'сегодня'; if (d < 7) return `${d} дн назад`; if (d < 30) return `${Math.floor(d / 7)} нед назад`; if (d < 365) { const m = Math.floor(d / 30); return `${m} ${plural(m, 'месяц', 'месяца', 'месяцев')} назад`; } const y = Math.floor(d / 365); return `${y} ${plural(y, 'год', 'года', 'лет')} назад`; };
-  const sameLang = (a, b) => (a.language || 'en').split('-')[0] === (b.language || 'en').split('-')[0];
+  // Every language a channel publishes in. Multi-language channels (one upload, several
+  // title/audio tracks) used to be filed under whichever language YouTube happened to
+  // return first, which quietly moved them out of their real competitive group.
+  const langsOf = c => {
+    const list = (c.languages && c.languages.length ? c.languages : [c.language]).map(l => (l || '').split('-')[0]);
+    const out = [...new Set(list.filter(Boolean))];
+    return out.length ? out : ['en'];
+  };
+  const sameLang = (a, b) => langsOf(a).some(l => langsOf(b).includes(l));
+  const nicheOf = c => c.niche_ai || c.niche || '';
+  // Channels collected before the language fix can still carry YouTube's default-locale
+  // language while sitting in an English-speaking market — the exact shape of the bug that
+  // filed a US channel under Spanish. Flag it instead of guessing: a re-run of the
+  // collector resolves it from the channel's localizations.
+  const EN_MARKETS = ['US', 'GB', 'CA', 'AU', 'NZ', 'IE'];
+  const langDoubt = c => !c.language_source && EN_MARKETS.includes(c.country) && !langsOf(c).includes('en');
   const MAX_COMPETITORS = 20;
   const MAX_VIDEOS = 100;
-  const compCount = c => c._comp ?? (c._comp = state.all.filter(x => x.niche === c.niche && x.id !== c.id && sameLang(x, c)).length);
+  // Competitors come from `state.pool`, not `state.all`. `state.all` drops channels that
+  // outgrew the catalogue (graduated) or stopped being re-found (stale), so a niche looked
+  // emptiest exactly when its winners had grown — the rivals worth knowing about were the
+  // ones being filtered out.
+  function competitors(c) {
+    if (c._comp) return c._comp;
+    const mine = nicheOf(c);
+    const all = (state.pool || state.all).filter(x => x.id !== c.id && nicheOf(x) === mine);
+    const same = all.filter(x => sameLang(x, c));
+    const other = all.filter(x => !sameLang(x, c));
+    return (c._comp = { all, same, other });
+  }
+  // The headline number is niche-wide on purpose. Splitting by language first is what
+  // produced "Конкуренты (0)": one US channel whose metadata read as Spanish was the only
+  // member of `engineering|es` while 13 channels sat in `engineering|en`.
+  const compCount = c => competitors(c).all.length;
+  const compSameLang = c => competitors(c).same.length;
+  // Real competition, measured on YouTube by collector/competition.py: 0 = free topic,
+  // 100 = saturated. Null until that probe has run for the channel.
+  const realComp = c => (c.competition ? c.competition.index : c.competition_index ?? null);
+  const COMP_CLASS = { free: 'badge-green', moderate: 'badge-blue', competitive: 'badge-amber', saturated: 'badge-red' };
+  const COMP_RU = { free: 'Свободно', moderate: 'Умеренно', competitive: 'Конкурентно', saturated: 'Переполнено' };
+  const compVerdict = c => (c.competition ? c.competition.verdict : c.competition_verdict) || null;
   const handleOf = c => c.handle ? '@' + c.handle.replace(/^@/, '') : '';
   const countryName = code => { if (!code) return '—'; try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(code) || code; } catch { return code; } };
   const STYLE_RU = { stock_footage: 'Стоковые видео', maps_graphics: 'Карты / графика', ai_images: 'ИИ-картинки', '2d_animation': '2D-анимация', '3d_animation': '3D-анимация', ai_video: 'ИИ-видео', highlights: 'Нарезки / шоу', illustrations: 'Иллюстрации', photos_stock: 'Фото / стоки', ai_illustrations: 'ИИ-иллюстрации', talking_head: 'Ведущий в кадре', screencast_slides: 'Скринкаст / слайды', stickman: 'Стикмены', code_generated: 'Производство кодом' };
@@ -56,14 +93,16 @@
     if (!state.rpm) return [];
     const nicheRpm = state.rpm.niches[c.niche] || state.rpm.niches.other;
     const byLang = {};
-    state.all.filter(x => x.niche === c.niche).forEach(x => { const l = (x.language || '').split('-')[0]; byLang[l] = (byLang[l] || 0) + 1; });
+    // A multi-language channel belongs to every language it publishes in, so it has to be
+    // counted once per language rather than only under whichever one came first.
+    (state.pool || state.all).filter(x => nicheOf(x) === nicheOf(c)).forEach(x => { langsOf(x).forEach(l => { byLang[l] = (byLang[l] || 0) + 1; }); });
     const rows = [];
     Object.entries(REGION_LANGS).forEach(([region, langs]) => langs.forEach(l => {
       const rpm = nicheRpm[region] ?? nicheRpm.other; const n = byLang[l] || 0;
       const income = Math.round(monthlyViews(c) / 1000 * rpm);
       const ck = (state.langChecks || {})[`${c.niche}|${l}`];
       const verdict = !ck ? ['badge-grey', 'Не проверено на YouTube'] : ck.channels <= 10 ? ['badge-green', 'Свободно (YouTube)'] : ck.channels <= 25 ? ['badge-amber', 'Средняя конкуренция (YouTube)'] : ['badge-red', 'Конкурентно (YouTube)'];
-      rows.push({ l, region, region_ru: (state.rpm.region_ru || {})[region] || region, rpm, n, ck, income, verdict, cur: l === (c.language || '').split('-')[0] });
+      rows.push({ l, region, region_ru: (state.rpm.region_ru || {})[region] || region, rpm, n, ck, income, verdict, cur: langsOf(c).includes(l) });
     }));
     return rows.sort((a, b) => ((a.ck ? a.ck.channels : 999) - (b.ck ? b.ck.channels : 999)) || (b.rpm - a.rpm));
   }
@@ -126,17 +165,24 @@
   const vps = c => (c.total_views || 0) / Math.max(c.subs || 1, 1);
   const lastUpload = c => { const d = (c.videos || []).map(v => v.published_at).filter(Boolean).sort().pop(); return d ? new Date(d) : null; };
   const minVideoViews = c => { const v = (c.videos || []).map(x => Number(x.views) || 0); return v.length ? Math.min(...v) : 0; };
-  const rivals = c => Math.max(0, (state.size[c.cluster] || 1) - 1);
-  const FIRE = { videos: 10, views: 20000, rivals: 4 };
+  // Was `state.size[c.cluster] - 1`, read off a `niche|style_group|language` key that
+  // enrichment leaves stale whenever it reassigns a niche — so a channel could be counted
+  // against a bucket it no longer belonged to.
+  const rivals = c => compSameLang(c);
+  const FIRE = { videos: 10, views: 20000, rivals: 4, comp: 50 };
   const FIRE_CRITERIA = [
     [`Не больше ${FIRE.videos} длинных роликов — канал только начал`, c => longCount(c) <= FIRE.videos],
     [`Каждый ролик набрал от ${fmt(FIRE.views)} просмотров`, c => minVideoViews(c) >= FIRE.views],
-    [`Не больше ${FIRE.rivals} конкурентов в той же нише, стиле и языке`, c => rivals(c) <= FIRE.rivals],
+    [`Не больше ${FIRE.rivals} конкурентов в той же нише и на том же языке`, c => rivals(c) <= FIRE.rivals],
+    [`Тема не переполнена на YouTube (индекс конкуренции до ${FIRE.comp})`, c => (realComp(c) ?? 0) <= FIRE.comp],
   ];
   const EXTRA_RU = { own_product: 'Свой продукт', affiliate: 'Партнёрки', sponsors: 'Спонсоры', membership: 'Подписка/Patreon', merch: 'Мерч' };
   const flags = c => {
     const xs = (c.videos || []).map(v => outX(c, v)).sort((a, b) => b - a); const out = [];
-    if (c.cluster && state.all.filter(x => x.cluster === c.cluster).length <= 3 && (c.entry_score ?? 0) >= 65) out.push('Ранняя ниша');
+    if (compSameLang(c) <= 3 && (c.entry_score ?? 0) >= 65) out.push('Ранняя ниша');
+    if (compVerdict(c) === 'saturated') out.push('Тема залита клонами');
+    if (c.is_multilang) out.push('Несколько языков');
+    if (langDoubt(c)) out.push('Язык под вопросом');
     if (xs[0] >= 5 && (xs[1] || 0) < 1.5) out.push('Один хит');
     return out;
   };
@@ -205,13 +251,19 @@
       if (tag && !tagsOf(c).includes(tag)) return false;
       if (extra && !(c.extra_monetization || []).includes(extra)) return false;
       if (itv && (entryIndex(c) ?? -1) < +itv) return false;
-      if (compCount(c) > MAX_COMPETITORS) return false;
+      // This used to hide every channel with more than 20 catalogue competitors, which
+      // removed exactly the channels needed to judge how crowded a niche is — and since a
+      // mis-detected language produced a count of 0, the survivors all looked free.
+      // Crowding is now judged by the YouTube probe, and only when it has actually run.
+      if ($('#onlyFree').checked && (realComp(c) ?? 0) > FIRE.comp) return false;
       const fm = $('#fMix').value; if ((fm === 'mixed' && !isMixed(c)) || (fm === 'single' && isMixed(c))) return false;
       const fc = $('#fComp').value; if (fc) { const [lo, hi] = fc.split('-').map(Number); const k = compCount(c); if (k < lo || (hi >= 0 && k > hi)) return false; }
+      const fr = $('#fRealComp').value;
+      if (fr) { const v = realComp(c); if (v == null || v > +fr) return false; }
       if (niche && c.niche !== niche && c.niche_ru !== niche) return false;
       if (sub && !subniches(c).includes(sub)) return false;
       if (cat && !categories(c).includes(cat)) return false;
-      if (lang && (c.language || '').split('-')[0] !== lang) return false;
+      if (lang && !langsOf(c).includes(lang)) return false;
       if (format && contentType(c) !== format) return false;
       if (style && !styles(c).includes(style)) return false;
       if (diff && c.difficulty !== diff) return false;
@@ -234,7 +286,11 @@
       if ($('#onlyVerified').checked && c.verified !== true) return false;
       return true;
     });
-    const sorters = { new: (a, b) => String(b.added_at || '').localeCompare(String(a.added_at || '')) || (b.score || 0) - (a.score || 0), rpm: (a, b) => (b.rpm || 0) - (a.rpm || 0), growth: (a, b) => growth(b) - growth(a), outliers: (a, b) => outliers(b) - outliers(a) || bestX(b) - bestX(a), easy: (a, b) => (DIFF_ORDER[a.difficulty] ?? 1) - (DIFF_ORDER[b.difficulty] ?? 1) || (b.score || 0) - (a.score || 0), entry: (a, b) => (entryIndex(b) ?? -1) - (entryIndex(a) ?? -1), subs: (a, b) => (b.subs || 0) - (a.subs || 0), views: (a, b) => (b.total_views || 0) - (a.total_views || 0), income: (a, b) => monthly(b) - monthly(a), monetization: (a, b) => (a.days_to_monetization || 9e9) - (b.days_to_monetization || 9e9) };
+    const sorters = { new: (a, b) => String(b.added_at || '').localeCompare(String(a.added_at || '')) || (b.score || 0) - (a.score || 0), rpm: (a, b) => (b.rpm || 0) - (a.rpm || 0), growth: (a, b) => growth(b) - growth(a), outliers: (a, b) => outliers(b) - outliers(a) || bestX(b) - bestX(a), easy: (a, b) => (DIFF_ORDER[a.difficulty] ?? 1) - (DIFF_ORDER[b.difficulty] ?? 1) || (b.score || 0) - (a.score || 0), entry: (a, b) => (entryIndex(b) ?? -1) - (entryIndex(a) ?? -1), subs: (a, b) => (b.subs || 0) - (a.subs || 0), views: (a, b) => (b.total_views || 0) - (a.total_views || 0), income: (a, b) => monthly(b) - monthly(a), monetization: (a, b) => (a.days_to_monetization || 9e9) - (b.days_to_monetization || 9e9),
+      // Unmeasured channels sort last either way: an unknown index is not evidence of a
+      // free topic, and claiming otherwise is the mistake this whole change is undoing.
+      freeTopic: (a, b) => (realComp(a) ?? 999) - (realComp(b) ?? 999) || (b.score || 0) - (a.score || 0),
+      competition: (a, b) => (realComp(b) ?? -1) - (realComp(a) ?? -1) || compCount(b) - compCount(a) };
     list.sort(sorters[state.sort] || sorters.new);
     return list;
   }
@@ -247,7 +303,7 @@
     fill('#fNiche', uniq('niche'), v => state.all.find(c => c.niche === v)?.niche_ru || v);
     fill('#fSub', [...new Set(state.all.flatMap(subniches))].sort());
     fill('#fCat', [...new Set(state.all.flatMap(categories))].filter(Boolean).sort().slice(0, 60));
-    fill('#fLang', [...new Set(uniq('language').map(l => l.split('-')[0]))], v => LANG[v] || v);
+    fill('#fLang', [...new Set(state.all.flatMap(langsOf))].sort(), v => langName(v));
     fill('#fFormat', ['long', 'mixed', 'shorts'].filter(t => state.all.some(c => contentType(c) === t)), v => CONTENT_RU[v]);
     fill('#fStyle', [...new Set([...Object.keys(STYLE_RU), ...state.all.flatMap(styles)])].sort((a, b) => styleName(a).localeCompare(styleName(b), 'ru')), styleName);
     const maxS = Math.max(1000, ...state.all.map(c => c.subs || 0));
@@ -267,9 +323,17 @@
   }
   const entryBox = (c, full) => { const v = entryIndex(c); if (v == null) return ''; const [l, cls] = entryLabel(v); return `<div class="entry-box"><small>Индекс точки входа</small><div class="entry-val">${gauge(v, cls)}<b>${l} (${v}/100)</b></div>${full ? `<p class="muted">${esc(BAND_HINT[l] || '')}</p>` : ''}</div>`; };
   const vthumb = (c, v) => { const x = outX(c, v); return `<a class="vt" href="${vUrl(v.id)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(v.thumbnail || 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg')}" alt=""><p>${x >= 2 ? `<span class="x">${x.toFixed(1)}×</span> ` : ''}${esc(v.title)}</p><small>${fmt(v.views)} просм.</small><small>${agoRu(v.published_at)}</small></a>`; };
+  // One pill per language the channel publishes in, so a channel that runs the same
+  // videos in two languages is not shown as if it only had one audience.
+  const langPills = c => langsOf(c).map((l, i) => `<span class="pill" title="${i === 0 ? 'Основной язык аудитории' : 'Канал также выпускает на этом языке'}">${esc(langName(l))}</span>`).join('');
+  const compBadge = c => {
+    const v = realComp(c), verdict = compVerdict(c);
+    if (v == null || !verdict) return '<span class="badge badge-grey" title="Сборщик ещё не искал темы этого канала на YouTube">Конкуренция не проверена</span>';
+    return `<span class="badge ${COMP_CLASS[verdict] || ''}" title="Индекс конкуренции на YouTube: ${v}/100">${esc(COMP_RU[verdict] || verdict)} (${v}/100)</span>`;
+  };
   function card(c) {
     const comps = compCount(c);
-    return `<article class="card" data-open="${esc(c.id)}"><div class="card-top"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div class="who"><p class="ttl">${esc(c.title)}</p><div class="handle">${esc(handleOf(c))}</div></div><div class="pills">${isNew(c) ? '<span class="pill pill-new">Новое</span>' : ''}${isFire(c) ? '<span class="pill pill-fire">Стреляет</span>' : ''}${c.verified ? '<span class="pill pill-ok">Проверено ИИ</span>' : c.verified === false ? '<span class="pill">Отклонён ИИ</span>' : '<span class="pill">Не проверен</span>'}<span class="pill">${esc(langName(c.language))}</span></div></div><div class="vts">${topVids(c, 3).map(v => vthumb(c, v)).join('')}</div><div class="nrow"><span>Ниша</span><span class="tag tag-b">${esc(c.niche_ai_ru || c.niche_ru || 'Другое')}</span></div><div class="nrow"><span>Подниша</span>${subniches(c).slice(0, 2).map(x => `<span class="tag tag-b">${esc(x)}</span>`).join('')}</div>${isMixed(c) ? `<div class="nrow"><span>Производство</span><span class="tag tag-mix">Смешанное: ${esc(mixText(c))}</span></div>` : ''}<div class="kpis3"><div><small>Подписчики</small><b>${num(c.subs)}</b></div><div><small>Просмотры</small><b>${num(c.total_views)}</b></div><div><small>RPM</small><b>${money(c.rpm)}</b></div></div>${entryBox(c, false)}${flags(c).length ? `<div class="tags">${flags(c).map(f => `<span class="tag tag-o">${f}</span>`).join('')}</div>` : ''}<div class="foot"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><button type="button" class="btn-comp" data-comps="${esc(c.id)}">Конкуренты (${comps})</button><button type="button" class="more" data-open="${esc(c.id)}">Подробнее →</button></div><div class="added">${esc(dateRu(c.added_at))}</div></article>`;
+    return `<article class="card" data-open="${esc(c.id)}"><div class="card-top"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div class="who"><p class="ttl">${esc(c.title)}</p><div class="handle">${esc(handleOf(c))}</div></div><div class="pills">${isNew(c) ? '<span class="pill pill-new">Новое</span>' : ''}${isFire(c) ? '<span class="pill pill-fire">Стреляет</span>' : ''}${c.verified ? '<span class="pill pill-ok">Проверено ИИ</span>' : c.verified === false ? '<span class="pill">Отклонён ИИ</span>' : '<span class="pill">Не проверен</span>'}${langPills(c)}</div></div><div class="vts">${topVids(c, 3).map(v => vthumb(c, v)).join('')}</div><div class="nrow"><span>Ниша</span><span class="tag tag-b">${esc(c.niche_ai_ru || c.niche_ru || 'Другое')}</span></div><div class="nrow"><span>Подниша</span>${subniches(c).slice(0, 2).map(x => `<span class="tag tag-b">${esc(x)}</span>`).join('')}</div>${isMixed(c) ? `<div class="nrow"><span>Производство</span><span class="tag tag-mix">Смешанное: ${esc(mixText(c))}</span></div>` : ''}<div class="kpis3"><div><small>Подписчики</small><b>${num(c.subs)}</b></div><div><small>Просмотры</small><b>${num(c.total_views)}</b></div><div><small>RPM</small><b>${money(c.rpm)}</b></div></div>${entryBox(c, false)}<div class="nrow"><span>Конкуренция на YouTube</span>${compBadge(c)}</div>${flags(c).length ? `<div class="tags">${flags(c).map(f => `<span class="tag tag-o">${f}</span>`).join('')}</div>` : ''}<div class="foot"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><button type="button" class="btn-comp" data-comps="${esc(c.id)}">Конкуренты (${comps})</button><button type="button" class="more" data-open="${esc(c.id)}">Подробнее →</button></div><div class="added">${esc(dateRu(c.added_at))}</div></article>`;
   }
 
   function pie(parts, colors) {
@@ -307,14 +371,35 @@
     const mv = monthlyViews(c);
     return `<div class="block"><h3>Перспективы на другом языке</h3><p class="muted">Сколько каналов этой ниши реально выпускают ролики на YouTube на каждом языке: сборщик ищет нишу на YouTube и считает разные каналы среди 50 самых популярных роликов за 90 дней. RPM и доход (при текущих ${fmt(mv)} просмотрах в месяц) — оценка по средним RPM региона.</p><div class="table-wrap"><table class="comp"><thead><tr><th>Язык</th><th>Регион</th><th>RPM (оценка)</th><th>Каналов на YouTube</th><th>Доход/мес. (оценка)</th><th>Вывод</th></tr></thead><tbody>${rows.map(r => `<tr${r.cur ? ' class="cur"' : ''}><td>${esc(langName(r.l))}${r.cur ? ' <small class="muted">(сейчас)</small>' : ''}</td><td>${esc(r.region_ru)}</td><td>${money(r.rpm)}</td><td>${r.ck ? `${r.ck.channels} <small class="muted">${esc(dateRu(r.ck.checked_at))}</small>` : '—'}</td><td>~${fmt(r.income)} $</td><td><span class="badge ${r.verdict[0]}">${esc(r.verdict[1])}</span></td></tr>`).join('')}</tbody></table></div></div>`;
   }
+  const COMP_HINT = {
+    free: 'Эту тему почти никто не делает — можно заходить.',
+    moderate: 'Тему делают, но копий заголовка мало — нужен свой угол подачи.',
+    competitive: 'Заголовки канала уже копируют. Выделяться придётся не темой, а подачей и превью.',
+    saturated: 'Тема залита клонами: тот же заголовок выпускают многие каналы. Входить сюда поздно.',
+  };
+  function competitionBlock(c) {
+    const k = c.competition;
+    if (!k) {
+      return '<div class="block"><h3>Конкуренция на YouTube</h3><p class="muted">Сборщик ещё не искал темы этого канала на YouTube. Запустите <code>collector/competition.py</code> — он берёт заголовки роликов канала, ищет их на YouTube и считает, сколько других каналов выпускают то же самое.</p></div>';
+    }
+    const rows = (k.top_rivals || []).map(r => `<tr><td>${esc(r.title || r.id)}</td><td>${r.subs != null ? num(r.subs) : '—'}</td><td>${r.videos || 0}</td><td>${Math.round((r.best_overlap || 0) * 100)}%</td><td>${r.clone ? '<span class="badge badge-red">копия заголовка</span>' : '<span class="badge badge-grey">та же тема</span>'}</td><td>${esc(agoRu(r.latest))}</td></tr>`).join('');
+    const clones = (k.clone_examples || []).map(x => `<tr><td>${esc(x.channel)}</td><td>${esc(x.title)}</td><td>${Math.round((x.overlap || 0) * 100)}%</td><td>${esc(agoRu(x.published_at))}</td></tr>`).join('');
+    return `<div class="block"><h3>Конкуренция на YouTube</h3><p>${compBadge(c)}</p><p class="muted">${esc(COMP_HINT[k.verdict] || '')}</p>
+<p class="muted small">Замер от ${esc(dateRu(k.checked_at))}: сборщик искал на YouTube заголовки роликов этого канала (${(k.queries || []).map(q => `«${esc(q)}»`).join(', ')}) среди роликов за ${k.window_days || 180} дней и считал другие каналы в выдаче.</p>
+<div class="meta-grid"><div><small>Каналов на эти темы</small><b>${k.rival_channels ?? '—'}</b></div><div><small>Копируют заголовок</small><b>${k.clone_channels ?? '—'}</b></div><div><small>Копий заголовка</small><b>${k.clone_videos ?? '—'}</b></div><div><small>Копий за 30 дней</small><b>${k.clones_30d ?? '—'}</b></div><div><small>Крупных конкурентов</small><b>${k.big_rivals ?? '—'}</b></div><div><small>Медиана подписчиков</small><b>${k.median_rival_subs != null ? num(k.median_rival_subs) : '—'}</b></div></div>
+${clones ? `<h3 class="h">Копии заголовков</h3><div class="table-wrap"><table class="comp"><thead><tr><th>Канал</th><th>Заголовок</th><th>Совпадение</th><th>Когда</th></tr></thead><tbody>${clones}</tbody></table></div>` : ''}
+${rows ? `<h3 class="h">Кто ещё делает эти темы</h3><div class="table-wrap"><table class="comp"><thead><tr><th>Канал</th><th>Подп.</th><th>Роликов в выдаче</th><th>Совпадение</th><th>Тип</th><th>Последний</th></tr></thead><tbody>${rows}</tbody></table></div>` : ''}</div>`;
+  }
   function openDrawer(id) {
     const c = state.all.find(x => x.id === id); if (!c) return;
     state.seen.add(id); saveSet(LS.seen, state.seen);
     const vids = topVids(c, 10);
-    const comps = state.all.filter(x => x.niche === c.niche && x.id !== c.id && sameLang(x, c)).sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 20);
+    const byScore = (a, b) => (b.score || 0) - (a.score || 0);
+    const rel = competitors(c);
+    const comps = [...rel.same.slice().sort(byScore), ...rel.other.slice().sort(byScore)].slice(0, MAX_COMPETITORS);
     const d = demo(c); const banner = c.banner || (vids[0] ? `https://i.ytimg.com/vi/${vids[0].id}/hq720.jpg` : '');
     const extra = (c.extra_monetization || []).map(x => EXTRA_RU[x] || x).join(', ');
-    const kpi = [['Подписчики', num(c.subs)], ['Просмотры', num(c.total_views)], ['Видео', num(c.videos_count)], ['RPM', money(c.rpm)], ['RPM Shorts', money(c.rpm_short ?? (c.rpm || 0) * 0.08)], ['RPM длинных видео', money(c.rpm_long ?? c.rpm)], ['Прострелов', outliers(c)], ['Страна', countryName(c.country)], ['Язык', langName(c.language)], ['Сложность производства', c.difficulty_ru || '—'], ['Использование ИИ', AI_RU[aiMode(c)]], ['Доп. монетизация', extra || '—'], ['Доход / мес.', '~' + num(monthly(c)) + ' $'], ['Монетизация YouTube', c.is_monetized ? 'Монетизирован' : c.is_monetized === false ? 'Не монетизирован' : 'Неизвестно'], ['До монетизации', c.is_monetized ? '—' : c.monetization_forecast || '—'], ['Формат контента', CONTENT_RU[contentType(c)]]];
+    const kpi = [['Подписчики', num(c.subs)], ['Просмотры', num(c.total_views)], ['Видео', num(c.videos_count)], ['RPM', money(c.rpm)], ['RPM Shorts', money(c.rpm_short ?? (c.rpm || 0) * 0.08)], ['RPM длинных видео', money(c.rpm_long ?? c.rpm)], ['Прострелов', outliers(c)], ['Страна', countryName(c.country)], ['Язык', langsOf(c).map(langName).join(', ')], ['Конкуренция на YouTube', realComp(c) != null ? `${COMP_RU[compVerdict(c)] || ''} ${realComp(c)}/100` : 'не проверена'], ['Конкурентов в базе', `${compCount(c)} (${compSameLang(c)} на том же языке)`], ['Сложность производства', c.difficulty_ru || '—'], ['Использование ИИ', AI_RU[aiMode(c)]], ['Доп. монетизация', extra || '—'], ['Доход / мес.', '~' + num(monthly(c)) + ' $'], ['Монетизация YouTube', c.is_monetized ? 'Монетизирован' : c.is_monetized === false ? 'Не монетизирован' : 'Неизвестно'], ['До монетизации', c.is_monetized ? '—' : c.monetization_forecast || '—'], ['Формат контента', CONTENT_RU[contentType(c)]]];
     const trow = (label, items, cls) => items.length ? `<div class="trow"><span>${label}</span>${items.map(x => `<span class="tag ${cls}">${esc(x)}</span>`).join('')}</div>` : '';
     const ageN = ['13–17 лет', '18–24 лет', '25–34 лет', '35–44 лет', '45+ лет'], pc = ['#ff3b1f', '#4a86c8', '#e8a93a', '#4caf88', '#9b6fd3', '#9aa0ab'];
     $('#drawerPanel').innerHTML = `<button type="button" class="x-close" data-close>× Закрыть</button>${banner ? `<img class="banner" src="${esc(banner)}" alt="">` : ''}<div class="m-head"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div><h2>${esc(c.title)}</h2><div class="handle">${esc(handleOf(c))}</div></div><div class="m-act"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><a class="ic" href="${yt(c.id, c.handle)}" target="_blank" rel="noopener" title="Открыть на YouTube">${ICON.ext}</a><button type="button" class="btn-out" id="showComps">Конкуренты</button></div></div>
@@ -327,7 +412,7 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
 <h3 class="h">Демография аудитории <small>оценка по нише и языку</small></h3><div class="demo"><div><b>Пол</b>${pie([d.male, d.female], pc)}${legend(['Муж', 'Жен'], pc)}</div><div><b>Возраст</b>${pie(d.ages, pc)}${legend(ageN, pc)}</div><div><b>Страны аудитории</b>${pie(d.countries.map(x => x[1]), pc)}${legend(d.countries.map(x => x[0]), pc)}</div></div>
 <h3 class="h">Динамика просмотров${estNote(c)}</h3>${chart(dated(c, 'views'), '#ff3b1f')}
 <h3 class="h">Прирост подписчиков за день${estNote(c)}</h3>${chart(dated(c, 'subs'), '#4a86c8')}
-<div class="block" id="compsBlock" hidden><h3>Конкуренты</h3><p class="muted">Другие каналы той же ниши и на том же языке. Нажмите на строку — откроется разбор канала.</p><div class="table-wrap"><table class="comp"><thead><tr><th>Канал</th><th>Подп.</th><th>Видео</th><th>Ср. просм.</th><th>Доход/мес.</th><th>RPM</th><th>Язык</th><th>ИТВ</th></tr></thead><tbody>${comps.map(x => `<tr data-open="${esc(x.id)}"><td>${esc(x.title)}</td><td>${num(x.subs)}</td><td>${x.videos_count || 0}</td><td>${num(x.avg_views)}</td><td>~${num(monthly(x))} $</td><td>${money(x.rpm)}</td><td>${esc(langName(x.language))}</td><td>${entryIndex(x) ?? '—'}</td></tr>`).join('') || '<tr><td colspan="8">Нет других каналов</td></tr>'}</tbody></table></div></div>
+<div class="block" id="compsBlock" hidden><h3>Конкуренты в базе</h3><p class="muted">Каналы той же ниши: ${rel.same.length} на том же языке, ${rel.other.length} на других. Выросшие каналы остаются в списке — именно они и есть главные конкуренты. Нажмите на строку — откроется разбор канала.</p><div class="table-wrap"><table class="comp"><thead><tr><th>Канал</th><th>Подп.</th><th>Видео</th><th>Ср. просм.</th><th>Доход/мес.</th><th>RPM</th><th>Язык</th><th>ИТВ</th></tr></thead><tbody>${comps.map(x => `<tr data-open="${esc(x.id)}"><td>${esc(x.title)}${x.graduated ? ' <small class="muted">(вырос)</small>' : ''}${sameLang(x, c) ? '' : ' <small class="muted">(другой язык)</small>'}</td><td>${num(x.subs)}</td><td>${x.videos_count || 0}</td><td>${num(x.avg_views)}</td><td>~${num(monthly(x))} $</td><td>${money(x.rpm)}</td><td>${esc(langsOf(x).map(langName).join(', '))}</td><td>${entryIndex(x) ?? '—'}</td></tr>`).join('') || '<tr><td colspan="8">Нет других каналов</td></tr>'}</tbody></table></div></div>${competitionBlock(c)}
 <div class="block"><h3>Критерии отбора</h3><ul class="crit">${CRITERIA.map(([t, f]) => `<li class="${f(c) ? 'ok' : 'no'}">${f(c) ? '✓' : '✗'} ${esc(t)}</li>`).join('')}</ul><p class="muted">Лучший ролик — ${bestX(c).toFixed(1).replace('.', ',')}× от обычного.</p></div>
 <div class="block"><h3>Стреляющий канал</h3><ul class="crit">${FIRE_CRITERIA.map(([t, f]) => `<li class="${f(c) ? 'ok' : 'no'}">${f(c) ? '✓' : '✗'} ${esc(t)}</li>`).join('')}</ul></div>${entryBlock(c)}${prospectsBlock(c)}`;
     $('#drawer').hidden = false; $('#drawerPanel').scrollTop = 0;
@@ -355,6 +440,14 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
       $('#grid').innerHTML = entries.map(([k, arr]) => `<h2 class="grp">${esc(k)} <span>${arr.length}</span></h2><div class="cards">${arr.map(card).join('')}</div>`).join('');
     }
     $('#empty').hidden = list.length > 0;
+    // Filtering by measured competition returns nothing until the probe has run, which
+    // looks like a broken filter rather than missing data. Say which it is.
+    if (!list.length) {
+      const needsProbe = ($('#fRealComp').value || $('#onlyFree').checked) && !state.all.some(c => realComp(c) != null);
+      $('#empty').querySelector('p').textContent = needsProbe
+        ? 'Конкуренция на YouTube ещё ни по одному каналу не измерена — запустите collector/competition.py, тогда этот фильтр заработает.'
+        : 'Сбросьте фильтры или нажмите «Обновить каналы».';
+    }
   }
 
   function toggle(set, key, id) { if (set.has(id)) set.delete(id); else set.add(id); saveSet(key, set); render(); if (!$('#drawer').hidden) openDrawer(id); }
@@ -407,11 +500,23 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     state.liveRunning = true;
     localStorage.setItem(LS.key, key); localStorage.setItem(LS.maxQ, $('#maxQueries').value); $('#refreshProgress').hidden = false;
     try {
-      const res = await window.NR_LIVE.run({ key, maxQueries: +$('#maxQueries').value, niche: $('#fNiche').value, lang: $('#fLang').value }, (t, f) => { $('#refreshLog').textContent = t; $('#refreshBar').style.width = Math.round((f || 0) * 100) + '%'; });
+      const res = await window.NR_LIVE.run({
+        key, maxQueries: +$('#maxQueries').value, niche: $('#fNiche').value, lang: $('#fLang').value,
+        // Searches are planned from what the catalogue already knows, so a run digs into
+        // proven clusters instead of sampling unrelated niches at random.
+        catalogue: state.pool,
+      }, (t, f) => { $('#refreshLog').textContent = t; $('#refreshBar').style.width = Math.round((f || 0) * 100) + '%'; });
       const prev = loadArr(LS.live); const map = new Map(prev.map(c => [c.id, c])); (res.channels || []).forEach(c => map.set(c.id, c));
+      // Competition readings for channels already in channels.json are stored as
+      // id-plus-competition patches; boot() spreads live records over the catalogue entry,
+      // so a partial record updates that channel instead of replacing it.
+      (res.competition || []).forEach(p => map.set(p.id, { ...(map.get(p.id) || {}), ...p }));
       localStorage.setItem(LS.live, JSON.stringify([...map.values()]));
       localStorage.setItem(LS.liveAt, new Date().toISOString());
-      $('#refreshLog').textContent = `Готово: ${res.channels.length} каналов, ${res.units} ед. квоты` + (res.stopped ? ' · ' + res.stopped : '');
+      const measured = (res.competition || []).length + (res.channels || []).filter(c => c.competition).length;
+      $('#refreshLog').textContent = `Готово: ${res.channels.length} новых каналов, конкуренция измерена у ${measured}. `
+        + `Запросов: ${res.mined} по кластерам, ${res.explored} на разведку, ${res.units} ед. квоты`
+        + (res.stopped ? ' · ' + res.stopped : '');
       setTimeout(() => location.reload(), 700);
     } catch (err) { $('#refreshLog').textContent = err.message || String(err); }
     finally { state.liveRunning = false; }
@@ -424,10 +529,24 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     state.clusters = data.clusters || {};
     const live = loadArr(LS.live).filter(c => c && c.id);
     const fresh = new Map(live.map(c => [c.id, c]));
+    // `pool` keeps every channel the collector has ever seen, including the ones that grew
+    // past the catalogue limit. Competitor counts read from it; the grid still shows only
+    // young channels. Counting rivals in the same list the grid shows is what let grown
+    // competitors vanish from the count.
+    // A live record may be a whole channel or just a competition patch ({id, competition,
+    // …}) written by the refresh for a channel the catalogue already holds. Patches must
+    // merge; they must never reach the grid as a channel of their own.
+    const isPatch = c => !c.title && !(c.videos || []).length;
+    state.pool = (data.channels || []).map(c => { const f = fresh.get(c.id); return f ? { ...c, ...f, added_at: c.added_at || f.added_at } : { ...c }; });
     state.all = (data.channels || []).filter(c => (!c.graduated && (c.videos_count || 0) <= MAX_VIDEOS) || c.labeled_role).map(c => {
       const f = fresh.get(c.id); if (!f) return c;
       fresh.delete(c.id); return { ...c, ...f, added_at: c.added_at || f.added_at };
-    }).concat([...fresh.values()]);
+    }).concat([...fresh.values()].filter(c => !isPatch(c)));
+    const known = new Set(state.pool.map(c => c.id));
+    state.all.forEach(c => { if (!known.has(c.id)) { state.pool.push(c); known.add(c.id); } });
+    // live.js plans its searches from what the catalogue already knows, and the file is
+    // 14 MB — publish the parsed copy rather than make the refresh fetch it again.
+    window.NR_CATALOGUE = state.pool;
     state.size = state.all.reduce((m, c) => { m[c.cluster] = (m[c.cluster] || 0) + 1; return m; }, {});
     const fileAt = data.generated_at ? new Date(data.generated_at) : null;
     const rawAt = live.length ? localStorage.getItem(LS.liveAt) : null;

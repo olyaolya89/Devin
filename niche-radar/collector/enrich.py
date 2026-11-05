@@ -259,6 +259,11 @@ def apply(channel: dict[str, Any], result: dict[str, Any], *, watched: dict[str,
     if key in NICHES and key != "other":
         channel["niche_ai"] = key
         channel["niche"], channel["niche_ru"] = key, NICHES[key]
+        # The cluster key is built from the niche in collect.py, so overwriting the niche
+        # here used to leave `cluster` pointing at the old query-derived niche. The site
+        # counts rivals and reads the entry verdict off that key, so a channel could land
+        # alone in a bucket that no longer matched it and show "Конкуренты (0)".
+        channel["cluster"] = cluster_key(channel)
         if channel.get("rpm_source") == "baseline" and channel.get("region"):
             rates = RPM[key]
             channel["rpm"] = float(rates.get(channel["region"], rates["other"]))
@@ -332,6 +337,35 @@ def enrich(channel: dict[str, Any], key: str, now: dt.datetime, call=call_gemini
     return False
 
 
+def cluster_key(channel: dict[str, Any]) -> str:
+    """Same formula as collect.cluster_key — kept here so enrich has no import cycle."""
+    return f"{channel.get('niche', '')}|{channel.get('style_group', '')}|{channel.get('language', '')}"
+
+
+def rebuild_clusters(data: dict[str, Any], now: dt.datetime) -> None:
+    """Recompute cluster keys and the clusters map after niches changed.
+
+    Enrichment moves channels between niches, which changes both the key each channel
+    points at and the membership of every bucket. Without this the `clusters` map keeps
+    counting channels that have since moved, so group sizes and entry verdicts drift.
+    """
+    channels = data.get("channels") or []
+    for channel in channels:
+        channel["cluster"] = cluster_key(channel)
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import collect  # noqa: PLC0415 - optional, only needed when rebuilding
+    except ImportError as error:  # pragma: no cover - collector always ships together
+        print(f"[enrich] cluster rebuild skipped: {error}", file=sys.stderr)
+        return
+    labels = collect._load_json(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "labels.json"), {}
+    )
+    clusters = collect.entry_scores(channels, now=now, labels=labels)
+    collect._decorate_channels(channels, clusters)
+    data["clusters"] = clusters
+
+
 def save(path: str, data: dict[str, Any]) -> None:
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as handle:
@@ -346,9 +380,20 @@ MAX_VIDEOS = 100
 
 
 def competitor_counts(channels: list[dict[str, Any]]) -> dict[str, int]:
-    """Competitors = other channels with the same niche and primary language (matches the site)."""
+    """Same-language competitors in the same niche — mirrors `compSameLang` on the site.
+
+    Only used to decide where Gemini's budget is worth spending, so it stays the narrow
+    count rather than the niche-wide headline. It reads `niche_ai` first because that is
+    the niche enrichment settled on; using the raw `niche` compared channels against
+    buckets they had already been moved out of.
+    """
     groups: dict[tuple[str, str], int] = {}
-    key = lambda c: (c.get("niche") or "", (c.get("language") or "en").split("-")[0])
+
+    def key(channel: dict[str, Any]) -> tuple[str, str]:
+        niche = channel.get("niche_ai") or channel.get("niche") or ""
+        languages = channel.get("languages") or [channel.get("language") or "en"]
+        return (niche, str(languages[0] or "en").split("-")[0])
+
     for channel in channels:
         groups[key(channel)] = groups.get(key(channel), 0) + 1
     return {c.get("id"): groups[key(c)] - 1 for c in channels}
@@ -404,6 +449,7 @@ def main(argv: list[str] | None = None) -> int:
                     break
             time.sleep(args.pause)
     finally:
+        rebuild_clusters(data, now)
         save(args.data, data)
     print(f"[enrich] enriched {done}/{len(batch)} channels with {MODEL}", file=sys.stderr)
     return 0
