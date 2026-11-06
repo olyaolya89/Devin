@@ -178,5 +178,53 @@
     "videos": 50,
     "query": "por que o brasil",
     "checked_at": "2026-11-05"
+  },
+  "relocation|pt": {
+    "channels": 19,
+    "videos": 24,
+    "query": "casas baratas no brasil",
+    "checked_at": "2026-11-06"
+  },
+  "engineering|de": {
+    "channels": 12,
+    "videos": 50,
+    "query": "japans neue erfindung",
+    "checked_at": "2026-11-06"
+  },
+  "history|de": {
+    "channels": 23,
+    "videos": 50,
+    "query": "zweiter weltkrieg geschichte doku",
+    "checked_at": "2026-11-06"
+  },
+  "history|fr": {
+    "channels": 11,
+    "videos": 11,
+    "query": "histoire de france que personne ne raconte",
+    "checked_at": "2026-11-06"
+  },
+  "engineering|fr": {
+    "channels": 26,
+    "videos": 30,
+    "query": "les plus grandes machines du monde",
+    "checked_at": "2026-11-06"
+  },
+  "history|it": {
+    "channels": 16,
+    "videos": 17,
+    "query": "storia d'italia che nessuno racconta",
+    "checked_at": "2026-11-06"
+  },
+  "engineering|it": {
+    "channels": 24,
+    "videos": 38,
+    "query": "le macchine più grandi del mondo",
+    "checked_at": "2026-11-06"
+  },
+  "relocation|es": {
+    "channels": 8,
+    "videos": 9,
+    "query": "jubilarse en españa documental",
+    "checked_at": "2026-11-06"
   }
 }
