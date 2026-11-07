@@ -226,5 +226,53 @@
     "videos": 9,
     "query": "jubilarse en españa documental",
     "checked_at": "2026-11-06"
+  },
+  "other|en": {
+    "channels": 33,
+    "videos": 50,
+    "query": "every marvel villain ranked",
+    "checked_at": "2026-11-07"
+  },
+  "science|es": {
+    "channels": 44,
+    "videos": 50,
+    "query": "lo que pasa en tu cuerpo al consumir",
+    "checked_at": "2026-11-07"
+  },
+  "lifehacks|es": {
+    "channels": 22,
+    "videos": 50,
+    "query": "peinados para cabello fino después de los 60",
+    "checked_at": "2026-11-07"
+  },
+  "geography|es": {
+    "channels": 40,
+    "videos": 50,
+    "query": "lugares prohibidos que no puedes visitar",
+    "checked_at": "2026-11-07"
+  },
+  "finance|es": {
+    "channels": 36,
+    "videos": 41,
+    "query": "negocios invisibles que ganan más",
+    "checked_at": "2026-11-07"
+  },
+  "lifehacks|de": {
+    "channels": 10,
+    "videos": 17,
+    "query": "pflanzen die deinen boden vergiften",
+    "checked_at": "2026-11-07"
+  },
+  "science|pt": {
+    "channels": 26,
+    "videos": 50,
+    "query": "o que acontece no seu corpo quando",
+    "checked_at": "2026-11-07"
+  },
+  "disasters|pt": {
+    "channels": 8,
+    "videos": 8,
+    "query": "abriu uma fenda na terra",
+    "checked_at": "2026-11-07"
   }
 }
