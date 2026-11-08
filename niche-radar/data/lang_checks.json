@@ -274,5 +274,53 @@
     "videos": 8,
     "query": "abriu uma fenda na terra",
     "checked_at": "2026-11-07"
+  },
+  "military|en": {
+    "channels": 36,
+    "videos": 50,
+    "query": "what boot camp does to a recruit",
+    "checked_at": "2026-11-08"
+  },
+  "military|es": {
+    "channels": 37,
+    "videos": 37,
+    "query": "la batalla olvidada de la segunda guerra mundial",
+    "checked_at": "2026-11-08"
+  },
+  "military|de": {
+    "channels": 25,
+    "videos": 50,
+    "query": "zweiter weltkrieg dokumentation geschichte",
+    "checked_at": "2026-11-08"
+  },
+  "aviation|en": {
+    "channels": 49,
+    "videos": 50,
+    "query": "what happens when you flush the toilet on a plane",
+    "checked_at": "2026-11-08"
+  },
+  "aviation|fr": {
+    "channels": 37,
+    "videos": 50,
+    "query": "les secrets de l'aviation",
+    "checked_at": "2026-11-08"
+  },
+  "aviation|es": {
+    "channels": 30,
+    "videos": 50,
+    "query": "accidente aéreo explicado",
+    "checked_at": "2026-11-08"
+  },
+  "earth_science|en": {
+    "channels": 8,
+    "videos": 8,
+    "query": "the ground opened up and no one told you",
+    "checked_at": "2026-11-08"
+  },
+  "earth_science|pt": {
+    "channels": 30,
+    "videos": 30,
+    "query": "o que existe embaixo da terra",
+    "checked_at": "2026-11-08"
   }
 }
