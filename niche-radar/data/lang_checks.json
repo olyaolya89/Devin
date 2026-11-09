@@ -322,5 +322,53 @@
     "videos": 30,
     "query": "o que existe embaixo da terra",
     "checked_at": "2026-11-08"
+  },
+  "earth_science|es": {
+    "channels": 38,
+    "videos": 39,
+    "query": "el volcán que podría despertar",
+    "checked_at": "2026-11-09"
+  },
+  "real_estate|en": {
+    "channels": 19,
+    "videos": 50,
+    "query": "dirt cheap farmhouses with land for sale",
+    "checked_at": "2026-11-09"
+  },
+  "real_estate|es": {
+    "channels": 21,
+    "videos": 41,
+    "query": "casas baratas con terreno en venta",
+    "checked_at": "2026-11-09"
+  },
+  "real_estate|pt": {
+    "channels": 8,
+    "videos": 8,
+    "query": "casas pequenas com quintal baratas",
+    "checked_at": "2026-11-09"
+  },
+  "education|en": {
+    "channels": 34,
+    "videos": 50,
+    "query": "learn english with an easy story",
+    "checked_at": "2026-11-09"
+  },
+  "education|es": {
+    "channels": 15,
+    "videos": 50,
+    "query": "aprende inglés con una historia fácil",
+    "checked_at": "2026-11-09"
+  },
+  "education|pt": {
+    "channels": 25,
+    "videos": 50,
+    "query": "aprenda inglês com histórias",
+    "checked_at": "2026-11-09"
+  },
+  "education|de": {
+    "channels": 16,
+    "videos": 50,
+    "query": "deutsch lernen mit geschichten",
+    "checked_at": "2026-11-09"
   }
 }
