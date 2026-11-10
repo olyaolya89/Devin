@@ -370,5 +370,53 @@
     "videos": 50,
     "query": "deutsch lernen mit geschichten",
     "checked_at": "2026-11-09"
+  },
+  "business|en": {
+    "channels": 38,
+    "videos": 50,
+    "query": "the rise and fall of the company",
+    "checked_at": "2026-11-10"
+  },
+  "business|es": {
+    "channels": 18,
+    "videos": 20,
+    "query": "negocios invisibles que ganan más que un doctor",
+    "checked_at": "2026-11-10"
+  },
+  "business|de": {
+    "channels": 17,
+    "videos": 29,
+    "query": "aufstieg und fall der firma",
+    "checked_at": "2026-11-10"
+  },
+  "travel|en": {
+    "channels": 44,
+    "videos": 50,
+    "query": "best countries to retire abroad ranked",
+    "checked_at": "2026-11-10"
+  },
+  "travel|es": {
+    "channels": 5,
+    "videos": 5,
+    "query": "japón vs estados unidos diferencias de cultura",
+    "checked_at": "2026-11-10"
+  },
+  "food|en": {
+    "channels": 31,
+    "videos": 39,
+    "query": "butcher reveals budget meats better than ribeye",
+    "checked_at": "2026-11-10"
+  },
+  "food|es": {
+    "channels": 26,
+    "videos": 50,
+    "query": "trucos de cocina mexicana de la abuela",
+    "checked_at": "2026-11-10"
+  },
+  "health|en": {
+    "channels": 46,
+    "videos": 50,
+    "query": "every supplement explained",
+    "checked_at": "2026-11-10"
   }
 }
