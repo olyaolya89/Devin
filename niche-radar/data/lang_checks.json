@@ -418,5 +418,53 @@
     "videos": 50,
     "query": "every supplement explained",
     "checked_at": "2026-11-10"
+  },
+  "health|es": {
+    "channels": 11,
+    "videos": 50,
+    "query": "peinados para cabello canoso después de los 60",
+    "checked_at": "2026-11-11"
+  },
+  "gardening|en": {
+    "channels": 38,
+    "videos": 50,
+    "query": "raising backyard chickens mistakes",
+    "checked_at": "2026-11-11"
+  },
+  "gardening|es": {
+    "channels": 33,
+    "videos": 50,
+    "query": "cómo cultivar un huerto en casa",
+    "checked_at": "2026-11-11"
+  },
+  "gear|en": {
+    "channels": 39,
+    "videos": 50,
+    "query": "everyday carry items you need",
+    "checked_at": "2026-11-11"
+  },
+  "reviews|en": {
+    "channels": 19,
+    "videos": 24,
+    "query": "watches ranked by popularity and price",
+    "checked_at": "2026-11-11"
+  },
+  "reviews|es": {
+    "channels": 32,
+    "videos": 50,
+    "query": "los mejores relojes baratos",
+    "checked_at": "2026-11-11"
+  },
+  "fashion|en": {
+    "channels": 33,
+    "videos": 50,
+    "query": "style tips for women over 60",
+    "checked_at": "2026-11-11"
+  },
+  "fashion|es": {
+    "channels": 24,
+    "videos": 50,
+    "query": "moda para mujeres de 60 años",
+    "checked_at": "2026-11-11"
   }
 }
