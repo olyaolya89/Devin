@@ -466,5 +466,53 @@
     "videos": 50,
     "query": "moda para mujeres de 60 años",
     "checked_at": "2026-11-11"
+  },
+  "celebrities|en": {
+    "channels": 41,
+    "videos": 50,
+    "query": "the tragic story of the son of",
+    "checked_at": "2026-11-12"
+  },
+  "celebrities|es": {
+    "channels": 40,
+    "videos": 50,
+    "query": "final explicado de la película",
+    "checked_at": "2026-11-12"
+  },
+  "gaming|en": {
+    "channels": 29,
+    "videos": 30,
+    "query": "gta lore mysteries explained",
+    "checked_at": "2026-11-12"
+  },
+  "gaming|es": {
+    "channels": 17,
+    "videos": 19,
+    "query": "misterios de gta explicados",
+    "checked_at": "2026-11-12"
+  },
+  "comics|en": {
+    "channels": 24,
+    "videos": 30,
+    "query": "every marvel villain ranked by strength",
+    "checked_at": "2026-11-12"
+  },
+  "comics|es": {
+    "channels": 34,
+    "videos": 50,
+    "query": "qué pasaría si marvel",
+    "checked_at": "2026-11-12"
+  },
+  "geopolitics|en": {
+    "channels": 21,
+    "videos": 22,
+    "query": "why this country controls the strait",
+    "checked_at": "2026-11-12"
+  },
+  "geopolitics|es": {
+    "channels": 1,
+    "videos": 1,
+    "query": "por qué este país es tan poderoso por su geografía",
+    "checked_at": "2026-11-12"
   }
 }
