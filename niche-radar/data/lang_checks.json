@@ -3,13 +3,13 @@
     "channels": 47,
     "videos": 50,
     "query": "the engineering behind",
-    "checked_at": "2026-11-02"
+    "checked_at": "2026-11-13"
   },
   "geography|en": {
-    "channels": 19,
-    "videos": 19,
+    "channels": 17,
+    "videos": 17,
     "query": "why this country's geography is a curse",
-    "checked_at": "2026-11-02"
+    "checked_at": "2026-11-13"
   },
   "science|en": {
     "channels": 45,
@@ -514,5 +514,41 @@
     "videos": 1,
     "query": "por qué este país es tan poderoso por su geografía",
     "checked_at": "2026-11-12"
+  },
+  "tech|en": {
+    "channels": 35,
+    "videos": 45,
+    "query": "japan's new invention could replace oil",
+    "checked_at": "2026-11-13"
+  },
+  "tech|es": {
+    "channels": 42,
+    "videos": 50,
+    "query": "el nuevo invento que está sorprendiendo a todos",
+    "checked_at": "2026-11-13"
+  },
+  "tech|de": {
+    "channels": 16,
+    "videos": 20,
+    "query": "neue erfindung schockiert alle",
+    "checked_at": "2026-11-13"
+  },
+  "tech|pt": {
+    "channels": 2,
+    "videos": 2,
+    "query": "nova invenção que vai mudar tudo",
+    "checked_at": "2026-11-13"
+  },
+  "true_crime|es": {
+    "channels": 16,
+    "videos": 50,
+    "query": "crímenes reales casos resueltos",
+    "checked_at": "2026-11-13"
+  },
+  "animals|pt": {
+    "channels": 39,
+    "videos": 50,
+    "query": "os híbridos de jurassic park",
+    "checked_at": "2026-11-13"
   }
 }
