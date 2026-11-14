@@ -12,52 +12,52 @@
     "checked_at": "2026-11-13"
   },
   "science|en": {
-    "channels": 45,
-    "videos": 50,
-    "query": "plate tectonics explained animation",
-    "checked_at": "2026-11-02"
-  },
-  "history|en": {
     "channels": 46,
     "videos": 50,
+    "query": "plate tectonics explained animation",
+    "checked_at": "2026-11-14"
+  },
+  "history|en": {
+    "channels": 41,
+    "videos": 50,
     "query": "history explained stick figures",
-    "checked_at": "2026-11-02"
+    "checked_at": "2026-11-14"
   },
   "nostalgia_finance|en": {
-    "channels": 7,
-    "videos": 8,
+    "channels": 9,
+    "videos": 10,
     "query": "forgotten money saving tricks 1970s",
-    "checked_at": "2026-11-02"
+    "checked_at": "2026-11-14"
   },
   "finance|en": {
-    "channels": 47,
+    "channels": 46,
     "videos": 50,
     "query": "retirement mistakes explained",
-    "checked_at": "2026-11-02"
+    "checked_at": "2026-11-14"
   },
   "religion|en": {
-    "channels": 17,
-    "videos": 29,
+    "channels": 18,
+    "videos": 26,
     "query": "every archangel explained",
-    "checked_at": "2026-11-03"
+    "checked_at": "2026-11-14"
   },
   "psychology|en": {
-    "channels": 17,
-    "videos": 19,
+    "channels": 21,
+    "videos": 24,
     "query": "stoic rules for life animated",
-    "checked_at": "2026-11-03"
+    "checked_at": "2026-11-14"
   },
   "religion|es": {
-    "channels": 6,
-    "videos": 6,
+    "channels": 8,
+    "videos": 8,
     "query": "cada arcángel explicado",
-    "checked_at": "2026-11-03"
+    "checked_at": "2026-11-14"
   },
   "psychology|es": {
     "channels": 28,
-    "videos": 31,
+    "videos": 29,
     "query": "filosofía estoica explicada",
-    "checked_at": "2026-11-03"
+    "checked_at": "2026-11-14"
   },
   "animals|en": {
     "channels": 17,
