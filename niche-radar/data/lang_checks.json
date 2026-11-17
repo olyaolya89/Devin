@@ -156,52 +156,52 @@
     "checked_at": "2026-11-16"
   },
   "engineering|es": {
-    "channels": 3,
-    "videos": 3,
+    "channels": 4,
+    "videos": 4,
     "query": "inventos de japón que cambiarán el mundo",
-    "checked_at": "2026-11-05"
+    "checked_at": "2026-11-17"
   },
   "nostalgia|es": {
-    "channels": 45,
+    "channels": 41,
     "videos": 50,
     "query": "así se vivía antes",
-    "checked_at": "2026-11-05"
+    "checked_at": "2026-11-17"
   },
   "history|pt": {
-    "channels": 32,
-    "videos": 36,
+    "channels": 37,
+    "videos": 39,
     "query": "história do brasil que ninguém conta",
-    "checked_at": "2026-11-05"
+    "checked_at": "2026-11-17"
   },
   "geography|pt": {
-    "channels": 46,
+    "channels": 44,
     "videos": 50,
     "query": "por que o brasil",
-    "checked_at": "2026-11-05"
+    "checked_at": "2026-11-17"
   },
   "relocation|pt": {
-    "channels": 19,
-    "videos": 24,
+    "channels": 33,
+    "videos": 39,
     "query": "casas baratas no brasil",
-    "checked_at": "2026-11-06"
+    "checked_at": "2026-11-17"
   },
   "engineering|de": {
-    "channels": 12,
+    "channels": 14,
     "videos": 50,
     "query": "japans neue erfindung",
-    "checked_at": "2026-11-06"
+    "checked_at": "2026-11-17"
   },
   "history|de": {
-    "channels": 23,
+    "channels": 25,
     "videos": 50,
     "query": "zweiter weltkrieg geschichte doku",
-    "checked_at": "2026-11-06"
+    "checked_at": "2026-11-17"
   },
   "history|fr": {
-    "channels": 11,
-    "videos": 11,
+    "channels": 9,
+    "videos": 9,
     "query": "histoire de france que personne ne raconte",
-    "checked_at": "2026-11-06"
+    "checked_at": "2026-11-17"
   },
   "engineering|fr": {
     "channels": 26,
