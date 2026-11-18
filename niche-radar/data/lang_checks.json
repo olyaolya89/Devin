@@ -204,52 +204,52 @@
     "checked_at": "2026-11-17"
   },
   "engineering|fr": {
-    "channels": 26,
-    "videos": 30,
-    "query": "les plus grandes machines du monde",
-    "checked_at": "2026-11-06"
-  },
-  "history|it": {
     "channels": 16,
     "videos": 17,
+    "query": "les plus grandes machines du monde",
+    "checked_at": "2026-11-18"
+  },
+  "history|it": {
+    "channels": 19,
+    "videos": 20,
     "query": "storia d'italia che nessuno racconta",
-    "checked_at": "2026-11-06"
+    "checked_at": "2026-11-18"
   },
   "engineering|it": {
-    "channels": 24,
-    "videos": 38,
+    "channels": 31,
+    "videos": 42,
     "query": "le macchine più grandi del mondo",
-    "checked_at": "2026-11-06"
+    "checked_at": "2026-11-18"
   },
   "relocation|es": {
-    "channels": 8,
-    "videos": 9,
+    "channels": 7,
+    "videos": 8,
     "query": "jubilarse en españa documental",
-    "checked_at": "2026-11-06"
+    "checked_at": "2026-11-18"
   },
   "other|en": {
-    "channels": 33,
+    "channels": 31,
     "videos": 50,
     "query": "every marvel villain ranked",
-    "checked_at": "2026-11-07"
+    "checked_at": "2026-11-18"
   },
   "science|es": {
     "channels": 44,
     "videos": 50,
     "query": "lo que pasa en tu cuerpo al consumir",
-    "checked_at": "2026-11-07"
+    "checked_at": "2026-11-18"
   },
   "lifehacks|es": {
-    "channels": 22,
+    "channels": 18,
     "videos": 50,
     "query": "peinados para cabello fino después de los 60",
-    "checked_at": "2026-11-07"
+    "checked_at": "2026-11-18"
   },
   "geography|es": {
-    "channels": 40,
+    "channels": 38,
     "videos": 50,
     "query": "lugares prohibidos que no puedes visitar",
-    "checked_at": "2026-11-07"
+    "checked_at": "2026-11-18"
   },
   "finance|es": {
     "channels": 36,

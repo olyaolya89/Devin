@@ -6011,7 +6011,178 @@
       "cluster": "disasters|live|en",
       "entry_verdict": "filling",
       "entry_verdict_ru": "Заполняется",
-      "entry_score": 82
+      "entry_score": 82,
+      "competition": {
+        "queries": [
+          "nepal floods explained what caused the deadly"
+        ],
+        "videos_seen": 50,
+        "rival_channels": 32,
+        "clone_channels": 8,
+        "clone_videos": 8,
+        "clone_share": 0.16,
+        "clones_30d": 0,
+        "big_rivals": 21,
+        "median_rival_subs": 307000,
+        "top_rivals": [
+          {
+            "id": "UC0blA1hxByL1uTCdVVB4Lrg",
+            "title": "The Classified Vault",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-09-02T21:53:53Z",
+            "subs": 118
+          },
+          {
+            "id": "UC6vFF29XZ_Mg0a_HYfOUZ6Q",
+            "title": "Beyond Human History",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-08-30T15:23:48Z",
+            "subs": 12
+          },
+          {
+            "id": "UCq6L7JFb3gqCNDD2tjWAhBw",
+            "title": "India Today Global",
+            "videos": 1,
+            "best_overlap": 0.86,
+            "clone": true,
+            "latest": "2026-08-27T00:30:06Z",
+            "subs": 225000
+          },
+          {
+            "id": "UCvHpT0tBkXLwIQpZw8Wi75A",
+            "title": "Máquinas Imposibles",
+            "videos": 1,
+            "best_overlap": 0.86,
+            "clone": true,
+            "latest": "2026-08-29T11:59:50Z",
+            "subs": 12600
+          },
+          {
+            "id": "UCHd0swjdtnrOhffBgeysVUw",
+            "title": "ShivaXplains",
+            "videos": 1,
+            "best_overlap": 0.86,
+            "clone": true,
+            "latest": "2026-08-27T00:09:00Z",
+            "subs": 1510
+          },
+          {
+            "id": "UC6ZFN9Tx6xh-skXCuRHCDpQ",
+            "title": "PBS NewsHour",
+            "videos": 1,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-08-27T00:19:58Z",
+            "subs": 5420000
+          },
+          {
+            "id": "UCTrQ7HXWRRxr7OsOtodr2_w",
+            "title": "Channel 4 News",
+            "videos": 1,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-08-27T18:42:07Z",
+            "subs": 4290000
+          },
+          {
+            "id": "UCXBD5iG5cr4ZYZ99K-fmDHg",
+            "title": "NDTV World",
+            "videos": 1,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-08-27T13:19:41Z",
+            "subs": 155000
+          },
+          {
+            "id": "UC16niRr50-MSBwiO3YDb3RA",
+            "title": "BBC News",
+            "videos": 3,
+            "best_overlap": 0.57,
+            "clone": false,
+            "latest": "2026-08-28T18:45:11Z",
+            "subs": 20300000
+          },
+          {
+            "id": "UCupvZG-5ko_eiXAupbDfxWw",
+            "title": "CNN",
+            "videos": 2,
+            "best_overlap": 0.57,
+            "clone": false,
+            "latest": "2026-09-05T00:30:44Z",
+            "subs": 20100000
+          }
+        ],
+        "clone_examples": [
+          {
+            "channel_id": "UC6vFF29XZ_Mg0a_HYfOUZ6Q",
+            "channel": "Beyond Human History",
+            "title": "Nepal Floods 2026 Explained: What Caused the Deadly Flash Flood?",
+            "published_at": "2026-08-30T15:23:48Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UC0blA1hxByL1uTCdVVB4Lrg",
+            "channel": "The Classified Vault",
+            "title": "NEPAL Floods 2026 Explained: HOW DID THIS HAPPEN? What Caused the Deadly Flash Flood?",
+            "published_at": "2026-09-02T21:53:53Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCvHpT0tBkXLwIQpZw8Wi75A",
+            "channel": "Máquinas Imposibles",
+            "title": "Nepal Floods 2026 Explained: What Really Triggered the Deadly Himalayan Flash Flood?",
+            "published_at": "2026-08-29T11:59:50Z",
+            "overlap": 0.86
+          },
+          {
+            "channel_id": "UCq6L7JFb3gqCNDD2tjWAhBw",
+            "channel": "India Today Global",
+            "title": "Nepal Flood Fury: What Really Caused Nepal’s Deadly Flash Flood? EXPLAINED",
+            "published_at": "2026-08-27T00:30:06Z",
+            "overlap": 0.86
+          },
+          {
+            "channel_id": "UCHd0swjdtnrOhffBgeysVUw",
+            "channel": "ShivaXplains",
+            "title": "Nepal Flash Flood Explained: What Caused This Deadly Disaster?",
+            "published_at": "2026-08-27T00:09:00Z",
+            "overlap": 0.86
+          },
+          {
+            "channel_id": "UCTrQ7HXWRRxr7OsOtodr2_w",
+            "channel": "Channel 4 News",
+            "title": "What caused Nepal’s deadly flash floods?",
+            "published_at": "2026-08-27T18:42:07Z",
+            "overlap": 0.71
+          },
+          {
+            "channel_id": "UC6ZFN9Tx6xh-skXCuRHCDpQ",
+            "channel": "PBS NewsHour",
+            "title": "What caused the deadly flash floods in Nepal?",
+            "published_at": "2026-08-27T00:19:58Z",
+            "overlap": 0.71
+          },
+          {
+            "channel_id": "UCXBD5iG5cr4ZYZ99K-fmDHg",
+            "channel": "NDTV World",
+            "title": "Nepal Floods Explained: How A Glacial Collapse Triggered Nepal’s Deadly Flash Floods",
+            "published_at": "2026-08-27T13:19:41Z",
+            "overlap": 0.71
+          }
+        ],
+        "index": 91,
+        "verdict": "saturated",
+        "verdict_ru": "Переполнено",
+        "window_days": 180,
+        "checked_at": "2026-11-18"
+      },
+      "competition_index": 91,
+      "competition_verdict": "saturated",
+      "competition_verdict_ru": "Переполнено"
     },
     {
       "id": "UCyIYCV-JGBJrfeaezM1ST5w",
@@ -13516,7 +13687,50 @@
       "cluster": "relocation|live|en",
       "entry_verdict": "unproven",
       "entry_verdict_ru": "Спрос не доказан",
-      "entry_score": 64
+      "entry_score": 64,
+      "competition": {
+        "queries": [
+          "forget malta these english islands are cheaper",
+          "forget malta uruguay is emptier and cheaper"
+        ],
+        "videos_seen": 92,
+        "rival_channels": 2,
+        "clone_channels": 0,
+        "clone_videos": 0,
+        "clone_share": 0.0,
+        "clones_30d": 0,
+        "big_rivals": 0,
+        "median_rival_subs": 262,
+        "top_rivals": [
+          {
+            "id": "UCkp7Lt1jlId1BRabfgnl88Q",
+            "title": "Retire Abroad Atlas",
+            "videos": 1,
+            "best_overlap": 0.57,
+            "clone": false,
+            "latest": "2026-07-23T19:00:25Z",
+            "subs": 42
+          },
+          {
+            "id": "UCc5ZIpU7u8scvUrgLN9giTQ",
+            "title": "QuickTrip World",
+            "videos": 1,
+            "best_overlap": 0.43,
+            "clone": false,
+            "latest": "2026-08-28T17:00:15Z",
+            "subs": 482
+          }
+        ],
+        "clone_examples": [],
+        "index": 3,
+        "verdict": "free",
+        "verdict_ru": "Свободно",
+        "window_days": 180,
+        "checked_at": "2026-11-18"
+      },
+      "competition_index": 3,
+      "competition_verdict": "free",
+      "competition_verdict_ru": "Свободно"
     },
     {
       "id": "UCwqp2OV1DeNCT_fiLKm441w",
@@ -24912,7 +25126,108 @@
       "cluster": "psychology|live|en",
       "entry_verdict": "filling",
       "entry_verdict_ru": "Заполняется",
-      "entry_score": 62
+      "entry_score": 62,
+      "competition": {
+        "queries": [
+          "fix dry flat hair complete hair care",
+          "remove pimple marks in days every boy"
+        ],
+        "videos_seen": 100,
+        "rival_channels": 6,
+        "clone_channels": 3,
+        "clone_videos": 3,
+        "clone_share": 0.03,
+        "clones_30d": 0,
+        "big_rivals": 3,
+        "median_rival_subs": 351750,
+        "top_rivals": [
+          {
+            "id": "UCHf2sfUNdrDEvGvk_nqVXZw",
+            "title": "Stylo Mrinal",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-08-06T09:00:08Z",
+            "subs": 72500
+          },
+          {
+            "id": "UCgKgjXLuJ9HtEOC0ciZ3S4w",
+            "title": "Arvind X",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-09-10T00:31:54Z",
+            "subs": 3950
+          },
+          {
+            "id": "UCqveZeDSXabMkVK5lma622g",
+            "title": "Quick Hacks ",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-09-24T13:48:09Z",
+            "subs": 3650
+          },
+          {
+            "id": "UCMTl80jTQwGkO335HoVf0ig",
+            "title": "Dr. Aanchal MD",
+            "videos": 1,
+            "best_overlap": 0.44,
+            "clone": false,
+            "latest": "2026-08-11T09:27:49Z",
+            "subs": 3500000
+          },
+          {
+            "id": "UCacFVXlPSfO0ukFHcWHHLEQ",
+            "title": "Lavish Krish",
+            "videos": 1,
+            "best_overlap": 0.44,
+            "clone": false,
+            "latest": "2026-08-09T14:55:09Z",
+            "subs": 955000
+          },
+          {
+            "id": "UCd6i3DSCAywbnsypBhov67Q",
+            "title": "HEAD 2 TOE",
+            "videos": 1,
+            "best_overlap": 0.44,
+            "clone": false,
+            "latest": "2026-07-07T09:30:29Z",
+            "subs": 631000
+          }
+        ],
+        "clone_examples": [
+          {
+            "channel_id": "UCqveZeDSXabMkVK5lma622g",
+            "channel": "Quick Hacks ",
+            "title": "Fix Dry &amp; Flat Hair: Complete Hair Care Routine For Men (Hindi) ",
+            "published_at": "2026-09-24T13:48:09Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCHf2sfUNdrDEvGvk_nqVXZw",
+            "channel": "Stylo Mrinal",
+            "title": "Remove Pimple Marks in 7 Days (0) | Every Boy Must Watch",
+            "published_at": "2026-08-06T09:00:08Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCgKgjXLuJ9HtEOC0ciZ3S4w",
+            "channel": "Arvind X",
+            "title": "Remove Pimple Marks in 7 Days (0 ₹) | Every Boy Must Watch",
+            "published_at": "2026-09-10T00:31:54Z",
+            "overlap": 1.0
+          }
+        ],
+        "index": 34,
+        "verdict": "moderate",
+        "verdict_ru": "Умеренно",
+        "window_days": 180,
+        "checked_at": "2026-11-18"
+      },
+      "competition_index": 34,
+      "competition_verdict": "moderate",
+      "competition_verdict_ru": "Умеренно"
     },
     {
       "id": "UCjwDdo07fneA3ViyGNmXUhg",
@@ -29558,7 +29873,144 @@
       "cluster": "psychology|live|en",
       "entry_verdict": "filling",
       "entry_verdict_ru": "Заполняется",
-      "entry_score": 62
+      "entry_score": 62,
+      "competition": {
+        "queries": [
+          "feminine glow up secrets that make you",
+          "how to become the prettiest smartest girl"
+        ],
+        "videos_seen": 100,
+        "rival_channels": 26,
+        "clone_channels": 3,
+        "clone_videos": 3,
+        "clone_share": 0.03,
+        "clones_30d": 1,
+        "big_rivals": 7,
+        "median_rival_subs": 5250,
+        "top_rivals": [
+          {
+            "id": "UCm3zILwTJtedmdDEdvXR28w",
+            "title": "All Little Things With KS",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-10-15T14:57:26Z",
+            "subs": 22300
+          },
+          {
+            "id": "UCKG_g2Mtm72QZQ_bHFF8VxQ",
+            "title": "Inside Japanes Wisdom",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-11-18T12:13:19Z",
+            "subs": 26
+          },
+          {
+            "id": "UCSD9y4iBvvb9puayLFAS73Q",
+            "title": "Gwen",
+            "videos": 1,
+            "best_overlap": 0.8,
+            "clone": true,
+            "latest": "2026-06-10T21:00:34Z",
+            "subs": 2
+          },
+          {
+            "id": "UCENKtd5Bd9BATHs4GQy05sA",
+            "title": "FAVOUR IKE",
+            "videos": 1,
+            "best_overlap": 0.67,
+            "clone": false,
+            "latest": "2026-05-28T17:33:46Z",
+            "subs": 27500
+          },
+          {
+            "id": "UCNGxJQeG9ukBmxX9gltK8-A",
+            "title": "Alice’s (beauty list)",
+            "videos": 1,
+            "best_overlap": 0.6,
+            "clone": false,
+            "latest": "2026-09-13T16:28:33Z",
+            "subs": 70900
+          },
+          {
+            "id": "UCw3FBKTTvkK7EEF4EWsdVJw",
+            "title": "Prettycore",
+            "videos": 1,
+            "best_overlap": 0.6,
+            "clone": false,
+            "latest": "2026-09-05T15:08:28Z",
+            "subs": 52000
+          },
+          {
+            "id": "UC13EPP3FXcADjGvEN_EqugQ",
+            "title": "Glamspire",
+            "videos": 1,
+            "best_overlap": 0.6,
+            "clone": false,
+            "latest": "2026-10-17T15:00:20Z",
+            "subs": 1430
+          },
+          {
+            "id": "UC6NfApkKPNswjbIOZZzqBkg",
+            "title": "MyDevDairy",
+            "videos": 1,
+            "best_overlap": 0.6,
+            "clone": false,
+            "latest": "2026-10-30T14:02:30Z",
+            "subs": 1
+          },
+          {
+            "id": "UCGVSA5gzrzdwlxSuTH20bCw",
+            "title": "RADAA",
+            "videos": 1,
+            "best_overlap": 0.44,
+            "clone": false,
+            "latest": "2026-11-07T05:44:53Z",
+            "subs": 2480
+          },
+          {
+            "id": "UClt0ybouUifpxAsf3G7Y3FA",
+            "title": "It Girl Mindset",
+            "videos": 1,
+            "best_overlap": 0.44,
+            "clone": false,
+            "latest": "2026-11-01T18:28:08Z",
+            "subs": 38
+          }
+        ],
+        "clone_examples": [
+          {
+            "channel_id": "UCKG_g2Mtm72QZQ_bHFF8VxQ",
+            "channel": "Inside Japanes Wisdom",
+            "title": "How to Become the PRETTIEST &amp; SMARTEST Girl at School 🌸 | 7 Japanese Habits",
+            "published_at": "2026-11-18T12:13:19Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCm3zILwTJtedmdDEdvXR28w",
+            "channel": "All Little Things With KS",
+            "title": "How to Become the PRETTIEST &amp; SMARTEST Girl at School 💗✨",
+            "published_at": "2026-10-15T14:57:26Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCSD9y4iBvvb9puayLFAS73Q",
+            "channel": "Gwen",
+            "title": "Become The Prettiest, Most Popular &amp; Smartest Girl",
+            "published_at": "2026-06-10T21:00:34Z",
+            "overlap": 0.8
+          }
+        ],
+        "index": 53,
+        "verdict": "competitive",
+        "verdict_ru": "Конкурентно",
+        "window_days": 180,
+        "checked_at": "2026-11-18"
+      },
+      "competition_index": 53,
+      "competition_verdict": "competitive",
+      "competition_verdict_ru": "Конкурентно"
     },
     {
       "id": "UCj77H54JCFCbKTkIaLC8bRQ",
@@ -38478,7 +38930,178 @@
       "cluster": "pov_stories|live|en",
       "entry_verdict": "crowded",
       "entry_verdict_ru": "Переполнено",
-      "entry_score": 46
+      "entry_score": 46,
+      "competition": {
+        "queries": [
+          "create this new ai niche go viral"
+        ],
+        "videos_seen": 50,
+        "rival_channels": 19,
+        "clone_channels": 15,
+        "clone_videos": 20,
+        "clone_share": 0.4,
+        "clones_30d": 2,
+        "big_rivals": 1,
+        "median_rival_subs": 1350,
+        "top_rivals": [
+          {
+            "id": "UCKOTiVw2u_e5LK40-YBTVlQ",
+            "title": "Jacksons AI",
+            "videos": 3,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-11-12T02:00:39Z",
+            "subs": 75300
+          },
+          {
+            "id": "UCphek-abtr1esPUXb06npTQ",
+            "title": "Mhizta P Studio",
+            "videos": 2,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-09-02T13:00:38Z",
+            "subs": 9660
+          },
+          {
+            "id": "UCBBRgfMZE-WHg9-_vN8RS-g",
+            "title": "AI Fast Lane",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-08-18T20:45:32Z",
+            "subs": 2580
+          },
+          {
+            "id": "UCe4HfFDEPFY9XCt6soFrpSA",
+            "title": "Pramodya",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-08-19T11:30:38Z",
+            "subs": 909
+          },
+          {
+            "id": "UCXdotB_0fjZE-7Zs_NFpD-g",
+            "title": "Ai With Dan",
+            "videos": 2,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-09-27T00:30:38Z",
+            "subs": 657
+          },
+          {
+            "id": "UCYPVrXSqbgqrtNooNaFM7Yw",
+            "title": "AIPRENEUR",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-09-18T19:41:41Z",
+            "subs": 61
+          },
+          {
+            "id": "UCiMf8agDYjmswSw73B7GyMQ",
+            "title": "Ai pay you",
+            "videos": 5,
+            "best_overlap": 0.89,
+            "clone": true,
+            "latest": "2026-10-18T13:50:39Z",
+            "subs": 38000
+          },
+          {
+            "id": "UCmPyEjHGPRVJdtuaM3ZVPbg",
+            "title": "Jarvis Maker Ai",
+            "videos": 1,
+            "best_overlap": 0.89,
+            "clone": true,
+            "latest": "2026-10-27T14:00:34Z",
+            "subs": 1350
+          },
+          {
+            "id": "UCGo5ha1rmygtFQeLSvzVuTA",
+            "title": "Auto Pay AI",
+            "videos": 1,
+            "best_overlap": 0.89,
+            "clone": true,
+            "latest": "2026-08-27T12:51:29Z",
+            "subs": 824
+          },
+          {
+            "id": "UCB5UfXNalNL4vNcHY-UGfQg",
+            "title": "Chad Grow",
+            "videos": 1,
+            "best_overlap": 0.78,
+            "clone": true,
+            "latest": "2026-09-30T13:00:39Z",
+            "subs": 72500
+          }
+        ],
+        "clone_examples": [
+          {
+            "channel_id": "UCKOTiVw2u_e5LK40-YBTVlQ",
+            "channel": "Jacksons AI",
+            "title": "How to Create This New Ai Niche &amp; Go Viral In 48hrs | 100% FREE Tools",
+            "published_at": "2026-10-15T03:36:09Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCXdotB_0fjZE-7Zs_NFpD-g",
+            "channel": "Ai With Dan",
+            "title": "Create This New Ai Niche &amp; Go Viral In 48hrs | 100% FREE Tools",
+            "published_at": "2026-09-19T23:00:16Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCBBRgfMZE-WHg9-_vN8RS-g",
+            "channel": "AI Fast Lane",
+            "title": "Create This New Ai Niche &amp; Go Viral In 24hrs | 100% FREE Tools",
+            "published_at": "2026-08-18T20:45:32Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCXdotB_0fjZE-7Zs_NFpD-g",
+            "channel": "Ai With Dan",
+            "title": "Create This New Ai Niche &amp; Go Viral In 48hrs | 100% FREE AI Tools",
+            "published_at": "2026-09-27T00:30:38Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCphek-abtr1esPUXb06npTQ",
+            "channel": "Mhizta P Studio",
+            "title": "Create This New Ai Niche &amp; Go Viral In 48hrs | 100% FREE Tools",
+            "published_at": "2026-08-30T12:00:17Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCe4HfFDEPFY9XCt6soFrpSA",
+            "channel": "Pramodya",
+            "title": "Create This New AI Niche &amp; Go Viral In 48hrs | 100% FREE Tools",
+            "published_at": "2026-08-19T11:30:38Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCphek-abtr1esPUXb06npTQ",
+            "channel": "Mhizta P Studio",
+            "title": "Create This New AI Niche &amp; Go Viral In 48hrs | 100% FREE Tools",
+            "published_at": "2026-09-02T13:00:38Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCYPVrXSqbgqrtNooNaFM7Yw",
+            "channel": "AIPRENEUR",
+            "title": "Create This New AI Niche &amp; Go Viral In 48hrs| 100% FREE Tools",
+            "published_at": "2026-09-18T19:41:41Z",
+            "overlap": 1.0
+          }
+        ],
+        "index": 88,
+        "verdict": "saturated",
+        "verdict_ru": "Переполнено",
+        "window_days": 180,
+        "checked_at": "2026-11-18"
+      },
+      "competition_index": 88,
+      "competition_verdict": "saturated",
+      "competition_verdict_ru": "Переполнено"
     },
     {
       "id": "UCXvdrBvoz_T36afkGrgIHfg",
@@ -41067,7 +41690,77 @@
       "reject_reason": "",
       "niche_ai_ru": "Религия",
       "niche_ai": "religion",
-      "enriched_at": "2026-11-17"
+      "enriched_at": "2026-11-17",
+      "competition": {
+        "queries": [
+          "irã queimou o túmulo da rainha ester",
+          "chatgpt leu o livro de enoque e"
+        ],
+        "videos_seen": 38,
+        "rival_channels": 5,
+        "clone_channels": 0,
+        "clone_videos": 0,
+        "clone_share": 0.0,
+        "clones_30d": 0,
+        "big_rivals": 0,
+        "median_rival_subs": 1860,
+        "top_rivals": [
+          {
+            "id": "UCvw9_ukL440BrLetZiX5CmA",
+            "title": "O Arquivo Proibido",
+            "videos": 1,
+            "best_overlap": 0.6,
+            "clone": false,
+            "latest": "2026-08-06T17:11:51Z",
+            "subs": 2880
+          },
+          {
+            "id": "UCrZivc8nJwH2VLmddRt1CmA",
+            "title": "PAULUS",
+            "videos": 1,
+            "best_overlap": 0.6,
+            "clone": false,
+            "latest": "2026-11-16T22:00:06Z",
+            "subs": 1860
+          },
+          {
+            "id": "UCQIcog6pg4hysl7tyS0KU6w",
+            "title": "História & Eternidade",
+            "videos": 1,
+            "best_overlap": 0.45,
+            "clone": false,
+            "latest": "2026-09-07T21:30:28Z",
+            "subs": 1760
+          },
+          {
+            "id": "UCDN7TdTRremtxMfSEeKSd_A",
+            "title": "TIKTAL TV",
+            "videos": 1,
+            "best_overlap": 0.4,
+            "clone": false,
+            "latest": "2026-07-01T14:30:03Z",
+            "subs": 75600
+          },
+          {
+            "id": "UCltiQ7s5MZdvbX5YjUll1Bw",
+            "title": "Dossiê Oculto",
+            "videos": 1,
+            "best_overlap": 0.4,
+            "clone": false,
+            "latest": "2026-09-24T15:30:05Z",
+            "subs": 1420
+          }
+        ],
+        "clone_examples": [],
+        "index": 7,
+        "verdict": "free",
+        "verdict_ru": "Свободно",
+        "window_days": 180,
+        "checked_at": "2026-11-18"
+      },
+      "competition_index": 7,
+      "competition_verdict": "free",
+      "competition_verdict_ru": "Свободно"
     },
     {
       "id": "UCvT-8GyxTjasPnE4mCC4FhQ",
@@ -43094,7 +43787,171 @@
       "cluster": "pov_stories|live|en",
       "entry_verdict": "crowded",
       "entry_verdict_ru": "Переполнено",
-      "entry_score": 46
+      "entry_score": 46,
+      "competition": {
+        "queries": [
+          "how to make insane video editing with"
+        ],
+        "videos_seen": 50,
+        "rival_channels": 24,
+        "clone_channels": 7,
+        "clone_videos": 7,
+        "clone_share": 0.14,
+        "clones_30d": 2,
+        "big_rivals": 5,
+        "median_rival_subs": 16750,
+        "top_rivals": [
+          {
+            "id": "UChMaCSE8Xyf89tTVoHOe8Vg",
+            "title": "Just Automate",
+            "videos": 1,
+            "best_overlap": 0.86,
+            "clone": true,
+            "latest": "2026-10-30T07:39:21Z",
+            "subs": 606
+          },
+          {
+            "id": "UCVHBBFjBPfOtQNWBIKxHtVQ",
+            "title": "Axel AI",
+            "videos": 1,
+            "best_overlap": 0.86,
+            "clone": true,
+            "latest": "2026-10-07T04:14:49Z",
+            "subs": 25
+          },
+          {
+            "id": "UCh13OyDSm-Kb8ij3yZArtFg",
+            "title": "Higgsfield AI",
+            "videos": 2,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-10-13T17:19:23Z",
+            "subs": 537000
+          },
+          {
+            "id": "UCkbjWQ7kLFNRY_RiJbqVWRg",
+            "title": "Jad M.H  | AI Automation",
+            "videos": 1,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-10-10T14:20:04Z",
+            "subs": 22000
+          },
+          {
+            "id": "UCgl54MMemaGR47QeWs-lRcQ",
+            "title": "AI News Today | Julian Goldie Podcast",
+            "videos": 1,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-10-04T10:36:52Z",
+            "subs": 10700
+          },
+          {
+            "id": "UCYt7dICv2Yx-50Noez7H8Pg",
+            "title": "Braydon Carter",
+            "videos": 1,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-10-13T18:56:54Z",
+            "subs": 7050
+          },
+          {
+            "id": "UCkJC32Q4jjH0KMy7N0pAKhA",
+            "title": "Gilbert Tuazon",
+            "videos": 1,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-11-13T10:00:08Z",
+            "subs": 520
+          },
+          {
+            "id": "UCelfWQr9sXVMTvBzviPGlFw",
+            "title": "AI LABS",
+            "videos": 1,
+            "best_overlap": 0.57,
+            "clone": false,
+            "latest": "2026-11-02T15:00:15Z",
+            "subs": 184000
+          },
+          {
+            "id": "UCzIsviqoJc-VcWqF5Pp8iLw",
+            "title": "Brendan Jowett",
+            "videos": 1,
+            "best_overlap": 0.57,
+            "clone": false,
+            "latest": "2026-10-08T10:23:46Z",
+            "subs": 68200
+          },
+          {
+            "id": "UC7SwCtUnwLSoTfb-JgMZSOQ",
+            "title": "Hindi AI Gyaan",
+            "videos": 1,
+            "best_overlap": 0.57,
+            "clone": false,
+            "latest": "2026-06-14T07:05:54Z",
+            "subs": 49500
+          }
+        ],
+        "clone_examples": [
+          {
+            "channel_id": "UCVHBBFjBPfOtQNWBIKxHtVQ",
+            "channel": "Axel AI",
+            "title": "How to make INSANE motion graphics with Claude Sonnet 5.5 (Video Editing Made Easy)",
+            "published_at": "2026-10-07T04:14:49Z",
+            "overlap": 0.86
+          },
+          {
+            "channel_id": "UChMaCSE8Xyf89tTVoHOe8Vg",
+            "channel": "Just Automate",
+            "title": "Claude Opus 5.5 Video Editing Is Insane 🤯 (Motion Graphics Too)",
+            "published_at": "2026-10-30T07:39:21Z",
+            "overlap": 0.86
+          },
+          {
+            "channel_id": "UCkJC32Q4jjH0KMy7N0pAKhA",
+            "channel": "Gilbert Tuazon",
+            "title": "How To Make Insane Video Editing With Opus 5.5 - Tagalog",
+            "published_at": "2026-11-13T10:00:08Z",
+            "overlap": 0.71
+          },
+          {
+            "channel_id": "UCYt7dICv2Yx-50Noez7H8Pg",
+            "channel": "Braydon Carter",
+            "title": "Claude opus 5.5 is INSANE at video editing here’s how you can do it too! #claude #claudecode",
+            "published_at": "2026-10-13T18:56:54Z",
+            "overlap": 0.71
+          },
+          {
+            "channel_id": "UCh13OyDSm-Kb8ij3yZArtFg",
+            "channel": "Higgsfield AI",
+            "title": "Claude Opus 5.5 + Higgsfield Make Insane Motion Graphics! (Claude Motion)",
+            "published_at": "2026-10-13T17:19:23Z",
+            "overlap": 0.71
+          },
+          {
+            "channel_id": "UCkbjWQ7kLFNRY_RiJbqVWRg",
+            "channel": "Jad M.H  | AI Automation",
+            "title": "Claude Opus 5.5 Is INSANE at Video Editing 0$ (Turned it into a skill)",
+            "published_at": "2026-10-10T14:20:04Z",
+            "overlap": 0.71
+          },
+          {
+            "channel_id": "UCgl54MMemaGR47QeWs-lRcQ",
+            "channel": "AI News Today | Julian Goldie Podcast",
+            "title": "Claude Opus 5.5 Video Editing is INSANE!",
+            "published_at": "2026-10-04T10:36:52Z",
+            "overlap": 0.71
+          }
+        ],
+        "index": 82,
+        "verdict": "saturated",
+        "verdict_ru": "Переполнено",
+        "window_days": 180,
+        "checked_at": "2026-11-18"
+      },
+      "competition_index": 82,
+      "competition_verdict": "saturated",
+      "competition_verdict_ru": "Переполнено"
     },
     {
       "id": "UCz07FoRcSyeswNqzpjuM6MA",
@@ -45322,7 +46179,178 @@
       "cluster": "pov_stories|live|en",
       "entry_verdict": "crowded",
       "entry_verdict_ru": "Переполнено",
-      "entry_score": 46
+      "entry_score": 46,
+      "competition": {
+        "queries": [
+          "how to recreate a viral motion graphics"
+        ],
+        "videos_seen": 50,
+        "rival_channels": 24,
+        "clone_channels": 11,
+        "clone_videos": 11,
+        "clone_share": 0.22,
+        "clones_30d": 0,
+        "big_rivals": 2,
+        "median_rival_subs": 12000,
+        "top_rivals": [
+          {
+            "id": "UCwFj-NpLKEU7SAISDb0q2AQ",
+            "title": "AiGrow",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-09-09T18:46:44Z",
+            "subs": 19000
+          },
+          {
+            "id": "UCM_3HrxwXMlbNVoljnsdTtw",
+            "title": "Gucha",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-10-17T14:47:53Z",
+            "subs": 10600
+          },
+          {
+            "id": "UCrxIWZ7La4-UFCRh976zM4w",
+            "title": "Enorhyta studio",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-09-06T14:12:05Z",
+            "subs": 193
+          },
+          {
+            "id": "UCkVnwUNMFfFE6D-lRrUeXyA",
+            "title": "Tech Lab",
+            "videos": 1,
+            "best_overlap": 1.0,
+            "clone": true,
+            "latest": "2026-09-12T19:03:54Z",
+            "subs": 34
+          },
+          {
+            "id": "UCtB-ldwnRW3-keCilISZmNw",
+            "title": "SkillZaib",
+            "videos": 1,
+            "best_overlap": 0.86,
+            "clone": true,
+            "latest": "2026-09-17T12:00:07Z",
+            "subs": 161
+          },
+          {
+            "id": "UCZ17TXgtHLiyM60ngd9cvag",
+            "title": "Inside Q",
+            "videos": 1,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-09-07T11:31:27Z",
+            "subs": 23500
+          },
+          {
+            "id": "UCLFAAt9ZmJGsTydBY1O9T-w",
+            "title": "Solomon Creator Tutor",
+            "videos": 1,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-10-10T13:01:11Z",
+            "subs": 17300
+          },
+          {
+            "id": "UCXiU1kjIUUnA1jjC8S6uvkg",
+            "title": "Net niche",
+            "videos": 1,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-09-19T11:00:35Z",
+            "subs": 10800
+          },
+          {
+            "id": "UCiVnliqRRyueMbiqhHU-kkA",
+            "title": "Maamria AI",
+            "videos": 1,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-09-23T21:15:30Z",
+            "subs": 5370
+          },
+          {
+            "id": "UCoHPhZkLSiyHJ35xkH7JNJw",
+            "title": "techHub NO 1",
+            "videos": 1,
+            "best_overlap": 0.71,
+            "clone": true,
+            "latest": "2026-09-03T14:41:12Z",
+            "subs": 190
+          }
+        ],
+        "clone_examples": [
+          {
+            "channel_id": "UCwFj-NpLKEU7SAISDb0q2AQ",
+            "channel": "AiGrow",
+            "title": "How to Recreate a VIRAL 3D Motion Graphics With AI (Omni 1.1 Flash)",
+            "published_at": "2026-09-09T18:46:44Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCkVnwUNMFfFE6D-lRrUeXyA",
+            "channel": "Tech Lab",
+            "title": "How to Recreate a VIRAL 3D Motion Graphics With AI (Omni 1.1 Flash)",
+            "published_at": "2026-09-12T19:03:54Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCrxIWZ7La4-UFCRh976zM4w",
+            "channel": "Enorhyta studio",
+            "title": "How I Recreate VIRAL 3D Motion Graphics With AI (Omni 1.1 Flash)",
+            "published_at": "2026-09-06T14:12:05Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCM_3HrxwXMlbNVoljnsdTtw",
+            "channel": "Gucha",
+            "title": "How to Recreate a VIRAL 3D Motion Graphics With AI (Google Flow Omni 1.1 Flash)",
+            "published_at": "2026-10-17T14:47:53Z",
+            "overlap": 1.0
+          },
+          {
+            "channel_id": "UCtB-ldwnRW3-keCilISZmNw",
+            "channel": "SkillZaib",
+            "title": "How to Recreate a VIRAL 3D Motion Graphics With Al (Omni 1.1 Flash)",
+            "published_at": "2026-09-17T12:00:07Z",
+            "overlap": 0.86
+          },
+          {
+            "channel_id": "UCiVnliqRRyueMbiqhHU-kkA",
+            "channel": "Maamria AI",
+            "title": "How to Recreate a VIRAL 3D Motion Graphics video with AI (100% FREE)",
+            "published_at": "2026-09-23T21:15:30Z",
+            "overlap": 0.71
+          },
+          {
+            "channel_id": "UCoHPhZkLSiyHJ35xkH7JNJw",
+            "channel": "techHub NO 1",
+            "title": "How to Recreate ANY Viral 3D Motion Graphics with AI (Free Tutorial)",
+            "published_at": "2026-09-03T14:41:12Z",
+            "overlap": 0.71
+          },
+          {
+            "channel_id": "UCXiU1kjIUUnA1jjC8S6uvkg",
+            "channel": "Net niche",
+            "title": "I Made Professional Motion Graphics With AI 🤯 | Google Flow + Omni Flash",
+            "published_at": "2026-09-19T11:00:35Z",
+            "overlap": 0.71
+          }
+        ],
+        "index": 87,
+        "verdict": "saturated",
+        "verdict_ru": "Переполнено",
+        "window_days": 180,
+        "checked_at": "2026-11-18"
+      },
+      "competition_index": 87,
+      "competition_verdict": "saturated",
+      "competition_verdict_ru": "Переполнено"
     },
     {
       "id": "UC1DOBzuJajJjhpj4e3EVQlQ",
@@ -53397,7 +54425,7 @@
       "production_style": "maps_graphics",
       "style_ru": "Карты и графика",
       "style_group": "live",
-      "uses_ai": false,
+      "uses_ai": true,
       "difficulty": "medium",
       "difficulty_ru": "Средняя",
       "solo_friendly": true,
@@ -53497,7 +54525,43 @@
       "cluster": "geography|live|pt",
       "entry_verdict": "filling",
       "entry_verdict_ru": "Заполняется",
-      "entry_score": 84
+      "entry_score": 84,
+      "notes_ru": "Разбор исторических и географических фактов с помощью анимированных карт. Темы включают историю столиц Бразилии, маршруты самолетов и территориальные споры. Примеры: «Почему в Бразилии сменилось 3 столицы?», «Почему самолеты не летают по прямой?». Видео на португальском языке, длительностью 6–17 минут. Лица в кадре нет, новые ролики выходят ежедневно.\n\nАнимированные карты на основе данных NASA (~60%), архивные кадры и стоковые видео (~30%), ИИ-изображения (~10%). Закадровый голос озвучен нейросетью. Сложность средняя.\n\nКлассифицировано 18.11 (Gemini): просмотр 2 мин ролика «Por que o Brasil TROCOU de capital 3 vezes? (Salvador, Rio e Brasília)».",
+      "production_methods_ru": "Анимированные карты на основе данных NASA (~60%), архивные кадры и стоковые видео (~30%), ИИ-изображения (~10%). Закадровый голос озвучен нейросетью. Сложность средняя.",
+      "subniche_ru": "Геополитическая история и карты",
+      "uses_ai_mode": "mix",
+      "extra_monetization": [],
+      "production_styles": [
+        "maps_graphics",
+        "stock_footage",
+        "ai_images"
+      ],
+      "production_mix": [
+        {
+          "style": "maps_graphics",
+          "share": 60
+        },
+        {
+          "style": "stock_footage",
+          "share": 30
+        },
+        {
+          "style": "ai_images",
+          "share": 10
+        }
+      ],
+      "categories": [
+        "geography",
+        "history",
+        "Documentary"
+      ],
+      "has_ai_avatar": false,
+      "notes_source": "gemini+video",
+      "verified": true,
+      "reject_reason": "",
+      "niche_ai_ru": "География",
+      "niche_ai": "geography",
+      "enriched_at": "2026-11-18"
     },
     {
       "id": "UCkcwR_bHFhNey7Hde3cCN-A",
@@ -110271,7 +111335,143 @@
       "cluster": "finance|live|en",
       "entry_verdict": "crowded",
       "entry_verdict_ru": "Переполнено",
-      "entry_score": 20
+      "entry_score": 20,
+      "competition": {
+        "queries": [
+          "state and society up to ce class"
+        ],
+        "videos_seen": 50,
+        "rival_channels": 24,
+        "clone_channels": 3,
+        "clone_videos": 3,
+        "clone_share": 0.06,
+        "clones_30d": 0,
+        "big_rivals": 5,
+        "median_rival_subs": 20450,
+        "top_rivals": [
+          {
+            "id": "UCphU2bAGmw304CFAzy0Enuw",
+            "title": "Physics Wallah Foundation",
+            "videos": 1,
+            "best_overlap": 0.77,
+            "clone": true,
+            "latest": "2026-09-19T11:30:14Z",
+            "subs": 6770000
+          },
+          {
+            "id": "UCVs9oKvZbUe0Mq9zBL62ZSw",
+            "title": "PW Class 9 - NEEV",
+            "videos": 1,
+            "best_overlap": 0.77,
+            "clone": true,
+            "latest": "2026-09-22T12:45:11Z",
+            "subs": 1010000
+          },
+          {
+            "id": "UCruD9A8A_p8PpPYNPc4z3FQ",
+            "title": "Unacademy Avengerz for Class 6th to 10th",
+            "videos": 2,
+            "best_overlap": 0.77,
+            "clone": true,
+            "latest": "2026-10-08T01:51:53Z",
+            "subs": 200000
+          },
+          {
+            "id": "UC1Dc35O2G2Wm-C3upCejppg",
+            "title": "Drishti School (9th & 10th Class)",
+            "videos": 1,
+            "best_overlap": 0.69,
+            "clone": false,
+            "latest": "2026-09-03T14:30:35Z",
+            "subs": 45800
+          },
+          {
+            "id": "UCfVYOjnErY1H5YbU8GjYz1w",
+            "title": "Arnav study channel",
+            "videos": 2,
+            "best_overlap": 0.62,
+            "clone": false,
+            "latest": "2026-07-10T12:51:14Z",
+            "subs": 116000
+          },
+          {
+            "id": "UCM9HWzU_BYLFKf-BirhuOHg",
+            "title": "CBSE INSIDER",
+            "videos": 1,
+            "best_overlap": 0.62,
+            "clone": false,
+            "latest": "2026-08-14T11:35:07Z",
+            "subs": 41800
+          },
+          {
+            "id": "UCq4BYLksB9oxkKlvAgOxnjA",
+            "title": "Wisdom of Avyaan",
+            "videos": 1,
+            "best_overlap": 0.62,
+            "clone": false,
+            "latest": "2026-09-12T05:14:54Z",
+            "subs": 32600
+          },
+          {
+            "id": "UCND7j_tJhK6uc20eR88UUxw",
+            "title": "The ACMP Academy ",
+            "videos": 1,
+            "best_overlap": 0.62,
+            "clone": false,
+            "latest": "2026-09-22T01:50:46Z",
+            "subs": 32500
+          },
+          {
+            "id": "UCVqX8rI6WaQmail43ydPmfQ",
+            "title": "Deeksha Vedantu CBSE English",
+            "videos": 1,
+            "best_overlap": 0.62,
+            "clone": false,
+            "latest": "2026-06-25T09:30:10Z",
+            "subs": 25100
+          },
+          {
+            "id": "UCsNpxpvmVAnmHfVNIgZWeHQ",
+            "title": "Spotlight Study ",
+            "videos": 1,
+            "best_overlap": 0.62,
+            "clone": false,
+            "latest": "2026-08-07T14:30:14Z",
+            "subs": 1130
+          }
+        ],
+        "clone_examples": [
+          {
+            "channel_id": "UCphU2bAGmw304CFAzy0Enuw",
+            "channel": "Physics Wallah Foundation",
+            "title": "State and Society Up to 1000 CE ONE SHOT 🔥 | Class 9 SST | New NCERT 2026-27",
+            "published_at": "2026-09-19T11:30:14Z",
+            "overlap": 0.77
+          },
+          {
+            "channel_id": "UCVs9oKvZbUe0Mq9zBL62ZSw",
+            "channel": "PW Class 9 - NEEV",
+            "title": "State and Society Up to 1000 CE ONE SHOT 🔥 | Class 9 SST Chapter 5 | New Book &amp; Syllabus 2026-27",
+            "published_at": "2026-09-22T12:45:11Z",
+            "overlap": 0.77
+          },
+          {
+            "channel_id": "UCruD9A8A_p8PpPYNPc4z3FQ",
+            "channel": "Unacademy Avengerz for Class 6th to 10th",
+            "title": "State &amp; Society up to 1000 CE ONE SHOT 🔥 | Class 9 SST Ch 5 | New NCERT 2027 | Komal Ma&#39;am",
+            "published_at": "2026-08-25T13:30:07Z",
+            "overlap": 0.77
+          }
+        ],
+        "index": 54,
+        "verdict": "competitive",
+        "verdict_ru": "Конкурентно",
+        "window_days": 180,
+        "checked_at": "2026-11-18"
+      },
+      "competition_index": 54,
+      "competition_verdict": "competitive",
+      "competition_verdict_ru": "Конкурентно"
     },
     {
       "id": "UCLyyH63qNzp1KVlV1tG4pBA",
@@ -111047,7 +112247,59 @@
       "cluster": "finance|live|es",
       "entry_verdict": "unproven",
       "entry_verdict_ru": "Спрос не доказан",
-      "entry_score": 41
+      "entry_score": 41,
+      "competition": {
+        "queries": [
+          "por qué enrique y beatriz pagan dos",
+          "medicare en español medicare explicado fácil guía"
+        ],
+        "videos_seen": 80,
+        "rival_channels": 3,
+        "clone_channels": 0,
+        "clone_videos": 0,
+        "clone_share": 0.0,
+        "clones_30d": 0,
+        "big_rivals": 0,
+        "median_rival_subs": 283,
+        "top_rivals": [
+          {
+            "id": "UCnGjiM3TxOrV0rmtKgapQkA",
+            "title": "Tu Guía Latino",
+            "videos": 1,
+            "best_overlap": 0.5,
+            "clone": false,
+            "latest": "2026-10-13T14:16:09Z",
+            "subs": 283
+          },
+          {
+            "id": "UCDuc08ZdXYLDEWPWnko57nA",
+            "title": "Medicare Sencillo en Español ",
+            "videos": 1,
+            "best_overlap": 0.42,
+            "clone": false,
+            "latest": "2026-10-15T20:00:06Z",
+            "subs": 12500
+          },
+          {
+            "id": "UCAAR1gYV15b5z1QdSs3gTJA",
+            "title": "Seguros con Sara",
+            "videos": 1,
+            "best_overlap": 0.42,
+            "clone": false,
+            "latest": "2026-06-23T14:56:23Z",
+            "subs": 3
+          }
+        ],
+        "clone_examples": [],
+        "index": 4,
+        "verdict": "free",
+        "verdict_ru": "Свободно",
+        "window_days": 180,
+        "checked_at": "2026-11-18"
+      },
+      "competition_index": 4,
+      "competition_verdict": "free",
+      "competition_verdict_ru": "Свободно"
     },
     {
       "id": "UC6zt2guUzUuTEPBEd22o0hw",
@@ -127982,8 +129234,8 @@
       "style_ru": "Карты и графика",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "medium",
-      "difficulty_ru": "Средняя",
+      "difficulty": "low",
+      "difficulty_ru": "Низкая",
       "solo_friendly": true,
       "subs": 34600,
       "total_views": 7616163,
@@ -128091,9 +129343,9 @@
       "entry_verdict": null,
       "entry_verdict_ru": null,
       "entry_score": null,
-      "notes_ru": "Канал посвящен разбору мрачных интернет-теорий, айсбергов по мультсериалам (например, SpongeBob), мистическим случаям на Google Maps и аномалиям SCP. Видео создаются на индонезийском языке, длительностью 10–15 минут. Лицо автора в кадре отсутствует, монетизационные ссылки в описании не указаны.\n\nМонтаж из фрагментов мультфильмов, интернет-мемов, скриншотов с Reddit, графических плашек и стоковых фото с закадровым дикторским голосом. Сложность средняя.\n\nКлассифицировано 17.11 (Gemini): просмотр 2 мин ролика «Membongkar Misteri Paling GELAP Dari Kartun Spongebob !».",
-      "production_methods_ru": "Монтаж из фрагментов мультфильмов, интернет-мемов, скриншотов с Reddit, графических плашек и стоковых фото с закадровым дикторским голосом. Сложность средняя.",
-      "subniche_ru": "Разборы мрачных теорий и айсбергов",
+      "notes_ru": "Видео-эссе и разборы айсбергов с мрачными интернет-теориями, загадками мультфильмов (например, происхождение Бикини Боттом), SCP-объектами и страшными происшествиями. Шаблоны заголовков: «[Тема]: [Интригующий вопрос/тайный факт]», «Membongkar Misteri Paling GELAP Dari Kartun Spongebob !». Язык — индонезийский. Длина роликов — 10–15 минут, без лица в кадре. Выход видео редкий (раз в месяц), монетизации в описании нет.\n\nНарезки кадров из мультфильмов, мемов и скриншотов Reddit (~60%), фото и стоковые иллюстрации (~40%) с быстрой динамичной склейкой и динамичным закадровым голосом. Низкая сложность.\n\nКлассифицировано 18.11 (Gemini): просмотр 2 мин ролика «Membongkar Misteri Paling GELAP Dari Kartun Spongebob !».",
+      "production_methods_ru": "Нарезки кадров из мультфильмов, мемов и скриншотов Reddit (~60%), фото и стоковые иллюстрации (~40%) с быстрой динамичной склейкой и динамичным закадровым голосом. Низкая сложность.",
+      "subniche_ru": "Айсберги теорий, SCP и страшные загадки",
       "uses_ai_mode": "without",
       "extra_monetization": [],
       "production_styles": [
@@ -128103,24 +129355,24 @@
       "production_mix": [
         {
           "style": "highlights",
-          "share": 70
+          "share": 60
         },
         {
           "style": "photos_stock",
-          "share": 30
+          "share": 40
         }
       ],
       "categories": [
         "Mysteries",
         "Pop Culture",
-        "Documentary"
+        "Entertainment"
       ],
       "has_ai_avatar": false,
       "notes_source": "gemini+video",
       "verified": true,
       "reject_reason": "",
-      "niche_ai_ru": "Интернет-мистика и теории",
-      "enriched_at": "2026-11-17"
+      "niche_ai_ru": "Мрачные загадки и теории",
+      "enriched_at": "2026-11-18"
     },
     {
       "id": "UCC7hsABHDWhoDi4Uc3L2Ytg",
@@ -129559,9 +130811,9 @@
       "entry_verdict": null,
       "entry_verdict_ru": null,
       "entry_score": null,
-      "notes_ru": "Канал посвящен исследованию городских легенд, криптидов и паранормальных явлений, таких как тайны гор Аппалачи или история Слендермена. Контент представляет собой документальные разборы фольклора и интернет-мифов на индонезийском языке. Типичный заголовок: «[Название монстра/места]: [интригующий вопрос о его реальности]». Ролики длятся 10–15 минут, лицо автора не используется.\n\nМонтаж из стоковых видео (~60%), тематических карт (~20%) и фрагментов из фильмов или TikTok (~20%) с атмосферной озвучкой. Сложность средняя из-за необходимости подбора тематического видеоряда.\n\nКлассифицировано 17.11 (Gemini): просмотр 2 мин ролика «MENELUSURI MISTERI PEGUNUNGAN PALING ANGKER DI DUNIA».",
-      "production_methods_ru": "Монтаж из стоковых видео (~60%), тематических карт (~20%) и фрагментов из фильмов или TikTok (~20%) с атмосферной озвучкой. Сложность средняя из-за необходимости подбора тематического видеоряда.",
-      "subniche_ru": "Городские легенды, криптиды и интернет-хоррор",
+      "notes_ru": "Индонезийский канал о городских легендах, криптидах, мифологических монстрах и аномальных местах (Аппалачи, Слендермен, мистический город Саранджана). Шаблоны заголовков: «[Тема]: [Интригующая подпись]» (например, «Siren Head: Monster Mengerikan yang Lahir dari Internet»). Длина роликов — 10–16 минут, без лица в кадре, новые видео выходят 2–4 раза в месяц. Дополнительная монетизация в описании не указана.\n\nВидеоряд собран из стоковых видеофутажей (~60%), анимированных карт и графики (~20%), архивных фото (~10%) и коротких фрагментов из видео или фильмов (~10%) под поверхностный закадровый голос. Сложность — средняя.\n\nКлассифицировано 18.11 (Gemini): просмотр 2 мин ролика «MENELUSURI MISTERI PEGUNUNGAN PALING ANGKER DI DUNIA».",
+      "production_methods_ru": "Видеоряд собран из стоковых видеофутажей (~60%), анимированных карт и графики (~20%), архивных фото (~10%) и коротких фрагментов из видео или фильмов (~10%) под поверхностный закадровый голос. Сложность — средняя.",
+      "subniche_ru": "Городские легенды и криптиды",
       "uses_ai_mode": "without",
       "extra_monetization": [],
       "production_styles": [
@@ -129579,21 +130831,25 @@
           "share": 20
         },
         {
+          "style": "photos_stock",
+          "share": 10
+        },
+        {
           "style": "highlights",
-          "share": 20
+          "share": 10
         }
       ],
       "categories": [
         "Horror",
-        "Mystery",
-        "Documentary"
+        "Documentary",
+        "Urban Legends"
       ],
       "has_ai_avatar": false,
       "notes_source": "gemini+video",
       "verified": true,
       "reject_reason": "",
-      "niche_ai_ru": "Мистика",
-      "enriched_at": "2026-11-17"
+      "niche_ai_ru": "Ужасы и мистика",
+      "enriched_at": "2026-11-18"
     },
     {
       "id": "UCkB_YJKjLz3C3xLrHOrBF8Q",
@@ -227263,8 +228519,8 @@
       "style_ru": "Скринкаст/слайды",
       "style_group": "live",
       "uses_ai": false,
-      "difficulty": "medium",
-      "difficulty_ru": "Средняя",
+      "difficulty": "low",
+      "difficulty_ru": "Низкая",
       "solo_friendly": true,
       "subs": 6270,
       "total_views": 357518,
@@ -227579,8 +228835,8 @@
       "entry_verdict": null,
       "entry_verdict_ru": null,
       "entry_score": null,
-      "notes_ru": "Канал посвящен мастер-классам по вязанию крючком и влогам о загородной жизни. Автор показывает создание различных узоров для пледов и одежды, а также делится советами по уходу за растениями (особенно папоротниками) и прогулками по ферме. Заголовки строятся по принципу «[Название техники]: [простой урок для начинающих]». Португальский язык, видео длятся от 6 до 45 минут, в кадре присутствуют руки автора или сама ведущая во время влогов.\n\nЖивая съемка процесса вязания крупным планом и влоги с прогулками по саду/ферме. Монтаж простой, используется закадровый голос и естественное освещение.\n\nКлассифицировано 17.11 (Gemini): просмотр 2 мин ролика «INCRÍVEL! PONTO DE CROCHÊ FÁCIL PARA INICIANTES 🌷».",
-      "production_methods_ru": "Живая съемка процесса вязания крупным планом и влоги с прогулками по саду/ферме. Монтаж простой, используется закадровый голос и естественное освещение.",
+      "notes_ru": "Канал с пошаговыми уроками вязания крючком и влогами о сельской жизни. Автор показывает создание узоров для детских пледов и ковриков, а также проводит туры по своему саду и делится советами по шитью и кулинарии. [Название]: [Интригующий вопрос] — «Узор крючком: всего 2 ряда для потрясающего результата». Язык португальский, видео длятся от 8 до 45 минут.\n\nЖивая съемка процесса вязания (вид на руки мастера) и лайфстайл-кадры из сада и дома. Простой монтаж, естественное освещение, без использования ИИ.\n\nКлассифицировано 18.11 (Gemini): просмотр 2 мин ролика «INCRÍVEL! PONTO DE CROCHÊ FÁCIL PARA INICIANTES 🌷».",
+      "production_methods_ru": "Живая съемка процесса вязания (вид на руки мастера) и лайфстайл-кадры из сада и дома. Простой монтаж, естественное освещение, без использования ИИ.",
       "subniche_ru": "Вязание крючком и садоводство",
       "uses_ai_mode": "without",
       "extra_monetization": [],
@@ -227595,15 +228851,15 @@
       ],
       "categories": [
         "DIY",
-        "Hobby",
+        "Crafts",
         "Gardening"
       ],
       "has_ai_avatar": false,
       "notes_source": "gemini+video",
       "verified": true,
       "reject_reason": "",
-      "niche_ai_ru": "Рукоделие и хобби",
-      "enriched_at": "2026-11-17"
+      "niche_ai_ru": "Рукоделие и домоводство",
+      "enriched_at": "2026-11-18"
     },
     {
       "id": "UCLcr9t-9v3ofFcW3aRlO2rg",
@@ -724171,9 +725427,9 @@
       "entry_verdict": null,
       "entry_verdict_ru": null,
       "entry_score": null,
-      "notes_ru": "Канал специализируется на формате «айсбергов» — подробных разборах мистических тем, теорий заговора и необъяснимых явлений. Темы включают путешественников во времени, загадки Ватикана и секреты Амазонии. Шаблон заголовка: «[Тема]: [интригующее обещание]». Видео на испанском языке, длительностью от 20 до 60 минут, без лица в кадре. Частота выхода — около одного ролика в неделю.\n\nСложный монтаж, сочетающий стоковые видео (~40%), ИИ-генерации видео и изображений (~50%) и архивные фото (~10%). Используется профессиональный закадровый голос и динамичная инфографика.\n\nКлассифицировано 17.11 (Gemini): просмотр 2 мин ролика «El Iceberg de los Viajeros en el Tiempo que te Dejará Sin Palabras 💀 | Explicado».",
-      "production_methods_ru": "Сложный монтаж, сочетающий стоковые видео (~40%), ИИ-генерации видео и изображений (~50%) и архивные фото (~10%). Используется профессиональный закадровый голос и динамичная инфографика.",
-      "subniche_ru": "Айсберги теорий заговора и необъяснимых явлений",
+      "notes_ru": "Канал специализируется на длинных видео-эссе в формате «айсбергов», разбирая мистические случаи, теории заговора и необъяснимые явления. Темы включают путешественников во времени, тайны Ватикана и загадки Амазонии. Шаблон заголовка: «Айсберг [темы], который лишит вас дара речи». Видео на испанском языке, длительностью от 20 до 60 минут, без лица в кадре.\n\nСмесь стоковых видео (~40%), ИИ-генераций изображений и видео (~40%) и графических вставок с текстом (~20%) под закадровый голос.\n\nКлассифицировано 18.11 (Gemini): просмотр 2 мин ролика «El Iceberg de los Viajeros en el Tiempo que te Dejará Sin Palabras 💀 | Explicado».",
+      "production_methods_ru": "Смесь стоковых видео (~40%), ИИ-генераций изображений и видео (~40%) и графических вставок с текстом (~20%) под закадровый голос.",
+      "subniche_ru": "Разборы мистических айсбергов и теорий заговора",
       "uses_ai_mode": "mix",
       "extra_monetization": [],
       "production_styles": [
@@ -724195,21 +725451,21 @@
           "share": 20
         },
         {
-          "style": "photos_stock",
+          "style": "maps_graphics",
           "share": 10
         }
       ],
       "categories": [
-        "Mystery",
-        "Documentary",
-        "Conspiracy"
+        "mystery",
+        "documentary",
+        "paranormal"
       ],
       "has_ai_avatar": false,
       "notes_source": "gemini+video",
       "verified": true,
       "reject_reason": "",
       "niche_ai_ru": "Мистика и тайны",
-      "enriched_at": "2026-11-17"
+      "enriched_at": "2026-11-18"
     },
     {
       "id": "UC83fKVE4eoHHVtJd-KBeSgA",
