@@ -252,52 +252,52 @@
     "checked_at": "2026-11-18"
   },
   "finance|es": {
-    "channels": 36,
-    "videos": 41,
+    "channels": 43,
+    "videos": 47,
     "query": "negocios invisibles que ganan más",
-    "checked_at": "2026-11-07"
+    "checked_at": "2026-11-19"
   },
   "lifehacks|de": {
-    "channels": 10,
-    "videos": 17,
+    "channels": 11,
+    "videos": 18,
     "query": "pflanzen die deinen boden vergiften",
-    "checked_at": "2026-11-07"
+    "checked_at": "2026-11-19"
   },
   "science|pt": {
     "channels": 26,
     "videos": 50,
     "query": "o que acontece no seu corpo quando",
-    "checked_at": "2026-11-07"
+    "checked_at": "2026-11-19"
   },
   "disasters|pt": {
-    "channels": 8,
-    "videos": 8,
+    "channels": 5,
+    "videos": 5,
     "query": "abriu uma fenda na terra",
-    "checked_at": "2026-11-07"
+    "checked_at": "2026-11-19"
   },
   "military|en": {
-    "channels": 36,
+    "channels": 32,
     "videos": 50,
     "query": "what boot camp does to a recruit",
-    "checked_at": "2026-11-08"
+    "checked_at": "2026-11-19"
   },
   "military|es": {
     "channels": 37,
-    "videos": 37,
+    "videos": 39,
     "query": "la batalla olvidada de la segunda guerra mundial",
-    "checked_at": "2026-11-08"
+    "checked_at": "2026-11-19"
   },
   "military|de": {
     "channels": 25,
     "videos": 50,
     "query": "zweiter weltkrieg dokumentation geschichte",
-    "checked_at": "2026-11-08"
+    "checked_at": "2026-11-19"
   },
   "aviation|en": {
-    "channels": 49,
+    "channels": 48,
     "videos": 50,
     "query": "what happens when you flush the toilet on a plane",
-    "checked_at": "2026-11-08"
+    "checked_at": "2026-11-19"
   },
   "aviation|fr": {
     "channels": 37,
