@@ -300,52 +300,52 @@
     "checked_at": "2026-11-19"
   },
   "aviation|fr": {
-    "channels": 37,
+    "channels": 33,
     "videos": 50,
     "query": "les secrets de l'aviation",
-    "checked_at": "2026-11-08"
+    "checked_at": "2026-11-20"
   },
   "aviation|es": {
-    "channels": 30,
+    "channels": 42,
     "videos": 50,
     "query": "accidente aéreo explicado",
-    "checked_at": "2026-11-08"
+    "checked_at": "2026-11-20"
   },
   "earth_science|en": {
-    "channels": 8,
-    "videos": 8,
+    "channels": 10,
+    "videos": 11,
     "query": "the ground opened up and no one told you",
-    "checked_at": "2026-11-08"
+    "checked_at": "2026-11-20"
   },
   "earth_science|pt": {
-    "channels": 30,
-    "videos": 30,
+    "channels": 38,
+    "videos": 38,
     "query": "o que existe embaixo da terra",
-    "checked_at": "2026-11-08"
+    "checked_at": "2026-11-20"
   },
   "earth_science|es": {
     "channels": 38,
     "videos": 39,
     "query": "el volcán que podría despertar",
-    "checked_at": "2026-11-09"
+    "checked_at": "2026-11-20"
   },
   "real_estate|en": {
-    "channels": 19,
+    "channels": 23,
     "videos": 50,
     "query": "dirt cheap farmhouses with land for sale",
-    "checked_at": "2026-11-09"
+    "checked_at": "2026-11-20"
   },
   "real_estate|es": {
-    "channels": 21,
-    "videos": 41,
+    "channels": 20,
+    "videos": 35,
     "query": "casas baratas con terreno en venta",
-    "checked_at": "2026-11-09"
+    "checked_at": "2026-11-20"
   },
   "real_estate|pt": {
-    "channels": 8,
-    "videos": 8,
+    "channels": 9,
+    "videos": 10,
     "query": "casas pequenas com quintal baratas",
-    "checked_at": "2026-11-09"
+    "checked_at": "2026-11-20"
   },
   "education|en": {
     "channels": 34,
