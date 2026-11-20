@@ -1,0 +1,22 @@
+{
+  "name": "lumencut",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k \"node server/index.js\" \"vite --host 0.0.0.0\"",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "concurrently": "9.1.2",
+    "dotenv": "16.4.7",
+    "express": "4.21.2",
+    "msedge-tts": "2.0.7",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router-dom": "6.28.2",
+    "vite": "5.4.14"
+  }
+}
