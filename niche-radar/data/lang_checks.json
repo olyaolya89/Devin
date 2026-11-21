@@ -351,49 +351,49 @@
     "channels": 34,
     "videos": 50,
     "query": "learn english with an easy story",
-    "checked_at": "2026-11-09"
+    "checked_at": "2026-11-21"
   },
   "education|es": {
-    "channels": 15,
+    "channels": 14,
     "videos": 50,
     "query": "aprende inglés con una historia fácil",
-    "checked_at": "2026-11-09"
+    "checked_at": "2026-11-21"
   },
   "education|pt": {
     "channels": 25,
     "videos": 50,
     "query": "aprenda inglês com histórias",
-    "checked_at": "2026-11-09"
+    "checked_at": "2026-11-21"
   },
   "education|de": {
-    "channels": 16,
+    "channels": 13,
     "videos": 50,
     "query": "deutsch lernen mit geschichten",
-    "checked_at": "2026-11-09"
+    "checked_at": "2026-11-21"
   },
   "business|en": {
     "channels": 38,
     "videos": 50,
     "query": "the rise and fall of the company",
-    "checked_at": "2026-11-10"
+    "checked_at": "2026-11-21"
   },
   "business|es": {
     "channels": 18,
-    "videos": 20,
+    "videos": 19,
     "query": "negocios invisibles que ganan más que un doctor",
-    "checked_at": "2026-11-10"
+    "checked_at": "2026-11-21"
   },
   "business|de": {
-    "channels": 17,
-    "videos": 29,
+    "channels": 23,
+    "videos": 36,
     "query": "aufstieg und fall der firma",
-    "checked_at": "2026-11-10"
+    "checked_at": "2026-11-21"
   },
   "travel|en": {
-    "channels": 44,
+    "channels": 41,
     "videos": 50,
     "query": "best countries to retire abroad ranked",
-    "checked_at": "2026-11-10"
+    "checked_at": "2026-11-21"
   },
   "travel|es": {
     "channels": 5,
