@@ -1,0 +1,6 @@
+Title: What Happened to 10 Airmen When a German Ace Refused to Shoot Down Their B-17
+Backup title: The German Ace Who Escorted a Dying B-17 Home Instead of Shooting It Down
+Format: C (What Happened to [N] [Crewmen] When [EVENT]) from crews-format/05-script-template.md
+Event: 20 December 1943, B-17F "Ye Olde Pub" (42-3167), 527th BS / 379th BG, 2nd Lt. Charles "Charlie" Brown; Bf 109 G-6 of Franz Stigler (JG 27).
+Target length: 19 minutes, about 3,100 words at 160-165 wpm (measured on The Crews transcripts).
+Thumbnail: not made yet (prompt in задача-производство.md).
