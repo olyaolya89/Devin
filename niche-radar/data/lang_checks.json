@@ -444,52 +444,52 @@
     "checked_at": "2026-11-22"
   },
   "reviews|en": {
-    "channels": 19,
-    "videos": 24,
+    "channels": 12,
+    "videos": 13,
     "query": "watches ranked by popularity and price",
-    "checked_at": "2026-11-11"
+    "checked_at": "2026-11-23"
   },
   "reviews|es": {
-    "channels": 32,
+    "channels": 33,
     "videos": 50,
     "query": "los mejores relojes baratos",
-    "checked_at": "2026-11-11"
+    "checked_at": "2026-11-23"
   },
   "fashion|en": {
     "channels": 33,
     "videos": 50,
     "query": "style tips for women over 60",
-    "checked_at": "2026-11-11"
+    "checked_at": "2026-11-23"
   },
   "fashion|es": {
-    "channels": 24,
+    "channels": 22,
     "videos": 50,
     "query": "moda para mujeres de 60 años",
-    "checked_at": "2026-11-11"
+    "checked_at": "2026-11-23"
   },
   "celebrities|en": {
-    "channels": 41,
-    "videos": 50,
-    "query": "the tragic story of the son of",
-    "checked_at": "2026-11-12"
-  },
-  "celebrities|es": {
     "channels": 40,
     "videos": 50,
+    "query": "the tragic story of the son of",
+    "checked_at": "2026-11-23"
+  },
+  "celebrities|es": {
+    "channels": 42,
+    "videos": 50,
     "query": "final explicado de la película",
-    "checked_at": "2026-11-12"
+    "checked_at": "2026-11-23"
   },
   "gaming|en": {
-    "channels": 29,
-    "videos": 30,
+    "channels": 47,
+    "videos": 49,
     "query": "gta lore mysteries explained",
-    "checked_at": "2026-11-12"
+    "checked_at": "2026-11-23"
   },
   "gaming|es": {
-    "channels": 17,
-    "videos": 19,
+    "channels": 23,
+    "videos": 24,
     "query": "misterios de gta explicados",
-    "checked_at": "2026-11-12"
+    "checked_at": "2026-11-23"
   },
   "comics|en": {
     "channels": 24,
