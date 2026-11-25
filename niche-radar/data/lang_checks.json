@@ -12,28 +12,28 @@
     "checked_at": "2026-11-24"
   },
   "science|en": {
-    "channels": 46,
+    "channels": 43,
     "videos": 50,
     "query": "plate tectonics explained animation",
-    "checked_at": "2026-11-14"
+    "checked_at": "2026-11-25"
   },
   "history|en": {
-    "channels": 41,
-    "videos": 50,
-    "query": "history explained stick figures",
-    "checked_at": "2026-11-14"
-  },
-  "nostalgia_finance|en": {
-    "channels": 9,
-    "videos": 10,
-    "query": "forgotten money saving tricks 1970s",
-    "checked_at": "2026-11-14"
-  },
-  "finance|en": {
     "channels": 46,
     "videos": 50,
+    "query": "history explained stick figures",
+    "checked_at": "2026-11-25"
+  },
+  "nostalgia_finance|en": {
+    "channels": 5,
+    "videos": 8,
+    "query": "forgotten money saving tricks 1970s",
+    "checked_at": "2026-11-25"
+  },
+  "finance|en": {
+    "channels": 45,
+    "videos": 50,
     "query": "retirement mistakes explained",
-    "checked_at": "2026-11-14"
+    "checked_at": "2026-11-25"
   },
   "religion|en": {
     "channels": 18,
@@ -528,27 +528,27 @@
     "checked_at": "2026-11-24"
   },
   "tech|de": {
-    "channels": 16,
-    "videos": 20,
+    "channels": 19,
+    "videos": 27,
     "query": "neue erfindung schockiert alle",
-    "checked_at": "2026-11-13"
+    "checked_at": "2026-11-25"
   },
   "tech|pt": {
     "channels": 2,
     "videos": 2,
     "query": "nova invenção que vai mudar tudo",
-    "checked_at": "2026-11-13"
+    "checked_at": "2026-11-25"
   },
   "true_crime|es": {
-    "channels": 16,
+    "channels": 21,
     "videos": 50,
     "query": "crímenes reales casos resueltos",
-    "checked_at": "2026-11-13"
+    "checked_at": "2026-11-25"
   },
   "animals|pt": {
-    "channels": 39,
+    "channels": 42,
     "videos": 50,
     "query": "os híbridos de jurassic park",
-    "checked_at": "2026-11-13"
+    "checked_at": "2026-11-25"
   }
 }
