@@ -7,7 +7,7 @@
   const loadSet = k => { try { return new Set(JSON.parse(localStorage.getItem(k) || '[]')); } catch { return new Set(); } };
   const saveSet = (k, set) => localStorage.setItem(k, JSON.stringify([...set]));
   const loadArr = k => { try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch { return []; } };
-  const state = { tab: 'all', q: '', sort: 'new', group: 'channels', supportedMarkets: {}, all: [], saved: loadSet(LS.saved), liked: loadSet(LS.liked), seen: loadSet(LS.seen), clusters: {}, size: {}, rpm: null, labels: (() => { try { return JSON.parse(localStorage.getItem('nr:labels') || '{}'); } catch { return {}; } })() };
+  const state = { tab: location.hash === '#topic' ? 'topic' : 'all', loadStatus: 'loading', q: '', sort: 'new', group: 'channels', supportedMarkets: {}, all: [], saved: loadSet(LS.saved), liked: loadSet(LS.liked), seen: loadSet(LS.seen), clusters: {}, size: {}, rpm: null, labels: (() => { try { return JSON.parse(localStorage.getItem('nr:labels') || '{}'); } catch { return {}; } })() };
   const LANG = { en: 'Английский', ru: 'Русский', es: 'Испанский', pt: 'Португальский', fr: 'Французский', de: 'Немецкий', it: 'Итальянский' };
   const fmt = n => { n = Number(n) || 0; if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1).replace('.0', '') + ' млн'; if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1).replace('.0', '') + ' тыс.'; return String(Math.round(n)); };
   const money = n => (Number(n) || 0).toFixed(2).replace('.', ',') + ' $';
@@ -237,7 +237,7 @@
       const fc = $('#fComp').value; if (fc) { const [lo, hi] = fc.split('-').map(Number); const k = compCount(c); if (k < lo || (hi >= 0 && k > hi)) return false; }
       const fr = $('#fRealComp').value;
       if (fr) { const v = realComp(c); if (v == null || v > +fr) return false; }
-      if (niche && c.niche !== niche && c.niche_ru !== niche) return false;
+      if (niche && nicheOf(c) !== niche) return false;
       if (sub && !subniches(c).includes(sub)) return false;
       if (cat && !categories(c).includes(cat)) return false;
       if (lang && primaryLang(c) !== lang) return false;
@@ -278,7 +278,7 @@
     const fill = (id, arr, labelFn) => { const el = $(id); const cur = el.value; el.innerHTML = el.options[0].outerHTML + arr.map(v => `<option value="${esc(v)}">${esc(labelFn ? labelFn(v) : v)}</option>`).join(''); el.value = [...el.options].some(o => o.value === cur) ? cur : ''; };
     fill('#fTag', [...new Set([...state.all.flatMap(flags), ...uniq('tags')])].slice(0, 40));
     fill('#fExtra', Object.keys(EXTRA_RU), v => EXTRA_RU[v]);
-    fill('#fNiche', uniq('niche'), v => state.all.find(c => c.niche === v)?.niche_ru || v);
+    fill('#fNiche', [...new Set(state.all.map(nicheOf))].sort(), nicheName);
     fill('#fSub', [...new Set(state.all.flatMap(subniches))].sort());
     fill('#fCat', [...new Set(state.all.flatMap(categories))].filter(Boolean).sort().slice(0, 60));
     fill('#fLang', Object.keys(state.supportedMarkets).sort((a, b) => langName(a).localeCompare(langName(b), 'ru')), langName);
@@ -447,16 +447,32 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
   }
 
   function render() {
-    const counts = { new: state.all.filter(isNew).length, all: state.all.length, saved: state.all.filter(c => state.saved.has(c.id)).length, liked: state.all.filter(c => state.liked.has(c.id)).length, fire: state.all.filter(isFire).length };
-    $$('[data-count]').forEach(el => { el.textContent = counts[el.dataset.count] ?? 0; });
-    $$('[data-tab]').forEach(b => b.classList.toggle('is-on', b.dataset.tab === state.tab));
-    $('#liveTab').hidden = !state.all.some(channel => channel.live);
+    const ready = state.loadStatus === 'ready';
     const nich = state.tab === 'niches';
     const topic = state.tab === 'topic';
-    $('#niches').hidden = !nich; $('#grid').hidden = nich || topic;
-    $('#catalogueControls').hidden = topic || nich;
-    $('#topic').hidden = !topic;
-    if (topic) { $('#resultsInfo').textContent = ''; $('#empty').hidden = true; return; }
+    const notice = $('#catalogueNotice');
+    notice.hidden = ready;
+    notice.querySelector('span').textContent = state.loadStatus === 'failed' ? 'Не удалось загрузить каталог ниш.' : 'Загружаю каталог ниш…';
+    $('#retryCatalogue').hidden = state.loadStatus !== 'failed';
+    $('#niches').hidden = !ready || !nich;
+    $('#grid').hidden = !ready || nich || topic;
+    $('#catalogueControls').hidden = !ready || topic || nich;
+    $('#topic').hidden = !ready || !topic;
+    $$('[data-tab]').forEach(button => button.classList.toggle('is-on', button.dataset.tab === state.tab));
+    if (!ready) {
+      $('#resultsInfo').textContent = '';
+      $('#empty').hidden = true;
+      return;
+    }
+    const counts = { new: state.all.filter(isNew).length, all: state.all.length, saved: state.all.filter(c => state.saved.has(c.id)).length, liked: state.all.filter(c => state.liked.has(c.id)).length, fire: state.all.filter(isFire).length };
+    $$('[data-count]').forEach(el => { el.textContent = counts[el.dataset.count] ?? 0; });
+    $('#liveTab').hidden = !state.all.some(channel => channel.live);
+    if (topic) {
+      $('#resultsInfo').textContent = '';
+      $('#empty').hidden = true;
+      renderTopicCatalogue();
+      return;
+    }
     if (nich) { $('#niches').innerHTML = nichesTable(); $('#resultsInfo').textContent = Object.keys(state.clusters).length + ' групп ниш'; $('#empty').hidden = true; return; }
     const list = filtered();
     const nv = state.all.filter(c => c.verified === true).length, vb = $('#verifyInfo');
@@ -483,10 +499,37 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     }
   }
 
+  function resetFilters({ useCriteria = true } = {}) {
+    $$('#filters select').forEach(select => { select.selectedIndex = 0; });
+    $$('#filters input[type="range"]').forEach(input => {
+      input.value = input.id.endsWith('Min') ? input.min : input.max;
+    });
+    $('#onlyFree').checked = $('#onlyNew3').checked = $('#onlyUnseen').checked = false;
+    $('#onlyRef').checked = $('#onlyVerified').checked = useCriteria;
+    fillFilterCountries();
+    labs();
+  }
+
   function toggle(set, key, id) { if (set.has(id)) set.delete(id); else set.add(id); saveSet(key, set); render(); if (!$('#drawer').hidden) openDrawer(id); }
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-comps],[data-label],[data-niche-open],#exportLabels,[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#liveClear,#supportBtn,#supportSend,#sideToggle,#refreshSide,#supportSide,#burger,#showUnverified,#toTop,#openTopic,#viewLive');
+    const t = e.target.closest('[data-comps],[data-label],[data-niche-open],[data-topic-niche],#retryCatalogue,#exportLabels,[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#liveClear,#supportBtn,#supportSend,#sideToggle,#refreshSide,#supportSide,#burger,#showUnverified,#toTop,#openTopic,#viewLive');
     if (!t) return;
+    if (t.id === 'retryCatalogue') { boot(); return; }
+    if (t.dataset.topicNiche) {
+      const language = $('#topicLang').value;
+      const country = $('#topicCountry').value;
+      state.tab = 'all';
+      resetFilters({ useCriteria: false });
+      $('#search').value = state.q = $('#topicQuery').value;
+      $('#fNiche').value = t.dataset.topicNiche;
+      $('#fLang').value = language;
+      fillFilterCountries();
+      $('#fCountry').value = country;
+      $('#filters').hidden = false;
+      render();
+      window.scrollTo({ top: 0 });
+      return;
+    }
     if (t.dataset.label) { const k = t.dataset.label; if (state.labels[k] === t.dataset.val) delete state.labels[k]; else state.labels[k] = t.dataset.val; localStorage.setItem(LS.labels, JSON.stringify(state.labels)); render(); return; }
     if (t.dataset.nicheOpen) { state.tab = 'all'; $('#fNiche').value = t.dataset.nicheOpen; $('#fLang').value = catalogue.languageCode(t.dataset.nicheLang); fillFilterCountries(); $('#filters').hidden = false; render(); return; }
     if (t.id === 'exportLabels') { exportLabels(); return; }
@@ -515,7 +558,7 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     if (t.dataset.comps) { e.stopPropagation(); openDrawer(t.dataset.comps); const b = $('#compsBlock'); if (b) { b.hidden = false; setTimeout(() => b.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); } return; }
     if (t.dataset.open) { openDrawer(t.dataset.open); return; }
     if (t.id === 'filtersToggle') { $('#filters').hidden = !$('#filters').hidden; return; }
-    if (t.id === 'resetFilters') { $$('#filters select').forEach(s => { s.selectedIndex = 0; }); $('#subsMin').value = 0; $('#subsMax').value = $('#subsMax').max; $('#viewsMin').value = 0; $('#viewsMax').value = $('#viewsMax').max; $('#avgMin').value = 0; $('#avgMax').value = $('#avgMax').max; $('#rpmMin').value = 0; $('#rpmMax').value = 30; $('#onlyFree').checked = $('#onlyNew3').checked = $('#onlyUnseen').checked = false; $('#onlyRef').checked = true; $('#onlyVerified').checked = true; fillFilterCountries(); labs(); render(); return; }
+    if (t.id === 'resetFilters') { resetFilters(); render(); return; }
     if (t.id === 'viewLive') {
       $('#refreshModal').hidden = true;
       state.tab = 'live';
@@ -561,16 +604,53 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     const field = $('#topicCountry');
     const previous = field.value;
     const countries = state.supportedMarkets[$('#topicLang').value] || [];
-    field.innerHTML = optionsFor(countries, countryName);
+    field.innerHTML = (countries.length > 1 ? '<option value="">Все страны этого языка</option>' : '') + optionsFor(countries, countryName);
     if (countries.includes(previous)) field.value = previous;
   }
 
   function openTopic() {
     state.tab = 'topic';
     document.body.classList.remove('side-open');
-    if (!$('#topicKey').value) $('#topicKey').value = localStorage.getItem(LS.key) || '';
-    $('#topicKeyDetails').open = !$('#topicKey').value;
     render();
+    window.scrollTo({ top: 0 });
+  }
+
+  function nicheName(key) {
+    return state.rpm?.niches?.[key]?.ru_name || state.all.find(channel => nicheOf(channel) === key)?.niche_ru || key;
+  }
+
+  function renderTopicCatalogue() {
+    const language = $('#topicLang').value;
+    const country = $('#topicCountry').value;
+    const terms = catalogue.words($('#topicQuery').value);
+    const groups = new Map();
+    let channelCount = 0;
+    for (const channel of state.all) {
+      if (primaryLang(channel) !== language || (country && channel.country !== country)) continue;
+      if (!channelMatches(channel, terms)) continue;
+      const niche = nicheOf(channel);
+      if (!groups.has(niche)) groups.set(niche, []);
+      groups.get(niche).push(channel);
+      channelCount++;
+    }
+
+    const status = $('#topicCatalogueStatus');
+    const table = $('#topicCatalogue');
+    if (!groups.size) {
+      status.textContent = terms.length
+        ? 'По этому запросу в выбранном рынке ничего не найдено. Попробуйте другую тему или очистите строку поиска.'
+        : 'В каталоге пока нет каналов для этого языка и страны. Выберите другой рынок.';
+      table.replaceChildren();
+      return;
+    }
+
+    status.textContent = `${groups.size} ${plural(groups.size, 'ниша', 'ниши', 'ниш')} · ${channelCount} ${plural(channelCount, 'канал', 'канала', 'каналов')} · ${langName(language)}${country ? ' · ' + countryName(country) : ''}`;
+    const rows = [...groups].sort((a, b) => b[1].length - a[1].length || nicheName(a[0]).localeCompare(nicheName(b[0]), 'ru')).map(([niche, channels]) => {
+      const sample = channels.slice().sort((a, b) => (b.avg_views || 0) - (a.avg_views || 0)).slice(0, 3);
+      const links = sample.map(channel => `<button type="button" class="text-link" data-open="${esc(channel.id)}">${esc(channel.title)}</button>`).join('');
+      return `<tr><th scope="row">${esc(nicheName(niche))}</th><td>${channels.length}</td><td><div class="topic-examples">${links}</div></td><td><button type="button" class="text-link" data-topic-niche="${esc(niche)}" aria-label="Все каналы ниши ${esc(nicheName(niche))}">Все каналы →</button></td></tr>`;
+    }).join('');
+    table.innerHTML = `<div class="table-wrap"><table class="comp topic-catalogue"><thead><tr><th scope="col">Ниша</th><th scope="col">Каналов</th><th scope="col">Примеры каналов</th><th scope="col">Список</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }
 
   function topicResults({ channels, videos }) {
@@ -589,10 +669,19 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
 
   $('#topicForm').addEventListener('submit', async event => {
     event.preventDefault();
-    const key = $('#topicKey').value.trim();
     const button = $('#topicRun');
     const status = $('#topicStatus');
-    if (button.disabled) return;
+    if (!$('#topicLive').open || button.disabled) return;
+    status.hidden = false;
+    const query = $('#topicQuery').value.trim();
+    const language = $('#topicLang').value;
+    const region = $('#topicCountry').value;
+    if (!query || !region) {
+      status.textContent = query ? 'Выберите страну для запроса к YouTube.' : 'Введите тему для запроса к YouTube.';
+      $(query ? '#topicCountry' : '#topicQuery').focus();
+      return;
+    }
+    const key = $('#topicKey').value.trim();
     if (!key) {
       $('#topicKeyDetails').open = true;
       $('#topicKey').focus();
@@ -603,9 +692,6 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     status.textContent = 'Ищу ролики на YouTube…';
     $('#topicResults').replaceChildren();
     try {
-      const query = $('#topicQuery').value.trim();
-      const language = $('#topicLang').value;
-      const region = $('#topicCountry').value;
       const result = await window.NR_LIVE.searchTopic({
         key, query, days: +$('#topicDays').value,
         language, region, order: $('#topicOrder').value,
@@ -656,22 +742,37 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     } catch (err) { $('#refreshLog').textContent = err.message || String(err); }
     finally { state.liveRunning = false; }
   }
+  async function fetchJson(path) {
+    const response = await fetch(path, { cache: 'no-cache' });
+    if (!response.ok) throw new Error(`${path}: ${response.status}`);
+    return response.json();
+  }
+
   async function boot() {
-    let data = { channels: [], generated_at: null };
-    try { const r = await fetch('data/channels.json', { cache: 'no-store' }); if (r.ok) data = await r.json(); } catch {}
-    try { const r = await fetch('collector/rpm_baseline.json', { cache: 'no-store' }); if (r.ok) state.rpm = await r.json(); } catch {}
-    try { const r = await fetch('data/lang_checks.json', { cache: 'no-store' }); if (r.ok) state.langChecks = await r.json(); } catch {}
+    state.loadStatus = 'loading';
+    render();
     try {
-      const response = await fetch('collector/markets.json');
-      if (!response.ok) throw new Error('Не удалось загрузить список рынков');
-      state.supportedMarkets = await response.json();
-    } catch {
-      $('#resultsInfo').textContent = 'Не удалось загрузить список рынков. Обновите страницу.';
-      return;
+      const [data, markets, rpm, langChecks] = await Promise.all([
+        fetchJson('data/channels.json'),
+        fetchJson('collector/markets.json'),
+        fetchJson('collector/rpm_baseline.json').catch(() => null),
+        fetchJson('data/lang_checks.json').catch(() => null),
+      ]);
+      if (!Array.isArray(data?.channels) || !Object.keys(markets || {}).length) {
+        throw new Error('Invalid catalogue data');
+      }
+      state.supportedMarkets = markets;
+      state.rpm = rpm;
+      state.langChecks = langChecks;
+      fillTopicLanguages();
+      state.baseData = data;
+      state.loadStatus = 'ready';
+      applyCatalogue(data);
+    } catch (error) {
+      console.error('Niche Radar catalogue:', error);
+      state.loadStatus = 'failed';
+      render();
     }
-    fillTopicLanguages();
-    state.baseData = data;
-    applyCatalogue(data);
   }
 
   function applyCatalogue(data) {
@@ -711,6 +812,17 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     fillSelects(); render();
   }
   window.addEventListener('scroll', () => { $('#toTop').hidden = window.scrollY < 600; }, { passive: true });
-  $('#topicLang').addEventListener('change', fillTopicCountries);
+  $('#topicLang').addEventListener('change', () => {
+    fillTopicCountries();
+    renderTopicCatalogue();
+  });
+  $('#topicCountry').addEventListener('change', renderTopicCatalogue);
+  $('#topicQuery').addEventListener('input', renderTopicCatalogue);
+  $('#topicLive').addEventListener('toggle', event => {
+    $('#topicResults').hidden = !event.target.open;
+    if (!event.target.open || $('#topicKey').value) return;
+    try { $('#topicKey').value = localStorage.getItem(LS.key) || ''; } catch {}
+    $('#topicKeyDetails').open = !$('#topicKey').value;
+  });
   boot();
 })();

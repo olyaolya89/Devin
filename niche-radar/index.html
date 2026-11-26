@@ -7,7 +7,7 @@
 <meta name="description" content="Найдите нишу для своего YouTube-канала: отобранные каналы, их контент, монетизация и динамика роста.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=37">
+<link rel="stylesheet" href="styles.css?v=38">
 </head>
 <body>
 <header class="top">
@@ -35,7 +35,8 @@
   <main class="main">
     <h1>Поисковик ниш</h1>
     <p class="lede">Найдите нишу для своего YouTube-канала. Каталог учитывает основной язык и страну, указанную в профиле YouTube.</p>
-    <div id="catalogueControls">
+    <div id="catalogueNotice" class="block" role="status"><span>Загружаю каталог ниш…</span> <button type="button" class="btn" id="retryCatalogue" hidden>Повторить загрузку</button></div>
+    <div id="catalogueControls" hidden>
     <nav class="tabs" id="tabs">
       <button type="button" class="tab" data-tab="new">Недавно добавленные (<span data-count="new">0</span>)</button>
       <button type="button" class="tab is-on" data-tab="all">Все ниши (<span data-count="all">0</span>)</button>
@@ -116,19 +117,29 @@
     <section id="topic" hidden>
       <h2>Поиск на YouTube</h2>
       <form id="topicForm" class="block">
-        <label>Тема или заголовок ролика<input id="topicQuery" type="search" required maxlength="150" placeholder="Например, abandoned megaprojects"></label>
+        <label>Тема, канал или название ролика<input id="topicQuery" type="search" maxlength="150" placeholder="Например, история"></label>
         <div class="topic-options">
-          <label>Период публикации<select id="topicDays"><option value="30">30 дней</option><option value="90" selected>90 дней</option><option value="180">180 дней</option><option value="365">Год</option></select></label>
-          <label>Язык роликов<select id="topicLang" required></select></label>
-          <label>Страна каналов<select id="topicCountry" required></select></label>
-          <label>Порядок выдачи<select id="topicOrder"><option value="relevance">По релевантности</option><option value="viewCount">По просмотрам</option><option value="date">Сначала свежие</option></select></label>
+          <label>Язык<select id="topicLang"></select></label>
+          <label>Страна каналов<select id="topicCountry"></select></label>
         </div>
-        <details id="topicKeyDetails"><summary>Ключ YouTube Data API</summary><label>Ключ API<input id="topicKey" type="password" placeholder="AIza…" autocomplete="off"></label></details>
-        <p class="muted">Проверяется до 50 роликов. В выдачу входят ролики с указанным языком от каналов из выбранной страны.</p>
-        <button type="submit" class="btn btn-red" id="topicRun">Найти ролики и каналы</button>
+        <details id="topicLive">
+          <summary>Найти новые ролики и каналы через YouTube API</summary>
+          <div class="topic-options">
+            <label>Период публикации<select id="topicDays"><option value="30">30 дней</option><option value="90" selected>90 дней</option><option value="180">180 дней</option><option value="365">Год</option></select></label>
+            <label>Порядок выдачи<select id="topicOrder"><option value="relevance">По релевантности</option><option value="viewCount">По просмотрам</option><option value="date">Сначала свежие</option></select></label>
+          </div>
+          <details id="topicKeyDetails"><summary>Ключ YouTube Data API</summary><label>Ключ API<input id="topicKey" type="password" placeholder="AIza…" autocomplete="off"></label></details>
+          <p class="muted">Выберите одну страну и введите тему. YouTube возвращает до 50 роликов, из которых учитываются совпадения по языку и стране.</p>
+          <button type="submit" class="btn btn-red" id="topicRun">Найти ролики и каналы</button>
+          <p id="topicStatus" role="status" hidden></p>
+        </details>
       </form>
-      <p id="topicStatus" role="status"></p>
-      <div id="topicResults"></div>
+      <div id="topicResults" hidden></div>
+      <section class="block" aria-labelledby="topicCatalogueTitle">
+        <h3 id="topicCatalogueTitle">Ниши в каталоге</h3>
+        <p id="topicCatalogueStatus" role="status" class="muted"></p>
+        <div id="topicCatalogue"></div>
+      </section>
     </section>
     <div class="empty" id="empty" hidden><h3>Ничего не найдено</h3><p>Сбросьте фильтры или нажмите «Обновить каналы».</p></div>
   </main>
@@ -168,6 +179,6 @@
 </div>
 <script src="catalogue.js?v=2"></script>
 <script src="live.js?v=4"></script>
-<script src="app.js?v=41"></script>
+<script src="app.js?v=42"></script>
 </body>
 </html>
