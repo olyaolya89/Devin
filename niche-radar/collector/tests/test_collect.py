@@ -269,16 +269,23 @@ class CollectTests(unittest.TestCase):
     def test_lang_checks_count_channels_and_rotate_oldest_first(self):
         from unittest import mock
         queries = [{"text": "a", "niche": "history", "lang": "en"}, {"text": "b", "niche": "history", "lang": "de"}]
-        payload = {"items": [{"snippet": {"channelId": "x"}}, {"snippet": {"channelId": "x"}}, {"snippet": {"channelId": "y"}}]}
+        payloads = [
+            {"items": [{"id": {"videoId": v}, "snippet": {"channelId": c}} for v, c in [("v1", "x"), ("v2", "x"), ("v3", "y"), ("v4", "z")]]},
+            {"items": [{"id": v, "snippet": {"defaultAudioLanguage": lang}} for v, lang in [("v1", "de-DE"), ("v2", "en"), ("v3", "de"), ("v4", "de")]]},
+            {"items": [{"id": c, "snippet": {"country": country}} for c, country in [("x", "DE"), ("y", "CH"), ("z", "BR")]]},
+        ]
         now = dt.datetime(2026, 1, 2, tzinfo=dt.timezone.utc)
         with tempfile.TemporaryDirectory() as directory:
             path = os.path.join(directory, "lc.json")
             with open(path, "w", encoding="utf-8") as handle:
                 json.dump({"history|en": {"channels": 9, "checked_at": "2026-01-01"}}, handle)
-            with mock.patch.object(collect, "yt_get", return_value=payload) as call:
+            with mock.patch.object(collect, "yt_get", side_effect=payloads) as call:
                 checks = collect.run_lang_checks(queries, {}, now, path=path, per_run=1)
-            self.assertEqual(call.call_args[0][1]["relevanceLanguage"], "de")
+            self.assertEqual(call.call_args_list[0].args[1]["relevanceLanguage"], "de")
+            self.assertIn(call.call_args_list[0].args[1]["regionCode"], collect.MARKETS["de"])
             self.assertEqual(checks["history|de"]["channels"], 2)
+            self.assertEqual(checks["history|de"]["videos"], 2)
+            self.assertTrue(checks["history|de"]["market_verified"])
             self.assertEqual(checks["history|en"]["channels"], 9)
 
 

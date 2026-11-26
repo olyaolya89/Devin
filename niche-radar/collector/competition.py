@@ -14,16 +14,14 @@ reasons:
   answer was an artefact of catalogue size, not of YouTube.
 
 This module asks YouTube instead. It takes the channel's own best-performing titles,
-searches for them, and counts how many *other* channels are publishing the same topic
-right now, how many of those titles are near-copies, and how big those rivals are.
+searches for them, and checks the language of each result and the country in each
+channel profile before counting related channels, title copies, and large rivals.
 That is the thing a creator actually needs to know before entering a niche.
 
 Quota
 -----
-`search.list` costs 100 units, `channels.list` costs 1. One probe per channel is
-100 units plus one cheap channels.list, so the default 2,000-unit budget covers about
-18 channels per run. Channels are processed oldest-check-first, so repeated runs sweep
-the whole catalogue.
+The internal budget allocates 100 points per search. Each search page also uses up to
+one videos.list and one channels.list request. Channels are processed oldest-check-first.
 
 Usage
 -----
@@ -122,15 +120,16 @@ def probe_titles(channel: dict[str, Any], limit: int = PROBES_PER_CHANNEL) -> li
     ordered = [v for v in videos if v.get("is_outlier")] + [v for v in videos if not v.get("is_outlier")]
     out: list[tuple[str, str]] = []
     for video in ordered:
-        text = collect.title_query(video["title"], words=7)
+        title = video.get("title_original") or video["title"]
+        text = collect.title_query(title, words=7)
         if len(text.split()) >= 3 and all(text != q for q, _ in out):
-            out.append((text, video["title"]))
+            out.append((text, title))
         if len(out) >= limit:
             break
     return out
 
 
-def _search(query: str, lang: str, state: dict[str, Any], after: str) -> list[dict[str, Any]]:
+def _search(query: str, lang: str, state: dict[str, Any], after: str, region: str) -> list[dict[str, Any]]:
     params = {
         "part": "snippet",
         "type": "video",
@@ -138,26 +137,26 @@ def _search(query: str, lang: str, state: dict[str, Any], after: str) -> list[di
         "order": "relevance",
         "publishedAfter": after,
         "maxResults": PAGE,
-        "relevanceLanguage": (lang or "en").split("-")[0],
+        "relevanceLanguage": lang,
+        "regionCode": region,
     }
     payload = collect.yt_get("search", params, state, cost=100, is_search=True)
     return payload.get("items", [])
 
 
-def _rival_subs(channel_ids: list[str], state: dict[str, Any]) -> dict[str, int]:
-    """Subscriber counts for the rivals, so a crowd of tiny channels is not mistaken
-    for a crowd of established ones."""
-    out: dict[str, int] = {}
+def _channel_details(channel_ids: list[str], state: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    out: dict[str, dict[str, Any]] = {}
     for start in range(0, len(channel_ids), 50):
         batch = channel_ids[start : start + 50]
         try:
             payload = collect.yt_get(
-                "channels", {"part": "statistics", "id": ",".join(batch)}, state, cost=1
+                "channels", {"part": "snippet,statistics", "id": ",".join(batch)}, state, cost=1
             )
         except (collect.QuotaExhausted, urllib.error.HTTPError):
             break
         for item in payload.get("items", []):
-            out[item.get("id")] = collect._number(item.get("statistics", {}).get("subscriberCount"))
+            if item.get("id"):
+                out[item["id"]] = item
     return out
 
 
@@ -199,74 +198,81 @@ def competition_index(
 def measure(channel: dict[str, Any], state: dict[str, Any], now: dt.datetime) -> dict[str, Any] | None:
     """Probe one channel's topics. Returns the `competition` payload, or None if no probe
     could be built or the quota ran out before any search succeeded."""
+    lang = collect.channel_language(channel)
+    if not collect.allowed_market(lang, channel.get("country")):
+        return None
     titles = probe_titles(channel)
     if not titles:
         return None
     after = (now - dt.timedelta(days=WINDOW_DAYS)).isoformat().replace("+00:00", "Z")
-    lang = (channel.get("language") or "en").split("-")[0]
     own_id = channel.get("id")
     used: list[str] = []
-    rivals: dict[str, dict[str, Any]] = {}
-    clones: list[dict[str, Any]] = []
-    videos_seen = 0
+    raw_ids: set[str] = set()
+    verified_ids: set[str] = set()
+    matches: dict[str, tuple[float, dict[str, Any]]] = {}
+    details: dict[str, dict[str, Any]] = {}
     for query, source_title in titles:
         try:
-            items = _search(query, lang, state, after)
+            items = _search(query, lang, state, after, channel["country"])
+            languages = collect.search_video_languages(items, state)
         except collect.QuotaExhausted:
             break
         except urllib.error.HTTPError as error:
             print(f"[competition] search failed for {query!r}: {error}", file=sys.stderr)
             continue
         used.append(query)
-        videos_seen += len(items)
-        for item in items:
-            snippet = item.get("snippet", {})
-            rival_id = snippet.get("channelId")
-            if not rival_id or rival_id == own_id:
+        raw_ids.update(vid for item in items if (vid := collect.search_video_id(item)))
+        same_language = [
+            item for item in items
+            if languages.get(collect.search_video_id(item)) == lang and item.get("snippet", {}).get("channelId")
+        ]
+        channel_ids = list(dict.fromkeys(item["snippet"]["channelId"] for item in same_language))
+        details.update(_channel_details([cid for cid in channel_ids if cid not in details], state))
+        for item in same_language:
+            video_id = collect.search_video_id(item)
+            snippet = item["snippet"]
+            rival_id = snippet["channelId"]
+            country = (details.get(rival_id, {}).get("snippet") or {}).get("country")
+            known_language = state.get("channel_languages", {}).get(rival_id)
+            if not collect.allowed_market(lang, country) or (known_language and known_language != lang):
                 continue
-            rival_title = snippet.get("title", "")
-            overlap = title_overlap(source_title, rival_title)
-            if overlap < TOPIC_OVERLAP:
-                # Search returns loosely related videos too; they are not competition
-                # for this topic and would inflate every count.
+            verified_ids.add(video_id)
+            if rival_id == own_id:
                 continue
-            row = rivals.setdefault(
-                rival_id,
-                {
-                    "id": rival_id,
-                    "title": snippet.get("channelTitle", ""),
-                    "videos": 0,
-                    "best_overlap": 0.0,
-                    "clone": False,
-                    "latest": None,
-                },
-            )
-            row["videos"] += 1
-            row["best_overlap"] = max(row["best_overlap"], round(overlap, 2))
-            published = snippet.get("publishedAt")
-            if published and (row["latest"] is None or published > row["latest"]):
-                row["latest"] = published
-            if overlap >= CLONE_OVERLAP:
-                row["clone"] = True
-                clones.append(
-                    {
-                        "channel_id": rival_id,
-                        "channel": snippet.get("channelTitle", ""),
-                        "title": rival_title,
-                        "published_at": published,
-                        "overlap": round(overlap, 2),
-                    }
-                )
-        # One probe is usually enough; spend the second only when the first page was thin.
-        if len(rivals) >= 10:
+            overlap = title_overlap(source_title, snippet.get("title", ""))
+            if overlap >= TOPIC_OVERLAP and overlap > matches.get(video_id, (0, {}))[0]:
+                matches[video_id] = (overlap, snippet)
+        if len({snippet["channelId"] for _, snippet in matches.values()}) >= 10:
             break
-    if not used:
+    if not verified_ids:
         return None
 
-    subs = _rival_subs([r for r in rivals][:50], state)
-    for rival_id, row in rivals.items():
-        if rival_id in subs:
-            row["subs"] = subs[rival_id]
+    rivals: dict[str, dict[str, Any]] = {}
+    clones: list[dict[str, Any]] = []
+    for video_id, (overlap, snippet) in matches.items():
+        rival_id = snippet["channelId"]
+        rival_title = snippet.get("title", "")
+        stats = details[rival_id].get("statistics") or {}
+        country = details[rival_id]["snippet"]["country"]
+        row = rivals.setdefault(rival_id, {
+            "id": rival_id, "title": snippet.get("channelTitle", ""),
+            "videos": 0, "best_overlap": 0.0, "clone": False, "latest": None,
+            "country": country,
+        })
+        if not stats.get("hiddenSubscriberCount") and stats.get("subscriberCount") is not None:
+            row["subs"] = collect._number(stats["subscriberCount"])
+        row["videos"] += 1
+        row["best_overlap"] = max(row["best_overlap"], round(overlap, 2))
+        published = snippet.get("publishedAt")
+        if published and (row["latest"] is None or published > row["latest"]):
+            row["latest"] = published
+        if overlap >= CLONE_OVERLAP:
+            row["clone"] = True
+            clones.append({
+                "id": video_id, "channel_id": rival_id, "channel": snippet.get("channelTitle", ""),
+                "title": rival_title, "published_at": published, "overlap": round(overlap, 2),
+            })
+    videos_seen = len(verified_ids)
 
     clone_share = len(clones) / max(videos_seen, 1)
     clone_channels = sum(1 for r in rivals.values() if r.get("clone"))
@@ -283,10 +289,15 @@ def measure(channel: dict[str, Any], state: dict[str, Any], now: dt.datetime) ->
         rivals.values(),
         key=lambda r: (-r["best_overlap"], -(r.get("subs") or 0), -r["videos"]),
     )[:10]
-    rival_subs = [r["subs"] for r in rivals.values() if r.get("subs")]
+    rival_subs = [r["subs"] for r in rivals.values() if "subs" in r]
     return {
         "queries": used,
         "videos_seen": videos_seen,
+        "raw_videos": len(raw_ids),
+        "language": lang,
+        "language_verified": True,
+        "market_verified": True,
+        "region_code": channel.get("country"),
         "rival_channels": len(rivals),
         "clone_channels": sum(1 for r in rivals.values() if r.get("clone")),
         "clone_videos": len(clones),
@@ -307,16 +318,17 @@ def measure(channel: dict[str, Any], state: dict[str, Any], now: dt.datetime) ->
 def pick(channels: list[dict[str, Any]], budget: int) -> list[dict[str, Any]]:
     """Oldest check first, so repeated runs sweep the catalogue instead of re-probing
     the same channels. Channels with no videos cannot be probed at all."""
-    # Each channel costs one or two searches plus a cheap channels.list.
+    # Reserve two search calls per channel.
     capacity = max(1, budget // (100 * PROBES_PER_CHANNEL))
     eligible = [
         c
         for c in channels
         if (c.get("videos") or []) and not c.get("graduated") and not c.get("stale")
+        and collect.allowed_market(collect.channel_language(c), c.get("country"))
     ]
     eligible.sort(
         key=lambda c: (
-            (c.get("competition") or {}).get("checked_at") or "",
+            c.get("competition_attempted_at") or "",
             -(c.get("score") or 0),
         )
     )
@@ -371,6 +383,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     # This script only searches, so give the whole budget to the search bucket.
     collect.SEARCH_LIMIT = args.budget
+    state["channel_languages"] = {c["id"]: collect.channel_language(c) for c in channels if c.get("id")}
     now = dt.datetime.now(dt.timezone.utc)
     done = 0
     try:
@@ -380,6 +393,7 @@ def main(argv: list[str] | None = None) -> int:
             except collect.QuotaExhausted:
                 print("[competition] quota budget spent - stopping", file=sys.stderr)
                 break
+            channel["competition_attempted_at"] = now.date().isoformat()
             if not result:
                 continue
             channel["competition"] = result

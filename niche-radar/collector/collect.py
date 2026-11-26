@@ -97,6 +97,10 @@ def _load_json(path: str, default: Any) -> Any:
         return default
 
 
+MARKETS = _load_json(os.path.join(BASE_DIR, "markets.json"), {})
+MARKET_COUNTRIES = {country for countries in MARKETS.values() for country in countries}
+
+
 def _load_cache() -> dict[str, Any]:
     if not os.path.exists(CACHE_PATH):
         with open(CACHE_PATH, "w", encoding="utf-8") as handle:
@@ -173,13 +177,13 @@ def snowball_queries(
             continue
         hits = sorted(channel.get("videos") or [], key=lambda v: -_number(v.get("views")))
         for video in [v for v in hits if v.get("is_outlier")][:2] or hits[:1]:
-            text = title_query(video.get("title", ""))
+            text = title_query(video.get("title_original") or video.get("title", ""))
             if len(text.split()) >= 3 and text not in seen:
                 seen.add(text)
                 pool.append({
                     "text": text,
                     "niche": channel.get("niche", "other"),
-                    "lang": (channel.get("language") or "en").split("-")[0],
+                    "lang": channel_language(channel),
                     "snowball": True,
                 })
     if not pool:
@@ -430,6 +434,8 @@ def search(
             "relevanceLanguage": query.get("lang", "en"),
             "q": text,
         }
+        if query.get("region"):
+            params["regionCode"] = query["region"]
         try:
             payload = yt_get("search", params, state, cost=100, is_search=True)
         except QuotaExhausted:
@@ -441,6 +447,53 @@ def search(
 def _banner(channel: dict[str, Any]) -> str:
     url = ((channel.get("brandingSettings") or {}).get("image") or {}).get("bannerExternalUrl") or ""
     return f"{url}=w1280-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" if url else ""
+
+
+def language_code(value: Any) -> str:
+    code = re.split(r"[-_]", str(value or "").strip().lower(), maxsplit=1)[0]
+    if code in {"nb", "nn"}:
+        return "no"
+    return code if re.fullmatch(r"[a-z]{2,3}", code) and code not in {"und", "mul", "zxx"} else ""
+
+
+def channel_language(channel: dict[str, Any]) -> str:
+    audio = language_code(channel.get("audio_language"))
+    if audio or channel.get("language_source") == "query_fallback":
+        return audio
+    return language_code(channel.get("language"))
+
+
+def allowed_market(language: str, country: str | None) -> bool:
+    return country in MARKETS.get(language_code(language), [])
+
+
+def search_video_id(item: dict[str, Any]) -> str | None:
+    return (item.get("id") or {}).get("videoId")
+
+
+def search_video_languages(items: list[dict[str, Any]], state: dict[str, Any]) -> dict[str, str]:
+    ids = list(dict.fromkeys(vid for item in items if (vid := search_video_id(item))))
+    languages: dict[str, str] = {}
+    for start in range(0, len(ids), 50):
+        data = yt_get("videos", {"part": "snippet", "id": ",".join(ids[start : start + 50])}, state, cost=1)
+        for video in data.get("items", []):
+            snippet = video.get("snippet") or {}
+            language = language_code(snippet.get("defaultAudioLanguage")) or language_code(snippet.get("defaultLanguage"))
+            if language:
+                languages[video["id"]] = language
+    return languages
+
+
+def search_channel_countries(items: list[dict[str, Any]], state: dict[str, Any]) -> dict[str, str]:
+    ids = list(dict.fromkeys(cid for item in items if (cid := item.get("snippet", {}).get("channelId"))))
+    countries: dict[str, str] = {}
+    for start in range(0, len(ids), 50):
+        data = yt_get("channels", {"part": "snippet", "id": ",".join(ids[start : start + 50])}, state, cost=1)
+        for channel in data.get("items", []):
+            country = (channel.get("snippet") or {}).get("country")
+            if country:
+                countries[channel["id"]] = country
+    return countries
 
 
 def run_lang_checks(
@@ -455,24 +508,43 @@ def run_lang_checks(
     checks = _load_json(path, {})
     pairs: dict[tuple[str, str], str] = {}
     for query in queries:
-        pairs.setdefault((query.get("niche", "other"), query.get("lang", "en")), query["text"])
-    order = sorted(pairs, key=lambda pair: checks.get(f"{pair[0]}|{pair[1]}", {}).get("checked_at") or "")
+        language = language_code(query.get("lang", "en"))
+        if language in MARKETS:
+            pairs.setdefault((query.get("niche", "other"), language), query["text"])
+
+    def last_checked(pair: tuple[str, str]) -> tuple[bool, bool, str]:
+        check = checks.get(f"{pair[0]}|{pair[1]}") or {}
+        return bool(check), bool(check.get("market_verified")), check.get("checked_at") or ""
+
+    order = sorted(pairs, key=last_checked)
     after = (now - dt.timedelta(days=90)).isoformat().replace("+00:00", "Z")
     for niche, lang in order[:per_run]:
+        regions = MARKETS[lang]
+        region = regions[now.toordinal() % len(regions)]
         params = {
             "part": "snippet", "type": "video", "q": pairs[(niche, lang)], "relevanceLanguage": lang,
-            "publishedAfter": after, "order": "viewCount", "maxResults": 50,
+            "publishedAfter": after, "order": "viewCount", "maxResults": 50, "regionCode": region,
         }
         try:
             payload = yt_get("search", params, state, cost=100, is_search=True)
+            raw = payload.get("items", [])
+            languages = search_video_languages(raw, state)
+            matching = [
+                item for item in raw
+                if languages.get(search_video_id(item)) == lang
+                and state.get("channel_languages", {}).get(item.get("snippet", {}).get("channelId")) in (None, "", lang)
+            ]
+            countries = search_channel_countries(matching, state)
         except QuotaExhausted:
             break
         except urllib.error.HTTPError:
             continue
-        items = payload.get("items", [])
+        items = [item for item in matching if allowed_market(lang, countries.get(item.get("snippet", {}).get("channelId")))]
         channels = {item.get("snippet", {}).get("channelId") for item in items} - {None}
         checks[f"{niche}|{lang}"] = {
             "channels": len(channels), "videos": len(items), "query": pairs[(niche, lang)],
+            "language_verified": True, "market_verified": True, "language": lang, "region_code": region,
+            "raw_videos": len(raw),
             "checked_at": now.date().isoformat(),
         }
     _write_output(path, checks)
@@ -853,6 +925,7 @@ def _channel_output(
             {
                 "id": video.get("id"),
                 "title": video.get("title", ""),
+                **({"title_original": video["title_original"]} if video.get("title_original") and video["title_original"] != video.get("title") else {}),
                 "thumbnail": video.get("thumbnail", ""),
                 "views": _number(video.get("views")),
                 "published_at": video.get("published_at"),
@@ -891,6 +964,10 @@ def merge(
         result["stale"] = False
         if old and old.get("enriched_at"):
             for key in ENRICHED_KEYS:
+                if key in old:
+                    result[key] = old[key]
+        if old and old.get("country") == result.get("country") and channel_language(old) == channel_language(result):
+            for key in ("competition", "competition_index", "competition_verdict", "competition_verdict_ru", "competition_attempted_at"):
                 if key in old:
                     result[key] = old[key]
         today = _iso_date(now)[:10]
@@ -951,9 +1028,12 @@ def main(argv: list[str] | None = None) -> int:
         _log(f"Dry run: wrote {args.out}")
         return 0
     state = _new_state()
+    state["channel_languages"] = {c["id"]: channel_language(c) for c in previous.get("channels", []) if c.get("id")}
     cache = _load_json(CACHE_PATH, {})
     rpm_data = _load_json(RPM_PATH, {})
-    queries = snowball_queries(previous.get("channels", []), now) + rotate_queries(queries_data.get("queries", []), now)
+    previous_markets = [c for c in previous.get("channels", []) if allowed_market(channel_language(c), c.get("country"))]
+    seeds = [q for q in queries_data.get("queries", []) if language_code(q.get("lang")) in MARKETS]
+    queries = snowball_queries(previous_markets, now) + rotate_queries(seeds, now)
     run_lang_checks(queries_data.get("queries", []), state, now)
     if args.max_queries is not None:
         queries = queries[: max(0, args.max_queries)]
@@ -963,6 +1043,11 @@ def main(argv: list[str] | None = None) -> int:
     forced_channels: dict[str, dict[str, Any]] = {}
     queries_run = 0
     for index, query in enumerate(queries):
+        language = language_code(query.get("lang"))
+        regions = MARKETS.get(language)
+        if not regions:
+            continue
+        query = {**query, "region": regions[(now.toordinal() + index) % len(regions)]}
         try:
             items = search(query, index, state, queries_data.get("modifiers", []))
         except QuotaExhausted:
@@ -1026,6 +1111,8 @@ def main(argv: list[str] | None = None) -> int:
     for channel_id, channel in channels.items():
         statistics = channel.get("statistics", {})
         force = channel_id in forced_ids
+        if not force and (channel.get("snippet") or {}).get("country") not in MARKET_COUNTRIES:
+            continue
         if not force and not eligible(statistics):
             _log(f"Skipping ineligible channel {channel_id}")
             continue
@@ -1036,7 +1123,7 @@ def main(argv: list[str] | None = None) -> int:
             if ai_niche:
                 query = {**query, "niche": ai_niche}
             result = _channel_output(channel, videos, query, rpm_data, cache, now, force=force)
-            if result:
+            if result and (force or allowed_market(channel_language(result), result.get("country"))):
                 if force:
                     result["labeled_role"] = forced_roles.get(channel_id)
                 current.append(result)

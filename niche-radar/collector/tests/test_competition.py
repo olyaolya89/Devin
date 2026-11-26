@@ -3,6 +3,7 @@ import importlib.util
 import os
 import sys
 import unittest
+from unittest import mock
 
 COLLECTOR_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, COLLECTOR_DIR)
@@ -27,12 +28,15 @@ SEARCH_PAGE = [
     ("UCbeyond", "Beyond Facts", "Inside the World's Largest Cruise Ship Ever Built", "2026-06-05T00:00:00Z"),
     ("UCnoise", "CTV News", "Crews begin production of Canada's largest ever polar icebreaker", "2026-10-01T00:00:00Z"),
     ("UCself", "Civilization Engine", PROBE, "2026-09-05T00:00:00Z"),
+    ("UCportuguese", "Portuguese", PROBE, "2026-10-26T00:00:00Z"),
+    ("UCbrazil", "Brazilian English", PROBE, "2026-10-26T00:00:00Z"),
+    ("UCunknown", "Unknown", PROBE, "2026-10-26T00:00:00Z"),
 ]
 
 
 def _page(*_args, **_kwargs):
     return [
-        {"snippet": {"channelId": cid, "channelTitle": name, "title": title, "publishedAt": pub}}
+        {"id": {"videoId": cid}, "snippet": {"channelId": cid, "channelTitle": name, "title": title, "publishedAt": pub}}
         for cid, name, title, pub in SEARCH_PAGE
     ]
 
@@ -101,27 +105,32 @@ class CompetitionIndexTests(unittest.TestCase):
 
 class MeasureTests(unittest.TestCase):
     def setUp(self):
-        self._search, self._subs = competition._search, competition._rival_subs
-        competition._search = _page
-        competition._rival_subs = lambda ids, state: {
-            "UCnext": 6980, "UCpresh": 4000, "UCaurio": 44900,
-            "UCroyal": 300, "UCbeyond": 250000,
-        }
+        self.enterContext(mock.patch.object(competition, "_search", side_effect=_page))
+        languages = {cid: "en" for cid, *_ in SEARCH_PAGE if cid != "UCunknown"}
+        languages["UCportuguese"] = "pt"
+        self.enterContext(mock.patch.object(collect, "search_video_languages", return_value=languages))
+        subs = {"UCnext": 6980, "UCpresh": 4000, "UCaurio": 44900, "UCroyal": 300, "UCbeyond": 250000}
+        self.enterContext(mock.patch.object(competition, "_channel_details", side_effect=lambda ids, state: {
+            cid: {"snippet": {"country": "BR" if cid == "UCbrazil" else "US"}, "statistics": {"subscriberCount": subs.get(cid, 0)}}
+            for cid in ids
+        }))
         self.channel = {
             "id": "UCself",
             "title": "Civilization Engine",
             "language": "en",
+            "country": "US",
             "videos": [{"title": PROBE, "views": 3737406, "is_outlier": True}],
         }
-
-    def tearDown(self):
-        competition._search, competition._rival_subs = self._search, self._subs
 
     def test_counts_clones_and_ignores_self_and_noise(self):
         result = competition.measure(self.channel, {"keys": ["k"], "quota_units_used": 0}, NOW)
         ids = [row["id"] for row in result["top_rivals"]]
         self.assertNotIn("UCself", ids, "the channel must not count as its own competitor")
         self.assertNotIn("UCnoise", ids, "unrelated news must not count as competition")
+        self.assertTrue({"UCportuguese", "UCbrazil", "UCunknown"}.isdisjoint(ids))
+        self.assertEqual(result["language"], "en")
+        self.assertTrue(result["market_verified"])
+        self.assertEqual(result["videos_seen"], 7)
         self.assertEqual(result["clone_channels"], 4)
         self.assertEqual(result["rival_channels"], 5)
         # Preshcute (26 Oct) and ROYAL ARCHIVES (22 Oct) fall inside the 30-day window;
@@ -130,6 +139,15 @@ class MeasureTests(unittest.TestCase):
         self.assertEqual(result["big_rivals"], 1)
         self.assertEqual(result["verdict"], "competitive")
         self.assertEqual(result["checked_at"], "2026-11-05")
+
+    def test_known_portuguese_channel_is_not_an_english_competitor(self):
+        state = {"channel_languages": {"UCnext": "pt"}}
+        result = competition.measure(self.channel, state, NOW)
+        self.assertNotIn("UCnext", [row["id"] for row in result["top_rivals"]])
+
+    def test_no_supported_results_does_not_claim_a_free_topic(self):
+        with mock.patch.object(collect, "search_video_languages", return_value={}):
+            self.assertIsNone(competition.measure(self.channel, {}, NOW))
 
     def test_channel_without_videos_returns_none(self):
         self.assertIsNone(
@@ -151,19 +169,21 @@ class MeasureTests(unittest.TestCase):
 class PickTests(unittest.TestCase):
     def test_oldest_check_first_and_skips_unprobeable(self):
         channels = [
-            {"id": "fresh", "videos": [{"title": "t"}], "competition": {"checked_at": "2026-11-04"}},
+            {"id": "fresh", "videos": [{"title": "t"}], "competition_attempted_at": "2026-11-04"},
             {"id": "never", "videos": [{"title": "t"}]},
             {"id": "stale", "videos": [{"title": "t"}], "stale": True},
             {"id": "empty", "videos": []},
-            {"id": "old", "videos": [{"title": "t"}], "competition": {"checked_at": "2026-10-01"}},
+            {"id": "old", "videos": [{"title": "t"}], "competition_attempted_at": "2026-10-01"},
         ]
+        for channel in channels:
+            channel.update(language="en", country="US")
         picked = [c["id"] for c in competition.pick(channels, budget=10_000)]
         self.assertEqual(picked[:3], ["never", "old", "fresh"])
         self.assertNotIn("stale", picked)
         self.assertNotIn("empty", picked)
 
     def test_budget_caps_the_batch(self):
-        channels = [{"id": str(i), "videos": [{"title": "t"}]} for i in range(50)]
+        channels = [{"id": str(i), "language": "en", "country": "US", "videos": [{"title": "t"}]} for i in range(50)]
         picked = competition.pick(channels, budget=400)
         self.assertEqual(len(picked), 400 // (100 * competition.PROBES_PER_CHANNEL))
 

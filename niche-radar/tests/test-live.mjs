@@ -9,6 +9,13 @@ import vm from 'vm';
 
 const SRC = process.argv[2] || fileURLToPath(new URL('../live.js', import.meta.url));
 const code = readFileSync(SRC, 'utf8');
+const catalogueCode = readFileSync(new URL('../catalogue.js', import.meta.url), 'utf8');
+const MARKETS = JSON.parse(readFileSync(new URL('../collector/markets.json', import.meta.url), 'utf8'));
+const NOW = Date.parse('2026-11-20T12:00:00Z');
+class TestDate extends Date {
+  constructor(...args) { super(...(args.length ? args : [NOW])); }
+  static now() { return NOW; }
+}
 
 let assertions = 0, failures = 0;
 const ok = (cond, name, extra) => {
@@ -21,16 +28,16 @@ const eq = (a, b, name) => ok(JSON.stringify(a) === JSON.stringify(b), name, { g
 // ---- fixtures ---------------------------------------------------------------------
 const PROBE = "How 10,000 People Live on the World's Biggest Cruise Ship";
 const CATALOGUE = [
-  { id: 'UCself', title: 'Civilization Engine', niche: 'engineering', language: 'en', score: 90,
+  { id: 'UCself', title: 'Civilization Engine', niche: 'engineering', language: 'en', country: 'US', score: 90,
     videos: [{ id: 'v1', title: PROBE, views: 3737406, is_outlier: true },
              { id: 'v2', title: 'The 5 Biggest Container Ships. Why Do Captains Fear Them?', views: 2004424, is_outlier: true }],
     avg_views_first_5: 1243069 },
-  { id: 'UCww2', title: 'The Forgotten Front', niche: 'history', language: 'en', score: 70,
+  { id: 'UCww2', title: 'The Forgotten Front', niche: 'history', language: 'en', country: 'US', score: 70,
     videos: [{ id: 'v3', title: 'Why Chinese Soldiers Dreaded the Turkish Brigade in Korea', views: 588000, is_outlier: true }],
     avg_views_first_5: 300000, competition: { checked_at: '2026-11-01', index: 80 } },
-  { id: 'UCgrown', title: 'Grown Rival', niche: 'engineering', language: 'en', score: 40,
+  { id: 'UCgrown', title: 'Grown Rival', niche: 'engineering', language: 'en', country: 'US', score: 40,
     graduated: true, videos: [{ id: 'v4', title: 'Giant Machines Explained', views: 10 }] },
-  { id: 'UCnovid', title: 'No Videos', niche: 'science', language: 'en', videos: [] },
+  { id: 'UCnovid', title: 'No Videos', niche: 'science', language: 'en', country: 'US', videos: [] },
 ];
 const QUERIES = {
   modifiers: ['explained', 'documentary'],
@@ -53,6 +60,9 @@ const SEARCH_PAGE = [
   ['UCbeyond', 'Beyond Facts', "Inside the World's Largest Cruise Ship Ever Built", '2026-06-05T00:00:00Z'],
   ['UCnoise', 'CTV News', "Crews begin production of Canada's largest ever polar icebreaker", '2026-10-01T00:00:00Z'],
   ['UCself', 'Civilization Engine', PROBE, '2026-09-05T00:00:00Z'],
+  ['UCportuguese', 'Portuguese Rival', PROBE, '2026-11-02T00:00:00Z'],
+  ['UCmixedCountry', 'Brazilian English', PROBE, '2026-11-02T00:00:00Z'],
+  ['UCunknown', 'Unknown Language', PROBE, '2026-11-02T00:00:00Z'],
 ];
 
 // ---- fake environment -------------------------------------------------------------
@@ -67,8 +77,19 @@ function makeSandbox() {
     const resource = u.pathname.split('/').pop();
     calls.push({ resource, params: Object.fromEntries(u.searchParams) });
     if (resource === 'search') {
+      if (u.searchParams.get('q') === 'empty topic') return { ok: true, json: async () => ({ items: [] }) };
+      if (u.searchParams.get('q') === 'cruise ships') return { ok: true, json: async () => ({ items: [
+        { id: { videoId: 'topic1' }, snippet: { channelId: 'UCnext' } },
+        { id: { videoId: 'topic2' }, snippet: { channelId: 'UCnext' } },
+        { id: { videoId: 'topic3' }, snippet: { channelId: 'UCpresh' } },
+        { id: { videoId: 'topic3' }, snippet: { channelId: 'UCpresh' } },
+        { id: { videoId: 'deleted' }, snippet: { channelId: 'UCgone' } },
+        { id: { videoId: 'topicPortuguese' }, snippet: { channelId: 'UCportuguese' } },
+        { id: { videoId: 'topicBritish' }, snippet: { channelId: 'UCbritish' } },
+      ] }) };
       return { ok: true, json: async () => ({
         items: SEARCH_PAGE.map(([cid, cname, title, pub]) => ({
+          id: { videoId: 'search-' + cid },
           snippet: { channelId: cid, channelTitle: cname, title, publishedAt: pub },
         })),
       }) };
@@ -77,26 +98,36 @@ function makeSandbox() {
       const ids = (u.searchParams.get('id') || '').split(',');
       return { ok: true, json: async () => ({ items: ids.map(id => ({
         id,
-        snippet: { title: 'Rival ' + id, customUrl: '@' + id, country: 'US',
+        snippet: { title: 'Rival ' + id, customUrl: '@' + id, country: id === 'UCmixedCountry' ? 'BR' : id === 'UCbritish' ? 'GB' : 'US',
           description: 'ships and engineering', thumbnails: { medium: { url: 't.jpg' } },
           localized: { title: 'Rival ' + id, description: 'ships and engineering' } },
-        statistics: { subscriberCount: '5000', viewCount: '900000', videoCount: '12' },
+        statistics: { subscriberCount: '5000', viewCount: '900000', videoCount: id === 'UCnext' ? '60' : '12', hiddenSubscriberCount: id === 'UCpresh' },
         contentDetails: { relatedPlaylists: { uploads: 'UU' + id } },
       })) }) };
     }
     if (resource === 'playlistItems') {
-      return { ok: true, json: async () => ({ items: [1, 2, 3, 4].map(i => ({ contentDetails: { videoId: 'vid' + i } })) }) };
+      const next = u.searchParams.get('playlistId') === 'UUUCnext';
+      const secondPage = u.searchParams.get('pageToken') === 'second';
+      const indexes = secondPage ? [5] : [1, 2, 3, 4];
+      return { ok: true, json: async () => ({
+        items: indexes.map(i => ({ contentDetails: { videoId: 'vid' + i } })),
+        nextPageToken: next && !secondPage ? 'second' : undefined,
+      }) };
     }
     if (resource === 'videos') {
       const ids = (u.searchParams.get('id') || '').split(',');
       // A multi-language channel: Spanish is the default locale, English is the
       // localization that hl=en returns. This is the exact shape that used to make a
       // US-facing channel read as Spanish.
-      return { ok: true, json: async () => ({ items: ids.map((id, i) => ({
+      return { ok: true, json: async () => ({ items: ids.filter(id => id !== 'deleted').map((id, i) => ({
         id,
         snippet: { title: i === 0 ? 'Cómo Viven 10.000 Personas en el Crucero Más Grande' : 'Otro documental de barcos ' + i,
-          description: 'd', tags: ['ships'], publishedAt: '2026-09-0' + (i + 1) + 'T00:00:00Z',
-          defaultAudioLanguage: 'es', defaultLanguage: 'es',
+          description: 'd', tags: ['ships'], publishedAt: id === 'vid5' ? '2024-09-01T00:00:00Z' : '2026-09-0' + (i + 1) + 'T00:00:00Z',
+          channelId: ({ topic3: 'UCpresh', topicPortuguese: 'UCportuguese', topicBritish: 'UCbritish' })[id] || 'UCnext',
+          channelTitle: 'Cruise channel',
+          defaultAudioLanguage: id.includes('portuguese') || id === 'topicPortuguese' ? 'pt-BR'
+            : id.includes('unknown') ? 'und' : id === 'vid2' ? 'es' : 'en-US',
+          defaultLanguage: id.includes('unknown') ? undefined : 'en',
           localized: { title: i === 0 ? PROBE : 'Another ship documentary ' + i },
           thumbnails: { medium: { url: 'v.jpg' } } },
         statistics: { viewCount: String(100000 * (i + 1)) },
@@ -105,9 +136,10 @@ function makeSandbox() {
     }
     return { ok: true, json: async () => ({ items: [] }) };
   };
-  const sandbox = { window: win, fetch: fakeFetch, URL, console, Date, Math, JSON, Set, Map, Number, String, Object, Array, RegExp, Promise, isNaN, parseInt, parseFloat, setTimeout };
+  const sandbox = { window: win, fetch: fakeFetch, URL, console, Date: TestDate, Math, JSON, Set, Map, Number, String, Object, Array, RegExp, Promise, isNaN, parseInt, parseFloat, setTimeout };
   sandbox.globalThis = sandbox;
   vm.createContext(sandbox);
+  vm.runInContext(catalogueCode, sandbox);
   vm.runInContext(code, sandbox);
   return win;
 }
@@ -117,7 +149,7 @@ const win = makeSandbox();
 ok(!!win.NR_LIVE && typeof win.NR_LIVE.run === 'function', 'exposes NR_LIVE.run');
 
 const res = await win.NR_LIVE.run(
-  { key: 'k', maxQueries: 9, catalogue: CATALOGUE },
+  { key: 'k', markets: MARKETS, maxQueries: 9, catalogue: CATALOGUE },
   () => {},
 );
 
@@ -133,15 +165,16 @@ eq(res.mined + res.explored, res.queries, 'mined + explored accounts for every q
 ok(searches.slice(0, 2).every(s => s.params.order === 'relevance'),
   'mined titles are searched first', searches.slice(0, 2).map(s => s.params.order));
 ok(searches.slice(2).every(s => s.params.order === 'viewCount'), 'seed queries sort by views');
+eq((NOW - Date.parse(searches[2].params.publishedAfter)) / 86400000, 120, 'seed queries use the same 120-day window as the collector');
 ok(searches.some(s => s.params.videoDuration === 'long'), 'searches long-form, not only medium');
 ok(searches.every(s => s.params.maxResults === '50'), 'asks for a full result page');
 
 // Channels already in the catalogue must not be re-fetched.
-const fetchedIds = calls.filter(c => c.resource === 'channels').flatMap(c => (c.params.id || '').split(','));
+const fetchedIds = calls.filter(c => c.resource === 'channels' && c.params.part.includes('contentDetails')).flatMap(c => (c.params.id || '').split(','));
 ok(!fetchedIds.includes('UCself'), 'does not spend quota re-fetching known channels');
 ok(fetchedIds.includes('UCnext'), 'fetches details for newly found channels');
-ok(calls.filter(c => c.resource === 'channels').every(c => c.params.hl === 'en'), 'channels.list asks for English metadata');
-ok(calls.filter(c => c.resource === 'videos').every(c => c.params.hl === 'en'), 'videos.list asks for English metadata');
+ok(calls.filter(c => c.resource === 'channels' && c.params.part.includes('contentDetails')).every(c => c.params.hl === 'en'), 'channels.list asks for English metadata');
+ok(calls.filter(c => c.resource === 'videos' && c.params.part.includes('contentDetails')).every(c => c.params.hl === 'en'), 'videos.list asks for English metadata');
 
 console.log('\ncompetition measured from the same pages');
 const patch = (res.competition || []).find(p => p.id === 'UCself');
@@ -153,6 +186,8 @@ if (patch) {
   eq(k.rival_channels, 5, 'counts rivals on the topic, excluding unrelated news');
   ok(!k.top_rivals.some(r => r.id === 'UCself'), 'never counts the channel against itself');
   ok(!k.top_rivals.some(r => r.id === 'UCnoise'), 'excludes unrelated results');
+  ok(!k.top_rivals.some(r => ['UCportuguese', 'UCmixedCountry', 'UCunknown'].includes(r.id)), 'excludes mismatched languages, unsupported countries, and unknown languages');
+  eq(k.language, 'en', 'measurement is tagged with the verified language');
   eq(k.verdict, 'competitive', 'verdict matches the observed clone cluster');
   eq(k.clones_30d, 2, 'counts copies published in the last 30 days');
 }
@@ -162,12 +197,15 @@ const found = res.channels[0];
 ok(!!found, 'returns the new channels it analysed');
 if (found) {
   console.log(`     language=${found.language} languages=${JSON.stringify(found.languages)} source=${found.language_source} multilang=${found.is_multilang}`);
-  eq(found.language, 'en', 'US channel with an English localization reads as English');
+  eq(found.language, 'en', 'US channel with predominantly English audio reads as English');
   ok(found.languages.includes('es'), 'keeps the channel\'s own language too');
   ok(found.is_multilang === true, 'marks it multi-language');
   ok(!!found.competition, 'new channel also gets a competition reading');
   ok(found.cluster && found.cluster.endsWith('|en'), 'cluster key uses the resolved language', found.cluster);
 }
+const expandedChannel = res.channels.find(channel => channel.id === 'UCnext');
+ok(expandedChannel?.videos_count === 60 && expandedChannel.videos.length === 5, 'accepts larger channels and reads the second upload page');
+eq(expandedChannel?.first_video_at, '2024-09-01T00:00:00Z', 'old first upload does not discard a channel with a recent upload');
 
 // ---- ratio on a catalogue large enough to show it ---------------------------------
 console.log('\nmine:explore ratio on a full catalogue');
@@ -177,12 +215,12 @@ calls.length = 0;
 const SUBJECTS = ['cruise ships', 'container vessels', 'icebreakers', 'oil platforms', 'cargo planes',
   'submarines', 'tunnel borers', 'dry docks', 'crane barges', 'nuclear reactors'];
 const big = SUBJECTS.flatMap((subject, i) => [0, 1, 2, 3].map(j => ({
-  id: `UCbig${i}_${j}`, title: `Channel ${i}-${j}`, niche: 'engineering', language: 'en', score: 50 + i,
+  id: `UCbig${i}_${j}`, title: `Channel ${i}-${j}`, niche: 'engineering', language: 'en', country: 'US', score: 50 + i,
   videos: [{ id: `b${i}${j}`, title: `How ${subject} really ${['work', 'fail', 'get built', 'get scrapped'][j]} explained`, views: 500000, is_outlier: true }],
   avg_views_first_5: 300000,
 })));
 const win2 = makeSandbox();
-const res2 = await win2.NR_LIVE.run({ key: 'k', maxQueries: 9, catalogue: big }, () => {});
+const res2 = await win2.NR_LIVE.run({ key: 'k', markets: MARKETS, maxQueries: 9, catalogue: big }, () => {});
 console.log(`     mined=${res2.mined} explored=${res2.explored}`);
 eq(res2.mined, 6, 'two of every three queries dig into clusters');
 eq(res2.explored, 3, 'one of every three queries explores new niches');
@@ -190,10 +228,30 @@ eq(res2.explored, 3, 'one of every three queries explores new niches');
 console.log('\nfilters restrict the plan');
 calls.length = 0;
 const win3 = makeSandbox();
-await win3.NR_LIVE.run({ key: 'k', maxQueries: 4, catalogue: CATALOGUE, niche: 'history' }, () => {});
+await win3.NR_LIVE.run({ key: 'k', markets: MARKETS, maxQueries: 4, catalogue: CATALOGUE, niche: 'history' }, () => {});
 const q3 = calls.filter(c => c.resource === 'search').map(s => s.params.q);
 ok(q3.some(q => /chinese soldiers/i.test(q)), 'mines only the chosen niche', q3);
 ok(!q3.some(q => /cruise ship/i.test(q)), 'leaves other niches alone', q3);
+
+console.log('\nsearch by topic');
+calls.length = 0;
+const topic = await win.NR_LIVE.searchTopic({ key: 'k', query: ' cruise ships ', days: 90, language: 'en', region: 'US', markets: MARKETS, order: 'viewCount' });
+eq(calls[0].params.q, 'cruise ships', 'searches the given topic');
+eq(calls[0].params.relevanceLanguage, 'en', 'sends the selected language');
+eq(calls[0].params.regionCode, 'US', 'sends the selected country');
+eq((NOW - Date.parse(calls[0].params.publishedAfter)) / 86400000, 90, 'sends the selected publication window');
+eq(calls.map(call => call.resource), ['search', 'videos', 'channels'], 'fetches channel and video statistics in batches');
+eq(topic.units, 102, 'reports search and statistics quota');
+eq(topic.videos.map(video => video.id), ['topic1', 'topic2', 'topic3'], 'keeps search order and excludes duplicates and unavailable videos');
+eq(topic.channels.find(channel => channel.id === 'UCnext')?.views, 300000, 'aggregates matched views by channel');
+eq(topic.channels.find(channel => channel.id === 'UCpresh')?.subs, null, 'keeps hidden subscriber count unknown');
+const empty = await win.NR_LIVE.searchTopic({ key: 'k', query: 'empty topic', days: 30, language: 'en', region: 'US', markets: MARKETS, order: 'relevance' });
+eq(empty, { videos: [], channels: [], rawVideos: 0, units: 100 }, 'skips detail calls when the search returns nothing');
+
+const probe = await win.NR_LIVE.probeCompetition({ key: 'k', channelId: 'UCself', title: PROBE, language: 'en', region: 'US', markets: MARKETS, catalogue: [
+  { id: 'UCnext', language: 'pt', country: 'PT' },
+] });
+ok(!probe.patch.competition.top_rivals.some(rival => rival.id === 'UCnext'), 'excludes a known Portuguese channel even when a result has English audio');
 
 console.log(`\n${assertions - failures}/${assertions} checks passed`);
 process.exit(failures ? 1 : 0);

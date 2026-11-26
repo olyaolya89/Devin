@@ -7,7 +7,7 @@
 <meta name="description" content="Найдите нишу для своего YouTube-канала: отобранные каналы, их контент, монетизация и динамика роста.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=35">
+<link rel="stylesheet" href="styles.css?v=37">
 </head>
 <body>
 <header class="top">
@@ -20,6 +20,8 @@
     <button type="button" class="side-min-btn" id="sideToggle"><span>×</span> Свернуть</button>
     <nav>
       <button type="button" class="nav" data-tab="all"><i class="dot"></i><span>Поисковик ниш</span></button>
+      <button type="button" class="nav" data-tab="topic"><i aria-hidden="true">⌕</i><span>Поиск на YouTube</span></button>
+      <button type="button" class="nav" data-tab="live" id="liveTab" hidden><i aria-hidden="true">↻</i><span>Мои находки</span></button>
       <button type="button" class="nav" data-tab="new"><i>✦</i><span>Недавно добавленные</span></button>
       <button type="button" class="nav" data-tab="fire"><i>⚡</i><span>Стреляющие каналы</span></button>
       <button type="button" class="nav" data-tab="niches"><i>▦</i><span>Группы ниш</span><em>ИТВ</em></button>
@@ -32,7 +34,8 @@
   </aside>
   <main class="main">
     <h1>Поисковик ниш</h1>
-    <p class="lede">Найдите нишу для своего YouTube-канала: изучайте отобранные каналы, их контент, монетизацию и динамику роста.</p>
+    <p class="lede">Найдите нишу для своего YouTube-канала. Каталог учитывает основной язык и страну, указанную в профиле YouTube.</p>
+    <div id="catalogueControls">
     <nav class="tabs" id="tabs">
       <button type="button" class="tab" data-tab="new">Недавно добавленные (<span data-count="new">0</span>)</button>
       <button type="button" class="tab is-on" data-tab="all">Все ниши (<span data-count="all">0</span>)</button>
@@ -58,18 +61,23 @@
       <select id="group" class="sel">
         <option value="channels">По каналам</option>
         <option value="niche">По нишам</option>
+        <option value="language">По языкам</option>
         <option value="compet">По конкурентности</option>
       </select>
       <button type="button" class="btn btn-red btn-filters" id="filtersToggle"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 4h18l-7 9v6l-4 2v-8z" fill="currentColor"/></svg> Фильтры <svg class="chev" viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.5"/></svg></button>
     </div>
-    <label class="search"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="11" cy="11" r="7" fill="none" stroke="#9aa0ab" stroke-width="2"/><path d="M20 20l-4-4" stroke="#9aa0ab" stroke-width="2"/></svg><input id="search" type="search" placeholder="Поиск по названию или юзернейму" autocomplete="off"></label>
+    <div class="search-row">
+      <label class="search"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="#9aa0ab" stroke-width="2"/><path d="M20 20l-4-4" stroke="#9aa0ab" stroke-width="2"/></svg><input id="search" type="search" aria-label="Поиск по каталогу" placeholder="Тема, канал или название ролика" autocomplete="off"></label>
+      <button type="button" class="btn" id="openTopic">Искать тему на YouTube →</button>
+    </div>
     <section class="filters" id="filters" hidden>
       <div class="f-grid">
         <label>Теги<select id="fTag"><option value="">Теги</option></select></label>
         <label>Ниша<select id="fNiche"><option value="">Ниша</option></select></label>
         <label>Подниша<select id="fSub"><option value="">Подниша</option></select></label>
         <label>Категории<select id="fCat"><option value="">Категории</option></select></label>
-        <label>Язык<select id="fLang"><option value="">Язык</option></select></label>
+        <label>Основной язык<select id="fLang"><option value="">Любой язык</option></select></label>
+        <label>Страна канала<select id="fCountry"><option value="">Все поддерживаемые страны</option></select></label>
         <label>Формат контента<select id="fFormat"><option value="">Формат контента</option></select></label>
         <label>Стиль производства<select id="fStyle"><option value="">Стиль производства</option></select></label>
         <label>Смешанное производство<select id="fMix"><option value="">Любое</option><option value="mixed">Смешанное (ИИ + стоки + графика…)</option><option value="single">Один способ</option></select></label>
@@ -80,7 +88,7 @@
         <label>Монетизация YouTube<select id="fMon"><option value="">Любое</option><option value="yes">Монетизирован</option><option value="no">Не монетизирован</option><option value="unknown">Неизвестно</option><option value="soon">Прогноз ≤ 90 дн.</option></select></label>
         <label>Мин. ИТВ<select id="fItv"><option value="">Любое</option><option value="20">20+</option><option value="40">40+</option><option value="60">60+</option><option value="80">80+</option></select></label>
         <label>Доп. монетизация<select id="fExtra"><option value="">Доп. монетизация</option></select></label>
-        <label>Конкурентов в базе (ниша)<select id="fComp"><option value="">Любое</option><option value="0-3">0–3</option><option value="4-10">4–10</option><option value="11-20">11–20</option><option value="21-99999">21 и больше</option></select></label>
+        <label>Конкурентов в базе (ниша и язык)<select id="fComp"><option value="">Любое</option><option value="0-3">0–3</option><option value="4-10">4–10</option><option value="11-20">11–20</option><option value="21-99999">21 и больше</option></select></label>
         <label title="Сборщик ищет на YouTube заголовки роликов этого канала и считает, сколько других каналов выпускают то же самое">Конкуренция на YouTube<select id="fRealComp"><option value="">Любое</option><option value="25">Свободно (до 25)</option><option value="50">Умеренно (до 50)</option><option value="75">Конкурентно (до 75)</option></select></label>
         <label>Дни до монетизации<select id="fDays"><option value="">Любое</option><option value="30">≤ 30 дн.</option><option value="90">≤ 90 дн.</option></select></label>
       </div>
@@ -95,15 +103,33 @@
         <label class="chk" title="Gemini посмотрел ролик и подтвердил нишу и поднишу"><input type="checkbox" id="onlyVerified" checked> Только проверенные ИИ</label>
         <label class="chk"><input type="checkbox" id="onlyNew3"> Только новые за 3 дня</label>
         <label class="chk"><input type="checkbox" id="onlyUnseen"> Только непросмотренные</label>
-        <label class="chk" title="Прячет каналы, чьи темы уже переполнены на YouTube. Каналы без проверки остаются в выдаче."><input type="checkbox" id="onlyFree"> Только свободные темы</label>
+        <label class="chk" title="Показывает каналы с измеренным индексом конкуренции до 25 включительно"><input type="checkbox" id="onlyFree"> Только свободные темы</label>
         <label class="chk" title="Подписчиков 500–300 тыс., просмотров от 200 тыс., ≥35 просмотров на подписчика, есть прострел ≥2,5×, свежий ролик за 90 дней"><input type="checkbox" id="onlyRef" checked> Только по критериям отбора</label>
         <button type="button" class="btn" id="resetFilters">Сбросить</button>
       </div>
     </section>
     <div class="verify-info" id="verifyInfo" hidden></div>
+    </div>
     <p class="muted" id="resultsInfo"></p>
     <div id="grid"></div>
     <section id="niches" hidden></section>
+    <section id="topic" hidden>
+      <h2>Поиск на YouTube</h2>
+      <form id="topicForm" class="block">
+        <label>Тема или заголовок ролика<input id="topicQuery" type="search" required maxlength="150" placeholder="Например, abandoned megaprojects"></label>
+        <div class="topic-options">
+          <label>Период публикации<select id="topicDays"><option value="30">30 дней</option><option value="90" selected>90 дней</option><option value="180">180 дней</option><option value="365">Год</option></select></label>
+          <label>Язык роликов<select id="topicLang" required></select></label>
+          <label>Страна каналов<select id="topicCountry" required></select></label>
+          <label>Порядок выдачи<select id="topicOrder"><option value="relevance">По релевантности</option><option value="viewCount">По просмотрам</option><option value="date">Сначала свежие</option></select></label>
+        </div>
+        <details id="topicKeyDetails"><summary>Ключ YouTube Data API</summary><label>Ключ API<input id="topicKey" type="password" placeholder="AIza…" autocomplete="off"></label></details>
+        <p class="muted">Проверяется до 50 роликов. В выдачу входят ролики с указанным языком от каналов из выбранной страны.</p>
+        <button type="submit" class="btn btn-red" id="topicRun">Найти ролики и каналы</button>
+      </form>
+      <p id="topicStatus" role="status"></p>
+      <div id="topicResults"></div>
+    </section>
     <div class="empty" id="empty" hidden><h3>Ничего не найдено</h3><p>Сбросьте фильтры или нажмите «Обновить каналы».</p></div>
   </main>
 </div>
@@ -114,13 +140,14 @@
   <div class="overlay-bg" data-close></div>
   <div class="box">
     <h3>Обновить список каналов</h3>
-    <p class="muted">Из каждых трёх запросов два идут вглубь: берут заголовки, которые уже выстрелили у каналов из базы, и ищут, кто ещё делает то же самое — так находятся соседи по кластеру и сразу считается конкуренция на YouTube. Третий запрос уходит на разведку новых ниш. Если в фильтрах выбрана ниша или язык, поиск идёт только по ним. Ключ хранится только в браузере.</p>
+    <p class="muted">Из каждых трёх запросов два идут вглубь: берут заголовки, которые уже выстрелили у каналов из базы, и ищут, кто ещё делает то же самое — так находятся соседи по кластеру и сразу считается конкуренция на YouTube. Третий запрос уходит на разведку новых ниш. Если в фильтрах выбраны ниша, язык или страна, поиск учитывает их. Ключ хранится только в браузере.</p>
     <label>Ключ YouTube Data API v3<input id="apiKey" type="password" placeholder="AIza…" autocomplete="off"></label>
-    <label>Поисковых запросов: <b id="maxQueriesVal">9</b> <small class="muted">(по 100 ед. квоты, бесплатный ключ — 10 000 в день)</small><input id="maxQueries" type="range" min="1" max="30" value="9"></label>
+    <label>Поисковых запросов: <b id="maxQueriesVal">9</b><input id="maxQueries" type="range" min="1" max="30" value="9"></label>
     <div class="progress" id="refreshProgress" hidden><i id="refreshBar"></i></div>
-    <p class="muted" id="refreshLog"></p>
+    <p class="muted" id="refreshLog" role="status"></p>
     <div class="row-end">
       <button type="button" class="btn" id="liveClear">Убрать найденные</button>
+      <button type="button" class="btn" id="viewLive" hidden>Показать найденные</button>
       <button type="button" class="btn" data-close>Закрыть</button>
       <button type="button" class="btn btn-red" id="refreshRun">Запустить поиск</button>
     </div>
@@ -139,7 +166,8 @@
     <p class="muted" id="supportOk" hidden>Сообщение сохранено.</p>
   </div>
 </div>
-<script src="live.js?v=2"></script>
-<script src="app.js?v=39"></script>
+<script src="catalogue.js?v=2"></script>
+<script src="live.js?v=4"></script>
+<script src="app.js?v=41"></script>
 </body>
 </html>

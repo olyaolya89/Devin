@@ -278,6 +278,20 @@
     {"text": "florida's new predator", "niche": "animals", "lang": "en"},
     {"text": "os híbridos de jurassic park", "niche": "animals", "lang": "pt"},
     {"text": "cada arcángel de la biblia explicado", "niche": "religion", "lang": "es"},
-    {"text": "historia bíblica explicada", "niche": "religion", "lang": "es"}
+    {"text": "historia bíblica explicada", "niche": "religion", "lang": "es"},
+    {"text": "verborgen geschiedenis Nederlandse steden", "niche": "history", "lang": "nl"},
+    {"text": "waterbouw grote projecten uitgelegd", "niche": "engineering", "lang": "nl"},
+    {"text": "glemt dansk historie dokumentar", "niche": "history", "lang": "da"},
+    {"text": "danske broer og store byggeprojekter", "niche": "engineering", "lang": "da"},
+    {"text": "unohdettu Suomen historia dokumentti", "niche": "history", "lang": "fi"},
+    {"text": "Suomen suuret rakennushankkeet", "niche": "engineering", "lang": "fi"},
+    {"text": "glemt norsk historie dokumentar", "niche": "history", "lang": "no"},
+    {"text": "norske tunneler og ingeniørprosjekter", "niche": "engineering", "lang": "no"},
+    {"text": "bortglömd svensk historia dokumentär", "niche": "history", "lang": "sv"},
+    {"text": "svenska broar och stora byggprojekt", "niche": "engineering", "lang": "sv"},
+    {"text": "日本の知られざる歴史 解説", "niche": "history", "lang": "ja"},
+    {"text": "日本の巨大インフラ メガプロジェクト 解説", "niche": "engineering", "lang": "ja"},
+    {"text": "잊혀진 한국 역사 다큐멘터리", "niche": "history", "lang": "ko"},
+    {"text": "한국 대형 건설 프로젝트 기술 이야기", "niche": "engineering", "lang": "ko"}
   ]
 }

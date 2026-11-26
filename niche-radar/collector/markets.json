@@ -1,0 +1,15 @@
+{
+  "en": ["US", "GB", "CA", "AU", "NZ", "IE"],
+  "de": ["DE", "AT", "CH"],
+  "fr": ["FR", "CA", "BE", "CH", "LU"],
+  "es": ["ES"],
+  "it": ["IT", "CH"],
+  "pt": ["PT"],
+  "nl": ["NL", "BE"],
+  "da": ["DK"],
+  "fi": ["FI"],
+  "no": ["NO"],
+  "sv": ["SE"],
+  "ja": ["JP"],
+  "ko": ["KR"]
+}
