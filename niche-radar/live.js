@@ -109,7 +109,7 @@
     text_language: item.snippet?.defaultLanguage || null,
     has_en_localization: !!(item.snippet?.localized?.title && item.snippet.localized.title !== item.snippet.title),
     thumbnail: item.snippet?.thumbnails?.medium?.url || item.snippet?.thumbnails?.default?.url || '',
-    views: num(item.statistics?.viewCount),
+    views: num(item.statistics?.viewCount), views_available: item.statistics?.viewCount != null,
     published_at: item.snippet?.publishedAt || null,
     duration_sec: durationSec(item.contentDetails?.duration),
   });
@@ -189,6 +189,168 @@
       videos.push(...(data.items || []).map(normVideo));
     }
     return videos;
+  }
+
+  async function fetchByIds(resource, part, ids, st) {
+    const requests = [];
+    for (let start = 0; start < ids.length; start += 50) {
+      requests.push(ytGet(resource, { part, id: ids.slice(start, start + 50).join(',') }, st, 1));
+    }
+    return (await Promise.all(requests)).flatMap(data => data.items || []);
+  }
+
+  function reportChannel(channel, videos, now, historyLimited) {
+    const snippet = channel.snippet || {};
+    const stats = channel.statistics || {};
+    return {
+      id: channel.id, title: snippet.title || channel.id, country: snippet.country || null,
+      created_at: snippet.publishedAt || null,
+      subs: stats.hiddenSubscriberCount || stats.subscriberCount == null ? null : num(stats.subscriberCount),
+      videos_count: stats.videoCount == null ? null : num(stats.videoCount),
+      total_views: stats.viewCount == null ? null : num(stats.viewCount),
+      videos, updated_at: now.toISOString(), history_limited: historyLimited,
+    };
+  }
+
+  function channelLookup(reference) {
+    let value = reference.trim();
+    let legacy = false;
+    if (/^(?:https?:\/\/)?(?:www\.|m\.)?youtube\.com\//i.test(value)) {
+      const url = new URL(/^https?:/i.test(value) ? value : 'https://' + value);
+      const parts = url.pathname.split('/').filter(Boolean).map(decodeURIComponent);
+      if (parts[0]?.startsWith('@')) value = parts[0];
+      else if (parts[0] === 'channel') value = parts[1] || '';
+      else if (parts[0] === 'user') { value = parts[1] || ''; legacy = true; }
+      else throw new Error('Нужна ссылка на сам канал YouTube или его @имя.');
+    }
+    if (/^UC[\w-]{22}$/.test(value)) return { id: value };
+    if (legacy && value) return { forUsername: value };
+    if (/^@[\p{L}\p{N}_.-]+$/u.test(value)) return { forHandle: value };
+    throw new Error('Укажите @имя или ссылку вида youtube.com/@имя.');
+  }
+
+  async function inspectChannel({ key, reference }) {
+    const st = { key, units: 0 };
+    const data = await ytGet('channels', {
+      part: 'snippet,statistics,contentDetails', ...channelLookup(reference),
+    }, st, 1);
+    const channel = data.items?.[0];
+    if (!channel) throw new Error('Канал не найден по этому адресу.');
+    const videos = await fetchChannelVideos(channel, st);
+    return reportChannel(channel, videos, new Date(), num(channel.statistics?.videoCount) > videos.length);
+  }
+
+  const reportVideoLanguage = video => languageCode(video.audio_language) || languageCode(video.text_language);
+  const reportTitle = video => video.title_original || video.title || '';
+  const REPORT_MAX_CHANNELS = 48;
+  const reportSegmenters = new Map();
+
+  function reportOverlap(source, other, language) {
+    const tokenize = value => {
+      if (['ja', 'ko'].includes(language) && typeof Intl.Segmenter === 'function') {
+        const segmenter = reportSegmenters.get(language) || new Intl.Segmenter(language, { granularity: 'word' });
+        reportSegmenters.set(language, segmenter);
+        return [...segmenter.segment(value)].filter(part => part.isWordLike).map(part => part.segment.toLowerCase());
+      }
+      return window.NR_CATALOGUE_TOOLS.words(value).filter(word => word.length > 1 && !STOPWORDS.has(word));
+    };
+    const terms = new Set(tokenize(source));
+    const candidate = new Set(tokenize(other));
+    let overlap = 0;
+    for (const term of terms) if (candidate.has(term)) overlap++;
+    return overlap >= Math.min(2, terms.size) && terms.size ? overlap / terms.size : 0;
+  }
+
+  async function researchNiche({ key, language, markets, country, plan, catalogue = [], minSeconds = 0 }, progress = () => {}) {
+    if (!plan.length || plan.some(item => !allowedMarket(markets, language, item.region))) {
+      throw new Error('Для разбора нужны поисковые запросы для выбранного языка и страны.');
+    }
+    const now = new Date();
+    const st = { key, units: 0 };
+    const searches = [];
+    const searchIds = new Set();
+    const matchedQuery = new Map();
+    let stop = '';
+    for (const step of plan) {
+      progress(`Поиск ${searches.length + 1}/${plan.length} · «${step.query}»`);
+      try {
+        const data = await ytGet('search', {
+          part: 'snippet', type: 'video', q: step.query, maxResults: 50, order: step.order,
+          publishedAfter: new Date(now - step.days * 86400000).toISOString(),
+          relevanceLanguage: language, regionCode: step.region,
+        }, st, 100);
+        searches.push(step);
+        for (const item of data.items || []) {
+          const id = item.id?.videoId;
+          if (!id) continue;
+          searchIds.add(id);
+          if (!matchedQuery.has(id)) matchedQuery.set(id, new Set());
+          matchedQuery.get(id).add(step.query);
+        }
+      } catch (error) {
+        if (!searches.length || error instanceof ApiDisabled) throw error;
+        stop = error.message;
+        break;
+      }
+    }
+    const languageByChannel = new Map(catalogue.map(channel => [channel.id, channelLanguage(channel)]));
+    const rawVideos = searchIds.size;
+    progress('Проверяю язык роликов и страну каналов…');
+    const videoData = await fetchByIds('videos', 'snippet,statistics,contentDetails', [...searchIds], st);
+    const matches = new Map();
+    let languageRejected = 0;
+    let topicRejected = 0;
+    for (const item of videoData) {
+      const snippet = item.snippet || {};
+      const primary = languageByChannel.get(snippet.channelId);
+      if (videoLanguage(snippet) !== language || (primary && primary !== language)) { languageRejected++; continue; }
+      const video = normVideo(item);
+      if (!snippet.channelId || video.duration_sec < minSeconds || snippet.liveBroadcastContent === 'upcoming') continue;
+      const related = [...(matchedQuery.get(item.id) || [])].some(query =>
+        reportOverlap(query, [reportTitle(video), ...(video.tags || [])].join(' '), language) >= 0.45);
+      if (!related) { topicRejected++; continue; }
+      if (!matches.has(snippet.channelId)) matches.set(snippet.channelId, []);
+      matches.get(snippet.channelId).push(video);
+    }
+    const details = await fetchByIds('channels', 'snippet,statistics,contentDetails', [...matches.keys()], st);
+    const eligible = details.filter(channel =>
+      allowedMarket(markets, language, channel.snippet?.country) && (!country || channel.snippet.country === country));
+    eligible.sort((a, b) => matches.get(b.id).length - matches.get(a.id).length
+      || String(matches.get(b.id)[0]?.published_at || '').localeCompare(String(matches.get(a.id)[0]?.published_at || '')));
+    const selected = eligible.slice(0, REPORT_MAX_CHANNELS);
+    const channels = [];
+    let playlistFailures = 0;
+    let otherPrimary = 0;
+    for (let start = 0; start < selected.length; start += 4) {
+      progress(`Проверяю историю публикаций · ${start}/${selected.length} каналов`);
+      const batch = selected.slice(start, start + 4);
+      const listings = await Promise.allSettled(batch.map(channel => fetchChannelVideos(channel, st)));
+      listings.forEach((listing, index) => {
+        const channel = batch[index];
+        const anchors = matches.get(channel.id);
+        const uploaded = listing.status === 'fulfilled' ? listing.value : [];
+        if (listing.status === 'rejected') playlistFailures++;
+        const declarations = uploaded.map(reportVideoLanguage).filter(Boolean);
+        if (declarations.length >= 3 && declarations.filter(code => code === language).length * 2 < declarations.length) {
+          otherPrimary++;
+          return;
+        }
+        const scoped = new Map(anchors.map(video => [video.id, video]));
+        for (const video of uploaded) {
+          if (reportVideoLanguage(video) !== language || video.duration_sec < minSeconds) continue;
+          const matchesAnchor = anchors.some(anchor => reportOverlap(reportTitle(anchor), reportTitle(video), language) >= 0.55);
+          if (scoped.has(video.id) || matchesAnchor) scoped.set(video.id, video);
+        }
+        channels.push(reportChannel(channel, [...scoped.values()], now,
+          listing.status === 'rejected' || num(channel.statistics?.videoCount) > uploaded.length));
+      });
+    }
+    return {
+      channels, date: now.toISOString(), searches, stop, rawVideos, checkedVideos: videoData.length,
+      languageRejected, topicRejected, marketRejected: details.length - eligible.length,
+      matchedChannels: matches.size, eligibleChannels: eligible.length, checkedChannels: selected.length,
+      playlistFailures, otherPrimary, limit: REPORT_MAX_CHANNELS,
+    };
   }
 
   function classify(channel, videos, query) {
@@ -585,5 +747,5 @@
     };
   }
 
-  window.NR_LIVE = { run, searchTopic, probeCompetition, QuotaExhausted, ApiDisabled };
+  window.NR_LIVE = { run, searchTopic, probeCompetition, researchNiche, inspectChannel, QuotaExhausted, ApiDisabled };
 })();

@@ -7,7 +7,7 @@
   const loadSet = k => { try { return new Set(JSON.parse(localStorage.getItem(k) || '[]')); } catch { return new Set(); } };
   const saveSet = (k, set) => localStorage.setItem(k, JSON.stringify([...set]));
   const loadArr = k => { try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch { return []; } };
-  const state = { tab: location.hash === '#topic' ? 'topic' : 'all', loadStatus: 'loading', q: '', sort: 'new', group: 'channels', supportedMarkets: {}, all: [], saved: loadSet(LS.saved), liked: loadSet(LS.liked), seen: loadSet(LS.seen), clusters: {}, size: {}, rpm: null, labels: (() => { try { return JSON.parse(localStorage.getItem('nr:labels') || '{}'); } catch { return {}; } })() };
+  const state = { tab: location.hash === '#topic' || location.hash.startsWith('#report?') ? 'topic' : 'all', loadStatus: 'loading', q: '', sort: 'new', group: 'channels', supportedMarkets: {}, all: [], saved: loadSet(LS.saved), liked: loadSet(LS.liked), seen: loadSet(LS.seen), clusters: {}, size: {}, rpm: null, labels: (() => { try { return JSON.parse(localStorage.getItem('nr:labels') || '{}'); } catch { return {}; } })() };
   const LANG = { en: 'Английский', ru: 'Русский', es: 'Испанский', pt: 'Португальский', fr: 'Французский', de: 'Немецкий', it: 'Итальянский' };
   const fmt = n => { n = Number(n) || 0; if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1).replace('.0', '') + ' млн'; if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1).replace('.0', '') + ' тыс.'; return String(Math.round(n)); };
   const money = n => (Number(n) || 0).toFixed(2).replace('.', ',') + ' $';
@@ -100,7 +100,7 @@
     const rows = Object.entries(state.clusters).sort(([, a], [, b]) => (b.entry_score || 0) - (a.entry_score || 0)).map(([key, g]) => {
       const label = state.labels[key] || g.label;
       const [niche, sg, language] = key.split('|');
-      return `<tr><td><b>${esc(g.niche_ru || niche)}</b></td><td>${esc(styleNames[sg] || sg || '—')}</td><td>${esc(langName(language))}</td><td>${g.n}</td><td>${Math.round((g.share_growing || 0) * 100)}%</td><td>${fmt(g.median_vpv)}</td><td>${g.newcomers_30d}</td><td>${money(g.median_rpm)}</td><td><span class="badge badge-blue">${g.entry_score ?? '—'}</span></td><td><span class="badge ${VERDICT_CLASS[g.verdict] || ''}" title="${esc(VERDICT_HINT[g.verdict] || '')}">${esc(g.verdict_ru || g.verdict || '—')}</span></td><td class="nowrap"><button type="button" class="icon ${label === 'good' ? 'on' : ''}" data-label="${esc(key)}" data-val="good" title="Хорошая ниша">👍</button> <button type="button" class="icon ${label === 'bad' ? 'on' : ''}" data-label="${esc(key)}" data-val="bad" title="Плохая ниша">👎</button></td><td><button type="button" class="more" data-niche-open="${esc(niche)}" data-niche-lang="${esc(language)}">Каналы →</button></td></tr>`;
+      return `<tr><td><b>${esc(g.niche_ru || niche)}</b></td><td>${esc(styleNames[sg] || sg || '—')}</td><td>${esc(langName(language))}</td><td>${g.n}</td><td>${Math.round((g.share_growing || 0) * 100)}%</td><td>${fmt(g.median_vpv)}</td><td>${g.newcomers_30d}</td><td>${money(g.median_rpm)}</td><td><span class="badge badge-blue">${g.entry_score ?? '—'}</span></td><td><span class="badge ${VERDICT_CLASS[g.verdict] || ''}" title="${esc(VERDICT_HINT[g.verdict] || '')}">${esc(g.verdict_ru || g.verdict || '—')}</span></td><td class="nowrap"><button type="button" class="icon ${label === 'good' ? 'on' : ''}" data-label="${esc(key)}" data-val="good" title="Хорошая ниша">👍</button> <button type="button" class="icon ${label === 'bad' ? 'on' : ''}" data-label="${esc(key)}" data-val="bad" title="Плохая ниша">👎</button></td><td><button type="button" class="more" data-niche-open="${esc(niche)}" data-niche-lang="${esc(language)}">Каналы →</button> <button type="button" class="text-link" data-report-niche="${esc(niche)}" data-report-lang="${esc(language)}">Разбор ниши</button></td></tr>`;
     }).join('');
     return `<div class="block"><div class="niches-head"><h3>Ниши: где проще зайти новичку</h3><button type="button" class="btn" id="exportLabels">Экспорт разметки</button></div><p class="muted">Каналы сгруппированы по нише, формату и языку. Оценка входа 0–100: чем выше, тем больше доля растущих новичков, выше просмотры и меньше конкуренция. Наведи на вердикт — будет подсказка. 👍/👎 — твоя разметка, она сохраняется в браузере; «Экспорт разметки» скачает файл для обучения сборщика.</p><div class="table-wrap"><table class="comp niches-t"><thead><tr><th>Ниша</th><th>Формат</th><th>Язык</th><th>Каналов</th><th>Растут</th><th>Медиана просм./видео</th><th>Новых за 30 дн.</th><th>Медиана RPM</th><th>Оценка входа</th><th>Вердикт</th><th>Разметка</th><th></th></tr></thead><tbody>${rows || '<tr><td colspan="12" class="muted">Нет данных</td></tr>'}</tbody></table></div></div>`;
   }
@@ -386,7 +386,7 @@ ${rows ? `<h3 class="h">Кто ещё делает эти темы</h3><div clas
     const extra = (c.extra_monetization || []).map(x => EXTRA_RU[x] || x).join(', ');
     const kpi = [['Подписчики', num(c.subs)], ['Просмотры', num(c.total_views)], ['Видео', num(c.videos_count)], ['RPM (оценка)', money(c.rpm)], ['RPM Shorts', money(c.rpm_short ?? (c.rpm || 0) * 0.08)], ['RPM длинных видео', money(c.rpm_long ?? c.rpm)], ['Прострелов', outliers(c)], ['Страна', countryName(c.country)], ['Язык', langsOf(c).map(langName).join(', ')], ['Конкуренция на YouTube', realComp(c) != null ? `${COMP_RU[compVerdict(c)] || ''} ${realComp(c)}/100` : 'не проверена'], ['Конкурентов в базе', primaryLang(c) ? `${compCount(c)} · ${langName(primaryLang(c))}` : 'Язык не определён'], ['Сложность производства', c.difficulty_ru || '—'], ['Использование ИИ', AI_RU[aiMode(c)]], ['Доп. монетизация', extra || '—'], ['Доход / мес.', '~' + num(monthly(c)) + ' $'], ['Монетизация YouTube', c.is_monetized ? 'Монетизирован' : c.is_monetized === false ? 'Не монетизирован' : 'Неизвестно'], ['До монетизации', c.is_monetized ? '—' : c.monetization_forecast || '—'], ['Формат контента', CONTENT_RU[contentType(c)]]];
     const trow = (label, items, cls) => items.length ? `<div class="trow"><span>${label}</span>${items.map(x => `<span class="tag ${cls}">${esc(x)}</span>`).join('')}</div>` : '';
-    $('#drawerPanel').innerHTML = `<button type="button" class="x-close" data-close>× Закрыть</button>${banner ? `<img class="banner" src="${esc(banner)}" alt="">` : ''}<div class="m-head"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div><h2>${esc(c.title)}</h2><div class="handle">${esc(handleOf(c))}</div></div><div class="m-act"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><a class="ic" href="${yt(c.id, c.handle)}" target="_blank" rel="noopener" title="Открыть на YouTube">${ICON.ext}</a><button type="button" class="btn-out" id="showComps">Конкуренты</button></div></div>
+    $('#drawerPanel').innerHTML = `<button type="button" class="x-close" data-close>× Закрыть</button>${banner ? `<img class="banner" src="${esc(banner)}" alt="">` : ''}<div class="m-head"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div><h2>${esc(c.title)}</h2><div class="handle">${esc(handleOf(c))}</div></div><div class="m-act"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><a class="ic" href="${yt(c.id, c.handle)}" target="_blank" rel="noopener" title="Открыть на YouTube">${ICON.ext}</a><button type="button" class="btn-out" id="showComps">Конкуренты</button><button type="button" class="btn" data-report-niche="${esc(nicheOf(c))}" data-report-lang="${esc(primaryLang(c))}" data-report-country="${esc(c.country)}" data-report-channel>Разбор ниши</button></div></div>
 <div class="kpi">${kpi.map(([k, v]) => `<div><small>${k}</small><b>${esc(v)}</b></div>`).join('')}</div>${c.verified === false ? `<div class="warn"><b>Отклонён ИИ.</b> ${esc(c.reject_reason || '')}</div>` : c.verified !== true ? '<div class="warn">Канал ещё не проверен ИИ — ниша и подниша определены автоматически по названиям роликов и могут быть неточными.</div>' : ''}${risky(c) ? '<div class="warn"><b>Высокие риски.</b> Ниша может чаще получать ограничения монетизации.</div>' : ''}
 ${isMixed(c) ? trow('Смешанное производство', mix(c).map(x => `${styleName(x.style)} ${x.share}%`), 'tag-mix') : ''}${trow('Стиль производства', styles(c).map(styleName), 'tag-o')}${trow('Категории', categories(c).slice(0, 6), 'tag-g')}${trow('Ниша', [c.niche_ai_ru || c.niche_ru || 'Другое'], 'tag-b')}${trow('Подниша', subniches(c).slice(0, 3), 'tag-p')}${trow('Метки', flags(c), 'tag-o')}
 <h3 class="h">Описание ниши</h3><p class="notes">${esc(c.notes_ru || describeRu(c))}</p>${c.notes_ru ? `<details><summary class="muted">Сводка по цифрам</summary><p class="notes">${esc(describeRu(c))}</p></details>` : ''}
@@ -450,16 +450,20 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     const ready = state.loadStatus === 'ready';
     const nich = state.tab === 'niches';
     const topic = state.tab === 'topic';
+    const report = state.tab === 'report';
+    $('#catalogueTitle').hidden = report;
+    $('#catalogueIntro').hidden = report;
+    $('#nicheReport').hidden = !ready || !report;
     const notice = $('#catalogueNotice');
     notice.hidden = ready;
     notice.querySelector('span').textContent = state.loadStatus === 'failed' ? 'Не удалось загрузить каталог ниш.' : 'Загружаю каталог ниш…';
     $('#retryCatalogue').hidden = state.loadStatus !== 'failed';
     $('#niches').hidden = !ready || !nich;
-    $('#grid').hidden = !ready || nich || topic;
-    $('#catalogueControls').hidden = !ready || topic || nich;
+    $('#grid').hidden = !ready || nich || topic || report;
+    $('#catalogueControls').hidden = !ready || topic || nich || report;
     $('#topic').hidden = !ready || !topic;
     $$('[data-tab]').forEach(button => button.classList.toggle('is-on', button.dataset.tab === state.tab));
-    if (!ready) {
+    if (!ready || report) {
       $('#resultsInfo').textContent = '';
       $('#empty').hidden = true;
       return;
@@ -512,9 +516,23 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
 
   function toggle(set, key, id) { if (set.has(id)) set.delete(id); else set.add(id); saveSet(key, set); render(); if (!$('#drawer').hidden) openDrawer(id); }
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-comps],[data-label],[data-niche-open],[data-topic-niche],#retryCatalogue,#exportLabels,[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#liveClear,#supportBtn,#supportSend,#sideToggle,#refreshSide,#supportSide,#burger,#showUnverified,#toTop,#openTopic,#viewLive');
+    const t = e.target.closest('[data-comps],[data-label],[data-niche-open],[data-topic-niche],[data-report-niche],#retryCatalogue,#exportLabels,[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#liveClear,#supportBtn,#supportSend,#sideToggle,#refreshSide,#supportSide,#burger,#showUnverified,#toTop,#openTopic,#viewLive,#reportCustom');
     if (!t) return;
     if (t.id === 'retryCatalogue') { boot(); return; }
+    if (t.id === 'reportCustom') {
+      openNicheReport({ niche: 'custom', language: $('#topicLang').value, country: $('#topicCountry').value, query: $('#topicQuery').value }, { collect: true });
+      return;
+    }
+    if (t.dataset.reportNiche) {
+      const fromTopic = state.tab === 'topic' && !t.hasAttribute('data-report-channel');
+      openNicheReport({
+        niche: t.dataset.reportNiche,
+        language: t.dataset.reportLang || $('#topicLang').value,
+        country: t.dataset.reportCountry || (fromTopic ? $('#topicCountry').value : ''),
+        query: fromTopic ? $('#topicQuery').value : '',
+      }, { collect: true });
+      return;
+    }
     if (t.dataset.topicNiche) {
       const language = $('#topicLang').value;
       const country = $('#topicCountry').value;
@@ -552,7 +570,7 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
       return;
     }
     if (t.dataset.tab === 'topic') { openTopic(); return; }
-    if (t.dataset.tab) { state.tab = t.dataset.tab; document.body.classList.remove('side-open'); render(); window.scrollTo({ top: 0 }); return; }
+    if (t.dataset.tab) { leaveReportUrl(t.dataset.tab); state.tab = t.dataset.tab; document.body.classList.remove('side-open'); render(); window.scrollTo({ top: 0 }); return; }
     if (t.dataset.save) { e.stopPropagation(); toggle(state.saved, LS.saved, t.dataset.save); return; }
     if (t.dataset.like) { e.stopPropagation(); toggle(state.liked, LS.liked, t.dataset.like); return; }
     if (t.dataset.comps) { e.stopPropagation(); openDrawer(t.dataset.comps); const b = $('#compsBlock'); if (b) { b.hidden = false; setTimeout(() => b.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); } return; }
@@ -609,6 +627,7 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
   }
 
   function openTopic() {
+    leaveReportUrl('topic');
     state.tab = 'topic';
     document.body.classList.remove('side-open');
     render();
@@ -619,10 +638,147 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     return state.rpm?.niches?.[key]?.ru_name || state.all.find(channel => nicheOf(channel) === key)?.niche_ru || key;
   }
 
+  const research = window.NR_NICHE_ANALYSIS;
+  let reportSession;
+  let reportRequests;
+  const freshReports = new Map();
+  let seedsRequest;
+
+  function leaveReportUrl(tab) {
+    if (location.hash.startsWith('#report?')) {
+      history.replaceState(null, '', location.pathname + location.search + (tab === 'topic' ? '#topic' : ''));
+    }
+  }
+
+  function reportCatalogue(scope) {
+    const terms = catalogue.words(scope.query);
+    return state.pool.filter(channel => (scope.niche === 'custom' || nicheOf(channel) === scope.niche)
+      && primaryLang(channel) === scope.language && (!scope.country || channel.country === scope.country)).map(channel => {
+      const videos = channel.videos?.filter(video => {
+        const language = catalogue.languageCode(video.audio_language) || catalogue.languageCode(video.text_language);
+        if (language && language !== scope.language) return false;
+        if (!terms.length) return true;
+        const title = catalogue.words(video.title + ' ' + (video.title_original || '')).join(' ');
+        return catalogue.matches(title, terms);
+      });
+      return { ...channel, videos };
+    });
+  }
+
+  function normalizedReportScope(input) {
+    const niche = String(input.niche || '');
+    const language = catalogue.languageCode(input.language);
+    if (!state.supportedMarkets[language]?.length) return null;
+    const query = String(input.query || '').trim().slice(0, 150);
+    if (niche === 'custom' ? !catalogue.words(query).length
+      : !(state.pool.some(channel => nicheOf(channel) === niche) || state.rpm?.niches?.[niche])) return null;
+    const country = input.country || '';
+    if (country && !catalogue.allowedMarket(state.supportedMarkets, language, country)) return null;
+    const canonical = catalogue.words(nicheName(niche)).join(' ');
+    const normalized = catalogue.words(query).join(' ');
+    return {
+      niche, language, country,
+      query: niche !== 'custom' && (normalized === canonical || normalized === catalogue.words(niche).join(' ')) ? '' : query,
+      minSeconds: [180, 600].includes(Number(input.minSeconds)) ? Number(input.minSeconds) : 0,
+    };
+  }
+
+  function getReportKey() {
+    try { return localStorage.getItem(LS.key) || ''; } catch { return ''; }
+  }
+
+  function openNicheReport(input, { focus = true, collect = false } = {}) {
+    if (state.loadStatus !== 'ready') return;
+    const scope = normalizedReportScope(input);
+    if (!scope) return;
+    const back = state.tab === 'report' ? reportSession.back : state.tab;
+    const key = JSON.stringify(scope);
+    reportSession = { scope, back, key };
+    state.tab = 'report';
+    $('#drawer').hidden = true;
+    document.body.classList.remove('side-open');
+    const params = new URLSearchParams(Object.entries(scope).filter(([, value]) => value));
+    history.replaceState(null, '', '#report?' + params);
+    showNicheReport(freshReports.get(key));
+    render();
+    if (focus) {
+      window.scrollTo({ top: 0 });
+      $('#reportTitle').focus({ preventScroll: true });
+    }
+    if (collect && !freshReports.has(key) && getReportKey()) $('#reportRefresh').click();
+  }
+
+  function showNicheReport(source = null) {
+    const session = reportSession;
+    const { scope } = session;
+    const data = reportCatalogue(scope);
+    const catalogueModel = research.build(data, { minSeconds: scope.minSeconds });
+    const label = scope.niche === 'custom' ? 'Разбор темы' : nicheName(scope.niche);
+    const similar = [...new Set(state.pool.filter(channel => primaryLang(channel) === scope.language
+      && (!scope.country || channel.country === scope.country)).map(nicheOf))]
+      .filter(niche => niche !== scope.niche).map(id => ({ id, label: nicheName(id) }))
+      .sort((a, b) => a.label.localeCompare(b.label, 'ru'));
+    const scopeLabel = [langName(scope.language), scope.country ? countryName(scope.country) : 'Все поддерживаемые страны языка'].join(' · ');
+    const root = $('#nicheReport');
+    window.NR_NICHE_REPORT.mount(root, {
+      scope, label, scopeLabel, similar, source,
+      model: source ? research.build(source.channels, { minSeconds: scope.minSeconds }) : catalogueModel,
+      actions: {
+        back() {
+          leaveReportUrl(session.back);
+          state.tab = session.back;
+          render();
+          window.scrollTo({ top: 0 });
+        },
+        scope(query, minSeconds) { openNicheReport({ ...scope, query, minSeconds }, { focus: false }); },
+        baseline() { return { label, model: catalogueModel }; },
+        comparison(id) {
+          if (!id) return null;
+          const other = { ...scope, niche: id, query: '' };
+          return { label: nicheName(id), model: research.build(reportCatalogue(other), { minSeconds: scope.minSeconds }) };
+        },
+        snapshot() { showNicheReport(); },
+        showSource(result) {
+          freshReports.set(session.key, result);
+          if (freshReports.size > 4) freshReports.delete(freshReports.keys().next().value);
+          if (reportSession === session && state.tab === 'report') showNicheReport(result);
+        },
+        getKey: getReportKey,
+        async inspect(key, reference) {
+          const result = await window.NR_LIVE.inspectChannel({ key, reference });
+          try { localStorage.setItem(LS.key, key); } catch {}
+          return result;
+        },
+        async refresh(key, progress) {
+          if (reportRequests) throw new Error('Идёт другой сбор YouTube. Дождитесь его завершения.');
+          reportRequests = true;
+          try {
+            const regions = scope.country ? [scope.country] : state.supportedMarkets[scope.language];
+            if (!seedsRequest) seedsRequest = fetchJson('collector/queries.json').catch(() => { seedsRequest = null; return null; });
+            const seeds = (await seedsRequest)?.queries?.filter(item => item.niche === scope.niche && item.lang === scope.language)
+              .map(item => item.text) || [];
+            const plan = research.queryPlan({
+              query: scope.query, label, seeds, channels: data, regions, language: scope.language,
+            });
+            const result = await window.NR_LIVE.researchNiche({
+              key, language: scope.language, country: scope.country, plan, markets: state.supportedMarkets,
+              catalogue: state.knownChannels, minSeconds: scope.minSeconds,
+            }, progress);
+            try { localStorage.setItem(LS.key, key); } catch {}
+            return result;
+          } finally {
+            reportRequests = false;
+          }
+        },
+      },
+    });
+  }
+
   function renderTopicCatalogue() {
     const language = $('#topicLang').value;
     const country = $('#topicCountry').value;
     const terms = catalogue.words($('#topicQuery').value);
+    $('#reportCustom').hidden = !terms.length;
     const groups = new Map();
     let channelCount = 0;
     for (const channel of state.all) {
@@ -648,7 +804,7 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     const rows = [...groups].sort((a, b) => b[1].length - a[1].length || nicheName(a[0]).localeCompare(nicheName(b[0]), 'ru')).map(([niche, channels]) => {
       const sample = channels.slice().sort((a, b) => (b.avg_views || 0) - (a.avg_views || 0)).slice(0, 3);
       const links = sample.map(channel => `<button type="button" class="text-link" data-open="${esc(channel.id)}">${esc(channel.title)}</button>`).join('');
-      return `<tr><th scope="row">${esc(nicheName(niche))}</th><td>${channels.length}</td><td><div class="topic-examples">${links}</div></td><td><button type="button" class="text-link" data-topic-niche="${esc(niche)}" aria-label="Все каналы ниши ${esc(nicheName(niche))}">Все каналы →</button></td></tr>`;
+      return `<tr><th scope="row">${esc(nicheName(niche))}</th><td>${channels.length}</td><td><div class="topic-examples">${links}</div></td><td><button type="button" class="text-link" data-topic-niche="${esc(niche)}" aria-label="Все каналы ниши ${esc(nicheName(niche))}">Каналы</button> <button type="button" class="btn btn-red report-list-button" data-report-niche="${esc(niche)}" aria-label="Разбор ниши ${esc(nicheName(niche))}">Разбор</button></td></tr>`;
     }).join('');
     table.innerHTML = `<div class="table-wrap"><table class="comp topic-catalogue"><thead><tr><th scope="col">Ниша</th><th scope="col">Каналов</th><th scope="col">Примеры каналов</th><th scope="col">Список</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }
@@ -768,6 +924,10 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
       state.baseData = data;
       state.loadStatus = 'ready';
       applyCatalogue(data);
+      if (location.hash.startsWith('#report?')) {
+        const scope = Object.fromEntries(new URLSearchParams(location.hash.slice(8)));
+        openNicheReport(scope);
+      }
     } catch (error) {
       console.error('Niche Radar catalogue:', error);
       state.loadStatus = 'failed';
