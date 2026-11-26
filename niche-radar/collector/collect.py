@@ -38,6 +38,7 @@ ENRICHED_KEYS = (
     "notes_ru", "subniche_ru", "extra_monetization", "enriched_at", "notes_source",
     "uses_ai", "uses_ai_mode", "difficulty", "difficulty_ru", "production_methods_ru",
     "has_ai_avatar", "production_styles", "categories", "verified", "reject_reason", "niche_ai_ru", "niche_ai",
+    "topic_audit_version", "topic_audited_at",
 )
 
 STYLE_KEYWORDS = {
@@ -970,7 +971,7 @@ def merge(
                 if key in old:
                     result[key] = old[key]
         if old and old.get("country") == result.get("country") and channel_language(old) == channel_language(result):
-            for key in ("competition", "competition_index", "competition_verdict", "competition_verdict_ru", "competition_attempted_at"):
+            for key in ("competition", "competition_index", "competition_verdict", "competition_verdict_ru", "competition_attempted_at", "competition_audit_version"):
                 if key in old:
                     result[key] = old[key]
         today = _iso_date(now)[:10]

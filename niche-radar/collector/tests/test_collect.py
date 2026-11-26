@@ -366,7 +366,7 @@ class EnrichTests(unittest.TestCase):
             calls.append(body)
             if len(calls) == 1:
                 raise ValueError("video not accepted")
-            return {"fits": True, "niche_ru": "Военное дело", "notes_ru": "О войне.", "production_ru": "Карты (~50%).", "subniche_ru": "Военная история",
+            return {"fits": True, "niche_key": "military", "niche_ru": "Военное дело", "notes_ru": "О войне.", "production_ru": "Карты (~50%).", "subniche_ru": "Военная история",
                     "uses_ai": "mix", "difficulty": "medium", "extra_monetization": ["own_product", "none"],
                     "production_styles": ["maps_graphics", "bogus"], "categories": ["history"], "has_ai_avatar": False}
 

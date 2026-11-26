@@ -2,7 +2,7 @@
    Mirrors collector/collect.py (filters, metrics, score) so that the button
    "Обновить каналы" produces records in the same schema as data/channels.json. */
 (() => {
-  const { languageCode, channelLanguage, videoLanguage, allowedMarket, competitionFor } = window.NR_CATALOGUE_TOOLS;
+  const { languageCode, channelLanguage, videoLanguage, allowedMarket, competitionFor, competitionEvidence, competitionCoverage, COMPETITION_METHOD, checkTopic, nicheFor } = window.NR_CATALOGUE_TOOLS;
   const API = 'https://www.googleapis.com/youtube/v3';
   const STYLE_KEYWORDS = {
     stickman: ['stickman', 'stick figure', 'stick-figure', 'stickly', 'палочный'],
@@ -37,7 +37,7 @@
      own hit title returns the channels working that topic, which is simultaneously the
      best way to find its siblings and the way to count how crowded the topic is. */
   const TITLE_NOISE = /[^\p{L}\p{N}\s']|\d+|_/gu;
-  const STOPWORDS = new Set(['the', 'a', 'an', 'of', 'in', 'on', 'to', 'for', 'and', 'or', 'is', 'are', 'was', 'were', 'how', 'why', 'what', 'who', 'this', 'that', 'it', 'its', 'with', 'from', 'at', 'by', 'as', 'be', 'been', 'do', 'does', 'did', 'will', 'would', 'can']);
+  const STOPWORDS = new Set(['el', 'la', 'los', 'las', 'del', 'de', 'que', 'para', 'por', 'com', 'uma', 'les', 'des', 'une', 'pour', 'der', 'die', 'das', 'und', 'für', 'the', 'a', 'an', 'of', 'in', 'on', 'to', 'for', 'and', 'or', 'is', 'are', 'was', 'were', 'how', 'why', 'what', 'who', 'this', 'that', 'it', 'its', 'with', 'from', 'at', 'by', 'as', 'be', 'been', 'do', 'does', 'did', 'will', 'would', 'can']);
   const titleQuery = (title, words = 6) => String(title || '').replace(TITLE_NOISE, ' ').toLowerCase().split(/\s+/)
     .map(w => w.replace(/^'+|'+$/g, '')).filter(w => w.length > 1 || ['a', 'i', 'y', 'e', 'o'].includes(w)).slice(0, words).join(' ');
   const titleWords = title => new Set(titleQuery(title, 40).replace(/'/g, '').split(' ').filter(w => w && !STOPWORDS.has(w)));
@@ -47,14 +47,14 @@
     const a = titleWords(source), b = titleWords(other);
     if (!a.size || !b.size) return 0;
     let hit = 0; a.forEach(w => { if (b.has(w)) hit++; });
-    return hit / a.size;
+    return hit >= 2 ? hit / a.size : 0;
   };
   const CLONE_OVERLAP = 0.7;
   const TOPIC_OVERLAP = 0.4;
   const BIG_RIVAL_SUBS = 100000;
   const MAX_CHANNEL_VIDEOS = 100;
   const MAX_INACTIVE_DAYS = 120;
-  const COMP_RU = { free: 'Свободно', moderate: 'Умеренно', competitive: 'Конкурентно', saturated: 'Переполнено' };
+  const COMP_RU = { free: 'Мало совпадений', moderate: 'Умеренный индекс', competitive: 'Высокий индекс', saturated: 'Очень высокий индекс' };
   function competitionIndex({ cloneChannels, cloneShare, rivalChannels, bigRivals }) {
     const value = Math.max(0, Math.min(100, Math.round(
       40 * clamp(cloneChannels / 8, 0, 1) + 25 * clamp(cloneShare / 0.25, 0, 1)
@@ -434,7 +434,7 @@
   async function checkedPage(items, language, markets, knownLanguages, st) {
     const videoId = item => item.id?.videoId;
     const ids = [...new Set(items.map(videoId).filter(Boolean))];
-    if (!ids.length) return { items: [], details: new Map(), rawVideos: 0 };
+    if (!ids.length) return { items: [], details: new Map(), rawIds: [] };
     const data = await ytGet('videos', { part: 'snippet', id: ids.join(',') }, st, 1);
     const sameLanguage = new Set((data.items || []).filter(video => videoLanguage(video.snippet || {}) === language).map(video => video.id));
     const matching = items.filter(item => {
@@ -444,27 +444,53 @@
     });
     const channelIds = [...new Set(matching.map(item => item.snippet.channelId))];
     const response = channelIds.length ? await ytGet('channels', { part: 'snippet,statistics', id: channelIds.join(',') }, st, 1) : {};
-    const details = new Map((response.items || []).filter(channel => allowedMarket(markets, language, channel.snippet?.country)).map(channel => [channel.id, channel]));
-    return { items: matching.filter(item => details.has(item.snippet.channelId)), details, rawVideos: ids.length };
+    const details = new Map((response.items || []).filter(channel => {
+      const primary = knownLanguages.get(channel.id) || languageCode(channel.snippet?.defaultLanguage);
+      return allowedMarket(markets, language, channel.snippet?.country) && (!primary || primary === language);
+    }).map(channel => [channel.id, channel]));
+    return { items: matching.filter(item => details.has(item.snippet.channelId)), details, rawIds: ids };
   }
 
-  async function probeCompetition({ key, channelId, title, language, region, markets, catalogue = [] }) {
-    const text = titleQuery(title, 7);
-    if (!text) throw new Error('Для замера нужен заголовок ролика');
+  function competitionSources(videos = [], title) {
+    const recent = [...videos].sort((a, b) => String(b.published_at || '').localeCompare(String(a.published_at || '')));
+    const popular = [...recent].sort((a, b) => (b.views || 0) - (a.views || 0));
+    const titles = [...popular.slice(0, 1), ...recent].map(v => v.title_original || v.title);
+    if (title) titles.unshift(title);
+    const sources = new Map();
+    for (const sourceTitle of titles) {
+      if (titleWords(sourceTitle).size < 2) continue;
+      const query = titleQuery(sourceTitle, 7);
+      if (!sources.has(query)) sources.set(query, sourceTitle);
+      if (sources.size === 2) break;
+    }
+    return sources;
+  }
+
+  async function probeCompetition({ key, channelId, title, videos, niche, language, region, markets, catalogue = [] }) {
     if (!allowedMarket(markets, language, region)) throw new Error('Для замера нужен поддерживаемый рынок канала');
+    const sources = competitionSources(videos, title);
+    if (!sources.size) throw new Error('Для замера нужен содержательный заголовок ролика');
     const now = new Date();
     const st = { key, units: 0 };
-    const data = await ytGet('search', {
-      part: 'snippet', type: 'video', q: text, order: 'relevance', maxResults: 50,
-      publishedAfter: new Date(now - 180 * 86400000).toISOString(),
-      relevanceLanguage: language, regionCode: region,
-    }, st, 100);
     const knownLanguages = new Map(catalogue.map(channel => [channel.id, channelLanguage(channel)]));
-    const checked = await checkedPage(data.items || [], language, markets, knownLanguages, st);
-    return {
-      patch: measureFromPage(title, channelId, [{ text, ...checked }], now, language, region),
-      units: st.units,
-    };
+    const pages = [];
+    let stopped = null;
+    for (const [text, sourceTitle] of sources) {
+      try {
+        const data = await ytGet('search', {
+          part: 'snippet', type: 'video', q: text, order: 'relevance', maxResults: 50,
+          publishedAfter: new Date(now - 180 * 86400000).toISOString(),
+          relevanceLanguage: language, regionCode: region,
+        }, st, 100);
+        const checked = await checkedPage(data.items || [], language, markets, knownLanguages, st);
+        pages.push({ text, sourceTitle, ...checked });
+      } catch (error) {
+        if (!(error instanceof QuotaExhausted) || !pages.length) throw error;
+        stopped = error.message;
+        break;
+      }
+    }
+    return { patch: measureFromPages(channelId, pages, now, language, region, niche), units: st.units, stopped };
   }
 
   /* ---- Seed planning ------------------------------------------------------------
@@ -524,8 +550,8 @@
     pool.sort((a, b) => {
       // Channels never probed come first: mining them yields siblings *and* their first
       // real competition reading.
-      const ap = competitionFor(a)?.checked_at || '';
-      const bp = competitionFor(b)?.checked_at || '';
+      const ap = competitionEvidence(a)?.checked_at || '';
+      const bp = competitionEvidence(b)?.checked_at || '';
       return ap.localeCompare(bp) || (b.score || 0) - (a.score || 0);
     });
     pool.forEach(c => {
@@ -560,34 +586,37 @@
   }
 
   /* Score search pages after language and country verification. */
-  function measureFromPage(sourceTitle, ownId, pages, now, language, region) {
-    if (!sourceTitle || !pages.length) return null;
-    const rivals = new Map(); const clones = []; const seen = new Set(); const queries = [];
+  function measureFromPages(ownId, pages, now, language, region, niche) {
+    if (!pages.length) return null;
+    const rivals = new Map(), clones = [], seen = new Set(), queries = new Set(), matches = new Map();
     const details = new Map();
-    const rawVideos = pages.reduce((sum, page) => sum + page.rawVideos, 0);
-    pages.forEach(({ text, items, details: channelDetails }) => {
-      queries.push(text);
+    const rawVideos = new Set(pages.flatMap(page => page.rawIds)).size;
+    for (const { text, sourceTitle, items, details: channelDetails } of pages) {
+      queries.add(text);
       channelDetails.forEach((channel, id) => details.set(id, channel));
-      items.forEach(it => {
-        const videoId = it.id?.videoId;
-        if (!videoId || seen.has(videoId)) return;
-        seen.add(videoId);
-        const sn = it.snippet || {}; const rid = sn.channelId;
-        if (!rid || rid === ownId) return;
-        const overlap = titleOverlap(sourceTitle, sn.title || '');
-        if (overlap < TOPIC_OVERLAP) return;
-        const row = rivals.get(rid) || { id: rid, title: sn.channelTitle || '', videos: 0, best_overlap: 0, clone: false, latest: null };
-        row.videos++;
-        row.best_overlap = Math.max(row.best_overlap, r2(overlap));
-        if (sn.publishedAt && (!row.latest || sn.publishedAt > row.latest)) row.latest = sn.publishedAt;
-        if (overlap >= CLONE_OVERLAP) {
-          row.clone = true;
-          clones.push({ id: videoId, channel_id: rid, channel: sn.channelTitle || '', title: sn.title || '', published_at: sn.publishedAt || null, overlap: r2(overlap) });
-        }
-        rivals.set(rid, row);
-      });
-    });
-    if (!seen.size) return null;
+      for (const item of items) {
+        const id = item.id?.videoId, snippet = item.snippet;
+        if (!id || !snippet?.channelId || snippet.channelId === ownId) continue;
+        seen.add(id);
+        const overlap = titleOverlap(sourceTitle, snippet.title || '');
+        if (overlap >= TOPIC_OVERLAP && overlap > (matches.get(id)?.overlap ?? 0)) matches.set(id, { overlap, snippet });
+      }
+    }
+    for (const [videoId, { overlap, snippet }] of matches) {
+      const id = snippet.channelId;
+      const row = rivals.get(id) || { id, title: snippet.channelTitle || '', videos: 0, best_overlap: 0, clone: false, latest: null };
+      row.videos++;
+      if (overlap > row.best_overlap) {
+        row.best_overlap = r2(overlap);
+        row.example = { id: videoId, title: snippet.title || '' };
+      }
+      if (snippet.publishedAt && (!row.latest || snippet.publishedAt > row.latest)) row.latest = snippet.publishedAt;
+      if (overlap >= CLONE_OVERLAP) {
+        row.clone = true;
+        clones.push({ id: videoId, channel_id: id, channel: row.title, title: snippet.title || '', published_at: snippet.publishedAt || null, overlap: r2(overlap) });
+      }
+      rivals.set(id, row);
+    }
     const list = [...rivals.values()];
     const subscriptions = [];
     for (const rival of list) {
@@ -599,12 +628,15 @@
       subscriptions.push(rival.subs);
     }
     const cloneChannels = list.filter(r => r.clone).length;
-    const cloneShare = clones.length / seen.size;
+    const cloneShare = clones.length / Math.max(seen.size, 1);
     const bigRivals = list.filter(r => (r.subs || 0) >= BIG_RIVAL_SUBS).length;
     const cutoff = new Date(now - 30 * 86400000).toISOString();
-    const verdict = competitionIndex({ cloneChannels, cloneShare, rivalChannels: list.length, bigRivals });
+    const coverage = { queries: [...queries], videos_seen: seen.size, related_videos: matches.size, rival_channels: list.length };
+    const verdict = competitionCoverage(coverage)
+      ? competitionIndex({ cloneChannels, cloneShare, rivalChannels: list.length, bigRivals })
+      : { index: null, verdict: null, verdict_ru: null };
     const competition = {
-      queries: [...new Set(queries)], videos_seen: seen.size, raw_videos: rawVideos, rival_channels: list.length,
+      ...coverage, raw_videos: rawVideos, method_version: COMPETITION_METHOD, niche,
       language, language_verified: true, market_verified: true, region_code: region,
       clone_channels: cloneChannels, clone_videos: clones.length, clone_share: Math.round(cloneShare * 1000) / 1000,
       clones_30d: clones.filter(c => (c.published_at || '') >= cutoff).length,
@@ -669,11 +701,20 @@
     if (stopped instanceof ApiDisabled) throw stopped;
 
     // The pages for mined titles already contain the verified rivals.
+    const channelsById = new Map(knownChannels.map(channel => [channel.id, channel]));
+    const pagesBySource = new Map();
+    for (const page of pages) {
+      const id = page.query.source_id;
+      if (!pagesBySource.has(id)) pagesBySource.set(id, []);
+      pagesBySource.get(id).push({ ...page, sourceTitle: page.query.source_title });
+    }
     const competitionUpdates = [];
-    pages.filter(p => p.query.kind === 'mine').forEach(p => {
-      const measured = measureFromPage(p.query.source_title, p.query.source_id, [p], now, p.query.lang, p.query.region);
-      if (measured) competitionUpdates.push({ id: p.query.source_id, ...measured });
-    });
+    for (const [id, sourcePages] of pagesBySource) {
+      const channel = channelsById.get(id);
+      if (!channel || competitionFor(channel)) continue;
+      const measured = measureFromPages(id, sourcePages, now, channelLanguage(channel), channel.country, nicheFor(channel));
+      if (measured) competitionUpdates.push({ id, ...measured });
+    }
 
     // The catalogue already holds details for known channels.
     const ids = [...foundBy.keys()].filter(id => !knownLanguages.has(id));
@@ -725,17 +766,12 @@
           days_to_monetization: m.days_to_monetization, monetization_forecast: m.monetization_forecast, is_monetized: null,
           rpm: rd.rpm, rpm_source: 'baseline', monthly_income_est: r2(m.monthly_views_est / 1000 * rd.rpm), region: rd.region, region_ru: rd.region_ru,
           found_by_queries: [q?.text].filter(Boolean), added_at: now.toISOString(), updated_at: now.toISOString(), live: true,
-          videos: m.long.map(v => ({ id: v.id, title: v.title, ...(v.title_original && v.title_original !== v.title ? { title_original: v.title_original } : {}), thumbnail: v.thumbnail, views: v.views, published_at: v.published_at, duration_sec: v.duration_sec, is_outlier: outSet.has(v.id) })),
+          videos: m.long.map(v => ({ id: v.id, title: v.title, ...(v.title_original && v.title_original !== v.title ? { title_original: v.title_original } : {}), thumbnail: v.thumbnail, views: v.views, published_at: v.published_at, duration_sec: v.duration_sec, audio_language: v.audio_language, text_language: v.text_language, is_outlier: outSet.has(v.id) })),
         };
-        rec.cluster = `${niche}|${rec.style_group}|${rec.language}`;
-        rec.score = score(rec);
-        // The pages this channel turned up on already describe its competition, so its
-        // own best title can be scored against them without another search.
-        const best = rec.videos.slice().sort((a, b) => (b.views || 0) - (a.views || 0))[0];
-        const mine = pages.filter(p => p.query.lang === language && p.items.some(it => it.snippet?.channelId === ch.id));
-        const measured = best ? measureFromPage(best.title_original || best.title, ch.id, mine, now, language, ch.snippet?.country) : null;
-        if (measured) Object.assign(rec, measured);
-        out.push(rec);
+        const checked = checkTopic(rec);
+        checked.cluster = `${nicheFor(checked)}|${checked.style_group}|${checked.language}`;
+        checked.score = score(checked);
+        out.push(checked);
       } catch (e) { if (e instanceof QuotaExhausted) stopped = e; else log(`Пропуск канала: ${e.message}`); }
     }
     const mined = chosen.filter(q => q.kind === 'mine').length;
@@ -747,5 +783,5 @@
     };
   }
 
-  window.NR_LIVE = { run, searchTopic, probeCompetition, researchNiche, inspectChannel, QuotaExhausted, ApiDisabled };
+  window.NR_LIVE = { run, searchTopic, probeCompetition, competitionSources, researchNiche, inspectChannel, QuotaExhausted, ApiDisabled };
 })();

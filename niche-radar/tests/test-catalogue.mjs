@@ -5,7 +5,7 @@ import vm from 'node:vm';
 const window = {};
 vm.runInNewContext(readFileSync(new URL('../catalogue.js', import.meta.url), 'utf8'), { window });
 const { words, makeSearchIndex, matches, snapshots, changeSeries, measuredChange,
-  channelLanguage, marketKey, competitionFor, clusters } = window.NR_CATALOGUE_TOOLS;
+  channelLanguage, marketKey, competitionFor, competitionEvidence, checkTopic, entryAssessment, clusters } = window.NR_CATALOGUE_TOOLS;
 const markets = JSON.parse(readFileSync(new URL('../collector/markets.json', import.meta.url), 'utf8'));
 
 const index = makeSearchIndex({
@@ -40,7 +40,7 @@ assert.equal(measuredChange(history, 'views', 8, Date.parse('2026-11-09')), 805)
 assert.equal(measuredChange(history, 'views', 8, Date.parse('2026-11-14')), null);
 assert.equal(changeSeries(snapshots([['2026-11-09', 107, 1805]]), 'views', 30).length, 0);
 
-const english = { niche: 'engineering', style_group: 'live', language: 'en-GB', country: 'GB' };
+const english = { niche: 'engineering', niche_ai: 'engineering', verified: true, style_group: 'live', language: 'en-GB', country: 'GB' };
 const portuguese = { ...english, language: 'en', audio_language: 'pt-PT', languages: ['en', 'pt'], country: 'PT' };
 assert.equal(channelLanguage(portuguese), 'pt');
 assert.equal(marketKey(english, markets), 'engineering|en');
@@ -49,7 +49,38 @@ assert.equal(marketKey({ ...portuguese, country: 'BR' }, markets), null);
 assert.equal(marketKey({ ...english, country: null }, markets), null);
 assert.equal(marketKey({ ...english, language_source: 'query_fallback' }, markets), null);
 assert.equal(competitionFor({ ...english, competition: { index: 0 } }), null);
-assert.equal(competitionFor({ ...english, competition: { index: 0, language: 'en', language_verified: true, market_verified: true, region_code: 'GB' } }).index, 0);
+const today = Date.parse('2026-11-27T12:00:00Z');
+const oldReading = { index: 0, language: 'en', language_verified: true, market_verified: true, region_code: 'GB' };
+const measured = {
+  ...oldReading, method_version: 2, niche: 'engineering', checked_at: '2026-11-26',
+  queries: ['container ships', 'ship propellers'], videos_seen: 12, related_videos: 6, rival_channels: 3, index: 20,
+};
+const current = { ...english, videos: [{ published_at: '2026-11-21' }], competition: measured };
+const grouping = { n: 4, entry_score: 82, verdict: 'open' };
+assert.equal(competitionFor({ ...english, competition: oldReading }, today), null);
+assert.equal(competitionFor(current, today).index, 20);
+assert.equal(competitionFor({ ...current, competition: { ...measured, niche: 'aviation' } }, today), null);
+assert.equal(competitionFor(current, today + 31 * 86400000), null);
+const oneQuery = { ...current, competition: { ...measured, queries: ['container ships'], index: 0 } };
+assert.equal(competitionEvidence(oneQuery, today).queries.length, 1);
+assert.equal(competitionFor(oneQuery, today), null);
+assert.equal(entryAssessment(oneQuery, grouping, 187, today).score, null);
+assert.equal(entryAssessment(current, grouping, 187, today).score, 64);
+assert.equal(entryAssessment(current, grouping, 4, today).score, 82);
+assert.equal(entryAssessment({ ...current, verified: undefined }, grouping, 4, today).score, null);
+
+const previous = {
+  niche: 'finance', niche_ai: 'finance', verified: true, rpm: 14, rpm_source: 'baseline',
+  videos: ['The First 150 Years of Christianity', 'Early Church Explained', 'Theology of the Nicene Creed',
+    'What it was like to be an early Christian'].map(title => ({ title })),
+};
+const corrected = checkTopic(previous);
+assert.equal(corrected.niche, 'religion');
+assert.equal(corrected.rpm, undefined);
+assert.equal(corrected.niche_ai, undefined);
+const otherFinance = checkTopic({ ...previous, videos: ['Retirement planning', 'Personal Finance', 'How to invest', 'Bible Stories'].map(title => ({ title })) });
+assert.equal(otherFinance.niche, 'finance');
+assert.equal(otherFinance.rpm, 14);
 const groups = clusters([english, portuguese, { ...portuguese, country: 'BR' }], markets);
 assert.equal(groups['engineering|live|en'].n, 1);
 assert.equal(groups['engineering|live|pt'].n, 1);

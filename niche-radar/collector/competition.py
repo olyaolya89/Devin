@@ -52,10 +52,11 @@ WINDOW_DAYS = 180
 # Above this many subscribers a rival is an established channel rather than a newcomer.
 BIG_RIVAL_SUBS = 100_000
 DEFAULT_BUDGET = 2_000
-# One probe per channel keeps the quota predictable; a second title is only worth it when
-# the first returns almost nothing.
 PROBES_PER_CHANNEL = 2
+METHOD_VERSION = 2
 STOPWORDS = {
+    "el", "la", "los", "las", "del", "de", "que", "para", "por", "com", "uma",
+    "les", "des", "une", "pour", "der", "die", "das", "und", "für",
     "the", "a", "an", "of", "in", "on", "to", "for", "and", "or", "is", "are", "was",
     "were", "how", "why", "what", "who", "this", "that", "it", "its", "with", "from",
     "at", "by", "as", "be", "been", "do", "does", "did", "will", "would", "can",
@@ -94,7 +95,8 @@ def title_overlap(source: str, other: str) -> float:
     left, right = _words(source), _words(other)
     if not left or not right:
         return 0.0
-    return len(left & right) / len(left)
+    shared = len(left & right)
+    return shared / len(left) if shared >= 2 else 0.0
 
 
 # A rival title reusing 70%+ of our words is our title rewritten.
@@ -105,24 +107,19 @@ TOPIC_OVERLAP = 0.4
 
 
 def probe_titles(channel: dict[str, Any], limit: int = PROBES_PER_CHANNEL) -> list[tuple[str, str]]:
-    """The channel's own hits, because those are the titles rivals copy.
-
-    Outliers first: a video that beat the channel's median is the one worth cloning, so
-    it is also the one whose search page shows the real competition.
-
-    Returns `(query, full_title)` pairs. The query is shortened for `search.list`, but
-    similarity has to be judged against the *whole* original title — scoring a 7-word
-    query against a rival's full title inflates the union and makes word-for-word copies
-    look unrelated.
-    """
-    videos = [v for v in (channel.get("videos") or []) if v.get("title")]
-    videos.sort(key=lambda v: -collect._number(v.get("views")))
-    ordered = [v for v in videos if v.get("is_outlier")] + [v for v in videos if not v.get("is_outlier")]
+    """Return distinct queries based on the most viewed and latest uploads."""
+    recent = sorted(
+        (v for v in channel.get("videos") or [] if v.get("title")),
+        key=lambda v: v.get("published_at") or "",
+        reverse=True,
+    )
+    popular = sorted(recent, key=lambda v: -collect._number(v.get("views")))
+    ordered = popular[:1] + recent
     out: list[tuple[str, str]] = []
     for video in ordered:
         title = video.get("title_original") or video["title"]
         text = collect.title_query(title, words=7)
-        if len(text.split()) >= 3 and all(text != q for q, _ in out):
+        if len(_words(title)) >= 2 and all(text != q for q, _ in out):
             out.append((text, title))
         if len(out) >= limit:
             break
@@ -163,7 +160,7 @@ def _channel_details(channel_ids: list[str], state: dict[str, Any]) -> dict[str,
 def competition_index(
     *, clone_channels: int, clone_share: float, rival_channels: int, big_rivals: int
 ) -> tuple[int, str, str]:
-    """0 = nobody else is on this topic, 100 = the topic is saturated.
+    """Compute the strength of title-based competition in a verified sample.
 
     Four signals, weighted by how much each one actually predicts a newcomer's trouble:
 
@@ -187,12 +184,12 @@ def competition_index(
     )
     value = max(0, min(100, value))
     if value <= 25:
-        return value, "free", "Свободно"
+        return value, "free", "Мало совпадений"
     if value <= 50:
-        return value, "moderate", "Умеренно"
+        return value, "moderate", "Умеренный индекс"
     if value <= 75:
-        return value, "competitive", "Конкурентно"
-    return value, "saturated", "Переполнено"
+        return value, "competitive", "Высокий индекс"
+    return value, "saturated", "Очень высокий индекс"
 
 
 def measure(channel: dict[str, Any], state: dict[str, Any], now: dt.datetime) -> dict[str, Any] | None:
@@ -232,19 +229,16 @@ def measure(channel: dict[str, Any], state: dict[str, Any], now: dt.datetime) ->
             video_id = collect.search_video_id(item)
             snippet = item["snippet"]
             rival_id = snippet["channelId"]
-            country = (details.get(rival_id, {}).get("snippet") or {}).get("country")
-            known_language = state.get("channel_languages", {}).get(rival_id)
-            if not collect.allowed_market(lang, country) or (known_language and known_language != lang):
+            profile = details.get(rival_id, {}).get("snippet") or {}
+            country = profile.get("country")
+            known_language = state.get("channel_languages", {}).get(rival_id) or collect.language_code(profile.get("defaultLanguage"))
+            if rival_id == own_id or not collect.allowed_market(lang, country) or (known_language and known_language != lang):
                 continue
             verified_ids.add(video_id)
-            if rival_id == own_id:
-                continue
             overlap = title_overlap(source_title, snippet.get("title", ""))
             if overlap >= TOPIC_OVERLAP and overlap > matches.get(video_id, (0, {}))[0]:
                 matches[video_id] = (overlap, snippet)
-        if len({snippet["channelId"] for _, snippet in matches.values()}) >= 10:
-            break
-    if not verified_ids:
+    if not used:
         return None
 
     rivals: dict[str, dict[str, Any]] = {}
@@ -262,7 +256,9 @@ def measure(channel: dict[str, Any], state: dict[str, Any], now: dt.datetime) ->
         if not stats.get("hiddenSubscriberCount") and stats.get("subscriberCount") is not None:
             row["subs"] = collect._number(stats["subscriberCount"])
         row["videos"] += 1
-        row["best_overlap"] = max(row["best_overlap"], round(overlap, 2))
+        if overlap > row["best_overlap"]:
+            row["best_overlap"] = round(overlap, 2)
+            row["example"] = {"id": video_id, "title": rival_title}
         published = snippet.get("publishedAt")
         if published and (row["latest"] is None or published > row["latest"]):
             row["latest"] = published
@@ -279,12 +275,14 @@ def measure(channel: dict[str, Any], state: dict[str, Any], now: dt.datetime) ->
     big_rivals = sum(1 for r in rivals.values() if (r.get("subs") or 0) >= BIG_RIVAL_SUBS)
     cutoff = (now - dt.timedelta(days=30)).isoformat().replace("+00:00", "Z")
     clones_30d = sum(1 for c in clones if (c.get("published_at") or "") >= cutoff)
-    index, verdict, verdict_ru = competition_index(
-        clone_channels=clone_channels,
-        clone_share=clone_share,
-        rival_channels=len(rivals),
-        big_rivals=big_rivals,
-    )
+    index = verdict = verdict_ru = None
+    if len(set(used)) >= 2 and videos_seen >= 12 and len(matches) >= 6 and len(rivals) >= 3:
+        index, verdict, verdict_ru = competition_index(
+            clone_channels=clone_channels,
+            clone_share=clone_share,
+            rival_channels=len(rivals),
+            big_rivals=big_rivals,
+        )
     top = sorted(
         rivals.values(),
         key=lambda r: (-r["best_overlap"], -(r.get("subs") or 0), -r["videos"]),
@@ -294,6 +292,9 @@ def measure(channel: dict[str, Any], state: dict[str, Any], now: dt.datetime) ->
         "queries": used,
         "videos_seen": videos_seen,
         "raw_videos": len(raw_ids),
+        "related_videos": len(matches),
+        "method_version": METHOD_VERSION,
+        "niche": channel.get("niche_ai") or channel.get("niche"),
         "language": lang,
         "language_verified": True,
         "market_verified": True,
@@ -323,11 +324,11 @@ def pick(channels: list[dict[str, Any]], budget: int) -> list[dict[str, Any]]:
     eligible = [
         c
         for c in channels
-        if (c.get("videos") or []) and not c.get("graduated") and not c.get("stale")
-        and collect.allowed_market(collect.channel_language(c), c.get("country"))
+        if probe_titles(c) and collect.allowed_market(collect.channel_language(c), c.get("country"))
     ]
     eligible.sort(
         key=lambda c: (
+            c.get("competition_audit_version") == METHOD_VERSION,
             c.get("competition_attempted_at") or "",
             -(c.get("score") or 0),
         )
@@ -394,6 +395,7 @@ def main(argv: list[str] | None = None) -> int:
                 print("[competition] quota budget spent - stopping", file=sys.stderr)
                 break
             channel["competition_attempted_at"] = now.date().isoformat()
+            channel["competition_audit_version"] = METHOD_VERSION
             if not result:
                 continue
             channel["competition"] = result

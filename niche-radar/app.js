@@ -10,7 +10,7 @@
   const state = { tab: location.hash === '#topic' || location.hash.startsWith('#report?') ? 'topic' : 'all', loadStatus: 'loading', q: '', sort: 'new', group: 'channels', supportedMarkets: {}, all: [], saved: loadSet(LS.saved), liked: loadSet(LS.liked), seen: loadSet(LS.seen), clusters: {}, size: {}, rpm: null, labels: (() => { try { return JSON.parse(localStorage.getItem('nr:labels') || '{}'); } catch { return {}; } })() };
   const LANG = { en: 'Английский', ru: 'Русский', es: 'Испанский', pt: 'Португальский', fr: 'Французский', de: 'Немецкий', it: 'Итальянский' };
   const fmt = n => { n = Number(n) || 0; if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1).replace('.0', '') + ' млн'; if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1).replace('.0', '') + ' тыс.'; return String(Math.round(n)); };
-  const money = n => (Number(n) || 0).toFixed(2).replace('.', ',') + ' $';
+  const money = n => Number.isFinite(n) ? n.toFixed(2).replace('.', ',') + ' $' : '—';
   const num = n => Math.round(Number(n) || 0).toLocaleString('ru-RU');
   const dateRu = iso => { const d = iso ? new Date(iso) : null; return d && !isNaN(d) ? d.toLocaleDateString('ru-RU') : ''; };
   const agoRu = iso => { if (!iso) return ''; const d = Math.floor((Date.now() - new Date(iso)) / 864e5); if (d < 1) return 'сегодня'; if (d < 7) return `${d} дн назад`; if (d < 30) return `${Math.floor(d / 7)} нед назад`; if (d < 365) { const m = Math.floor(d / 30); return `${m} ${plural(m, 'месяц', 'месяца', 'месяцев')} назад`; } const y = Math.floor(d / 365); return `${y} ${plural(y, 'год', 'года', 'лет')} назад`; };
@@ -19,7 +19,9 @@
   // return first, which quietly moved them out of their real competitive group.
   const primaryLang = catalogue.channelLanguage;
   const langsOf = c => [primaryLang(c)].filter(Boolean);
-  const nicheOf = c => c.niche_ai || c.niche || '';
+  const nicheOf = catalogue.nicheFor;
+  const nicheLabel = c => c.topic_audit_version && !catalogue.topicConfirmed(c) ? 'Тема не установлена' : c.niche_ai_ru || c.niche_ru || 'Другое';
+  const catalogueIncome = c => Number.isFinite(c.rpm) ? '~' + num(monthly(c)) + ' $' : '—';
   // Channels collected before the language fix can still carry YouTube's default-locale
   // language while sitting in an English-speaking market — the exact shape of the bug that
   // filed a US channel under Spanish. Flag it instead of guessing: a re-run of the
@@ -42,7 +44,7 @@
   };
   const realComp = c => catalogue.competitionFor(c)?.index ?? null;
   const COMP_CLASS = { free: 'badge-green', moderate: 'badge-blue', competitive: 'badge-amber', saturated: 'badge-red' };
-  const COMP_RU = { free: 'Свободно', moderate: 'Умеренно', competitive: 'Конкурентно', saturated: 'Переполнено' };
+  const COMP_RU = { free: 'Мало совпадений', moderate: 'Умеренный индекс', competitive: 'Высокий индекс', saturated: 'Очень высокий индекс' };
   const compVerdict = c => catalogue.competitionFor(c)?.verdict ?? null;
   const handleOf = c => c.handle ? '@' + c.handle.replace(/^@/, '') : '';
   const countryName = code => { if (!code) return '—'; try { return new Intl.DisplayNames(['ru'], { type: 'region' }).of(code) || code; } catch { return code; } };
@@ -60,7 +62,6 @@
   const growth = c => (c.subs_per_day || 0) / Math.max(c.subs || 1, 1);
   const DIFF_ORDER = { low: 0, medium: 1, high: 2 };
   const ICON = { heart: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>', save: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>', ext: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>' };
-  const BAND_HINT = { 'Отличный вход': 'Ниша свежая, конкурентов мало — лучший момент зайти.', 'Хороший вход': 'Спрос есть, конкуренция умеренная — заходить можно.', 'Вход с отстройкой': 'Заходить можно, но нужно заметно отличаться от конкурентов.', 'Последний вагон': 'Входить рискованно — рост уже маловероятен.', 'Вход закрыт': 'Ниша переполнена — новичку не пробиться.' };
   const BAND_COLOR = { 'badge-green': '#22a653', 'badge-blue': '#2c6bed', 'badge-amber': '#f5a623', 'badge-red': '#ff6a2b', 'badge-grey': '#9aa0ab' };
   const gauge = (v, cls) => { const f = Math.max(0.04, Math.min(1, v / 100)), a = Math.PI * (1 - f); return `<svg viewBox="0 0 36 21" width="30" height="18"><path d="M3 18A15 15 0 0 1 33 18" fill="none" stroke="#eceef2" stroke-width="4.5" stroke-linecap="round"/><path d="M3 18A15 15 0 0 1 ${(18 + 15 * Math.cos(a)).toFixed(2)} ${(18 - 15 * Math.sin(a)).toFixed(2)}" fill="none" stroke="${BAND_COLOR[cls]}" stroke-width="4.5" stroke-linecap="round"/></svg>`; };
   const topVids = (c, n) => (c.videos || []).slice().sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, n);
@@ -83,7 +84,7 @@
   const VERDICT_HINT = { open: 'В выборке мало новичков, и часть уже набирает просмотры.', filling: 'В выборке несколько каналов с признаками спроса.', crowded: 'В выборке много каналов этого формата.', unproven: 'В выборке мало подтверждений устойчивого спроса.' };
   const clusterOf = c => state.clusters[catalogue.clusterKey(c, state.supportedMarkets)] || null;
   function prospects(c) {
-    if (!state.rpm) return [];
+    if (!state.rpm || !catalogue.topicConfirmed(c)) return [];
     const nicheRpm = state.rpm.niches[c.niche] || state.rpm.niches.other;
     return Object.entries(state.supportedMarkets).map(([l, countries]) => {
       const region = state.rpm.country_to_region[countries[0]] || state.rpm.lang_to_region[l] || 'other';
@@ -100,9 +101,9 @@
     const rows = Object.entries(state.clusters).sort(([, a], [, b]) => (b.entry_score || 0) - (a.entry_score || 0)).map(([key, g]) => {
       const label = state.labels[key] || g.label;
       const [niche, sg, language] = key.split('|');
-      return `<tr><td><b>${esc(g.niche_ru || niche)}</b></td><td>${esc(styleNames[sg] || sg || '—')}</td><td>${esc(langName(language))}</td><td>${g.n}</td><td>${Math.round((g.share_growing || 0) * 100)}%</td><td>${fmt(g.median_vpv)}</td><td>${g.newcomers_30d}</td><td>${money(g.median_rpm)}</td><td><span class="badge badge-blue">${g.entry_score ?? '—'}</span></td><td><span class="badge ${VERDICT_CLASS[g.verdict] || ''}" title="${esc(VERDICT_HINT[g.verdict] || '')}">${esc(g.verdict_ru || g.verdict || '—')}</span></td><td class="nowrap"><button type="button" class="icon ${label === 'good' ? 'on' : ''}" data-label="${esc(key)}" data-val="good" title="Хорошая ниша">👍</button> <button type="button" class="icon ${label === 'bad' ? 'on' : ''}" data-label="${esc(key)}" data-val="bad" title="Плохая ниша">👎</button></td><td><button type="button" class="more" data-niche-open="${esc(niche)}" data-niche-lang="${esc(language)}">Каналы →</button> <button type="button" class="text-link" data-report-niche="${esc(niche)}" data-report-lang="${esc(language)}">Разбор ниши</button></td></tr>`;
+      return `<tr><td><b>${esc(g.niche_ru || niche)}</b></td><td>${esc(styleNames[sg] || sg || '—')}</td><td>${esc(langName(language))}</td><td>${g.n}</td><td>${Math.round((g.share_growing || 0) * 100)}%</td><td>${fmt(g.median_vpv)}</td><td>${g.newcomers_30d}</td><td>${money(g.median_rpm)}</td><td><span class="badge ${VERDICT_CLASS[g.verdict] || ''}" title="${esc(VERDICT_HINT[g.verdict] || '')}">${esc(g.verdict_ru || g.verdict || '—')}</span></td><td class="nowrap"><button type="button" class="icon ${label === 'good' ? 'on' : ''}" data-label="${esc(key)}" data-val="good" title="Хорошая ниша">👍</button> <button type="button" class="icon ${label === 'bad' ? 'on' : ''}" data-label="${esc(key)}" data-val="bad" title="Плохая ниша">👎</button></td><td><button type="button" class="more" data-niche-open="${esc(niche)}" data-niche-lang="${esc(language)}">Каналы →</button> <button type="button" class="text-link" data-report-niche="${esc(niche)}" data-report-lang="${esc(language)}">Разбор ниши</button></td></tr>`;
     }).join('');
-    return `<div class="block"><div class="niches-head"><h3>Ниши: где проще зайти новичку</h3><button type="button" class="btn" id="exportLabels">Экспорт разметки</button></div><p class="muted">Каналы сгруппированы по нише, формату и языку. Оценка входа 0–100: чем выше, тем больше доля растущих новичков, выше просмотры и меньше конкуренция. Наведи на вердикт — будет подсказка. 👍/👎 — твоя разметка, она сохраняется в браузере; «Экспорт разметки» скачает файл для обучения сборщика.</p><div class="table-wrap"><table class="comp niches-t"><thead><tr><th>Ниша</th><th>Формат</th><th>Язык</th><th>Каналов</th><th>Растут</th><th>Медиана просм./видео</th><th>Новых за 30 дн.</th><th>Медиана RPM</th><th>Оценка входа</th><th>Вердикт</th><th>Разметка</th><th></th></tr></thead><tbody>${rows || '<tr><td colspan="12" class="muted">Нет данных</td></tr>'}</tbody></table></div></div>`;
+    return `<div class="block"><div class="niches-head"><h3>Группы каналов по нишам</h3><button type="button" class="btn" id="exportLabels">Экспорт разметки</button></div><p class="muted">Каналы сгруппированы по нише, формату и языку. Таблица показывает характеристики каналов в каталоге. Кнопка «Разбор ниши» открывает поиск по выбранному языку. 👍/👎 — твоя разметка, она сохраняется в браузере; «Экспорт разметки» скачает файл для обучения сборщика.</p><div class="table-wrap"><table class="comp niches-t"><thead><tr><th>Ниша</th><th>Формат</th><th>Язык</th><th>Каналов</th><th>Растут</th><th>Медиана просм./видео</th><th>Новых за 30 дн.</th><th>Медиана RPM</th><th>Состояние выборки</th><th>Разметка</th><th></th></tr></thead><tbody>${rows || '<tr><td colspan="11" class="muted">Нет данных</td></tr>'}</tbody></table></div></div>`;
   }
   function exportLabels() {
     const niches = Object.entries(state.labels).map(([cluster, label]) => { const [niche, style_group, language] = cluster.split('|'); return { niche, style_group, language, label }; });
@@ -161,21 +162,20 @@
   const FIRE_CRITERIA = [
     [`Не больше ${FIRE.videos} длинных роликов — канал только начал`, c => longCount(c) <= FIRE.videos],
     [`Каждый ролик набрал от ${fmt(FIRE.views)} просмотров`, c => minVideoViews(c) >= FIRE.views],
-    [`Не больше ${FIRE.rivals} конкурентов в той же нише и на том же языке`, c => !!primaryLang(c) && compCount(c) <= FIRE.rivals],
-    [`Тема не переполнена на YouTube (индекс конкуренции до ${FIRE.comp})`, c => realComp(c) == null ? null : realComp(c) <= FIRE.comp],
+    [`Не больше ${FIRE.rivals} других каналов этой категории и языка в каталоге`, c => !!primaryLang(c) && compCount(c) <= FIRE.rivals],
+    [`Индекс по проверенной выдаче YouTube до ${FIRE.comp}`, c => realComp(c) == null ? null : realComp(c) <= FIRE.comp],
   ];
   const EXTRA_RU = { own_product: 'Свой продукт', affiliate: 'Партнёрки', sponsors: 'Спонсоры', membership: 'Подписка/Patreon', merch: 'Мерч' };
   const flags = c => {
     const xs = (c.videos || []).map(v => outX(c, v)).sort((a, b) => b - a); const out = [];
-    if (primaryLang(c) && compCount(c) <= 3 && (clusterOf(c)?.entry_score ?? 0) >= 65) out.push('Ранняя ниша');
-    if (compVerdict(c) === 'saturated') out.push('Тема залита клонами');
+    if (compVerdict(c) === 'saturated') out.push('Высокая конкуренция в выборке');
     if (c.is_multilang) out.push('Несколько языков');
     if (langDoubt(c)) out.push('Язык под вопросом');
     if (xs[0] >= 5 && (xs[1] || 0) < 1.5) out.push('Один хит');
     return out;
   };
   const tagsOf = c => [...flags(c), ...(c.tags || [])];
-  const isFire = c => (c.videos || []).length > 0 && FIRE_CRITERIA.every(([, f]) => f(c) !== false);
+  const isFire = c => (c.videos || []).length > 0 && catalogue.topicConfirmed(c) && FIRE_CRITERIA.every(([, f]) => f(c) === true);
   const lastDays = c => { const t = Math.max(0, ...(c.videos || []).map(v => Date.parse(v.published_at || '') || 0)); return t ? (Date.now() - t) / 864e5 : 9999; };
   const CRITERIA = [
     ['Подписчиков от 500 до 300 тыс. — канал ещё небольшой', c => (c.subs || 0) >= 500 && (c.subs || 0) <= 300000],
@@ -185,8 +185,9 @@
     ['Последний длинный ролик вышел не позже 90 дней назад — канал живой', c => lastDays(c) <= 90],
   ];
   const refMatch = c => CRITERIA.every(([, f]) => f(c));
-  const entryIndex = c => { const group = clusterOf(c); if (!group || c.stale || c.graduated) return null; const { entry_score: score, verdict } = group; return verdict === 'crowded' ? Math.min(score, 40) : verdict === 'unproven' ? Math.min(score, 55) : score; };
-  const entryLabel = v => v < 20 ? ['Вход закрыт', 'badge-grey'] : v >= 80 ? ['Отличный вход', 'badge-green'] : v >= 65 ? ['Хороший вход', 'badge-blue'] : v >= 45 ? ['Вход с отстройкой', 'badge-amber'] : ['Последний вагон', 'badge-red'];
+  const entryResult = c => catalogue.entryAssessment(c, clusterOf(c), compCount(c));
+  const entryIndex = c => entryResult(c).score;
+  const entryLabel = v => v >= 80 ? ['Сильные сигналы', 'badge-green'] : v >= 65 ? ['Хорошие сигналы', 'badge-blue'] : v >= 45 ? ['Вход с отстройкой', 'badge-amber'] : ['Слабые сигналы', 'badge-red'];
   const plural = (n, a, b, c5) => { n = Math.abs(Math.round(n)); const m = n % 10, h = n % 100; return m === 1 && h !== 11 ? a : m >= 2 && m <= 4 && (h < 12 || h > 14) ? b : c5; };
   function describeRu(c) {
     if (c.description_ru) return c.description_ru;
@@ -300,19 +301,27 @@
     $('#avgLab').textContent = fmt($('#avgMin').value) + ' — ' + fmt($('#avgMax').value);
     $('#rpmLab').textContent = '$' + $('#rpmMin').value + ' — $' + $('#rpmMax').value;
   }
-  const entryBox = (c, full) => { const v = entryIndex(c); if (v == null) return ''; const [l, cls] = entryLabel(v); return `<div class="entry-box"><small>Индекс точки входа</small><div class="entry-val">${gauge(v, cls)}<b>${l} (${v}/100)</b></div>${full ? `<p class="muted">${esc(BAND_HINT[l] || '')}</p>` : ''}</div>`; };
+  function entryBox(c, full) {
+    const { score, reason } = entryResult(c);
+    if (score == null) return `<div class="entry-box"><small>Индекс точки входа</small><div class="entry-val"><b>Вход не оценён</b></div><small class="muted">${esc(reason)}</small></div>`;
+    const [label, color] = entryLabel(score);
+    return `<div class="entry-box"><small>Индекс точки входа по выборке</small><div class="entry-val">${gauge(score, color)}<b>${label} (${score}/100)</b></div>${full ? '<p class="muted">Индекс учитывает просмотры и рост сопоставимой группы, число каналов категории и результаты тематического поиска.</p>' : ''}</div>`;
+  }
   const vthumb = (c, v) => { const x = outX(c, v); return `<a class="vt" href="${vUrl(v.id)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(v.thumbnail || 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg')}" alt=""><p>${x >= 2 ? `<span class="x">${x.toFixed(1)}×</span> ` : ''}${esc(v.title)}</p><small>${fmt(v.views)} просм.</small><small>${agoRu(v.published_at)}</small></a>`; };
   // One pill per language the channel publishes in, so a channel that runs the same
   // videos in two languages is not shown as if it only had one audience.
   const langPills = c => langsOf(c).map(l => `<span class="pill" title="${l === primaryLang(c) ? 'Основной язык канала' : 'Дополнительный язык в метаданных'}">${esc(langName(l))}</span>`).join('');
   const compBadge = c => {
     const v = realComp(c), verdict = compVerdict(c);
-    if (v == null || !verdict) return '<span class="badge badge-grey" title="Сборщик ещё не искал темы этого канала на YouTube">Конкуренция не проверена</span>';
-    return `<span class="badge ${COMP_CLASS[verdict] || ''}" title="Индекс конкуренции на YouTube: ${v}/100">${esc(COMP_RU[verdict] || verdict)} (${v}/100)</span>`;
+    if (v == null || !verdict) {
+      const label = catalogue.competitionEvidence(c) ? 'Мало данных' : c.competition ? 'Нужен повторный замер' : 'Конкуренция не проверена';
+      return `<span class="badge badge-grey">${label}</span>`;
+    }
+    return `<span class="badge ${COMP_CLASS[verdict] || ''}" title="Индекс по проверенной выдаче YouTube ${v}/100">${esc(COMP_RU[verdict] || verdict)} (${v}/100)</span>`;
   };
   function card(c) {
     const comps = compCount(c);
-    return `<article class="card" data-open="${esc(c.id)}"><div class="card-top"><img class="av" loading="lazy" src="${esc(c.thumbnail || '')}" alt=""><div class="who"><p class="ttl">${esc(c.title)}</p><div class="handle">${esc(handleOf(c))}</div></div><div class="pills">${isNew(c) ? '<span class="pill pill-new">Новое</span>' : ''}${isFire(c) ? '<span class="pill pill-fire">Стреляет</span>' : ''}${c.verified ? '<span class="pill pill-ok">Проверено ИИ</span>' : c.verified === false ? '<span class="pill">Отклонён ИИ</span>' : '<span class="pill">Не проверен</span>'}${langPills(c)}</div></div><div class="vts">${topVids(c, 3).map(v => vthumb(c, v)).join('')}</div><div class="nrow"><span>Ниша</span><span class="tag tag-b">${esc(c.niche_ai_ru || c.niche_ru || 'Другое')}</span></div><div class="nrow"><span>Подниша</span>${subniches(c).slice(0, 2).map(x => `<span class="tag tag-b">${esc(x)}</span>`).join('')}</div>${isMixed(c) ? `<div class="nrow"><span>Производство</span><span class="tag tag-mix">Смешанное: ${esc(mixText(c))}</span></div>` : ''}<div class="kpis3"><div><small>Подписчики</small><b>${num(c.subs)}</b></div><div><small>Просмотры</small><b>${num(c.total_views)}</b></div><div><small>RPM · оценка</small><b>${money(c.rpm)}</b></div></div>${entryBox(c, false)}<div class="nrow"><span>Конкуренция на YouTube</span>${compBadge(c)}</div>${flags(c).length ? `<div class="tags">${flags(c).map(f => `<span class="tag tag-o">${f}</span>`).join('')}</div>` : ''}<div class="foot"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><button type="button" class="btn-comp" data-comps="${esc(c.id)}">Конкуренты (${comps})</button><button type="button" class="more" data-open="${esc(c.id)}">Подробнее →</button></div><div class="added">${esc(dateRu(c.added_at))}</div></article>`;
+    return `<article class="card" data-open="${esc(c.id)}"><div class="card-top"><img class="av" loading="lazy" src="${esc(c.thumbnail || '')}" alt=""><div class="who"><p class="ttl">${esc(c.title)}</p><div class="handle">${esc(handleOf(c))}</div></div><div class="pills">${isNew(c) ? '<span class="pill pill-new">Новое</span>' : ''}${isFire(c) ? '<span class="pill pill-fire">Стреляет</span>' : ''}${catalogue.topicConfirmed(c) ? '<span class="pill pill-ok">Тема проверена</span>' : '<span class="pill">Тема предварительная</span>'}${langPills(c)}</div></div><div class="vts">${topVids(c, 3).map(v => vthumb(c, v)).join('')}</div><div class="nrow"><span>Ниша</span><span class="tag tag-b">${esc(nicheLabel(c))}</span></div><div class="nrow"><span>Подниша</span>${subniches(c).slice(0, 2).map(x => `<span class="tag tag-b">${esc(x)}</span>`).join('')}</div>${isMixed(c) ? `<div class="nrow"><span>Производство</span><span class="tag tag-mix">Смешанное: ${esc(mixText(c))}</span></div>` : ''}<div class="kpis3"><div><small>Подписчики</small><b>${num(c.subs)}</b></div><div><small>Просмотры</small><b>${num(c.total_views)}</b></div><div><small>RPM · оценка</small><b>${money(c.rpm)}</b></div></div>${entryBox(c, false)}<div class="nrow"><span>Конкуренция на YouTube</span>${compBadge(c)}</div>${flags(c).length ? `<div class="tags">${flags(c).map(f => `<span class="tag tag-o">${f}</span>`).join('')}</div>` : ''}<div class="foot"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><button type="button" class="btn-comp" data-comps="${esc(c.id)}">Каналы категории (${comps})</button><button type="button" class="more" data-open="${esc(c.id)}">Подробнее →</button></div><div class="added">${esc(dateRu(c.added_at))}</div></article>`;
   }
 
   const MON = ['янв.', 'февр.', 'мар.', 'апр.', 'мая', 'июн.', 'июл.', 'авг.', 'сент.', 'окт.', 'нояб.', 'дек.'];
@@ -343,8 +352,8 @@
   }
 
   function entryBlock(c) {
-    const g = clusterOf(c); if (!g) return '';
-    return `<div class="block"><h3>Вход в нишу</h3><p><span class="badge ${VERDICT_CLASS[g.verdict] || ''}">${esc(g.verdict_ru || g.verdict)}</span> <b>Оценка входа: ${g.entry_score ?? '—'}/100</b></p><p class="muted">${esc(VERDICT_HINT[g.verdict] || '')}</p><div class="meta-grid"><div><small>Каналов в группе</small><b>${g.n}</b></div><div><small>Растут (≥20 тыс. на первых 5)</small><b>${Math.round((g.share_growing || 0) * 100)}%</b></div><div><small>Медиана просм./видео</small><b>${fmt(g.median_vpv)}</b></div><div><small>Новых за 30 дн.</small><b>${g.newcomers_30d}</b></div></div></div>`;
+    const g = clusterOf(c);
+    return `<div class="block"><h3>Вход в нишу</h3>${entryBox(c, true)}${g ? `<div class="meta-grid"><div><small>Каналов того же формата и языка</small><b>${g.n}</b></div><div><small>От 20 тыс. в среднем на первых 5</small><b>${Math.round(g.share_growing * 100)}%</b></div><div><small>Медиана средних просмотров</small><b>${fmt(g.median_vpv)}</b></div><div><small>Добавлено в каталог за 30 дней</small><b>${g.newcomers_30d}</b></div></div>` : ''}</div>`;
   }
   function prospectsBlock(c) {
     const rows = prospects(c); if (!rows.length) return '';
@@ -355,25 +364,19 @@
     }).join('');
     return `<div class="block"><h3>Рынки по языкам</h3><p class="muted">Число каналов относится к отдельной выборке YouTube для каждого языка. RPM и доход — ориентиры по первой стране в строке при текущих ${fmt(monthlyViews(c))} просмотрах в месяц.</p><div class="table-wrap"><table class="comp"><thead><tr><th>Язык</th><th>Страны каналов</th><th>RPM, оценка</th><th>Каналов в выборке · регион поиска</th><th>Доход/мес., оценка</th></tr></thead><tbody>${content}</tbody></table></div></div>`;
   }
-  const COMP_HINT = {
-    free: 'Эту тему почти никто не делает — можно заходить.',
-    moderate: 'Тему делают, но копий заголовка мало — нужен свой угол подачи.',
-    competitive: 'Заголовки канала уже копируют. Выделяться придётся не темой, а подачей и превью.',
-    saturated: 'Тема залита клонами: тот же заголовок выпускают многие каналы. Входить сюда поздно.',
-  };
   function competitionBlock(c) {
-    const k = catalogue.competitionFor(c);
-    const probe = topVids(c, 1)[0] ? '<form id="competitionForm" class="competition-form"><button type="submit" class="btn">Проверить конкуренцию на YouTube</button><label id="competitionKeyLabel" hidden>Ключ YouTube Data API v3<input id="competitionKey" type="password" autocomplete="off"></label><small class="muted">Один поисковый запрос по заголовку популярного ролика</small><p id="competitionStatus" class="muted" role="status" hidden></p></form>' : '';
+    const k = catalogue.competitionEvidence(c);
+    const probe = topVids(c, 1)[0] ? '<form id="competitionForm" class="competition-form"><button type="submit" class="btn">Проверить конкуренцию на YouTube</button><label id="competitionKeyLabel" hidden>Ключ YouTube Data API v3<input id="competitionKey" type="password" autocomplete="off"></label><small class="muted">Поиск по популярному и свежему роликам за последние 180 дней</small><p id="competitionStatus" class="muted" role="status" hidden></p></form>' : '';
     if (!k) {
-      return '<div class="block" id="competitionBlock"><h3>Конкуренция на YouTube</h3><p class="muted">Для этого языка и рынка замер пока недоступен.</p>' + probe + '</div>';
+      return '<div class="block" id="competitionBlock"><h3>Конкуренция на YouTube</h3><p class="muted">Для канала пока нет свежего замера по действующей методике.</p>' + probe + '</div>';
     }
-    const rows = (k.top_rivals || []).map(r => `<tr><td>${esc(r.title || r.id)}</td><td>${esc(countryName(r.country))}</td><td>${r.subs != null ? num(r.subs) : '—'}</td><td>${r.videos || 0}</td><td>${Math.round((r.best_overlap || 0) * 100)}%</td><td>${r.clone ? '<span class="badge badge-red">копия заголовка</span>' : '<span class="badge badge-grey">та же тема</span>'}</td><td>${esc(agoRu(r.latest))}</td></tr>`).join('');
-    const clones = (k.clone_examples || []).map(x => `<tr><td>${esc(x.channel)}</td><td>${esc(x.title)}</td><td>${Math.round((x.overlap || 0) * 100)}%</td><td>${esc(agoRu(x.published_at))}</td></tr>`).join('');
-    return `<div class="block" id="competitionBlock"><h3>Конкуренция на YouTube · ${esc(langName(k.language))}</h3><p>${compBadge(c)}</p><p class="muted">${esc(COMP_HINT[k.verdict] || '')}</p>
-<p class="muted small">Замер от ${esc(dateRu(k.checked_at))}. Регион выдачи — ${esc(countryName(k.region_code))}. Язык и страна подтверждены у ${num(k.videos_seen)} из ${num(k.raw_videos)} роликов в выборке.</p>${probe}
-<div class="meta-grid"><div><small>Каналов на эти темы</small><b>${k.rival_channels ?? '—'}</b></div><div><small>Копируют заголовок</small><b>${k.clone_channels ?? '—'}</b></div><div><small>Копий заголовка</small><b>${k.clone_videos ?? '—'}</b></div><div><small>Копий за 30 дней</small><b>${k.clones_30d ?? '—'}</b></div><div><small>Крупных конкурентов</small><b>${k.big_rivals ?? '—'}</b></div><div><small>Медиана подписчиков</small><b>${k.median_rival_subs != null ? num(k.median_rival_subs) : '—'}</b></div></div>
-${clones ? `<h3 class="h">Копии заголовков</h3><div class="table-wrap"><table class="comp"><thead><tr><th>Канал</th><th>Заголовок</th><th>Совпадение</th><th>Когда</th></tr></thead><tbody>${clones}</tbody></table></div>` : ''}
-${rows ? `<h3 class="h">Кто ещё делает эти темы</h3><div class="table-wrap"><table class="comp"><thead><tr><th>Канал</th><th>Страна</th><th>Подп.</th><th>Роликов в выдаче</th><th>Совпадение</th><th>Тип</th><th>Последний</th></tr></thead><tbody>${rows}</tbody></table></div>` : ''}</div>`;
+    const rows = (k.top_rivals || []).map(r => `<tr><td><a href="${yt(r.id)}" target="_blank" rel="noopener">${esc(r.title || r.id)}</a></td><td>${esc(countryName(r.country))}</td><td>${r.subs != null ? num(r.subs) : '—'}</td><td>${r.videos || 0}</td><td>${Math.round((r.best_overlap || 0) * 100)}%</td><td>${r.clone ? '<span class="badge badge-red">сильное совпадение</span>' : '<span class="badge badge-grey">схожий заголовок</span>'}</td><td>${esc(agoRu(r.latest))}</td><td>${r.example ? `<a href="${vUrl(r.example.id)}" target="_blank" rel="noopener">${esc(r.example.title)}</a>` : '—'}</td></tr>`).join('');
+    const clones = (k.clone_examples || []).map(x => `<tr><td>${esc(x.channel)}</td><td><a href="${vUrl(x.id)}" target="_blank" rel="noopener">${esc(x.title)}</a></td><td>${Math.round((x.overlap || 0) * 100)}%</td><td>${esc(agoRu(x.published_at))}</td></tr>`).join('');
+    return `<div class="block" id="competitionBlock"><h3>Конкуренция на YouTube · ${esc(langName(k.language))}</h3><p>${compBadge(c)}</p><p class="muted">Для индекса нужны два запроса, от 12 роликов других авторов с подтверждёнными языком и страной, от 6 совпадений по теме и от 3 каналов.</p>
+<p class="muted small">Замер от ${esc(dateRu(k.checked_at))}. Регион выдачи — ${esc(countryName(k.region_code))}. Найдено ${num(k.videos_seen)} подходящих по языку и стране роликов других авторов. Совпадений по заголовкам — ${num(k.related_videos)}. Запросы — ${esc(k.queries.join(" · "))}.</p>${probe}
+<div class="meta-grid"><div><small>Каналов с совпадениями по теме</small><b>${k.rival_channels ?? '—'}</b></div><div><small>Копируют заголовок</small><b>${k.clone_channels ?? '—'}</b></div><div><small>Копий заголовка</small><b>${k.clone_videos ?? '—'}</b></div><div><small>Копий за 30 дней</small><b>${k.clones_30d ?? '—'}</b></div><div><small>Крупных конкурентов</small><b>${k.big_rivals ?? '—'}</b></div><div><small>Медиана подписчиков</small><b>${k.median_rival_subs != null ? num(k.median_rival_subs) : '—'}</b></div></div>
+${clones ? `<h3 class="h">Сильные совпадения заголовков</h3><div class="table-wrap"><table class="comp"><thead><tr><th>Канал</th><th>Заголовок</th><th>Совпадение</th><th>Когда</th></tr></thead><tbody>${clones}</tbody></table></div>` : ''}
+${rows ? `<h3 class="h">Кто ещё делает эти темы</h3><div class="table-wrap"><table class="comp"><thead><tr><th>Канал</th><th>Страна</th><th>Подп.</th><th>Роликов в выдаче</th><th>Совпадение</th><th>Тип</th><th>Последний</th><th>Ролик-источник</th></tr></thead><tbody>${rows}</tbody></table></div>` : ''}</div>`;
   }
   function openDrawer(id) {
     const c = state.all.find(x => x.id === id) || state.pool?.find(x => x.id === id); if (!c) return;
@@ -384,9 +387,9 @@ ${rows ? `<h3 class="h">Кто ещё делает эти темы</h3><div clas
     const history = catalogue.snapshots(c.daily);
     const banner = c.banner || (vids[0] ? `https://i.ytimg.com/vi/${vids[0].id}/hq720.jpg` : '');
     const extra = (c.extra_monetization || []).map(x => EXTRA_RU[x] || x).join(', ');
-    const kpi = [['Подписчики', num(c.subs)], ['Просмотры', num(c.total_views)], ['Видео', num(c.videos_count)], ['RPM (оценка)', money(c.rpm)], ['RPM Shorts', money(c.rpm_short ?? (c.rpm || 0) * 0.08)], ['RPM длинных видео', money(c.rpm_long ?? c.rpm)], ['Прострелов', outliers(c)], ['Страна', countryName(c.country)], ['Язык', langsOf(c).map(langName).join(', ')], ['Конкуренция на YouTube', realComp(c) != null ? `${COMP_RU[compVerdict(c)] || ''} ${realComp(c)}/100` : 'не проверена'], ['Конкурентов в базе', primaryLang(c) ? `${compCount(c)} · ${langName(primaryLang(c))}` : 'Язык не определён'], ['Сложность производства', c.difficulty_ru || '—'], ['Использование ИИ', AI_RU[aiMode(c)]], ['Доп. монетизация', extra || '—'], ['Доход / мес.', '~' + num(monthly(c)) + ' $'], ['Монетизация YouTube', c.is_monetized ? 'Монетизирован' : c.is_monetized === false ? 'Не монетизирован' : 'Неизвестно'], ['До монетизации', c.is_monetized ? '—' : c.monetization_forecast || '—'], ['Формат контента', CONTENT_RU[contentType(c)]]];
+    const kpi = [['Подписчики', num(c.subs)], ['Просмотры', num(c.total_views)], ['Видео', num(c.videos_count)], ['RPM (оценка)', money(c.rpm)], ['RPM Shorts', money(c.rpm_short ?? (c.rpm == null ? null : c.rpm * 0.08))], ['RPM длинных видео', money(c.rpm_long ?? c.rpm)], ['Прострелов', outliers(c)], ['Страна', countryName(c.country)], ['Язык', langsOf(c).map(langName).join(', ')], ['Конкуренция на YouTube', realComp(c) != null ? `${COMP_RU[compVerdict(c)] || ''} ${realComp(c)}/100` : 'не проверена'], ['Каналов той же категории', primaryLang(c) ? `${compCount(c)} · ${langName(primaryLang(c))}` : 'Язык не определён'], ['Сложность производства', c.difficulty_ru || '—'], ['Использование ИИ', AI_RU[aiMode(c)]], ['Доп. монетизация', extra || '—'], ['Доход / мес.', catalogueIncome(c)], ['Монетизация YouTube', c.is_monetized ? 'Монетизирован' : c.is_monetized === false ? 'Не монетизирован' : 'Неизвестно'], ['До монетизации', c.is_monetized ? '—' : c.monetization_forecast || '—'], ['Формат контента', CONTENT_RU[contentType(c)]]];
     const trow = (label, items, cls) => items.length ? `<div class="trow"><span>${label}</span>${items.map(x => `<span class="tag ${cls}">${esc(x)}</span>`).join('')}</div>` : '';
-    $('#drawerPanel').innerHTML = `<button type="button" class="x-close" data-close>× Закрыть</button>${banner ? `<img class="banner" src="${esc(banner)}" alt="">` : ''}<div class="m-head"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div><h2>${esc(c.title)}</h2><div class="handle">${esc(handleOf(c))}</div></div><div class="m-act"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><a class="ic" href="${yt(c.id, c.handle)}" target="_blank" rel="noopener" title="Открыть на YouTube">${ICON.ext}</a><button type="button" class="btn-out" id="showComps">Конкуренты</button><button type="button" class="btn" data-report-niche="${esc(nicheOf(c))}" data-report-lang="${esc(primaryLang(c))}" data-report-country="${esc(c.country)}" data-report-channel>Разбор ниши</button></div></div>
+    $('#drawerPanel').innerHTML = `<button type="button" class="x-close" data-close>× Закрыть</button>${banner ? `<img class="banner" src="${esc(banner)}" alt="">` : ''}<div class="m-head"><img class="av" src="${esc(c.thumbnail || '')}" alt=""><div><h2>${esc(c.title)}</h2><div class="handle">${esc(handleOf(c))}</div></div><div class="m-act"><button type="button" class="ic ${state.liked.has(c.id) ? 'on' : ''}" data-like="${esc(c.id)}" title="Нравится">${ICON.heart}</button><button type="button" class="ic ${state.saved.has(c.id) ? 'on' : ''}" data-save="${esc(c.id)}" title="Сохранить">${ICON.save}</button><a class="ic" href="${yt(c.id, c.handle)}" target="_blank" rel="noopener" title="Открыть на YouTube">${ICON.ext}</a><button type="button" class="btn-out" id="showComps">Каналы категории</button><button type="button" class="btn" data-report-niche="${esc(nicheOf(c))}" data-report-lang="${esc(primaryLang(c))}" data-report-country="${esc(c.country)}" data-report-channel>Разбор ниши</button></div></div>
 <div class="kpi">${kpi.map(([k, v]) => `<div><small>${k}</small><b>${esc(v)}</b></div>`).join('')}</div>${c.verified === false ? `<div class="warn"><b>Отклонён ИИ.</b> ${esc(c.reject_reason || '')}</div>` : c.verified !== true ? '<div class="warn">Канал ещё не проверен ИИ — ниша и подниша определены автоматически по названиям роликов и могут быть неточными.</div>' : ''}${risky(c) ? '<div class="warn"><b>Высокие риски.</b> Ниша может чаще получать ограничения монетизации.</div>' : ''}
 ${isMixed(c) ? trow('Смешанное производство', mix(c).map(x => `${styleName(x.style)} ${x.share}%`), 'tag-mix') : ''}${trow('Стиль производства', styles(c).map(styleName), 'tag-o')}${trow('Категории', categories(c).slice(0, 6), 'tag-g')}${trow('Ниша', [c.niche_ai_ru || c.niche_ru || 'Другое'], 'tag-b')}${trow('Подниша', subniches(c).slice(0, 3), 'tag-p')}${trow('Метки', flags(c), 'tag-o')}
 <h3 class="h">Описание ниши</h3><p class="notes">${esc(c.notes_ru || describeRu(c))}</p>${c.notes_ru ? `<details><summary class="muted">Сводка по цифрам</summary><p class="notes">${esc(describeRu(c))}</p></details>` : ''}
@@ -394,16 +397,16 @@ ${isMixed(c) ? trow('Смешанное производство', mix(c).map(x 
 ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.description)}</p>` : ''}
 <h3 class="h">Топ-10 видео</h3><div class="vts vts-3">${vids.map(v => vthumb(c, v)).join('')}</div>
 <section class="block"><div class="history-head"><h3>Динамика канала</h3><select id="historyDays" aria-label="Период графика"><option value="7">7 дней</option><option value="30" selected>30 дней</option><option value="90">90 дней</option></select></div><p class="muted">Публичные замеры YouTube${history.length ? ` по ${esc(dateRu(history.at(-1).date))}` : ''}. При пропусках показано среднее изменение за интервал.</p><div id="historyCharts">${historyCharts(history, 30)}</div></section>
-<div class="block" id="compsBlock" hidden><h3>Конкуренты в базе</h3><p class="muted">${primaryLang(c) ? `Та же ниша и основной язык: ${esc(langName(primaryLang(c)))}. Показано ${comps.length} из ${compCount(c)}.` : 'Основной язык канала не определён.'}</p><div class="table-wrap"><table class="comp"><thead><tr><th>Канал</th><th>Подп.</th><th>Видео</th><th>Ср. просм.</th><th>Доход/мес.</th><th>RPM</th><th>Язык</th><th>ИТВ</th></tr></thead><tbody>${comps.map(x => `<tr data-open="${esc(x.id)}"><td>${esc(x.title)}${x.graduated ? ' <small class="muted">(вырос)</small>' : ''}</td><td>${num(x.subs)}</td><td>${x.videos_count || 0}</td><td>${num(x.avg_views)}</td><td>~${num(monthly(x))} $</td><td>${money(x.rpm)}</td><td>${esc(langName(primaryLang(x)))}</td><td>${entryIndex(x) ?? '—'}</td></tr>`).join('') || '<tr><td colspan="8">Нет других каналов</td></tr>'}</tbody></table></div></div>${competitionBlock(c)}
+<div class="block" id="compsBlock" hidden><h3>Каналы той же категории</h3><p class="muted">${primaryLang(c) ? `Группа каталога по категории и основному языку (${esc(langName(primaryLang(c)))}). Показано ${comps.length} из ${compCount(c)}. Тематические совпадения ищутся отдельно в блоке «Конкуренция на YouTube».` : 'Основной язык канала не определён.'}</p><div class="table-wrap"><table class="comp"><thead><tr><th>Канал</th><th>Подп.</th><th>Видео</th><th>Ср. просм.</th><th>Доход/мес.</th><th>RPM</th><th>Язык</th><th>ИТВ</th></tr></thead><tbody>${comps.map(x => `<tr data-open="${esc(x.id)}"><td>${esc(x.title)}${x.graduated ? ' <small class="muted">(вырос)</small>' : ''}</td><td>${num(x.subs)}</td><td>${x.videos_count || 0}</td><td>${num(x.avg_views)}</td><td>${catalogueIncome(x)}</td><td>${money(x.rpm)}</td><td>${esc(langName(primaryLang(x)))}</td><td>${entryIndex(x) ?? '—'}</td></tr>`).join('') || '<tr><td colspan="8">Нет других каналов</td></tr>'}</tbody></table></div></div>${competitionBlock(c)}
 <div class="block"><h3>Критерии отбора</h3><ul class="crit">${CRITERIA.map(([t, f]) => `<li class="${f(c) ? 'ok' : 'no'}">${f(c) ? '✓' : '✗'} ${esc(t)}</li>`).join('')}</ul><p class="muted">Лучший ролик — ${bestX(c).toFixed(1).replace('.', ',')}× от обычного.</p></div>
 <div class="block"><h3>Стреляющий канал</h3><ul class="crit">${FIRE_CRITERIA.map(([text, test]) => { const result = test(c); return result == null ? '<li class="muted">— Конкуренция на YouTube ещё не измерена</li>' : `<li class="${result ? 'ok' : 'no'}">${result ? '✓' : '✗'} ${esc(text)}</li>`; }).join('')}</ul></div>${entryBlock(c)}${prospectsBlock(c)}`;
     $('#drawer').hidden = false; $('#drawerPanel').scrollTop = 0;
     $('#historyDays').addEventListener('change', e => { $('#historyCharts').innerHTML = historyCharts(history, +e.target.value); });
-    $('#competitionForm')?.addEventListener('submit', event => runCompetition(event, c, vids[0].title_original || vids[0].title));
+    $('#competitionForm')?.addEventListener('submit', event => runCompetition(event, c));
     $('#showComps')?.addEventListener('click', () => { const b = $('#compsBlock'); b.hidden = !b.hidden; if (!b.hidden) b.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   }
 
-  async function runCompetition(event, channel, title) {
+  async function runCompetition(event, channel) {
     event.preventDefault();
     const form = event.currentTarget;
     const button = $('button', form);
@@ -419,10 +422,11 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
       return;
     }
     button.disabled = true;
-    status.textContent = 'Проверяю язык роликов и страну каналов…';
+    status.textContent = 'Ищу тематические совпадения и проверяю язык и страну…';
     try {
       const { patch } = await window.NR_LIVE.probeCompetition({
-        key, channelId: channel.id, title, language: primaryLang(channel), region: channel.country,
+        key, channelId: channel.id, videos: channel.videos, niche: nicheOf(channel),
+        language: primaryLang(channel), region: channel.country,
         markets: state.supportedMarkets, catalogue: state.knownChannels,
       });
       if (!patch) {
@@ -439,7 +443,7 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
         openDrawer(channel.id);
         const result = $('#competitionStatus');
         result.hidden = false;
-        result.textContent = 'Замер сохранён в этом браузере.';
+        result.textContent = patch.competition.index == null ? 'Замер сохранён. Совпадений для индекса пока недостаточно.' : 'Замер сохранён в этом браузере.';
         $('#competitionBlock').scrollIntoView({ block: 'start' });
       }
     } catch (error) { status.textContent = error.message || 'Не удалось измерить конкуренцию.'; }
@@ -481,14 +485,14 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     const list = filtered();
     const nv = state.all.filter(c => c.verified === true).length, vb = $('#verifyInfo');
     vb.hidden = state.tab === 'live' || !$('#onlyVerified').checked || nv === state.all.length;
-    vb.innerHTML = `<span>Проверено ИИ: <b>${nv}</b> из ${state.all.length} каналов. Каждый день в 7:00 МСК Gemini смотрит ролики ещё ~100 каналов, подтверждает нишу и поднишу и отсеивает неподходящие.</span><button type="button" class="btn" id="showUnverified">Показать непроверенные</button>`;
-    $('#resultsInfo').textContent = `${list.length} ${plural(list.length, 'канал', 'канала', 'каналов')}` + (state.tab === 'fire' ? ` · до ${FIRE.videos} роликов, от ${fmt(FIRE.views)} просмотров на каждом, не больше ${FIRE.rivals} конкурентов` : '');
+    vb.innerHTML = `<span>Проверено ИИ: <b>${nv}</b> из ${state.all.length} каналов. Темы сверяются с описанием и публикациями в очереди фоновой проверки.</span><button type="button" class="btn" id="showUnverified">Показать непроверенные</button>`;
+    $('#resultsInfo').textContent = `${list.length} ${plural(list.length, 'канал', 'канала', 'каналов')}` + (state.tab === 'fire' ? ` · до ${FIRE.videos} роликов, от ${fmt(FIRE.views)} просмотров на каждом, не больше ${FIRE.rivals} каналов той же категории` : '');
     if (state.group === 'channels') $('#grid').innerHTML = `<div class="cards">${list.map(card).join('')}</div>`;
     else {
       const key = state.group === 'language' ? c => langName(primaryLang(c))
         : state.group === 'niche' ? c => c.niche_ai_ru || c.niche_ru || 'Другое' : c => { const v = entryIndex(c); return v == null ? 'Без оценки' : entryLabel(v)[0]; };
       const groups = new Map(); list.forEach(c => { const k = key(c); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(c); });
-      const order = ['Отличный вход', 'Хороший вход', 'Вход с отстройкой', 'Последний вагон', 'Вход закрыт', 'Без оценки'];
+      const order = ['Сильные сигналы', 'Хорошие сигналы', 'Вход с отстройкой', 'Слабые сигналы', 'Без оценки'];
       const entries = [...groups].sort((a, b) => state.group === 'compet' ? order.indexOf(a[0]) - order.indexOf(b[0]) : b[1].length - a[1].length);
       $('#grid').innerHTML = entries.map(([k, arr]) => `<h2 class="grp">${esc(k)} <span>${arr.length}</span></h2><div class="cards">${arr.map(card).join('')}</div>`).join('');
     }
@@ -516,7 +520,7 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
 
   function toggle(set, key, id) { if (set.has(id)) set.delete(id); else set.add(id); saveSet(key, set); render(); if (!$('#drawer').hidden) openDrawer(id); }
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-comps],[data-label],[data-niche-open],[data-topic-niche],[data-report-niche],#retryCatalogue,#exportLabels,[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#liveClear,#supportBtn,#supportSend,#sideToggle,#refreshSide,#supportSide,#burger,#showUnverified,#toTop,#openTopic,#viewLive,#reportCustom');
+    const t = e.target.closest('[data-comps],[data-label],[data-niche-open],[data-topic-niche],[data-report-niche],#retryCatalogue,#exportLabels,[data-close],[data-open],[data-save],[data-like],[data-tab],#filtersToggle,#resetFilters,#refreshBtn,#refreshRun,#auditRun,#liveClear,#supportBtn,#supportSend,#sideToggle,#refreshSide,#supportSide,#burger,#showUnverified,#toTop,#openTopic,#viewLive,#reportCustom');
     if (!t) return;
     if (t.id === 'retryCatalogue') { boot(); return; }
     if (t.id === 'reportCustom') {
@@ -587,6 +591,7 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     }
     if (t.id === 'refreshBtn') { openRefresh(); return; }
     if (t.id === 'liveClear') { localStorage.removeItem(LS.live); localStorage.removeItem(LS.liveAt); location.reload(); return; }
+    if (t.id === 'auditRun') { runCatalogueAudit(); return; }
     if (t.id === 'refreshRun') runLive();
     if (t.id === 'supportBtn') { $('#supportModal').hidden = false; return; }
     if (t.id === 'supportSend') { const text = $('#supportText').value.trim(); if (!text) return; const prev = loadArr(LS.support); prev.push({ text, at: new Date().toISOString() }); localStorage.setItem(LS.support, JSON.stringify(prev)); $('#supportOk').hidden = false; $('#supportText').value = ''; }
@@ -652,7 +657,7 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
 
   function reportCatalogue(scope) {
     const terms = catalogue.words(scope.query);
-    return state.pool.filter(channel => (scope.niche === 'custom' || nicheOf(channel) === scope.niche)
+    return state.pool.filter(channel => (scope.niche === 'custom' || catalogue.topicConfirmed(channel) && nicheOf(channel) === scope.niche)
       && primaryLang(channel) === scope.language && (!scope.country || channel.country === scope.country)).map(channel => {
       const videos = channel.videos?.filter(video => {
         const language = catalogue.languageCode(video.audio_language) || catalogue.languageCode(video.text_language);
@@ -867,6 +872,55 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
     const q = localStorage.getItem(LS.maxQ);
     if (q) { $('#maxQueries').value = q; $('#maxQueriesVal').textContent = q; }
   }
+  async function runCatalogueAudit() {
+    if (state.liveRunning || !state.baseData || !window.NR_LIVE) return;
+    const key = $('#apiKey').value.trim();
+    const status = $('#refreshLog');
+    if (!key) { status.textContent = 'Введите ключ YouTube Data API v3'; return; }
+    const { competitionSources, probeCompetition } = window.NR_LIVE;
+    const candidates = state.pool.filter(channel =>
+      !catalogue.competitionEvidence(channel) && competitionSources(channel.videos).size);
+    candidates.sort((a, b) => Number(Boolean(b.live)) - Number(Boolean(a.live)) || (b.score || 0) - (a.score || 0));
+    if (!candidates.length) { status.textContent = 'Все каналы с доступными заголовками уже проверены за последние 30 дней.'; return; }
+    let budget = +$('#maxQueries').value;
+    if (budget < 2) { status.textContent = 'Выберите минимум два поисковых запроса для проверки.'; return; }
+    const button = $('#auditRun');
+    const progress = $('#refreshBar');
+    const records = new Map(loadArr(LS.live).map(record => [record.id, record]));
+    const initialBudget = budget;
+    let checked = 0, scored = 0, stop = '';
+    state.liveRunning = button.disabled = true;
+    $('#refreshProgress').hidden = false;
+    progress.style.width = '0%';
+    try {
+      localStorage.setItem(LS.key, key);
+      for (const channel of candidates) {
+        const cost = competitionSources(channel.videos).size;
+        if (cost > budget) break;
+        status.textContent = `Проверяю «${channel.title}» · ${langName(primaryLang(channel))}`;
+        const result = await probeCompetition({
+          key, channelId: channel.id, videos: channel.videos, niche: nicheOf(channel),
+          language: primaryLang(channel), region: channel.country,
+          markets: state.supportedMarkets, catalogue: state.knownChannels,
+        });
+        if (result.stopped) { stop = result.stopped; break; }
+        const patch = result.patch;
+        records.set(channel.id, { ...records.get(channel.id), id: channel.id, ...patch });
+        localStorage.setItem(LS.live, JSON.stringify([...records.values()]));
+        checked++;
+        if (patch.competition.index != null) scored++;
+        budget -= cost;
+        progress.style.width = Math.round((initialBudget - budget) / initialBudget * 100) + '%';
+      }
+    } catch (error) {
+      stop = error.message || 'Проверка прервалась';
+    } finally {
+      if (checked) applyCatalogue(state.baseData);
+      status.textContent = `Проверено: ${checked}. Индекс рассчитан: ${scored}. В очереди: ${candidates.length - checked}.${stop ? ' ' + stop : ''}`;
+      state.liveRunning = button.disabled = false;
+    }
+  }
+
   async function runLive() {
     if (state.liveRunning) return;
     const key = ($('#apiKey').value || '').trim();
@@ -946,14 +1000,15 @@ ${c.description ? `<h3 class="h">Описание</h3><p class="notes">${esc(c.d
       const update = fresh.get(channel.id);
       fresh.delete(channel.id);
       if (!update) return channel;
-      const newer = catalogue.competitionFor(channel);
-      const local = catalogue.competitionFor({ ...channel, ...update });
-      if (newer && (!local || newer.checked_at > local.checked_at)) {
+      const merged = { ...channel, ...update };
+      const newer = catalogue.competitionFor(channel) || catalogue.competitionEvidence(channel);
+      const local = catalogue.competitionFor(merged) || catalogue.competitionEvidence(merged);
+      if (newer && (!local || (newer.index != null && local.index == null) || newer.checked_at > local.checked_at)) {
         return { ...channel, ...update, competition: newer, added_at: channel.added_at || update.added_at };
       }
       return { ...channel, ...update, added_at: channel.added_at || update.added_at };
     });
-    state.knownChannels = shared.concat([...fresh.values()].filter(channel => channel.title));
+    state.knownChannels = shared.concat([...fresh.values()].filter(channel => channel.title)).map(catalogue.checkTopic);
     state.pool = state.knownChannels.filter(channel => catalogue.marketKey(channel, state.supportedMarkets));
     state.all = state.pool.filter(channel => (!channel.graduated && (channel.videos_count || 0) <= MAX_VIDEOS) || channel.labeled_role);
     state.markets = new Map();

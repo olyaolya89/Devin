@@ -130,14 +130,15 @@ class MeasureTests(unittest.TestCase):
         self.assertTrue({"UCportuguese", "UCbrazil", "UCunknown"}.isdisjoint(ids))
         self.assertEqual(result["language"], "en")
         self.assertTrue(result["market_verified"])
-        self.assertEqual(result["videos_seen"], 7)
+        self.assertEqual(result["videos_seen"], 6)
         self.assertEqual(result["clone_channels"], 4)
         self.assertEqual(result["rival_channels"], 5)
         # Preshcute (26 Oct) and ROYAL ARCHIVES (22 Oct) fall inside the 30-day window;
         # NEXT ENGINE (5 Oct) and AURIO (5 Sep) are older.
         self.assertEqual(result["clones_30d"], 2)
         self.assertEqual(result["big_rivals"], 1)
-        self.assertEqual(result["verdict"], "competitive")
+        self.assertIsNone(result["index"])
+        self.assertIsNone(result["verdict"])
         self.assertEqual(result["checked_at"], "2026-11-05")
 
     def test_known_portuguese_channel_is_not_an_english_competitor(self):
@@ -147,7 +148,9 @@ class MeasureTests(unittest.TestCase):
 
     def test_no_supported_results_does_not_claim_a_free_topic(self):
         with mock.patch.object(collect, "search_video_languages", return_value={}):
-            self.assertIsNone(competition.measure(self.channel, {}, NOW))
+            result = competition.measure(self.channel, {}, NOW)
+        self.assertEqual(result["videos_seen"], 0)
+        self.assertIsNone(result["verdict"])
 
     def test_channel_without_videos_returns_none(self):
         self.assertIsNone(
@@ -169,21 +172,20 @@ class MeasureTests(unittest.TestCase):
 class PickTests(unittest.TestCase):
     def test_oldest_check_first_and_skips_unprobeable(self):
         channels = [
-            {"id": "fresh", "videos": [{"title": "t"}], "competition_attempted_at": "2026-11-04"},
-            {"id": "never", "videos": [{"title": "t"}]},
-            {"id": "stale", "videos": [{"title": "t"}], "stale": True},
+            {"id": "fresh", "videos": [{"title": "Ship Engines"}], "competition_attempted_at": "2026-11-04"},
+            {"id": "never", "videos": [{"title": "Ship Engines"}]},
+            {"id": "stale", "videos": [{"title": "Ship Engines"}], "stale": True},
             {"id": "empty", "videos": []},
-            {"id": "old", "videos": [{"title": "t"}], "competition_attempted_at": "2026-10-01"},
+            {"id": "old", "videos": [{"title": "Ship Engines"}], "competition_attempted_at": "2026-10-01"},
         ]
         for channel in channels:
             channel.update(language="en", country="US")
         picked = [c["id"] for c in competition.pick(channels, budget=10_000)]
-        self.assertEqual(picked[:3], ["never", "old", "fresh"])
-        self.assertNotIn("stale", picked)
+        self.assertEqual(picked, ["never", "stale", "old", "fresh"])
         self.assertNotIn("empty", picked)
 
     def test_budget_caps_the_batch(self):
-        channels = [{"id": str(i), "language": "en", "country": "US", "videos": [{"title": "t"}]} for i in range(50)]
+        channels = [{"id": str(i), "language": "en", "country": "US", "videos": [{"title": "Ship Engines"}]} for i in range(50)]
         picked = competition.pick(channels, budget=400)
         self.assertEqual(len(picked), 400 // (100 * competition.PROBES_PER_CHANNEL))
 

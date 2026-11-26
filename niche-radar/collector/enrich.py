@@ -59,7 +59,7 @@ SCHEMA = {
             "style": {"type": "STRING", "enum": list(STYLES)}, "share": {"type": "INTEGER"}}, "required": ["style", "share"]}},
         "categories": {"type": "ARRAY", "items": {"type": "STRING"}},
     },
-    "required": ["fits", "niche_ru", "notes_ru", "production_ru", "subniche_ru", "uses_ai", "difficulty", "extra_monetization"],
+    "required": ["fits", "niche_key", "niche_ru", "notes_ru", "production_ru", "subniche_ru", "uses_ai", "difficulty", "extra_monetization"],
 }
 PROMPT = """Ты куратор каталога YouTube-ниш для русскоязычных авторов фейслес-каналов.
 Опиши нишу канала по-русски, конкретно, без воды и общих фраз.
@@ -74,7 +74,8 @@ niche_ru — ниша 1–3 слова: «История», «Военное д�
 niche_key — ключ ниши из списка, самый точный по реальным роликам: {niche_keys}.
 Военные темы — military, а не history; новые изобретения и техника — tech; авиация — aviation;
 компании и богатые семьи — business; дома, земля, переезд пенсионеров — real_estate; Marvel/DC — comics.
-Подниша и ниша должны соответствовать тому, что реально в роликах, а не случайным словам из названий.
+Выбирай нишу по повторяющейся теме разных роликов и описанию канала. История христианства, Библия и богословие относятся к religion.
+Если заголовки и описание дают слишком мало тематических сведений или конфликтуют, выбери other. Категория поискового запроса не является доказательством.
 
 notes_ru — 2–4 предложения: о чём ролики (с конкретными примерами тем из названий),
 1–2 шаблона заголовков в виде «[Событие]: [интригующий вопрос]», язык, длина роликов в минутах,
@@ -119,7 +120,10 @@ def _fmt_minutes(seconds: int) -> str:
 
 
 def channel_data(channel: dict[str, Any]) -> str:
-    videos = sorted(channel.get("videos") or [], key=lambda v: v.get("views") or 0, reverse=True)[:15]
+    videos = channel.get("videos") or []
+    recent = sorted(videos, key=lambda v: v.get("published_at") or "", reverse=True)
+    popular = sorted(videos, key=lambda v: v.get("views") or 0, reverse=True)
+    sample = {v.get("id") or v.get("title"): v for v in recent[:10] + popular[:10]}
     lines = [
         f"Название: {channel.get('title', '')}",
         f"Язык: {channel.get('language', '')}; страна: {channel.get('country') or '—'}",
@@ -128,8 +132,8 @@ def channel_data(channel: dict[str, Any]) -> str:
         "Ролики (просмотры, длина, дата, название):",
     ]
     lines += [
-        f"- {v.get('views', 0)} | {_fmt_minutes(v.get('duration_sec') or 0)} | {(v.get('published_at') or '')[:10]} | {v.get('title', '')}"
-        for v in videos
+        f"- {v.get('views', 0)} | {_fmt_minutes(v.get('duration_sec') or 0)} | {(v.get('published_at') or '')[:10]} | {v.get('title_original') or v.get('title', '')}"
+        for v in sample.values()
     ]
     return "\n".join(lines)
 
@@ -256,6 +260,11 @@ def apply(channel: dict[str, Any], result: dict[str, Any], *, watched: dict[str,
     if (result.get("niche_ru") or "").strip():
         channel["niche_ai_ru"] = result["niche_ru"].strip()
     key = result.get("niche_key")
+    channel["topic_audit_version"] = TOPIC_AUDIT_VERSION
+    channel["topic_audited_at"] = now.date().isoformat()
+    if key not in NICHES or key == "other":
+        channel.pop("niche_ai", None)
+        channel.pop("niche_ai_ru", None)
     if key in NICHES and key != "other":
         channel["niche_ai"] = key
         channel["niche"], channel["niche_ru"] = key, NICHES[key]
@@ -374,9 +383,7 @@ def save(path: str, data: dict[str, Any]) -> None:
     os.replace(tmp, path)
 
 
-MAX_COMPETITORS = 20
-SHOW_CLIPS_REJECT = re.compile(r"нарез|шоу|передач", re.IGNORECASE)
-MAX_VIDEOS = 100
+TOPIC_AUDIT_VERSION = 2
 
 
 def competitor_counts(channels: list[dict[str, Any]]) -> dict[str, int]:
@@ -421,14 +428,9 @@ def main(argv: list[str] | None = None) -> int:
     print(f"[enrich] model: {MODEL}", file=sys.stderr)
     todo = [
         c for c in data.get("channels", [])
-        if ("verified" not in c or (c.get("verified") and ("production_mix" not in c or "niche_ai" not in c)) or SHOW_CLIPS_REJECT.search(c.get("reject_reason") or ""))
-        and not c.get("graduated") and (c.get("videos_count") or 0) <= MAX_VIDEOS
+        if c.get("videos") and c.get("topic_audit_version") != TOPIC_AUDIT_VERSION
     ]
-    counts = competitor_counts(data.get("channels", []))
-    crowded = [c for c in todo if counts.get(c.get("id"), 0) > MAX_COMPETITORS]
-    todo = [c for c in todo if counts.get(c.get("id"), 0) <= MAX_COMPETITORS]
-    print(f"[enrich] skipping {len(crowded)} channels with more than {MAX_COMPETITORS} competitors", file=sys.stderr)
-    todo.sort(key=lambda c: (counts.get(c.get("id"), 0), -(c.get("score") or 0)))
+    todo.sort(key=lambda c: (bool(c.get("enriched_at")), bool(c.get("stale")), -(c.get("score") or 0)))
     now = dt.datetime.now(dt.timezone.utc)
     done = failed = 0
     batch = todo[: args.limit]

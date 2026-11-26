@@ -188,7 +188,8 @@ if (patch) {
   ok(!k.top_rivals.some(r => r.id === 'UCnoise'), 'excludes unrelated results');
   ok(!k.top_rivals.some(r => ['UCportuguese', 'UCmixedCountry', 'UCunknown'].includes(r.id)), 'excludes mismatched languages, unsupported countries, and unknown languages');
   eq(k.language, 'en', 'measurement is tagged with the verified language');
-  eq(k.verdict, 'competitive', 'verdict matches the observed clone cluster');
+  eq(k.index, null, 'a single mined page never yields a competition index');
+  eq(k.videos_seen, 6, 'counts only distinct verified videos from other authors');
   eq(k.clones_30d, 2, 'counts copies published in the last 30 days');
 }
 
@@ -200,7 +201,7 @@ if (found) {
   eq(found.language, 'en', 'US channel with predominantly English audio reads as English');
   ok(found.languages.includes('es'), 'keeps the channel\'s own language too');
   ok(found.is_multilang === true, 'marks it multi-language');
-  ok(!!found.competition, 'new channel also gets a competition reading');
+  ok(!found.competition, 'another channel’s discovery query cannot supply a competition reading');
   ok(found.cluster && found.cluster.endsWith('|en'), 'cluster key uses the resolved language', found.cluster);
 }
 const expandedChannel = res.channels.find(channel => channel.id === 'UCnext');

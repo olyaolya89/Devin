@@ -11,28 +11,96 @@
   const channelLanguage = channel => languageCode(channel.audio_language)
     || (channel.language_source !== 'query_fallback' ? languageCode(channel.language) : '');
   const videoLanguage = snippet => languageCode(snippet.defaultAudioLanguage) || languageCode(snippet.defaultLanguage);
-  const competitionFor = channel => {
+  const COMPETITION_METHOD = 2;
+  const CHRISTIAN_STORY = 'UCK44H7LgmSSiQdehlxBGwRg';
+  const CHRISTIAN_HISTORY = /\b(?:christian(?:s|ity)?|church histor(?:y|ies)|early church|church fathers|theolog(?:y|ical)|bible|biblical|nicene|reformation|trinity|jesus christ|cristianismo|cristiandad|iglesia primitiva|igreja primitiva|teologia|jesus cristo|cristo|christianisme|christentum|fruhe kirche|jesus christus)\b/i;
+  const FINANCIAL_TOPIC = /\b(?:retire(?:ment|e|es)?|pensions?|401k|ira contributions?|social security|tax(?:es|ation)?|personal finances?|invest(?:ments?|ing)?|savings|budgeting|mortgages?|jubilacion|aposentadoria|finanzas personales|financas pessoais|hipotecas?|inversiones|investimentos|retraite|altersvorsorge|rente|geldanlage)\b/i;
+
+  function topicCorrection(channel) {
+    if (channel.id === CHRISTIAN_STORY) {
+      return { niche: 'religion', label: 'История христианства и богословие', source: 'public-review' };
+    }
+    if (!['finance', 'nostalgia_finance'].includes(channel.niche_ai || channel.niche)) return null;
+    const titles = [...new Set((channel.videos || []).map(video => normalize(video.title_original || video.title)).filter(Boolean))];
+    const religious = titles.filter(title => CHRISTIAN_HISTORY.test(title)).length;
+    const financial = titles.filter(title => FINANCIAL_TOPIC.test(title)).length;
+    return religious >= 3 && religious * 2 > titles.length && financial * 4 < titles.length
+      ? { niche: 'religion', label: 'Религия', source: 'video-titles' } : null;
+  }
+
+  const nicheFor = channel => topicCorrection(channel)?.niche || channel.niche_ai || channel.niche || '';
+  const topicConfirmed = channel => Boolean(['public-review', 'video-titles'].includes(channel.topic_source)
+    || channel.verified === true && channel.niche_ai);
+
+  function checkTopic(channel) {
+    const correction = topicCorrection(channel);
+    if (!correction && (topicConfirmed(channel) || channel.rpm_source !== 'baseline')) return channel;
+    const checked = { ...channel };
+    if (correction) {
+      checked.niche = correction.niche;
+      checked.niche_ru = 'Религия';
+      checked.topic_source = correction.source;
+      checked.subniche_ru = correction.label;
+      for (const key of ['niche_ai', 'niche_ai_ru', 'notes_ru', 'description_ru', 'categories', 'tags', '_sub']) {
+        delete checked[key];
+      }
+    }
+    if (channel.rpm_source === 'baseline' || (correction && !channel.rpm_source)) {
+      for (const key of ['rpm', 'rpm_short', 'rpm_long', 'monthly_income_est']) delete checked[key];
+    }
+    return checked;
+  }
+
+  function competitionEvidence(channel, now = Date.now()) {
     const language = channelLanguage(channel);
     const reading = channel.competition;
-    return language && reading?.language === language && reading.market_verified === true
-      && reading.language_verified === true && reading.region_code === channel.country ? reading : null;
+    const measured = Date.parse(reading?.checked_at || '');
+    return language && reading?.method_version === COMPETITION_METHOD
+      && reading.niche === nicheFor(channel) && reading.language === language && reading.market_verified === true
+      && reading.language_verified === true && reading.region_code === channel.country
+      && Number.isFinite(measured) && now - measured <= 30 * DAY && measured <= now ? reading : null;
+  }
+
+  function competitionCoverage({ queries = [], videos_seen, related_videos, rival_channels }) {
+    return Array.isArray(queries) && new Set(queries).size >= 2 && videos_seen >= 12 && related_videos >= 6 && rival_channels >= 3;
+  }
+
+  const competitionFor = (channel, now) => {
+    const reading = competitionEvidence(channel, now);
+    return reading && competitionCoverage(reading) && Number.isFinite(reading.index) ? reading : null;
   };
+
+  function entryAssessment(channel, grouping, categoryPeers, now = Date.now()) {
+    if (!topicConfirmed(channel)) return { score: null, reason: 'Проверьте тему канала' };
+    const latest = Math.max(0, ...(channel.videos || []).map(video => Date.parse(video.published_at || '') || 0));
+    if (!latest || latest > now || now - latest > 90 * DAY || channel.stale || channel.graduated) {
+      return { score: null, reason: 'Нет свежих данных по каналу' };
+    }
+    const measure = competitionFor(channel, now);
+    if (!measure || !grouping || grouping.n < 3 || !Number.isFinite(grouping.entry_score)) {
+      return { score: null, reason: 'Недостаточно данных для оценки входа' };
+    }
+    const marketCap = categoryPeers > 20 ? 64 : 100;
+    const groupCap = grouping.verdict === 'crowded' ? 64 : grouping.verdict === 'unproven' ? 55 : 100;
+    const competitionCap = measure.index > 75 ? 35 : measure.index > 50 ? 55 : measure.index > 25 ? 74 : 100;
+    return { score: Math.min(grouping.entry_score, marketCap, groupCap, competitionCap), reason: '' };
+  }
   const marketKey = (channel, markets) => {
     const language = channelLanguage(channel);
-    const niche = channel.niche_ai || channel.niche;
+    const niche = nicheFor(channel);
     return niche && allowedMarket(markets, language, channel.country) ? `${niche}|${language}` : null;
   };
   const allowedMarket = (markets, language, country) =>
     Boolean(markets?.[languageCode(language)]?.includes(String(country || '').trim().toUpperCase()));
   const clusterKey = (channel, markets) => {
     const market = marketKey(channel, markets);
-    return market ? [channel.niche_ai || channel.niche, channel.style_group || '', channelLanguage(channel)].join('|') : null;
+    return market ? [nicheFor(channel), channel.style_group || '', channelLanguage(channel)].join('|') : null;
   };
 
   function clusters(channels, markets, now = Date.now()) {
     const groups = {};
     for (const channel of channels) {
-      if (channel.stale || channel.graduated) continue;
+      if (channel.stale || channel.graduated || !topicConfirmed(channel)) continue;
       const key = clusterKey(channel, markets);
       if (key) (groups[key] ||= []).push(channel);
     }
@@ -114,6 +182,7 @@
 
   window.NR_CATALOGUE_TOOLS = {
     words, makeSearchIndex, matches, snapshots, changeSeries, measuredChange,
-    languageCode, channelLanguage, videoLanguage, competitionFor, marketKey, allowedMarket, clusterKey, clusters,
+    languageCode, channelLanguage, videoLanguage, competitionFor, competitionEvidence, competitionCoverage,
+    marketKey, allowedMarket, clusterKey, clusters, checkTopic, topicConfirmed, nicheFor, entryAssessment, COMPETITION_METHOD,
   };
 })();
