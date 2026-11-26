@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-26T13:37:24.676675Z",
+  "generated_at": "2026-11-26T21:33:12.341431Z",
   "channels": [
     {
       "id": "UCAQ3ijMJflppSdHdsB75n9g",
       "subs": 11200,
-      "total_views": 1969321,
+      "total_views": 1970205,
       "videos_count": 84,
       "score": 79,
       "cluster": "jewelry|live|en",
@@ -13,8 +13,8 @@
     },
     {
       "id": "UCzZqLcrq92NWT52GqSMLesw",
-      "subs": 5350,
-      "total_views": 2190344,
+      "subs": 5370,
+      "total_views": 2204572,
       "videos_count": 71,
       "score": 89,
       "cluster": "jewelry|live|en",
@@ -24,7 +24,7 @@
     {
       "id": "UCbaeKRGzo2JEkJ5orygbUwA",
       "subs": 2970,
-      "total_views": 363753,
+      "total_views": 364026,
       "videos_count": 32,
       "score": 74,
       "cluster": "jewelry|live|en",
@@ -34,7 +34,7 @@
     {
       "id": "UCf0VgA4RUAOP1wCXYSLhhyw",
       "subs": 2770,
-      "total_views": 282415,
+      "total_views": 282729,
       "videos_count": 35,
       "score": 84,
       "cluster": "jewelry|live|en",
@@ -43,8 +43,8 @@
     },
     {
       "id": "UCv7mY6CXR9MY912cRKR_y7Q",
-      "subs": 6840,
-      "total_views": 871090,
+      "subs": 6850,
+      "total_views": 874095,
       "videos_count": 17,
       "score": 62,
       "cluster": "jewelry|live|en",
@@ -54,7 +54,7 @@
     {
       "id": "UCmKjefsbN1_nOS0rIUdlo9Q",
       "subs": 114000,
-      "total_views": 16422535,
+      "total_views": 16439660,
       "videos_count": 68,
       "score": 66,
       "cluster": "animals|live|en",
@@ -64,9 +64,9 @@
     {
       "id": "UCfpr2PTfO5v3w1-emJ-5x7Q",
       "subs": 47300,
-      "total_views": 8487636,
-      "videos_count": 82,
-      "score": 67,
+      "total_views": 8492984,
+      "videos_count": 83,
+      "score": 66,
       "cluster": "animals|live|en",
       "is_monetized": null,
       "monetization_forecast": "≤30 дн."
@@ -74,7 +74,7 @@
     {
       "id": "UC10ZrtXRUv9zmgrlzw19Uww",
       "subs": 91800,
-      "total_views": 559755,
+      "total_views": 575142,
       "videos_count": 73,
       "score": 65,
       "cluster": "animals|live|en",
@@ -84,9 +84,9 @@
     {
       "id": "UCobGrgRznm2kcxJfAwjoiPQ",
       "subs": 15000,
-      "total_views": 4167938,
-      "videos_count": 45,
-      "score": 68,
+      "total_views": 4186155,
+      "videos_count": 46,
+      "score": 56,
       "cluster": "animals|live|en",
       "is_monetized": null,
       "monetization_forecast": "≤30 дн."
@@ -94,7 +94,7 @@
     {
       "id": "UCjw4TogAifphMJ8HfZpk22w",
       "subs": 16600,
-      "total_views": 4978381,
+      "total_views": 4978618,
       "videos_count": 25,
       "score": 74,
       "cluster": "disasters|live|en",
@@ -104,10 +104,90 @@
     {
       "id": "UCyIYCV-JGBJrfeaezM1ST5w",
       "subs": 1910,
-      "total_views": 343306,
+      "total_views": 343310,
       "videos_count": 59,
       "score": 55,
       "cluster": "disasters|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCYARYdLq9-UwcTzzMDF_v2Q",
+      "subs": 18700,
+      "total_views": 4490567,
+      "videos_count": 31,
+      "score": 66,
+      "cluster": "history|live|es",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCFpXsCPbQtzpLNFiJlxHYHQ",
+      "subs": 45400,
+      "total_views": 2046506,
+      "videos_count": 37,
+      "score": 61,
+      "cluster": "history|live|es",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UC9DltgGxltZs45koX1sDpdA",
+      "subs": 6080,
+      "total_views": 1278251,
+      "videos_count": 24,
+      "score": 73,
+      "cluster": "nostalgia|live|de",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCjQmQuGyQtNpjeROVExuAYw",
+      "subs": 8700,
+      "total_views": 1310120,
+      "videos_count": 50,
+      "score": 72,
+      "cluster": "nostalgia|live|de",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCVAadbBHRm49FvDvEh0Ke5w",
+      "subs": 14800,
+      "total_views": 2160978,
+      "videos_count": 40,
+      "score": 75,
+      "cluster": "nostalgia_finance|live|de",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCG1FhX9QEcUEqNQEnP1EaiQ",
+      "subs": 160000,
+      "total_views": 22434681,
+      "videos_count": 145,
+      "score": 61,
+      "cluster": "lifehacks|live|en",
+      "is_monetized": null,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCtrNrW5RTVzL7Tj07EExLKg",
+      "subs": 13500,
+      "total_views": 5918156,
+      "videos_count": 12,
+      "score": 70,
+      "cluster": "disasters|live|en",
+      "is_monetized": false,
+      "monetization_forecast": "≤30 дн."
+    },
+    {
+      "id": "UCqX_HO1AR-1uNx9T41ID9IQ",
+      "subs": 54100,
+      "total_views": 7427215,
+      "videos_count": 105,
+      "score": 59,
+      "cluster": "food|live|en",
       "is_monetized": null,
       "monetization_forecast": "≤30 дн."
     },
@@ -120,56 +200,6 @@
       "cluster": "disasters|live|ur",
       "is_monetized": true,
       "monetization_forecast": "уже"
-    },
-    {
-      "id": "UCYARYdLq9-UwcTzzMDF_v2Q",
-      "subs": 18700,
-      "total_views": 4470083,
-      "videos_count": 31,
-      "score": 66,
-      "cluster": "history|live|es",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCFpXsCPbQtzpLNFiJlxHYHQ",
-      "subs": 45400,
-      "total_views": 2039178,
-      "videos_count": 37,
-      "score": 61,
-      "cluster": "history|live|es",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UC9DltgGxltZs45koX1sDpdA",
-      "subs": 6080,
-      "total_views": 1277296,
-      "videos_count": 24,
-      "score": 73,
-      "cluster": "nostalgia|live|de",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCjQmQuGyQtNpjeROVExuAYw",
-      "subs": 8700,
-      "total_views": 1309234,
-      "videos_count": 50,
-      "score": 72,
-      "cluster": "nostalgia|live|de",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCVAadbBHRm49FvDvEh0Ke5w",
-      "subs": 14800,
-      "total_views": 2157220,
-      "videos_count": 40,
-      "score": 75,
-      "cluster": "nostalgia_finance|live|de",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
     },
     {
       "id": "UCRHZY2A2Xv4I2nUnHHIoP3Q",
@@ -2522,16 +2552,6 @@
       "monetization_forecast": "неясно"
     },
     {
-      "id": "UCG1FhX9QEcUEqNQEnP1EaiQ",
-      "subs": 160000,
-      "total_views": 22399961,
-      "videos_count": 145,
-      "score": 61,
-      "cluster": "lifehacks|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
       "id": "UCkIlnxqtruZLPs7IMZgd2Uw",
       "subs": 1490,
       "total_views": 543254,
@@ -2577,19 +2597,9 @@
       "total_views": 387763,
       "videos_count": 61,
       "score": 47,
-      "cluster": "geopolitics|ai|hi",
+      "cluster": "engineering|ai|hi",
       "is_monetized": null,
       "monetization_forecast": "≤90 дн."
-    },
-    {
-      "id": "UCqX_HO1AR-1uNx9T41ID9IQ",
-      "subs": 54000,
-      "total_views": 7412752,
-      "videos_count": 105,
-      "score": 59,
-      "cluster": "food|live|en",
-      "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
     },
     {
       "id": "UC3RMHQGNk2Rm_SVVTJ9IKIg",
@@ -2609,16 +2619,6 @@
       "score": 53,
       "cluster": "engineering|live|ml",
       "is_monetized": null,
-      "monetization_forecast": "≤30 дн."
-    },
-    {
-      "id": "UCtrNrW5RTVzL7Tj07EExLKg",
-      "subs": 13500,
-      "total_views": 5916927,
-      "videos_count": 12,
-      "score": 70,
-      "cluster": "disasters|live|en",
-      "is_monetized": false,
       "monetization_forecast": "≤30 дн."
     },
     {
@@ -33826,471 +33826,44 @@
     "jewelry|live|en": {
       "n": 5,
       "share_growing": 0.4,
-      "median_vpv": 12072.97,
+      "median_vpv": 12076.53,
       "entry_score": 65,
       "verdict": "filling"
     },
     "animals|live|en": {
-      "n": 7,
-      "share_growing": 0.429,
-      "median_vpv": 69546.27,
-      "entry_score": 65,
-      "verdict": "filling"
+      "n": 4,
+      "share_growing": 0.25,
+      "median_vpv": 61653.32,
+      "entry_score": 67,
+      "verdict": "unproven"
     },
     "disasters|live|en": {
       "n": 3,
       "share_growing": 0.667,
-      "median_vpv": 445051.18,
+      "median_vpv": 445067.82,
       "entry_score": 88,
       "verdict": "open"
-    },
-    "disasters|live|ur": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 459854.5,
-      "entry_score": 65,
-      "verdict": "unproven"
     },
     "history|live|es": {
       "n": 2,
       "share_growing": 0.5,
-      "median_vpv": 108597.87,
+      "median_vpv": 108810.48,
       "entry_score": 75,
       "verdict": "open"
     },
     "nostalgia|live|de": {
       "n": 2,
       "share_growing": 1.0,
-      "median_vpv": 37292.51,
+      "median_vpv": 37337.72,
       "entry_score": 94,
       "verdict": "open"
     },
     "nostalgia_finance|live|de": {
       "n": 1,
       "share_growing": 1.0,
-      "median_vpv": 27645.73,
+      "median_vpv": 27754.8,
       "entry_score": 90,
       "verdict": "open"
-    },
-    "tech|live|pt": {
-      "n": 9,
-      "share_growing": 0.556,
-      "median_vpv": 19310.2,
-      "entry_score": 59,
-      "verdict": "crowded"
-    },
-    "history|live|en": {
-      "n": 12,
-      "share_growing": 0.417,
-      "median_vpv": 6281.87,
-      "entry_score": 52,
-      "verdict": "crowded"
-    },
-    "tech|live|en": {
-      "n": 9,
-      "share_growing": 0.556,
-      "median_vpv": 33368.13,
-      "entry_score": 60,
-      "verdict": "crowded"
-    },
-    "geography|live|it": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 7768.75,
-      "entry_score": 57,
-      "verdict": "unproven"
-    },
-    "tech|live|es": {
-      "n": 2,
-      "share_growing": 0.0,
-      "median_vpv": 30424.83,
-      "entry_score": 60,
-      "verdict": "unproven"
-    },
-    "military|live|es": {
-      "n": 12,
-      "share_growing": 0.5,
-      "median_vpv": 14658.99,
-      "entry_score": 56,
-      "verdict": "crowded"
-    },
-    "military|live|en": {
-      "n": 3,
-      "share_growing": 0.667,
-      "median_vpv": 39671.89,
-      "entry_score": 77,
-      "verdict": "filling"
-    },
-    "history|live|ru": {
-      "n": 2,
-      "share_growing": 1.0,
-      "median_vpv": 60142.73,
-      "entry_score": 97,
-      "verdict": "open"
-    },
-    "military|ai|en": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 3999.29,
-      "entry_score": 42,
-      "verdict": "unproven"
-    },
-    "nostalgia|live|es": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 9558.0,
-      "entry_score": 58,
-      "verdict": "unproven"
-    },
-    "tech|live|de": {
-      "n": 3,
-      "share_growing": 0.333,
-      "median_vpv": 16536.23,
-      "entry_score": 71,
-      "verdict": "unproven"
-    },
-    "business|live|pt": {
-      "n": 2,
-      "share_growing": 0.5,
-      "median_vpv": 15258.32,
-      "entry_score": 77,
-      "verdict": "open"
-    },
-    "religion|live|id": {
-      "n": 3,
-      "share_growing": 0.333,
-      "median_vpv": 10017.48,
-      "entry_score": 70,
-      "verdict": "unproven"
-    },
-    "business|live|es": {
-      "n": 3,
-      "share_growing": 0.333,
-      "median_vpv": 59658.87,
-      "entry_score": 73,
-      "verdict": "unproven"
-    },
-    "religion|live|en": {
-      "n": 5,
-      "share_growing": 0.4,
-      "median_vpv": 17892.07,
-      "entry_score": 73,
-      "verdict": "filling"
-    },
-    "history|ai|en": {
-      "n": 2,
-      "share_growing": 0.0,
-      "median_vpv": 25736.85,
-      "entry_score": 49,
-      "verdict": "unproven"
-    },
-    "true_crime|live|es": {
-      "n": 7,
-      "share_growing": 0.429,
-      "median_vpv": 8904.96,
-      "entry_score": 54,
-      "verdict": "unproven"
-    },
-    "animals|live|pt": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 81915.0,
-      "entry_score": 97,
-      "verdict": "open"
-    },
-    "animals|live|es": {
-      "n": 2,
-      "share_growing": 1.0,
-      "median_vpv": 30688.0,
-      "entry_score": 95,
-      "verdict": "open"
-    },
-    "true_crime|live|en": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 238.23,
-      "entry_score": 34,
-      "verdict": "unproven"
-    },
-    "religion|ai|pt": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 5059.42,
-      "entry_score": 51,
-      "verdict": "unproven"
-    },
-    "health|live|es": {
-      "n": 4,
-      "share_growing": 0.75,
-      "median_vpv": 24178.0,
-      "entry_score": 86,
-      "verdict": "filling"
-    },
-    "health|live|en": {
-      "n": 5,
-      "share_growing": 0.4,
-      "median_vpv": 5728.43,
-      "entry_score": 59,
-      "verdict": "unproven"
-    },
-    "health|live|ur": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 1156.43,
-      "entry_score": 50,
-      "verdict": "unproven"
-    },
-    "health|live|hi": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 529.36,
-      "entry_score": 34,
-      "verdict": "unproven"
-    },
-    "religion|live|pt": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 377.13,
-      "entry_score": 44,
-      "verdict": "unproven"
-    },
-    "fashion|live|es": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 3571.6,
-      "entry_score": 54,
-      "verdict": "unproven"
-    },
-    "religion|live|es": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 1306.67,
-      "entry_score": 39,
-      "verdict": "unproven"
-    },
-    "health|live|ta": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 75395.0,
-      "entry_score": 97,
-      "verdict": "open"
-    },
-    "gardening|live|en": {
-      "n": 11,
-      "share_growing": 0.364,
-      "median_vpv": 9242.79,
-      "entry_score": 42,
-      "verdict": "crowded"
-    },
-    "gardening|ai|en": {
-      "n": 2,
-      "share_growing": 0.5,
-      "median_vpv": 23549.88,
-      "entry_score": 77,
-      "verdict": "open"
-    },
-    "gardening|live|es": {
-      "n": 5,
-      "share_growing": 0.2,
-      "median_vpv": 2955.6,
-      "entry_score": 58,
-      "verdict": "unproven"
-    },
-    "gear|live|en": {
-      "n": 13,
-      "share_growing": 0.154,
-      "median_vpv": 13327.47,
-      "entry_score": 37,
-      "verdict": "crowded"
-    },
-    "gear|live|pt": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 312415.09,
-      "entry_score": 100,
-      "verdict": "open"
-    },
-    "reviews|live|en": {
-      "n": 20,
-      "share_growing": 0.4,
-      "median_vpv": 12629.3,
-      "entry_score": 53,
-      "verdict": "crowded"
-    },
-    "gear|ai|en": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 8320.93,
-      "entry_score": 55,
-      "verdict": "unproven"
-    },
-    "fashion|live|en": {
-      "n": 21,
-      "share_growing": 0.143,
-      "median_vpv": 3060.4,
-      "entry_score": 32,
-      "verdict": "crowded"
-    },
-    "fashion|live|ar": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 5796.42,
-      "entry_score": 57,
-      "verdict": "unproven"
-    },
-    "jewelry|live|es": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 10252.19,
-      "entry_score": 58,
-      "verdict": "unproven"
-    },
-    "fashion|live|pt": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 29256.78,
-      "entry_score": 59,
-      "verdict": "unproven"
-    },
-    "celebrities|live|en": {
-      "n": 11,
-      "share_growing": 0.636,
-      "median_vpv": 30343.83,
-      "entry_score": 63,
-      "verdict": "crowded"
-    },
-    "celebrities|live|ur": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 52497.71,
-      "entry_score": 96,
-      "verdict": "open"
-    },
-    "celebrities|ai|en": {
-      "n": 2,
-      "share_growing": 0.5,
-      "median_vpv": 41504.77,
-      "entry_score": 77,
-      "verdict": "open"
-    },
-    "fashion|ai|es": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 48062.67,
-      "entry_score": 61,
-      "verdict": "unproven"
-    },
-    "celebrities|live|es": {
-      "n": 3,
-      "share_growing": 0.667,
-      "median_vpv": 167891.8,
-      "entry_score": 80,
-      "verdict": "filling"
-    },
-    "gaming|live|en": {
-      "n": 4,
-      "share_growing": 0.5,
-      "median_vpv": 95714.35,
-      "entry_score": 80,
-      "verdict": "filling"
-    },
-    "gaming|live|und": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 85094.57,
-      "entry_score": 93,
-      "verdict": "open"
-    },
-    "gaming|live|hi": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 14846.5,
-      "entry_score": 59,
-      "verdict": "unproven"
-    },
-    "gaming|live|pt": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 79631.62,
-      "entry_score": 97,
-      "verdict": "open"
-    },
-    "comics|live|en": {
-      "n": 16,
-      "share_growing": 0.75,
-      "median_vpv": 94465.5,
-      "entry_score": 69,
-      "verdict": "crowded"
-    },
-    "comics|ai|en": {
-      "n": 4,
-      "share_growing": 0.5,
-      "median_vpv": 128017.55,
-      "entry_score": 81,
-      "verdict": "filling"
-    },
-    "gaming|ai|en": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 37470.0,
-      "entry_score": 96,
-      "verdict": "open"
-    },
-    "gaming|live|es": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 15850.11,
-      "entry_score": 76,
-      "verdict": "open"
-    },
-    "engineering|live|en": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 400476.77,
-      "entry_score": 100,
-      "verdict": "open"
-    },
-    "engineering|live|pt": {
-      "n": 2,
-      "share_growing": 0.5,
-      "median_vpv": 71060.74,
-      "entry_score": 80,
-      "verdict": "open"
-    },
-    "geography|live|id": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 37671.2,
-      "entry_score": 94,
-      "verdict": "open"
-    },
-    "geopolitics|live|en": {
-      "n": 11,
-      "share_growing": 0.182,
-      "median_vpv": 7798.48,
-      "entry_score": 44,
-      "verdict": "crowded"
-    },
-    "geopolitics|ai|en": {
-      "n": 1,
-      "share_growing": 1.0,
-      "median_vpv": 11957.59,
-      "entry_score": 94,
-      "verdict": "open"
-    },
-    "geopolitics|ai|hi": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 16449.08,
-      "entry_score": 59,
-      "verdict": "unproven"
-    },
-    "engineering|live|ml": {
-      "n": 1,
-      "share_growing": 0.0,
-      "median_vpv": 29261.84,
-      "entry_score": 60,
-      "verdict": "unproven"
     }
   }
 }

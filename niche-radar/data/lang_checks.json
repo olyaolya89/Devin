@@ -550,5 +550,71 @@
     "videos": 50,
     "query": "os híbridos de jurassic park",
     "checked_at": "2026-11-25"
+  },
+  "history|nl": {
+    "channels": 2,
+    "videos": 5,
+    "query": "verborgen geschiedenis Nederlandse steden",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "nl",
+    "region_code": "NL",
+    "raw_videos": 7,
+    "checked_at": "2026-11-26"
+  },
+  "engineering|nl": {
+    "channels": 0,
+    "videos": 0,
+    "query": "waterbouw grote projecten uitgelegd",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "nl",
+    "region_code": "NL",
+    "raw_videos": 0,
+    "checked_at": "2026-11-26"
+  },
+  "history|da": {
+    "channels": 0,
+    "videos": 0,
+    "query": "glemt dansk historie dokumentar",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "da",
+    "region_code": "DK",
+    "raw_videos": 1,
+    "checked_at": "2026-11-26"
+  },
+  "engineering|da": {
+    "channels": 0,
+    "videos": 0,
+    "query": "danske broer og store byggeprojekter",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "da",
+    "region_code": "DK",
+    "raw_videos": 0,
+    "checked_at": "2026-11-26"
+  },
+  "history|fi": {
+    "channels": 0,
+    "videos": 0,
+    "query": "unohdettu Suomen historia dokumentti",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "fi",
+    "region_code": "FI",
+    "raw_videos": 0,
+    "checked_at": "2026-11-26"
+  },
+  "engineering|fi": {
+    "channels": 0,
+    "videos": 0,
+    "query": "Suomen suuret rakennushankkeet",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "fi",
+    "region_code": "FI",
+    "raw_videos": 0,
+    "checked_at": "2026-11-26"
   }
 }
