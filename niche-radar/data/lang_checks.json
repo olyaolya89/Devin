@@ -616,5 +616,71 @@
     "region_code": "FI",
     "raw_videos": 0,
     "checked_at": "2026-11-26"
+  },
+  "history|no": {
+    "channels": 0,
+    "videos": 0,
+    "query": "glemt norsk historie dokumentar",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "no",
+    "region_code": "NO",
+    "raw_videos": 0,
+    "checked_at": "2026-11-27"
+  },
+  "engineering|no": {
+    "channels": 0,
+    "videos": 0,
+    "query": "norske tunneler og ingeniørprosjekter",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "no",
+    "region_code": "NO",
+    "raw_videos": 0,
+    "checked_at": "2026-11-27"
+  },
+  "history|sv": {
+    "channels": 0,
+    "videos": 0,
+    "query": "bortglömd svensk historia dokumentär",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "sv",
+    "region_code": "SE",
+    "raw_videos": 0,
+    "checked_at": "2026-11-27"
+  },
+  "engineering|sv": {
+    "channels": 0,
+    "videos": 0,
+    "query": "svenska broar och stora byggprojekt",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "sv",
+    "region_code": "SE",
+    "raw_videos": 0,
+    "checked_at": "2026-11-27"
+  },
+  "history|ja": {
+    "channels": 5,
+    "videos": 5,
+    "query": "日本の知られざる歴史 解説",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "ja",
+    "region_code": "JP",
+    "raw_videos": 9,
+    "checked_at": "2026-11-27"
+  },
+  "engineering|ja": {
+    "channels": 0,
+    "videos": 0,
+    "query": "日本の巨大インフラ メガプロジェクト 解説",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "ja",
+    "region_code": "JP",
+    "raw_videos": 0,
+    "checked_at": "2026-11-27"
   }
 }
