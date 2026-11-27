@@ -14,8 +14,14 @@
 <section id="tab-project" class="tab on">
   <div class="card"><h2>Сценарий и озвучка</h2><textarea id="script" placeholder="Вставьте английский текст озвучки."></textarea>
   <div class="row"><label class="file">🎙 Озвучка (MP3/WAV из ElevenLabs и т.п.)<input type="file" id="voice" accept=".mp3,.wav,.m4a,.aac,.ogg,.opus,.flac,.webm,audio/*"></label><span id="voiceInfo" class="muted">Для черновика можно начать с текста. Для финального фильма нужна озвучка.</span></div>
-  <div class="row"><label>План кадров <select id="planMode"><option value="local">Локально · 0 запросов Gemini</option><option value="gemini">Gemini · по ключу из настроек</option></select></label><span id="planEstimate" class="muted" aria-live="polite"></span></div>
+  <div class="row"><label>План кадров <select id="planMode"><option value="gemini">Gemini · смысловой план</option><option value="local">Локально · поиск по тексту</option></select></label><span id="planEstimate" class="muted" aria-live="polite"></span></div>
   <div class="row"><button id="auto" class="primary">🎬 Сделать готовое видео</button><button id="go">Подобрать кадры</button><button id="saveProj">Сохранить проект</button><label class="file small">Открыть проект или монтажный план<input type="file" id="loadProj" accept=".json"></label></div>
+  <details id="researchPanel" class="research-panel">
+    <summary id="researchSummary">Подбор ключевых кадров с Codex</summary>
+    <p class="muted">Список доступен сразу по тексту. Отметьте сцены и прикрепите скачанное задание в чате Codex.</p>
+    <div id="researchScenes" class="research-scenes"></div>
+    <div class="row"><button id="researchMore" type="button">Показать все сцены</button><button id="researchDownload" type="button" disabled>Скачать задание для Codex</button></div>
+  </details>
   <p class="muted">Научно-популярный режим проверяет покрытие сцен и источники перед экспортом. Монтажный план из Codex можно открыть вместе с подобранными файлами.</p></div>
   <div class="card"><h2>Стиль фильма</h2>
   <div class="row"><label class="grow">Стиль, в котором соберётся видео <select id="style"></select></label></div>

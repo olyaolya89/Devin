@@ -26,7 +26,13 @@ export const cutsNeeded = s => Math.max(1, Math.ceil((s.end - s.start - 0.001) /
 // preUsed: ids/urls already on screen elsewhere; preEmb: their CLIP vectors, so "Найти заново" can't bring back a look-alike frame.
 export async function pickMedia(shots, settings, onProgress, preUsed = [], preEmb = []) {
   let useClip = settings.clip !== false, textE = [];
-  if (useClip) try { textE = await textEmbed(shots.map(s => `a photo of ${s.visual || s.text}. ${s.meaning || ''}`.slice(0, 300)), onProgress); } catch (e) { console.warn(e); useClip = false; }
+  if (useClip) {
+    const targetText = shots.map(s => {
+      const context = settings.production ? s.queries?.[0] : s.meaning;
+      return `a photo of ${s.visual || s.text}. ${context || ''}`.slice(0, 300);
+    });
+    try { textE = await textEmbed(targetText, onProgress); } catch (error) { console.warn(error); useClip = false; }
+  }
   const usedIds = new Set(preUsed), usedEmb = preEmb.filter(v => v?.length).map(v => ({ v }));
   for (const [i, s] of shots.entries()) {
     onProgress?.(`Смысловой подбор (${useClip ? 'CLIP' : 'по словам'}): ${i + 1}/${shots.length}`);
