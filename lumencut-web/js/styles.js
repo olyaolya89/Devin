@@ -22,12 +22,21 @@ export const STYLES = {
   }
 };
 
+STYLES.discovery = {
+  ...STYLES.doc,
+  id: 'discovery', name: 'Научно-популярный документальный',
+  cut: { min: 2.2, max: 5 }, dissolve: 0.22,
+  grade: { warm: 0, sat: 1.02, contrast: 1.04, bright: 1 },
+  gfx: { every: 15, types: STYLES.doc.gfx.types },
+  music: { db: -23 }
+};
+
 export const SUB_LOOKS = { none: 'Без субтитров', karaoke: 'Караоке — 6 слов, текущее жёлтым', boxed: 'На тёмной плашке — строка, текущее слово выделено', word: 'По одному слову, крупно (как Shorts)' };
 
 const KEY = 'lumencut.style';
 export function loadStyle() {
   try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s?.look) return s; } catch { }
-  return structuredClone(STYLES.doc);
+  return structuredClone(STYLES.discovery);
 }
 export function saveStyle(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch { } }
 

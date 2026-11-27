@@ -1,4 +1,4 @@
-import { splitShots, alignTiming, estimateTiming, mergeShort, heuristicPlan, geminiPlan, toSrt, thinGraphics, SFX, MOODS, OVERLAYS, DOC_OVERLAYS, toDoc } from './plan.js';
+import { splitShots, alignTiming, estimateTiming, estimateVoiceTiming, mergeShort, heuristicPlan, geminiPlan, toSrt, thinGraphics, SFX, MOODS, OVERLAYS, DOC_OVERLAYS, toDoc } from './plan.js';
 import { gatherCandidates, pickMedia, planCuts, refillShort, cutsNeeded, CUT } from './match.js';
 import { STYLES, SUB_LOOKS, loadStyle, saveStyle, describeStyle } from './styles.js';
 import { analyzeReference } from './reference.js';
@@ -6,16 +6,47 @@ import { limits } from './sources.js';
 import { transcribe } from './ai.js';
 import { mixAudio, decodeFile, to16kMono } from './audio.js';
 import { renderVideo } from './render.js';
+import { auditProduction, creditsFor, importProduction, LIVE_TARGET, PRODUCTION_FORMAT, publicUrl } from './production.js';
 
 const $ = s => document.querySelector(s);
 const S = { script: '', shots: [], topic: '', voice: null, voiceName: '', style: loadStyle(), musicTrack: null };
-const cfg = () => JSON.parse(localStorage.getItem('lumencut.settings') || '{}');
+const files = new Map(), selectedSlots = new Map();
+const previews = new IntersectionObserver(entries => {
+  for (const { target, isIntersecting } of entries) {
+    if (isIntersecting) { target.preload = 'auto'; previews.unobserve(target); }
+  }
+});
+const isProduction = () => S.style.id === 'discovery';
+const readStored = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
+const cfg = () => readStored('lumencut.settings', {});
+const plannerSettings = () => ({ ...cfg(), production: isProduction() });
+let working = false;
+const pipelineControls = ['go', 'auto', 'full', 'test', 'voice', 'loadProj', 'style', 'refVideo', 'loadStyle', 'mediaBundle', 'planMode', 'script'];
+function setWorking(state) {
+  working = state;
+  for (const id of pipelineControls) $('#' + id).disabled = state;
+}
+const prettyPercent = value => `${Math.round(value * 100)}%`;
+const resolveMedia = p => p?.file ? files.get(p.file) || '' : publicUrl(p?.url);
+function bindFile(file) {
+  if (files.has(file.name)) URL.revokeObjectURL(files.get(file.name));
+  files.set(file.name, URL.createObjectURL(file));
+}
+function mediaKind(file) {
+  if (/^video\//.test(file.type) || /\.(mp4|webm|m4v|mov)$/i.test(file.name)) return 'video';
+  if (/^image\/(jpeg|png|webp|gif|avif)$/.test(file.type) || /\.(jpe?g|png|webp|gif|avif)$/i.test(file.name)) return 'image';
+  return '';
+}
 const log = m => { $('#log').textContent += `${new Date().toLocaleTimeString()}  ${m}\n`; $('#log').scrollTop = 1e9; };
 const prog = (el, p) => { $(el + ' i').style.width = `${Math.round(p * 100)}%`; };
 let lastMsg = ''; const status = m => { const pct = m.match(/(\d+)%$/); if (pct && +pct[1] % 25 !== 0) return; if (m !== lastMsg) { lastMsg = m; log(m); } };
 
 document.querySelectorAll('nav button').forEach(b => b.onclick = () => tab(b.dataset.tab));
-function tab(name) { document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.tab === name)); document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.id === 'tab-' + name)); }
+function tab(name) {
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.id === 'tab-' + name));
+  if (name !== 'board') document.querySelectorAll('#board video').forEach(video => video.pause());
+}
 
 // settings
 const K = { pexels: 'k_pexels', pixabay: 'k_pixabay', gemini: 'k_gemini', model: 'k_model' };
@@ -29,98 +60,223 @@ const REF_KEY = 'lumencut.refStyle';
 const refStyle = () => { try { return JSON.parse(localStorage.getItem(REF_KEY) || 'null'); } catch { return null; } };
 $('#subs').innerHTML = Object.entries(SUB_LOOKS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
 function styleChoices() {
-  const ref = refStyle(), list = [STYLES.doc, STYLES.classic, ...(ref ? [ref] : [])];
+  const ref = refStyle(), list = [STYLES.discovery, STYLES.doc, STYLES.classic, ...(ref ? [ref] : [])];
   if (S.style.id !== 'ref' && !list.some(x => x.id === S.style.id)) list.push(S.style);
-  $('#style').innerHTML = list.map(x => `<option value="${x.id}" ${x.id === S.style.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('');
+  $('#style').innerHTML = list.map(x => `<option value="${esc(x.id)}" ${x.id === S.style.id ? 'selected' : ''}>${esc(x.name)}</option>`).join('');
 }
 function applyStyle(st, persistIt = true) {
-  if (!st?.look) st = STYLES.doc;
+  if (!st?.look) st = STYLES.discovery;
   S.style = structuredClone(st); CUT.max = S.style.cut.max || 5; if (persistIt) saveStyle(S.style);
   $('#styleInfo').innerHTML = describeStyle(S.style).map(l => `<li>${esc(l)}</li>`).join('');
   $('#subs').value = S.style.subtitles in SUB_LOOKS ? S.style.subtitles : 'none';
   // a profile saved by the first version could carry -60 dB ("no music heard"): music stays on, quiet
   if (!(S.style.music.db > -50)) S.style.music.db = -26;
   $('#musicDb').value = Math.max(-30, Math.min(-8, S.style.music.db)); $('#music').checked = true; musicDbVal();
-  styleChoices();
+  styleChoices(); updatePlanEstimate();
 }
 const musicDbVal = () => ($('#musicDbVal').textContent = `${$('#musicDb').value} дБ`);
 $('#musicDb').oninput = musicDbVal;
 $('#style').onchange = e => { const id = e.target.value; applyStyle(id === 'ref' ? refStyle() : STYLES[id] || S.style); if (S.shots.length) drawBoard(); };
 $('#refVideo').onchange = async e => {
-  const f = e.target.files[0]; if (!f) return; const c = cfg(), st = $('#refStatus'); $('#refVideo').disabled = true;
+  const f = e.target.files[0]; if (!f || working) return; const st = $('#refStatus'), settings = cfg();
+  const useGemini = $('#refGemini').checked;
+  if (useGemini && !settings.gemini) { st.textContent = 'Для анализа графики добавьте ключ Gemini в настройках.'; e.target.value = ''; return; }
+  setWorking(true);
   try {
     st.textContent = `Открываю «${f.name}»…`;
-    const prof = await analyzeReference(f, { key: c.gemini, model: c.model }, (m, p) => { st.textContent = m; if (p != null) prog('#refProgress', p); });
+    const prof = await analyzeReference(f, useGemini ? { key: settings.gemini, model: settings.model } : {}, (m, p) => { st.textContent = m; if (p != null) prog('#refProgress', p); });
     localStorage.setItem(REF_KEY, JSON.stringify(prof)); applyStyle(prof); prog('#refProgress', 1);
-    st.textContent = `✓ Стиль снят с «${f.name}». Теперь «Сделать готовое видео» соберёт ролик в этом стиле.${c.gemini ? '' : ' Без ключа Gemini виды графики взяты из пресета «Документалка».'}`;
+    st.textContent = `✓ Стиль снят с «${f.name}». Теперь «Сделать готовое видео» соберёт ролик в этом стиле.${prof.measured?.gemini ? ' Графика оценена по выборочным кадрам.' : ' Виды графики взяты из пресета «Документалка».'}`;
     if (S.shots.length) log('Стиль поменялся — чтобы графика и длина кадров стали как в образце, сделайте раскадровку заново.');
   } catch (err) { st.textContent = '⚠ ' + err.message; console.error(err); }
-  finally { $('#refVideo').disabled = false; e.target.value = ''; }
+  finally { setWorking(false); e.target.value = ''; }
 };
 $('#saveStyleFile').onclick = () => download(new Blob([JSON.stringify(S.style, null, 1)], { type: 'application/json' }), `lumencut-style-${S.style.id}.json`);
 $('#loadStyle').onchange = async e => { const f = e.target.files[0]; if (!f) return; try { const st = JSON.parse(await f.text()); if (!st.look || !st.gfx) throw new Error('это не файл стиля'); if (st.id === 'ref') localStorage.setItem(REF_KEY, JSON.stringify(st)); applyStyle(st); } catch (err) { alert('Не получилось открыть стиль: ' + err.message); } e.target.value = ''; };
 $('#musicFile').onchange = async e => { const f = e.target.files[0]; if (!f) return; $('#musicInfo').textContent = 'читаю…'; try { S.musicTrack = await decodeFile(f); $('#musicInfo').textContent = `✓ ${f.name} · ${fmt(S.musicTrack.duration)} — будет играть по кругу под всем видео (не забудьте указать автора в описании, если лицензия требует)`; } catch (err) { S.musicTrack = null; $('#musicInfo').textContent = '⚠ ' + err.message; } };
 
 // project
-const saved = JSON.parse(localStorage.getItem('lumencut.project') || 'null');
-// CLIP vectors (512 numbers per clip) are dropped when saving: they overflowed localStorage and the project silently stopped saving.
+const saved = readStored('lumencut.project', null);
 const noEmb = (k, v) => (k === 'emb' ? undefined : v);
-const persist = () => { try { localStorage.setItem('lumencut.project', JSON.stringify({ script: S.script, shots: S.shots, topic: S.topic, style: S.style, boardLook: S.boardLook, boardVoice: S.boardVoice }, noEmb)); } catch (e) { log('⚠ Проект не поместился в память браузера — нажмите «Сохранить проект», чтобы не потерять раскадровку.'); } };
-async function setVoice(f) {
-  if (!f) return; const vi = $('#voiceInfo'); vi.textContent = `читаю «${f.name}» (${(f.size / 1048576).toFixed(1)} МБ)…`;
-  try { S.voice = await decodeFile(f); S.voiceName = f.name; vi.textContent = `✓ ${f.name} · ${fmt(S.voice.duration)}`; }
-  catch (e) { S.voice = null; vi.textContent = '⚠ ' + e.message; console.error(e); }
+const projectData = () => ({
+  script: S.script, shots: S.shots, topic: S.topic, style: S.style,
+  boardLook: S.boardLook, boardStyle: S.boardStyle, boardVoice: S.boardVoice,
+  boardVoiceFile: S.boardVoiceFile, importedPlan: S.importedPlan
+});
+const persist = () => {
+  try { localStorage.setItem('lumencut.project', JSON.stringify(projectData(), noEmb)); }
+  catch { log('Проект не поместился в память браузера. Скачайте JSON кнопкой «Сохранить проект».'); }
+};
+const voiceKey = file => [file.name, file.size, file.lastModified].join('|');
+async function setVoice(file) {
+  if (!file || working) return;
+  const info = $('#voiceInfo');
+  setWorking(true);
+  info.textContent = `Читаю «${file.name}»…`;
+  try {
+    S.voice = await decodeFile(file); S.voiceName = file.name; S.voiceKey = voiceKey(file);
+    info.textContent = `✓ ${file.name} · ${fmt(S.voice.duration)}`;
+  } catch (error) {
+    S.voice = null; S.voiceName = ''; S.voiceKey = '';
+    info.textContent = '⚠ ' + error.message;
+  } finally {
+    setWorking(false);
+    if (S.shots.length) drawBoard();
+  }
 }
 $('#voice').onchange = e => setVoice(e.target.files[0]);
 addEventListener('dragover', e => e.preventDefault());
-addEventListener('drop', e => { const f = [...(e.dataTransfer?.files || [])].find(x => /^audio\/|\.(mp3|wav|m4a|aac|ogg|opus|flac)$/i.test(x.type || x.name)); if (f) { e.preventDefault(); tab('project'); setVoice(f); } });
-$('#saveProj').onclick = () => download(new Blob([JSON.stringify({ script: $('#script').value, shots: S.shots, topic: S.topic, style: S.style }, noEmb, 1)], { type: 'application/json' }), 'lumencut-project.json');
-$('#loadProj').onchange = async e => { const f = e.target.files[0]; if (!f) return; const pr = JSON.parse(await f.text()); Object.assign(S, { script: pr.script, shots: pr.shots || [], topic: pr.topic }); if (pr.style?.look) applyStyle(pr.style); $('#script').value = S.script || ''; drawBoard(); log('Проект открыт. Для рендера снова выберите файл озвучки.'); };
+addEventListener('drop', e => {
+  e.preventDefault();
+  const file = [...(e.dataTransfer?.files || [])].find(x => /^audio\//.test(x.type) || /\.(mp3|wav|m4a|aac|ogg|opus|flac)$/i.test(x.name));
+  if (file && !working) { tab('project'); setVoice(file); }
+});
+$('#saveProj').onclick = () => {
+  const data = S.shots.length ? projectData() : { ...projectData(), script: $('#script').value.trim() };
+  if (S.shots.length && $('#script').value.trim() !== S.script) {
+    data.draftScript = $('#script').value.trim();
+  }
+  download(new Blob([JSON.stringify(data, noEmb, 1)], { type: 'application/json' }), 'lumencut-project.json');
+};
+
+function openProject(data, showBoard) {
+  if (!data || typeof data !== 'object') throw new Error('Нужен JSON проекта или монтажного плана.');
+  if (data.format === PRODUCTION_FORMAT) {
+    const plan = importProduction(data);
+    Object.assign(S, plan, { boardStyle: 'discovery', boardLook: 'doc', boardVoice: null, boardVoiceFile: plan.voiceFile, importedPlan: true });
+    applyStyle(STYLES.discovery);
+  } else {
+    if (typeof data.script !== 'string' || !Array.isArray(data.shots) ||
+        data.shots.some(s => !s || typeof s.text !== 'string' || !Number.isFinite(s.start) || !Number.isFinite(s.end))) {
+      throw new Error('Неверный формат проекта LumenCut.');
+    }
+    Object.assign(S, {
+      script: data.script, shots: data.shots, topic: data.topic, boardLook: data.boardLook,
+      boardStyle: data.boardStyle, boardVoice: data.boardVoice, boardVoiceFile: data.boardVoiceFile, importedPlan: data.importedPlan
+    });
+    if (data.style?.look) applyStyle(data.style);
+  }
+  selectedSlots.clear();
+  $('#script').value = data.draftScript ?? S.script;
+  updatePlanEstimate();
+  drawBoard();
+  if (showBoard) {
+    persist();
+    if (S.shots.length) tab('board');
+    log('Открыт проект. Выберите исходную озвучку и прикрепите файлы, указанные в раскадровке.');
+  }
+}
+
+$('#loadProj').onchange = async e => {
+  const file = e.target.files[0];
+  if (!file || working) return;
+  setWorking(true);
+  try { openProject(JSON.parse(await file.text()), true); }
+  catch (error) { alert(error.message); }
+  finally { setWorking(false); e.target.value = ''; }
+};
+
+function updatePlanEstimate() {
+  const gemini = $('#planMode').value === 'gemini';
+  const count = Math.ceil(splitShots($('#script').value.trim()).length / 25);
+  $('#planEstimate').textContent = !gemini ? '' : !cfg().gemini ? 'Добавьте ключ Gemini в настройках.' :
+    `До ${count} ${count === 1 ? 'запроса' : 'запросов'} · результаты повторного запуска берутся из кэша вкладки`;
+}
+$('#script').addEventListener('input', updatePlanEstimate);
+$('#planMode').addEventListener('change', updatePlanEstimate);
+$('#saveKeys').addEventListener('click', updatePlanEstimate);
 
 async function makeStoryboard() {
-  const btns = [$('#go'), $('#auto')]; btns.forEach(b => (b.disabled = true)); $('#log').textContent = '';
+  if (working) return false;
+  setWorking(true);
+  $('#log').textContent = '';
   try {
-    const c = cfg(); S.script = $('#script').value.trim(); if (!S.script) throw new Error('Вставьте сценарий');
-    if (!c.pexels && !c.pixabay) log('⚠ Нет ключей Pexels/Pixabay — ищу только в Wikimedia. Добавьте бесплатные ключи во вкладке «Настройки» для качественного видео.');
-    let shots = splitShots(S.script); log(`Сцен: ${shots.length}`); prog('#progress', 0.05);
+    const c = plannerSettings(), script = $('#script').value.trim();
+    let shots = splitShots(script);
+    if (!shots.length) throw new Error('Вставьте текст сценария.');
+    if (!c.pexels && !c.pixabay) log('Поиск идёт по открытым источникам. Ключи Pexels и Pixabay расширят выбор стоковых кадров.');
+    log(`Сцен до синхронизации: ${shots.length}`);
+    prog('#progress', 0.05);
     if (S.voice) {
-      try { const words = await transcribe(await to16kMono(S.voice), status); shots = alignTiming(shots, words, S.voice.duration); log(`Тайминг по голосу: ${words.length} слов распознано`); }
-      catch (e) { log(`Whisper не сработал (${e.message}) — оцениваю время по словам`); shots = estimateTiming(shots, shots.reduce((n, s) => n + s.text.split(/\s+/).length, 0) / S.voice.duration); shots.at(-1).end = S.voice.duration; }
+      try {
+        const words = await transcribe(await to16kMono(S.voice), status);
+        shots = alignTiming(shots, words, S.voice.duration);
+        log(`Тайминг по голосу: ${words.length} слов распознано`);
+      } catch (error) {
+        log(`Whisper: ${error.message}. Время оценено по словам, проверьте склейки на черновике.`);
+        shots = estimateVoiceTiming(shots, S.voice.duration);
+      }
     } else shots = estimateTiming(shots);
-    const st = S.style; CUT.max = st.cut.max || 5;
-    if (st.cut.min) { const n = shots.length; shots = mergeShort(shots, st.cut.min, st.cut.max + 1); if (shots.length < n) log(`Стиль «${st.name.split(' —')[0]}»: короткие фразы объединены, чтобы кадр держался ${st.cut.min}–${st.cut.max} сек — сцен стало ${shots.length}`); }
+    const st = S.style;
+    CUT.max = st.cut.max || 5;
+    if (st.cut.min) shots = mergeShort(shots, st.cut.min, st.cut.max + (c.production ? 0 : 1));
     prog('#progress', 0.25);
     let plan;
-    if (c.gemini) { try { plan = await geminiPlan(c.gemini, c.model, shots, status, st); log(`Тема: ${plan.topic}`); } catch (e) { log(`Gemini ошибка (${e.message}) — использую простой план`); } }
-    else if (st.look === 'doc') log('Без ключа Gemini графика будет только из цифр, годов и мест в тексте. Карты, списки, панели и диаграммы появятся с ключом Gemini.');
-    plan ||= heuristicPlan(shots, st); S.shots = plan.shots; S.topic = plan.topic; prog('#progress', 0.4);
-    limits.onLimit = src => log(`⚠ Лимит ${src} (200 запросов в час) исчерпан — дальше ищу в Pixabay и архивах. Через час лимит вернётся.`);
-    const W = 1920; await gatherCandidates(S.shots, c, W, m => { status(m); }); prog('#progress', 0.7);
-    await pickMedia(S.shots, c, status); prog('#progress', 0.9);
-    const refilled = await refillShort(S.shots, c, S.topic, status); if (refilled) log(`Длинным сценам не хватало разных кадров — дополнительный поиск для ${refilled} сцен.`); prog('#progress', 1);
-    const long = S.shots.filter(s => s.picks.length && s.picks.length < cutsNeeded(s)).length; if (long) log(`⚠ ${long} сцен с кадром длиннее 5 сек — их можно дополнить во вкладке «Раскадровка» (кнопка «Найти заново»).`);
-    const miss = S.shots.filter(s => !s.picks.length).length; log(`Готово. ${miss ? `Без кадра: ${miss} сцен — замените вручную во вкладке «Раскадровка».` : 'Все сцены с уникальными кадрами.'}`);
-    S.boardLook = st.look; S.boardVoice = S.voice ? Math.round(S.voice.duration * 10) / 10 : null;
-    persist(); drawBoard(); return true;
-  } catch (e) { log('Ошибка: ' + e.message); console.error(e); return false; }
-  finally { btns.forEach(b => (b.disabled = false)); }
+    if ($('#planMode').value === 'gemini' && c.gemini) {
+      try { plan = await geminiPlan(c.gemini, c.model, shots, status, st); }
+      catch (error) { log(`Gemini: ${error.message}. Продолжаю локально.`); }
+    } else log('План строится локально. Запросов Gemini: 0.');
+    plan ||= heuristicPlan(shots, st);
+    prog('#progress', 0.4);
+    limits.onLimit = src => log(`Достигнут лимит ${src}. Продолжаю с доступными источниками.`);
+    await gatherCandidates(plan.shots, c, 1920, status);
+    prog('#progress', 0.7);
+    await pickMedia(plan.shots, c, status);
+    prog('#progress', 0.9);
+    await refillShort(plan.shots, c, plan.topic, status);
+    prog('#progress', 1);
+    const missing = plan.shots.filter(s => s.picks.length < cutsNeeded(s)).length;
+    log(missing ? `Нужны дополнительные материалы для сцен: ${missing}.` : 'Для каждой сцены найден кадр.');
+    Object.assign(S, {
+      script, shots: plan.shots, topic: plan.topic, boardStyle: st.id, boardLook: st.look,
+      boardVoice: S.voiceKey || null, boardVoiceFile: S.voiceName, importedPlan: false
+    });
+    selectedSlots.clear();
+    persist();
+    drawBoard();
+    return true;
+  } catch (error) {
+    log('Ошибка: ' + error.message);
+    console.error(error);
+    return false;
+  } finally { setWorking(false); }
 }
 $('#go').onclick = async () => { if (await makeStoryboard()) tab('board'); };
 $('#auto').onclick = async () => {
-  if (!$('#script').value.trim()) return alert('Вставьте сценарий');
-  if (!S.voice && !confirm('Озвучка не выбрана — видео будет без голоса. Продолжить?')) return;
-  let fileHandle = false;
-  if (window.showSaveFilePicker) { try { fileHandle = await window.showSaveFilePicker({ suggestedName: 'lumencut-video.mp4', types: [{ description: 'MP4', accept: { 'video/mp4': ['.mp4'] } }] }); } catch { return; } }
-  log('Шаг 1/2: раскадровка…');
-  if (!(await makeStoryboard())) return;
-  tab('render'); await doRender(Infinity, fileHandle);
+  if (working) return;
+  const reuse = S.shots.length && !staleReason();
+  if (!reuse && !(await makeStoryboard())) return;
+  if (isProduction()) {
+    const audit = productionAudit();
+    if (audit.issues.size || audit.global.length || !reuse) {
+      tab('board');
+      drawBoard();
+      return;
+    }
+    tab('render');
+    await doRender(Infinity);
+    return;
+  }
+  if (!S.voice && !confirm('Экспортировать видео без озвучки?')) return;
+  tab('render');
+  await doRender(Infinity, false);
 };
 
 // storyboard
 const opt = (list, v) => list.map(x => `<option ${x === v ? 'selected' : ''}>${x}</option>`).join('');
-const fmt = t => `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, '0')}`;
+const fmt = t => {
+  const tenths = Math.round(t * 10);
+  return `${Math.floor(tenths / 600)}:${((tenths % 600) / 10).toFixed(1).padStart(4, '0')}`;
+};
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-function usedMap() { const m = new Map(); S.shots.forEach((s, i) => (s.picks || []).forEach(p => m.set(p.id, i))); return m; }
+function usedMap() {
+  const used = new Map();
+  S.shots.forEach((s, i) => (s.picks || []).forEach((p, j) => {
+    if (p.id) used.set(p.id, { i, j });
+    if (p.file || p.url) used.set(p.file || p.url, { i, j });
+  }));
+  return used;
+}
 // The second graphic field of the doc look: unit, subline, list items, chart bars or highlighted words.
 function subOf(o = {}) {
   if (['counter', 'stat'].includes(o.type)) return o.unit || '';
@@ -137,42 +293,182 @@ function setSub(o, v) {
   else if (o.type === 'statement') o.highlight = v.trim();
   else o.sub = v.trim();
 }
-function drawBoard() {
-  const used = usedMap(), doc = S.style.look === 'doc'; $('#boardInfo').textContent = `${S.shots.length} сцен · ${S.topic || ''} · клик по миниатюре внизу карточки — заменить кадр`;
-  $('#board').innerHTML = S.shots.map((s, i) => `<div class="shot" data-i="${i}"><div class="media">${(s.picks || []).map(p => p.kind === 'video' ? `<video src="${esc(p.url)}#t=${(s.cuts?.find(c => c.media.id === p.id)?.from || 0).toFixed(1)}" muted preload="none" poster="${esc(p.thumb)}" onmouseenter="this.play()" onmouseleave="this.pause()"></video>` : `<img src="${esc(p.thumb)}">`).join('') || '<div class="muted">нет кадра</div>'}
-   ${(s.picks || []).map(p => `<span class="badge">${p.source} · ${p.kind}${p.sim != null ? ' · смысл ' + Math.round(p.sim * 100) : ''}</span>`).join(' ')}</div>
-   <div><div class="t">#${i + 1} · ${fmt(s.start)}–${fmt(s.end)} · ${(s.end - s.start).toFixed(1)} сек · кадров: ${(s.picks || []).length}</div><div class="txt">${esc(s.text)}</div>
-   <div class="f"><label class="wide">Смысл / что показать (для поиска)<input data-k="visual" value="${esc(s.visual)}"></label>
-   <label class="wide">Запросы через |<input data-k="queries" value="${esc((s.queries || []).join(' | '))}"></label>
-   <label>Графика<select data-k="otype">${opt(doc ? DOC_OVERLAYS : OVERLAYS, (doc ? toDoc(s.overlay, i) : s.overlay)?.type || 'none')}</select></label><label>Текст графики${doc ? ' (для цифр — число)' : ''}<input data-k="otext" value="${esc(doc && ['counter', 'stat'].includes(s.overlay?.type) ? s.overlay.value ?? s.overlay.text : s.overlay?.text)}"></label>
-   ${doc ? `<label class="wide" title="Цифры: что считаем (COTTAGES). Плашка, карточка, имя: строка под заголовком. Панель, чек-лист: пункты через |. Диаграмма: Orange County: 1.2 | Marin: 1. Тезис: слова, которые выделить красным.">Подпись или пункты через | (наведите мышь — подсказка)<input data-k="osub" value="${esc(subOf(s.overlay))}"></label>` : ''}
-   <label>Звук<select data-k="sfx">${opt(['none', ...SFX], s.sfx || 'none')}</select></label><label>Музыка<select data-k="mood">${opt(MOODS, s.mood)}</select></label></div>
-   <div class="row"><button data-act="research">Найти заново</button><button data-act="sfxplay">▶ звук</button></div>
-   <div class="cands">${(s.candidates || []).map(c => `<img src="${esc(c.thumb)}" title="${esc(c.source + ': ' + c.tags)}" data-cid="${esc(c.id)}" class="${used.has(c.id) ? 'used' : ''}" loading="lazy">`).join('')}</div></div></div>`).join('');
+function slotFor(i) { return selectedSlots.get(i) ?? 0; }
+function productionAudit() { return auditProduction(S.shots, { files, voice: S.voice, maxCut: S.style.cut.max }); }
+function localAssets() {
+  return new Map(S.shots.flatMap(s => (s.picks || []).filter(p => p.file).map(p => [p.file, p])));
 }
+
+function drawBoard() {
+  previews.disconnect();
+  const used = usedMap(), doc = S.style.look === 'doc';
+  const audit = isProduction() && S.shots.length ? productionAudit() : null;
+  $('#boardInfo').textContent = S.shots.length ? `${S.shots.length} сцен · ${fmt(S.shots.at(-1).end)}${S.topic ? ' · ' + S.topic : ''}` : 'Раскадровки ещё нет';
+  $('#productionStatus').innerHTML = audit ? [
+    `<p>Реальная съёмка: <b>${prettyPercent(audit.liveShare)}</b> таймлайна.${audit.liveShare < LIVE_TARGET ? ' Для документального ритма ориентир — от 50%.' : ''}</p>`,
+    audit.issues.size ? `<p class="issue">Нужно проверить сцен: ${audit.issues.size}.</p>` : '',
+    ...audit.global.map(m => `<p class="issue">${esc(m)}</p>`),
+    !audit.issues.size && !audit.global.length ? '<p>Монтажный план готов к экспорту. Исходники будут проверены при чтении.</p>' : ''
+  ].join('') : '';
+  $('#toRender').hidden = !S.shots.length;
+  const needed = localAssets(), missing = [...needed.keys()].filter(name => !files.has(name));
+  $('#mediaBundleLabel').hidden = !needed.size;
+  $('#mediaBundleInfo').hidden = !needed.size;
+  $('#mediaBundleInfo').textContent = missing.length ? 'Прикрепите файлы с теми же именами: ' + missing.join(', ') : 'Все файлы плана прикреплены.';
+  $('#board').innerHTML = S.shots.map((s, i) => {
+    const issues = audit?.issues.get(i);
+    const active = slotFor(i);
+    const assets = (s.picks || []).map((p, j) => {
+      const url = resolveMedia(p), thumb = publicUrl(p.thumb);
+      const cut = s.cuts?.[j], page = publicUrl(p.page);
+      const title = p.file || p.tags || p.source || 'Кадр';
+      const visual = !url ? '<p class="issue">Файл не прикреплён</p>' : p.kind === 'video'
+        ? `<video src="${esc(url)}#t=${Number(cut?.from) || 0}" muted controls playsinline preload="none"${p.file ? ' data-local' : ''}${thumb ? ` poster="${esc(thumb)}"` : ''}></video>`
+        : `<img src="${esc(thumb || url)}" alt="${esc(title)}" loading="lazy">`;
+      return `<div class="asset-slot${j === active ? ' active' : ''}">${visual}
+        <button data-act="slot" data-slot="${j}" aria-pressed="${j === active}">Кадр ${j + 1}${cut ? ' · ' + fmt(cut.t0) + '–' + fmt(cut.t1) : ''}</button>
+        <div class="muted">${esc([p.source, p.author, p.license].filter(Boolean).join(' · '))}</div>
+        ${page ? `<a href="${esc(page)}" target="_blank" rel="noopener noreferrer">Первоисточник</a>` : ''}
+        ${isProduction() && p.kind === 'video' ? `<label>Начало фрагмента, с<input type="number" min="0" step="0.1" data-k="inpoint" data-slot="${j}" value="${Number(cut?.from) || 0}"></label>` : ''}
+      </div>`;
+    }).join('');
+    const visual = esc(s.visual), type = (doc ? toDoc(s.overlay, i) : s.overlay)?.type || 'none';
+    const choices = (s.candidates || []).map(c => {
+      const owner = used.get(c.id) || used.get(c.url), blocked = owner && (owner.i !== i || owner.j !== active);
+      const label = esc([c.source, c.tags, c.license].filter(Boolean).join(' · '));
+      const thumb = publicUrl(c.thumb);
+      return `<button data-cid="${esc(c.id)}" title="${label}" aria-label="${label}" ${blocked ? 'disabled' : ''}>${thumb ? `<img src="${esc(thumb)}" alt="" loading="lazy">` : esc(c.source)}</button>`;
+    }).join('');
+    return `<article class="shot" data-i="${i}"><div class="media">${assets || '<div class="muted">Кадр пока не выбран</div>'}
+      ${isProduction() && assets ? `<button data-act="slot" data-slot="${s.picks.length}" aria-pressed="${active === s.picks.length}">Добавить кадр</button>` : ''}
+    </div><div>
+      <div class="t">Сцена ${i + 1} · ${fmt(s.start)}–${fmt(s.end)}</div><div class="txt">${esc(s.text)}</div>
+      ${issues ? `<ul class="issues">${issues.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}
+      <div class="f">
+        <label class="wide">Что показать<input data-k="visual" value="${visual}"></label>
+        <label class="wide">Поисковые запросы через |<input data-k="queries" value="${esc((s.queries || []).join(' | '))}"></label>
+        ${isProduction() ? `<label class="wide">Точный человек, место или событие для этой сцены<input data-k="subject" value="${esc(s.subject)}"></label>
+          ${s.subject && s.picks?.length ? `<label class="wide"><input data-k="reviewed" type="checkbox" ${s.reviewed ? 'checked' : ''}> Кадры соответствуют объекту и времени в сценарии</label>` : ''}` : ''}
+        <label>Графика<select data-k="otype">${opt(doc ? DOC_OVERLAYS : OVERLAYS, type)}</select></label>
+        <label>Текст графики<input data-k="otext" value="${esc(doc && ['counter', 'stat'].includes(type) ? s.overlay?.value ?? s.overlay?.text : s.overlay?.text)}"></label>
+        ${doc ? `<label class="wide">Подпись или пункты через |<input data-k="osub" value="${esc(subOf(s.overlay))}"></label>` : ''}
+        ${S.style.sfx?.soft ? '' : `<label>Звук<select data-k="sfx">${opt(['none', ...SFX], s.sfx || 'none')}</select></label>`}
+        <label>Музыка<select data-k="mood">${opt(MOODS, s.mood)}</select></label>
+      </div>
+      <div class="row"><button data-act="research">Найти заново</button><button data-act="attach">Выбрать файл</button>
+      ${!S.style.sfx?.soft && s.sfx && s.sfx !== 'none' ? '<button data-act="sfxplay">▶ звук</button>' : ''}</div>
+      <div class="cands">${choices}</div>
+    </div></article>`;
+  }).join('');
+  document.querySelectorAll('#board video[data-local]').forEach(video => previews.observe(video));
+}
+
 $('#board').addEventListener('change', e => {
-  const card = e.target.closest('.shot'); if (!card) return; const s = S.shots[card.dataset.i], k = e.target.dataset.k, v = e.target.value;
-  if (k === 'visual') s.visual = v; if (k === 'queries') s.queries = v.split('|').map(x => x.trim()).filter(Boolean); if (k === 'sfx') s.sfx = v; if (k === 'mood') s.mood = v;
+  const card = e.target.closest('.shot');
+  if (!card || working) return;
+  const i = +card.dataset.i, s = S.shots[i], k = e.target.dataset.k, v = e.target.value;
+  if (k === 'visual') s.visual = v;
+  if (k === 'queries') s.queries = v.split('|').map(x => x.trim()).filter(Boolean);
+  if (k === 'sfx') s.sfx = v;
+  if (k === 'mood') s.mood = v;
+  if (k === 'subject') { s.subject = v.trim(); s.reviewed = false; }
+  if (k === 'reviewed') s.reviewed = e.target.checked;
+  if (k === 'inpoint' && s.cuts?.[e.target.dataset.slot]) {
+    s.cuts[e.target.dataset.slot].from = Math.max(0, Number(v) || 0);
+    s.reviewed = false;
+  }
   if (k === 'otype' || k === 'otext') {
-    s.overlay = { ...(S.style.look === 'doc' ? toDoc(s.overlay, +card.dataset.i) : s.overlay || {}), [k === 'otype' ? 'type' : 'text']: v };
-    if (['number', 'counter', 'stat'].includes(s.overlay.type)) { const n = Number(String(s.overlay.text ?? s.overlay.value).replace(/[^\d.]/g, '')); if (n || k === 'otext') s.overlay.value = n || 0; }
+    s.overlay = { ...(S.style.look === 'doc' ? toDoc(s.overlay, i) : s.overlay || {}), [k === 'otype' ? 'type' : 'text']: v };
+    if (['number', 'counter', 'stat'].includes(s.overlay.type)) {
+      const n = Number(String(s.overlay.text ?? s.overlay.value).replace(/[^\d.-]/g, ''));
+      if (n || k === 'otext') s.overlay.value = n || 0;
+    }
     if (s.overlay.type === 'statement' && k === 'otype' && !s.overlay.text) s.overlay.text = s.text.split(/\s+/).slice(0, 12).join(' ');
-    if (k === 'otype') drawBoard();
   }
   if (k === 'osub') setSub(s.overlay ||= { type: 'none' }, v);
   persist();
+  if (['subject', 'reviewed', 'inpoint', 'otype'].includes(k)) drawBoard();
 });
-$('#board').addEventListener('click', async e => {
-  const card = e.target.closest('.shot'); if (!card) return; const i = +card.dataset.i, s = S.shots[i];
-  if (e.target.dataset.cid) {
-    const c = s.candidates.find(x => x.id === e.target.dataset.cid), owner = usedMap().get(c.id);
-    if (owner != null && owner !== i) return alert(`Этот кадр уже стоит в сцене #${owner + 1}. Кадры не повторяются.`);
-    s.picks = s.picks?.length ? [c, ...s.picks.slice(1).filter(p => p.id !== c.id)] : [c]; planCuts(s); persist(); drawBoard();
+
+function selectMedia(i, media) {
+  const s = S.shots[i], slot = slotFor(i);
+  const owner = usedMap().get(media.id) || usedMap().get(media.file || media.url);
+  if (owner && (owner.i !== i || owner.j !== slot)) throw new Error(`Кадр уже используется в сцене ${owner.i + 1}.`);
+  if (!s.picks) s.picks = [];
+  if (slot < s.picks.length && s.cuts?.[slot]) {
+    s.picks[slot] = media;
+    s.cuts[slot] = { ...s.cuts[slot], media, from: media.start || 0 };
+  } else {
+    s.picks.push(media);
+    planCuts(s);
   }
-  if (e.target.dataset.act === 'sfxplay' && s.sfx !== 'none') new Audio(`sfx/${s.sfx}.mp3`).play();
-  if (e.target.dataset.act === 'research') {
-    e.target.disabled = true; const c = cfg(); const others = S.shots.filter((_, j) => j !== i).flatMap(x => x.picks || []);
-    await gatherCandidates([s], c, 1920, m => (e.target.textContent = m)); await pickMedia([s], c, m => (e.target.textContent = m), others.flatMap(p => [p.id, p.url]), others.map(p => p.emb)); persist(); drawBoard();
+  s.reviewed = false;
+  persist();
+  drawBoard();
+}
+
+let attachScene;
+$('#assetCancel').onclick = () => $('#assetDialog').close();
+$('#assetForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const file = $('#assetFile').files[0], kind = file && mediaKind(file);
+  const author = $('#assetAuthor').value.trim(), license = $('#assetLicense').value.trim();
+  const inputPage = $('#assetPage').value.trim();
+  if (!kind || !author || !license || (inputPage && !publicUrl(inputPage))) {
+    $('#assetError').textContent = 'Выберите фото или видео, заполните автора и лицензию. Ссылка на источник должна начинаться с https://.';
+    return;
+  }
+  try {
+    const media = { id: 'local:' + file.name, file: file.name, kind, author, license,
+      page: publicUrl(inputPage), source: 'Локальный файл', footage: $('#assetIllustration').checked ? 'illustration' : 'live' };
+    selectMedia(attachScene, media);
+    bindFile(file);
+    drawBoard();
+    $('#assetDialog').close();
+  } catch (error) { $('#assetError').textContent = error.message; }
+});
+$('#mediaBundle').onchange = e => {
+  const wanted = localAssets();
+  for (const file of e.target.files) if (wanted.get(file.name)?.kind === mediaKind(file)) bindFile(file);
+  e.target.value = '';
+  drawBoard();
+};
+
+$('#board').addEventListener('click', async e => {
+  const control = e.target.closest('button'), card = control?.closest('.shot');
+  if (!card || working) return;
+  const i = +card.dataset.i, s = S.shots[i], action = control.dataset.act;
+  if (control.dataset.cid) {
+    const media = s.candidates.find(x => x.id === control.dataset.cid);
+    if (media) {
+      try { selectMedia(i, media); }
+      catch (error) { alert(error.message); }
+    }
+  } else if (action === 'slot') {
+    selectedSlots.set(i, +control.dataset.slot);
+    drawBoard();
+  } else if (action === 'attach') {
+    attachScene = i;
+    $('#assetForm').reset();
+    $('#assetError').textContent = '';
+    $('#assetDialog').showModal();
+  } else if (action === 'sfxplay' && SFX.includes(s.sfx)) {
+    new Audio(`sfx/${s.sfx}.mp3`).play().catch(() => {});
+  } else if (action === 'research') {
+    if (!s.queries?.length) return alert('Введите хотя бы один поисковый запрос.');
+    setWorking(true);
+    control.disabled = true;
+    try {
+      const c = plannerSettings();
+      const draft = { ...s };
+      await gatherCandidates([draft], { ...c, wideSearch: true }, 1920, m => (control.textContent = m));
+      const others = S.shots.filter((_, j) => j !== i).flatMap(x => x.picks || []);
+      await pickMedia([draft], c, m => (control.textContent = m), others.flatMap(p => [p.id, p.url].filter(Boolean)), others.map(p => p.emb));
+      s.candidates = draft.candidates;
+      if (!s.picks?.length) { s.picks = draft.picks; s.cuts = draft.cuts; s.reviewed = false; }
+      persist();
+    } catch (error) { alert(error.message); }
+    finally { setWorking(false); drawBoard(); }
   }
 });
 
@@ -180,41 +476,82 @@ $('#board').addEventListener('click', async e => {
 // The storyboard belongs to the script, voice and style it was made from; rendering an old one gives footage and
 // graphics for another text (this happened in the first test: an old storyboard under a new voiceover).
 function staleReason() {
-  const txt = $('#script').value.trim();
-  if (txt && S.script && txt !== S.script) return 'сценарий изменился';
-  if (S.voice && S.shots.length && Math.abs(S.voice.duration - S.shots.at(-1).end) > 2) return 'озвучка другой длины';
-  if (S.boardLook && S.boardLook !== S.style.look) return 'выбран другой стиль';
-  if (!S.boardLook && S.style.look === 'doc') return 'раскадровка сделана старой версией программы, без графики нового стиля';
+  if ($('#script').value.trim() !== S.script) return 'сценарий изменился';
+  if ((S.boardStyle && S.boardStyle !== S.style.id) || (S.boardLook && S.boardLook !== S.style.look)) return 'выбран другой стиль';
+  if (S.voice && S.boardVoiceFile && S.voiceName !== S.boardVoiceFile) return `выберите озвучку «${S.boardVoiceFile}» или соберите раскадровку под новый файл`;
+  if (S.voice && typeof S.boardVoice === 'string' && S.boardVoice !== S.voiceKey) return 'выбран другой файл озвучки';
+  if (S.voice && !S.boardVoiceFile && !S.boardVoice && S.boardStyle && !S.importedPlan) return 'раскадровка подготовлена без озвучки';
+  if (S.voice && Math.abs(S.voice.duration - S.shots.at(-1).end) > (isProduction() ? 0.1 : 2)) return 'длительность озвучки изменилась';
   return '';
 }
+
 async function doRender(limit, presetHandle = null) {
-  const why = S.shots.length ? staleReason() : '';
-  if (why && confirm(`Раскадровка сделана не для того, что сейчас на странице (${why}). Сделать раскадровку заново перед рендером? Рекомендуется — иначе кадры и графика будут от старого сценария.`)) { tab('project'); if (!(await makeStoryboard())) return; tab('render'); }
-  if (!S.shots.length) return alert('Сначала сделайте раскадровку');
-  if (!('VideoEncoder' in window)) return alert('Нужен Google Chrome или Microsoft Edge (последней версии).');
-  const [W, H] = $('#res').value.split('x').map(Number); const buttons = [$('#test'), $('#full'), $('#auto')]; buttons.forEach(b => (b.disabled = true));
-  $('#downloads').innerHTML = ''; const info = m => ($('#rinfo').textContent = m);
+  if (working) return;
+  const info = message => ($('#rinfo').textContent = message);
+  if (!S.shots.length) return info('Сначала подготовьте раскадровку.');
+  if (!('VideoEncoder' in window) || !('AudioEncoder' in window)) return info('Для экспорта нужен актуальный Chrome или Edge с поддержкой WebCodecs.');
+  const final = limit === Infinity, production = isProduction();
+  const why = staleReason();
+  if (why && (production || !confirm(`Причина: ${why}. Продолжить с текущей раскадровкой?`))) {
+    return info(`Проверьте раскадровку перед экспортом: ${why}.`);
+  }
+  if (production && final) {
+    const audit = productionAudit();
+    if (audit.issues.size || audit.global.length) { drawBoard(); tab('board'); return; }
+  }
+  setWorking(true);
   try {
-    const duration = limit < Infinity ? Math.min(limit, S.shots.at(-1).end) : S.shots.at(-1).end;
-    let voice = S.voice; if (!voice) { info('Озвучка не выбрана — видео будет без голоса'); voice = new AudioBuffer({ length: Math.ceil(S.shots.at(-1).end * 48000), sampleRate: 48000, numberOfChannels: 1 }); }
-    const shots = thinGraphics(S.shots, $('#gfx').value, S.style);
-    const audio = await mixAudio({ voice, shots, duration: Math.max(duration, voice.duration), musicOn: $('#music').checked, musicDb: +$('#musicDb').value, sfxOn: $('#sfx').checked, level: $('#level')?.checked !== false, style: S.style, musicTrack: S.musicTrack }, info);
-    let fileHandle = presetHandle || null;
-    if (presetHandle == null && limit === Infinity && window.showSaveFilePicker) { try { fileHandle = await window.showSaveFilePicker({ suggestedName: 'lumencut-video.mp4', types: [{ description: 'MP4', accept: { 'video/mp4': ['.mp4'] } }] }); } catch { buttons.forEach(b => (b.disabled = false)); return; } }
-    const t0 = performance.now();
-    const blob = await renderVideo({ shots, audio, W, H, canvas: $('#canvas'), subtitles: $('#subs').value, style: S.style, limit, fileHandle, onProgress: (p, m) => { prog('#rprogress', p); info(m); } });
-    prog('#rprogress', 1); info(`Готово за ${((performance.now() - t0) / 60000).toFixed(1)} мин.${fileHandle ? ' Файл сохранён туда, куда вы указали.' : ''}`);
-    if (blob) { link(blob, limit < Infinity ? 'lumencut-test.mp4' : 'lumencut-video.mp4', 'Скачать MP4'); if (presetHandle === false) download(blob, 'lumencut-video.mp4'); }
-    link(new Blob([toSrt(S.shots)], { type: 'text/plain' }), 'subtitles.srt', 'Субтитры .srt');
-    const credits = [...new Map(S.shots.flatMap(s => s.picks || []).map(p => [p.id, `${p.source} — ${p.author || 'unknown'}${p.license ? ' (' + p.license + ')' : ''} — ${p.page || p.url}`])).values()].join('\n');
-    link(new Blob([credits], { type: 'text/plain' }), 'credits.txt', 'Авторы кадров');
-  } catch (e) { info('Ошибка рендера: ' + e.message); console.error(e); }
-  buttons.forEach(b => (b.disabled = false));
+    let fileHandle = presetHandle;
+    // Save picker needs the export button's user gesture.
+    if (final && presetHandle === null && window.showSaveFilePicker) {
+      try {
+        fileHandle = await window.showSaveFilePicker({ suggestedName: 'lumencut-video.mp4', types: [{ description: 'MP4', accept: { 'video/mp4': ['.mp4'] } }] });
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+        if (error.name !== 'SecurityError') throw error;
+      }
+    }
+    for (const item of $('#downloads').querySelectorAll('a')) URL.revokeObjectURL(item.href);
+    $('#downloads').replaceChildren();
+    prog('#rprogress', 0);
+    const [W, H] = $('#res').value.split('x').map(Number);
+    const duration = Math.min(limit, S.shots.at(-1).end);
+    const voice = S.voice || new AudioBuffer({ length: Math.ceil(duration * 48000), sampleRate: 48000, numberOfChannels: 1 });
+    const shots = thinGraphics(S.shots.filter(s => s.start < duration), $('#gfx').value, S.style).map(s => ({
+      ...s, cuts: (s.cuts || []).filter(c => c.t0 < duration).map(c => ({
+        ...c, media: { ...c.media, url: resolveMedia(c.media), alt: publicUrl(c.media?.alt), thumb: publicUrl(c.media?.thumb) }
+      }))
+    }));
+    const audio = await mixAudio({
+      voice, shots, duration, musicOn: $('#music').checked, musicDb: +$('#musicDb').value,
+      sfxOn: $('#sfx').checked, level: $('#level').checked, style: S.style, musicTrack: S.musicTrack
+    }, info);
+    const started = performance.now();
+    const blob = await renderVideo({
+      shots, audio, W, H, canvas: $('#canvas'), subtitles: $('#subs').value, style: S.style, limit: duration,
+      strict: production && final, fileHandle, onProgress: (p, m) => { prog('#rprogress', p); info(m); }
+    });
+    prog('#rprogress', 1);
+    info(`Готово за ${((performance.now() - started) / 1000).toFixed(0)} с.${fileHandle ? ' MP4 сохранён.' : ''}${!final ? ' В черновике могут отображаться заглушки.' : ''}`);
+    if (blob) link(blob, final ? 'lumencut-video.mp4' : 'lumencut-test.mp4', 'Скачать MP4');
+    const subs = shots.map(s => ({ ...s, end: Math.min(s.end, duration) }));
+    link(new Blob([toSrt(subs)], { type: 'text/plain' }), 'subtitles.srt', 'Субтитры .srt');
+    const credits = creditsFor(shots.map(s => ({ picks: s.cuts.map(c => c.media) })));
+    link(new Blob([credits], { type: 'text/plain' }), 'credits.txt', 'Источники и авторы');
+  } catch (error) {
+    info('Ошибка рендера: ' + error.message);
+    console.error(error);
+  } finally { setWorking(false); }
 }
 function link(blob, name, label) { const a = document.createElement('a'); a.className = 'dl'; a.href = URL.createObjectURL(blob); a.download = name; a.textContent = label; $('#downloads').append(a); }
 function download(blob, name) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); }
 $('#test').onclick = () => doRender(20);
 $('#full').onclick = () => doRender(Infinity);
 
+$('#toRender').onclick = () => tab('render');
+
 applyStyle(S.style, false);
-try { if (saved) { Object.assign(S, { script: saved.script, shots: saved.shots || [], topic: saved.topic, boardLook: saved.boardLook, boardVoice: saved.boardVoice }); $('#script').value = S.script || ''; if (S.shots.length) drawBoard(); } } catch (e) { console.error(e); localStorage.removeItem('lumencut.project'); }
+if (saved) {
+  try { openProject(saved, false); }
+  catch (error) { log(`Не удалось открыть сохранённый проект: ${error.message}`); }
+}

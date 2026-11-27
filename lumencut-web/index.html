@@ -12,20 +12,45 @@
 <nav><button data-tab="project" class="on">1. Сценарий и голос</button><button data-tab="board">2. Раскадровка</button><button data-tab="render">3. Рендер</button><button data-tab="settings">Настройки</button></nav></header>
 <main>
 <section id="tab-project" class="tab on">
-  <div class="card"><h2>Сценарий (английский)</h2><textarea id="script" placeholder="Вставьте готовый сценарий. Каждая фраза станет сценой 2–5 секунд."></textarea>
-  <div class="row"><label class="file">🎙 Озвучка (MP3/WAV из ElevenLabs и т.п.)<input type="file" id="voice" accept=".mp3,.wav,.m4a,.aac,.ogg,.opus,.flac,.webm,audio/*"></label><span id="voiceInfo" class="muted">не выбрана — время сцен будет оценено (2,6 слова/сек), звук будет тишиной</span></div>
-  <div class="row"><button id="auto" class="primary">🎬 Сделать готовое видео</button><button id="go">Только раскадровка</button><button id="saveProj">Сохранить проект</button><label class="file small">Открыть проект<input type="file" id="loadProj" accept=".json"></label></div>
-  <p class="muted">«Сделать готовое видео» — всё автоматически: тайминг по голосу → подбор кадров по смыслу → графика, звуки, музыка → MP4. Можно также перетащить MP3 прямо на страницу.</p></div>
-  <div class="card"><h2>Стиль ролика — по образцу (референсу)</h2>
+  <div class="card"><h2>Сценарий и озвучка</h2><textarea id="script" placeholder="Вставьте английский текст озвучки."></textarea>
+  <div class="row"><label class="file">🎙 Озвучка (MP3/WAV из ElevenLabs и т.п.)<input type="file" id="voice" accept=".mp3,.wav,.m4a,.aac,.ogg,.opus,.flac,.webm,audio/*"></label><span id="voiceInfo" class="muted">Для черновика можно начать с текста. Для финального фильма нужна озвучка.</span></div>
+  <div class="row"><label>План кадров <select id="planMode"><option value="local">Локально · 0 запросов Gemini</option><option value="gemini">Gemini · по ключу из настроек</option></select></label><span id="planEstimate" class="muted" aria-live="polite"></span></div>
+  <div class="row"><button id="auto" class="primary">🎬 Сделать готовое видео</button><button id="go">Подобрать кадры</button><button id="saveProj">Сохранить проект</button><label class="file small">Открыть проект или монтажный план<input type="file" id="loadProj" accept=".json"></label></div>
+  <p class="muted">Научно-популярный режим проверяет покрытие сцен и источники перед экспортом. Монтажный план из Codex можно открыть вместе с подобранными файлами.</p></div>
+  <div class="card"><h2>Стиль фильма</h2>
   <div class="row"><label class="grow">Стиль, в котором соберётся видео <select id="style"></select></label></div>
-  <div class="row"><label class="file">🎞 Загрузить видео-образец (MP4 конкурента)<input type="file" id="refVideo" accept="video/*,.mp4,.webm,.mov,.m4v"></label>
+  <div class="row"><label class="file">Загрузить видео-образец<input type="file" id="refVideo" accept="video/*,.mp4,.webm,.mov,.m4v"></label>
   <label class="file small">Открыть стиль из файла<input type="file" id="loadStyle" accept=".json"></label><button id="saveStyleFile" class="small">Сохранить стиль в файл</button></div>
+  <label class="ref-mode"><input type="checkbox" id="refGemini"> Оценить графику референса через Gemini · до 20 кадров, 1 запрос</label>
   <div id="refProgress" class="bar" style="margin-top:12px"><i></i></div><div id="refStatus" class="muted"></div>
   <ul id="styleInfo"></ul>
-  <p class="muted">Загрузите ролик, на который хотите быть похожи. Программа сама его посмотрит (2–4 минуты, вкладку не сворачивать): как долго держится кадр, сколько плавных переходов, какой цвет, насколько тихо играет музыка. С ключом Gemini она ещё покажет кадры Gemini и посчитает, какие цифры, плашки, карты и списки там есть и как часто. Дальше кнопка «Сделать готовое видео» собирает ролик в этом стиле. Видео остаётся на компьютере — наружу уходят только кадры для Gemini.</p></div>
+  <p class="muted">Загрузите ролик, на который хотите быть похожи. Программа сама его посмотрит (2–4 минуты, вкладку не сворачивать): как долго держится кадр, сколько плавных переходов, какой цвет, насколько тихо играет музыка. Темп, цвет и звук анализируются в браузере. Отправка кадров для оценки графики включается отдельно.</p></div>
   <div class="card"><h3>Ход работы</h3><div id="progress" class="bar"><i></i></div><pre id="log"></pre></div>
 </section>
-<section id="tab-board" class="tab"><div class="row"><b id="boardInfo" class="muted">Раскадровки ещё нет</b></div><div id="board"></div></section>
+<section id="tab-board" class="tab">
+  <div class="card">
+    <h2>Раскадровка</h2><p id="boardInfo" class="muted">Раскадровки ещё нет</p>
+    <div id="productionStatus" aria-live="polite"></div>
+    <div class="row">
+      <label class="file small" id="mediaBundleLabel" hidden>Прикрепить файлы из монтажного плана<input type="file" id="mediaBundle" multiple accept="video/*,image/*,.mp4,.webm,.jpg,.jpeg,.png,.webp"></label>
+      <button id="toRender" class="primary" hidden>Перейти к экспорту</button>
+    </div>
+    <p id="mediaBundleInfo" class="muted" hidden></p>
+  </div>
+  <div id="board"></div>
+</section>
+<dialog id="assetDialog" aria-labelledby="assetTitle">
+  <form id="assetForm">
+    <h2 id="assetTitle">Кадр из файла</h2>
+    <label>Фото или видео<input id="assetFile" type="file" accept="video/*,image/*,.mp4,.webm,.jpg,.jpeg,.png,.webp" required></label>
+    <label>Автор<input id="assetAuthor" required maxlength="200"></label>
+    <label>Лицензия или разрешение<input id="assetLicense" required maxlength="200" placeholder="Например, CC BY 4.0 или собственная съёмка"></label>
+    <label>Страница источника<input id="assetPage" type="url" placeholder="https://"></label>
+    <label><input id="assetIllustration" type="checkbox"> Видео представляет собой иллюстрацию или реконструкцию</label>
+    <div class="row"><button id="assetCancel" type="button">Отмена</button><button class="primary">Использовать кадр</button></div>
+    <p id="assetError" class="muted" aria-live="polite"></p>
+  </form>
+</dialog>
 <section id="tab-render" class="tab">
   <div class="card"><div class="grid2">
     <label>Качество <select id="res"><option value="1920x1080">1080p (1920×1080)</option><option value="1280x720">720p — быстрее</option></select></label>
@@ -37,19 +62,19 @@
     <label class="file small">🎵 Своя музыка (MP3/WAV, например из YouTube Audio Library)<input type="file" id="musicFile" accept="audio/*,.mp3,.wav,.m4a,.flac"></label><span id="musicInfo" class="muted">не выбрана — музыка по настроению сцен</span>
     <label><input type="checkbox" id="sfx" checked> Звуковые эффекты (в стиле «Документалка» — тихие, только при появлении графики)</label>
   </div>
-  <div class="row"><button id="test" class="primary">Тест: первые 20 секунд</button><button id="full" class="primary">Рендер всего видео</button></div>
+  <div class="row"><button id="test">Черновик · первые 20 секунд</button><button id="full" class="primary">Экспортировать MP4</button></div>
   <p class="muted">Во время рендера не сворачивайте вкладку. Видео собирается прямо в браузере — бесплатно, без сервера.</p></div>
-  <div class="card"><div id="rprogress" class="bar"><i></i></div><div id="rinfo" class="muted"></div><canvas id="canvas" width="1920" height="1080"></canvas><div id="downloads" class="row"></div></div>
+  <div class="card"><div id="rprogress" class="bar"><i></i></div><div id="rinfo" class="muted" role="status"></div><canvas id="canvas" width="1920" height="1080"></canvas><div id="downloads" class="row"></div></div>
 </section>
 <section id="tab-settings" class="tab"><div class="card grid2">
-  <label>Pexels API key (бесплатно: pexels.com/api) <input id="k_pexels" type="password"></label>
-  <label>Pixabay API key (бесплатно: pixabay.com/api/docs) <input id="k_pixabay" type="password"></label>
-  <label>Gemini API key (бесплатно: aistudio.google.com/apikey) <input id="k_gemini" type="password"></label>
+  <label>Ключ Pexels · pexels.com/api <input id="k_pexels" type="password"></label>
+  <label>Ключ Pixabay · pixabay.com/api/docs <input id="k_pixabay" type="password"></label>
+  <label>Ключ Gemini · aistudio.google.com/apikey <input id="k_gemini" type="password"></label>
   <label>Модель Gemini <input id="k_model" value="gemini-flash-latest"></label>
   <label><input type="checkbox" id="k_wikimedia" checked> Wikimedia Commons — исторические фото/видео (только свободные лицензии)</label>
   <label><input type="checkbox" id="k_nasa" checked> NASA — космос, наука, техника (общественное достояние)</label>
-  <label><input type="checkbox" id="k_archive" checked> Internet Archive — архивная кинохроника (только Prelinger и фильмы правительства США)</label>
-  <label><input type="checkbox" id="k_loc" checked> Library of Congress — исторические фото (только «No known restrictions»)</label>
+  <label><input type="checkbox" id="k_archive" checked> Internet Archive — кинохроника для других стилей</label>
+  <label><input type="checkbox" id="k_loc" checked> Library of Congress — исторические фото для других стилей</label>
   <label><input type="checkbox" id="k_clip" checked> Смысловой подбор CLIP (нейросеть в браузере, ~150 МБ один раз)</label>
   <label><input type="checkbox" id="k_video" checked> Предпочитать видео, а не фото</label>
   <div class="row"><button id="saveKeys" class="primary">Сохранить</button><span id="keysInfo" class="muted">Ключи хранятся только в этом браузере.</span></div>

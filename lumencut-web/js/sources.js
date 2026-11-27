@@ -17,8 +17,8 @@ export async function pexels(key, q, W, photos = true) {
     photos ? pexelsGet('https://api.pexels.com/v1/search?' + new URLSearchParams({ query: q, per_page: '10', orientation: 'landscape' }), h, { photos: [] }) : { photos: [] }
   ]);
   return [
-    ...(v.videos || []).map(x => { const f = fitFile(x.video_files || [], W); return f && { id: 'pexels-v' + x.id, group: 'pexels-v' + x.id, source: 'Pexels', kind: 'video', url: f.link, thumb: x.image, duration: x.duration, author: x.user?.name || '', page: x.url, tags: (x.url || '').split('/').slice(-2, -1)[0]?.replace(/-\d+$/, '').replace(/-/g, ' ') || '' }; }),
-    ...(p.photos || []).map(x => ({ id: 'pexels-p' + x.id, group: 'pexels-p' + x.id, source: 'Pexels', kind: 'image', url: x.src.large2x, thumb: x.src.medium, author: x.photographer, page: x.url, tags: x.alt || '' }))
+    ...(v.videos || []).map(x => { const f = fitFile(x.video_files || [], W); return f && { id: 'pexels-v' + x.id, group: 'pexels-v' + x.id, source: 'Pexels', kind: 'video', url: f.link, thumb: x.image, duration: x.duration, author: x.user?.name || '', license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', page: x.url, tags: (x.url || '').split('/').slice(-2, -1)[0]?.replace(/-\d+$/, '').replace(/-/g, ' ') || '' }; }),
+    ...(p.photos || []).map(x => ({ id: 'pexels-p' + x.id, group: 'pexels-p' + x.id, source: 'Pexels', kind: 'image', url: x.src.large2x, thumb: x.src.medium, author: x.photographer, license: 'Pexels License', licenseUrl: 'https://www.pexels.com/license/', page: x.url, tags: x.alt || '' }))
   ].filter(Boolean);
 }
 
@@ -30,22 +30,23 @@ export async function pixabay(key, q, W) {
     fetch('https://pixabay.com/api/?' + new URLSearchParams({ key, q, per_page: '8', image_type: 'photo', orientation: 'horizontal', safesearch: 'true' })).then(r => r.ok ? r.json() : { hits: [] })
   ]);
   return [
-    ...(v.hits || []).map(x => { const vs = x.videos || {}; const f = (W >= 1900 ? vs.large?.url && vs.large : null) || vs.medium || vs.large || vs.small; return f?.url && f.width >= f.height && { id: 'pixabay-v' + x.id, group: 'pixabay-v' + x.id, source: 'Pixabay', kind: 'video', url: f.url, thumb: vs.medium?.thumbnail || vs.small?.thumbnail || vs.tiny?.thumbnail, duration: x.duration, author: x.user, page: x.pageURL, tags: x.tags || '' }; }),
-    ...(p.hits || []).map(x => ({ id: 'pixabay-p' + x.id, group: 'pixabay-p' + x.id, source: 'Pixabay', kind: 'image', url: x.largeImageURL, thumb: x.webformatURL, author: x.user, page: x.pageURL, tags: x.tags || '' }))
+    ...(v.hits || []).map(x => { const vs = x.videos || {}; const f = (W >= 1900 ? vs.large?.url && vs.large : null) || vs.medium || vs.large || vs.small; return f?.url && f.width >= f.height && { id: 'pixabay-v' + x.id, group: 'pixabay-v' + x.id, source: 'Pixabay', kind: 'video', url: f.url, thumb: vs.medium?.thumbnail || vs.small?.thumbnail || vs.tiny?.thumbnail, duration: x.duration, author: x.user, license: 'Pixabay Content License', licenseUrl: 'https://pixabay.com/service/license-summary/', page: x.pageURL, tags: x.tags || '' }; }),
+    ...(p.hits || []).map(x => ({ id: 'pixabay-p' + x.id, group: 'pixabay-p' + x.id, source: 'Pixabay', kind: 'image', url: x.largeImageURL, thumb: x.webformatURL, author: x.user, license: 'Pixabay Content License', licenseUrl: 'https://pixabay.com/service/license-summary/', page: x.pageURL, tags: x.tags || '' }))
   ].filter(Boolean);
 }
 
 const strip = s => String(s || '').replace(/<[^>]*>/g, '').trim();
-export async function wikimedia(q) {
-  const url = 'https://commons.wikimedia.org/w/api.php?' + new URLSearchParams({ action: 'query', generator: 'search', gsrsearch: `filetype:bitmap|video ${q}`, gsrnamespace: '6', gsrlimit: '12', prop: 'imageinfo', iiprop: 'url|size|mime|extmetadata', iiurlwidth: '1920', format: 'json', origin: '*' });
+export async function wikimedia(q, type = 'bitmap|video') {
+  const url = 'https://commons.wikimedia.org/w/api.php?' + new URLSearchParams({ action: 'query', generator: 'search', gsrsearch: `filetype:${type} ${q}`, gsrnamespace: '6', gsrlimit: '12', prop: 'imageinfo', iiprop: 'url|size|mime|extmetadata', iiurlwidth: '1920', format: 'json', origin: '*' });
   const r = await fetch(url); if (!r.ok) return [];
   const d = await r.json();
   return Object.values(d.query?.pages || {}).map(pg => {
-    const i = pg.imageinfo?.[0] || {}, m = i.extmetadata || {}; const video = /^video\//.test(i.mime || '');
-    if (!i.url || (i.width || 0) < 900 || i.height > i.width) return null;
-    if (/fair use|non-free|copyrighted|all rights reserved/i.test(`${m.LicenseShortName?.value} ${m.UsageTerms?.value}`)) return null;
+    const i = pg.imageinfo?.[0] || {}, m = i.extmetadata || {}; const video = /^video\//.test(i.mime || '') || /\.ogv$/i.test(i.url || '');
+    if (!i.url || (i.width || 0) < 900 || i.height > i.width || video && !/\.(mp4|webm)$/i.test(i.url)) return null;
+    const license = m.LicenseShortName?.value || '';
+    if (!/^(?:public domain|pdm|cc0(?: [0-9.]+)?|cc by(?:-sa)? [0-9.]+(?: [a-z-]+)?)$/i.test(license.trim())) return null;
     const thumb = i.thumburl && i.width > 640 ? i.thumburl.replace(/\/\d+px-/, '/640px-') : (i.thumburl || i.url);
-    return { id: 'wm-' + pg.pageid, group: 'wm-' + pg.pageid, source: 'Wikimedia', kind: video ? 'video' : 'image', url: video ? i.url : (i.thumburl || i.url), thumb, duration: Number(m.Duration?.value || 0) || null, author: strip(m.Artist?.value), license: m.LicenseShortName?.value || '', page: i.descriptionurl, tags: strip(m.ObjectName?.value || pg.title) + ' ' + strip(m.ImageDescription?.value).slice(0, 120) };
+    return { id: 'wm-' + pg.pageid, group: 'wm-' + pg.pageid, source: 'Wikimedia', kind: video ? 'video' : 'image', url: video ? i.url : (i.thumburl || i.url), thumb, duration: Number(m.Duration?.value || 0) || null, author: strip(m.Artist?.value), license, licenseUrl: m.LicenseUrl?.value || '', page: i.descriptionurl, tags: strip(m.ObjectName?.value || pg.title) + ' ' + strip(m.ImageDescription?.value).slice(0, 120) };
   }).filter(Boolean);
 }
 
@@ -60,7 +61,7 @@ export async function nasa(q) {
     const x = it.data?.[0] || {}, links = it.links || [], id = x.nasa_id;
     if (!id || /copyright|courtesy of (?!nasa)|©/i.test(`${x.description} ${x.photographer} ${x.secondary_creator}`)) return null;
     const thumb = (links.find(l => l.rel === 'preview') || links[0])?.href; if (!thumb) return null;
-    const base = { id: 'nasa-' + id, group: 'nasa-' + id, source: 'NASA', thumb: thumb.replace(/^http:/, 'https:'), author: x.photographer || x.secondary_creator || 'NASA', license: 'Public domain (NASA)', page: 'https://images.nasa.gov/details/' + encodeURIComponent(id), tags: `${x.title || ''} ${(x.keywords || []).join(' ')}`.slice(0, 200) };
+    const base = { id: 'nasa-' + id, group: 'nasa-' + id, source: 'NASA', thumb: thumb.replace(/^http:/, 'https:'), author: x.photographer || x.secondary_creator || 'NASA', license: 'NASA media usage guidelines', licenseUrl: 'https://www.nasa.gov/nasa-brand-center/images-and-media/', page: 'https://images.nasa.gov/details/' + encodeURIComponent(id), tags: `${x.title || ''} ${(x.keywords || []).join(' ')}`.slice(0, 200) };
     if (x.media_type === 'video') { const dir = `https://images-assets.nasa.gov/video/${encodeURIComponent(id)}/${encodeURIComponent(id)}`; return { ...base, kind: 'video', url: dir + '~medium.mp4', alt: dir + '~mobile.mp4', duration: null }; }
     const big = links.filter(l => l.render === 'image' && l.width).sort((a, b) => b.width - a.width).find(l => l.width <= 1920);
     return big && big.width >= 900 && big.width >= big.height && { ...base, kind: 'image', url: big.href.replace(/^http:/, 'https:') };
@@ -104,16 +105,20 @@ export async function loc(q) {
 // Same query from different scenes is answered once (also saves the Pexels/Pixabay hourly limits).
 const cache = new Map();
 export function searchAll(settings, q, W, qr = 0) {
-  const key = [qr, !!settings.pexels, !!settings.pixabay, settings.wikimedia, settings.nasa, settings.archive, settings.loc, q.toLowerCase().trim()].join('|');
+  const key = [W, qr, settings.pexels, settings.pixabay, settings.wikimedia, settings.nasa, settings.archive, settings.loc, settings.production, q.toLowerCase().trim()].join('|');
   if (!cache.has(key)) cache.set(key, searchFresh(settings, q, W, qr).catch(e => { cache.delete(key); throw e; }));
   return cache.get(key);
 }
 async function searchFresh(settings, q, W, qr) {
   const tasks = [pexels(settings.pexels, q, W, qr === 0), pixabay(settings.pixabay, q, W)];
-  if (settings.wikimedia !== false) tasks.push(wikimedia(q));
+  if (settings.wikimedia !== false) {
+    if (settings.production) tasks.push(wikimedia(q, 'video'), wikimedia(q, 'bitmap'));
+    else tasks.push(wikimedia(q));
+  }
   if (settings.nasa !== false && qr < 2) tasks.push(nasa(q));
-  if (settings.archive !== false && qr === 0) tasks.push(archive(q));
-  if (settings.loc !== false && qr === 0) tasks.push(loc(q));
+  if (!settings.production && settings.archive !== false && qr === 0) tasks.push(archive(q));
+  if (!settings.production && settings.loc !== false && qr === 0) tasks.push(loc(q));
   const res = await Promise.allSettled(tasks);
-  return res.flatMap(r => r.status === 'fulfilled' ? r.value : []);
+  const media = res.flatMap(r => r.status === 'fulfilled' ? r.value : []);
+  return media;
 }
