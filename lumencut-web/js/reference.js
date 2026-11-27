@@ -123,17 +123,16 @@ async function grabFrames(url, times, onProgress) {
 }
 
 async function classifyFrames(url, duration, key, model, onProgress) {
-  const every = Math.max(4, duration / 240), times = []; for (let t = 2; t < duration - 1; t += every) times.push(Math.round(t * 10) / 10);
-  const imgs = await grabFrames(url, times, onProgress), frames = []; let subs = 0, votes = 0;
-  for (let k = 0; k < times.length; k += 20) {
-    onProgress(`Gemini смотрит кадры ${k + 1}–${Math.min(times.length, k + 20)} из ${times.length}`, 0.75 + 0.2 * k / times.length);
-    const ts = times.slice(k, k + 20), parts = [{ text: framePrompt(ts) }];
-    ts.forEach((t, i) => parts.push({ text: `t=${t}` }, { inline_data: { mime_type: 'image/jpeg', data: imgs[k + i] } }));
-    const out = await gemini(key, model, parts);
-    (out.frames || []).forEach(f => frames.push({ t: +f.t, type: String(f.type || 'none').toLowerCase(), text: f.text || '' }));
-    votes++; if (out.subtitles) subs++;
-  }
-  return summarizeFrames(frames, duration, subs > votes / 2, every);
+  const every = Math.max(4, duration / 20), times = [];
+  for (let t = 2; t < duration - 1 && times.length < 20; t += every) times.push(Math.round(t * 10) / 10);
+  if (!times.length) return null;
+  const imgs = await grabFrames(url, times, onProgress);
+  onProgress(`Gemini анализирует ${times.length} кадров одним запросом`, 0.8);
+  const parts = [{ text: framePrompt(times) }];
+  times.forEach((t, i) => parts.push({ text: `t=${t}` }, { inline_data: { mime_type: 'image/jpeg', data: imgs[i] } }));
+  const out = await gemini(key, model, parts, result => Array.isArray(result?.frames));
+  const frames = out.frames.map(f => ({ t: +f.t, type: String(f.type || 'none').toLowerCase(), text: f.text || '' }));
+  return summarizeFrames(frames, duration, !!out.subtitles, every);
 }
 
 // Consecutive frames with the same graphic are one appearance.

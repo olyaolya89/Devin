@@ -12,7 +12,7 @@ export async function gatherCandidates(shots, settings, W, onProgress) {
   const worker = async () => {
     while (cursor < shots.length) {
       const s = shots[cursor++];
-      const lists = await Promise.all(s.queries.map((q, qr) => searchAll(settings, q, W, qr).then(r => r.map(c => ({ ...c, qr }))).catch(() => [])));
+      const lists = await Promise.all((settings.production && !settings.wideSearch ? s.queries.slice(0, 1) : s.queries.slice(0, 3)).map((q, qr) => searchAll(settings, q, W, qr).then(r => r.map(c => ({ ...c, qr }))).catch(() => [])));
       const m = new Map(); for (const c of lists.flat()) if (!m.has(c.id) || m.get(c.id).qr > c.qr) m.set(c.id, c);
       s.candidates = [...m.values()];
       onProgress?.(`Поиск кадров: ${++done}/${shots.length}`);
@@ -21,7 +21,7 @@ export async function gatherCandidates(shots, settings, W, onProgress) {
   await Promise.all(Array.from({ length: 3 }, worker));
 }
 
-export const cutsNeeded = s => Math.max(1, Math.ceil((s.end - s.start) / CUT.max - 0.05));
+export const cutsNeeded = s => Math.max(1, Math.ceil((s.end - s.start - 0.001) / CUT.max));
 
 // preUsed: ids/urls already on screen elsewhere; preEmb: their CLIP vectors, so "Найти заново" can't bring back a look-alike frame.
 export async function pickMedia(shots, settings, onProgress, preUsed = [], preEmb = []) {
@@ -33,7 +33,9 @@ export async function pickMedia(shots, settings, onProgress, preUsed = [], preEm
     const need = cutsNeeded(s), len = (s.end - s.start) / need;
     const target = tok(`${s.text} ${s.visual} ${s.queries.join(' ')}`);
     const pre = c => [...tok(c.tags)].filter(w => target.has(w)).length + (c.qr === 0 ? 1 : c.qr === 1 ? 0.5 : 0) + (c.kind === 'video' ? 0.5 : 0);
-    const pool = (s.candidates || []).filter(c => !usedIds.has(c.id) && !usedIds.has(c.url)).sort((a, b) => pre(b) - pre(a)).slice(0, 48);
+    const pool = (s.candidates || []).filter(c => !usedIds.has(c.id) && !usedIds.has(c.url) &&
+      (!settings.production || c.author && c.license &&
+        (c.kind !== 'video' || !c.duration || c.duration >= len * 0.75))).sort((a, b) => pre(b) - pre(a)).slice(0, settings.production ? 24 : 48);
     let embs = [];
     if (useClip && pool.length) try { embs = await imageEmbed(pool.map(c => c.thumb), onProgress); } catch (e) { console.warn(e); }
     pool.forEach((c, k) => {
@@ -47,7 +49,11 @@ export async function pickMedia(shots, settings, onProgress, preUsed = [], preEm
     // Off-meaning = clearly worse than the best match of this scene (not just below a fixed number).
     const best = Math.max(-1, ...pool.map(c => c.sim ?? -1));
     const floor = best >= 0.17 ? Math.max(0.17, best - 0.07) : -Infinity;
+    const visual = tok(s.visual || s.text);
+    const relevant = c => c.sim != null ? c.sim >= Math.max(0.17, floor) : [...tok(c.tags)].some(w => visual.has(w));
     const ok = (c, strict) => {
+      if (usedIds.has(c.id) || usedIds.has(c.url)) return false;
+      if (settings.production && !relevant(c)) return false;
       if (c.sim != null && c.sim < (strict ? floor : Math.min(floor, 0.15))) return false;
       if (c.emb && usedEmb.some(e => cos(e.v, c.emb) > 0.93)) return false; // visually the same frame
       if (strict && c.emb && usedEmb.slice(-3).some(e => cos(e.v, c.emb) > 0.88)) return false; // too similar to neighbours
@@ -73,7 +79,9 @@ export async function refillShort(all, settings, topic, onProgress) {
   for (const s of short) {
     s.oldCandidates = s.candidates || [];
     s.queriesBak = s.queries;
-    s.queries = [...new Set([words(s.visual), words(s.meaning), topic].filter(q => q && !s.queries.includes(q)))].slice(0, 3);
+    s.queries = settings.production
+      ? [...s.queries.slice(1), words(s.visual)].filter(q => q && q !== s.queries[0]).slice(0, 1)
+      : [...new Set([words(s.visual), words(s.meaning), topic].filter(q => q && !s.queries.includes(q)))].slice(0, 3);
   }
   await gatherCandidates(short.filter(s => s.queries.length), settings, 1920, onProgress);
   for (const s of short) {

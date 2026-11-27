@@ -46,6 +46,7 @@ export function ovWindow(s) {
     const ws = statementWords(o); const ts = ws.length && s.text ? phraseTimes(s, ws) : [s.start];
     t0 = Math.max(s.start, ts[0] - 0.35); t1 = Math.max(t0 + 3, ts.at(-1) + 1.4);
   } else { t0 = s.start + 0.1; t1 = Math.min(t0 + 10, Math.max(t0 + (type === 'map' ? 5 : 6.5), voiceEnd)); }
+  if (s.boundGraphics) t1 = Math.min(t1, s.end);
   return { t0, t1, land: land ?? t0 };
 }
 

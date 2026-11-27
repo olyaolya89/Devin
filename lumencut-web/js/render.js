@@ -6,18 +6,59 @@ const YEL = '#FFD400';
 const easeBack = x => { const c = 1.9; x = Math.min(1, Math.max(0, x)); return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
 const easeOut = x => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
 
-function loadMedia(c) {
-  if (c.kind === 'video') return new Promise(res => {
-    const v = document.createElement('video'); v.crossOrigin = 'anonymous'; v.muted = true; v.playsInline = true; v.preload = 'auto';
-    let alt = c.alt; const fail = () => res(loadImage(c.thumb)); let t = setTimeout(fail, 20000);
-    v.onerror = () => { clearTimeout(t); if (alt) { v.src = alt; alt = null; t = setTimeout(fail, 20000); } else fail(); };
-    v.onloadeddata = () => { clearTimeout(t); res({ v, w: v.videoWidth, h: v.videoHeight }); };
-    v.src = c.url;
-  });
-  return loadImage(c.url).then(r => r.img ? r : loadImage(c.thumb));
+function releaseVideo(v) {
+  v.pause();
+  v.removeAttribute('src');
+  v.load();
 }
-function loadImage(url) { return new Promise(res => { const i = new Image(); i.crossOrigin = 'anonymous'; i.onload = () => res({ img: i, w: i.naturalWidth, h: i.naturalHeight }); i.onerror = () => res({}); i.src = url || ''; }); }
-const seek = (v, t) => new Promise(r => { if (Math.abs(v.currentTime - t) < 0.01) return r(); const to = setTimeout(r, 5000); v.onseeked = () => { clearTimeout(to); r(); }; v.currentTime = t; });
+
+async function loadMedia(c = {}, strict = false) {
+  if (c.kind === 'video') {
+    for (const url of [c.url, c.alt].filter(Boolean)) {
+      const media = await new Promise(resolve => {
+        const v = document.createElement('video');
+        v.crossOrigin = 'anonymous'; v.muted = true; v.playsInline = true; v.preload = 'auto';
+        const done = data => {
+          clearTimeout(timer);
+          v.onloadeddata = v.onerror = null;
+          if (!data) releaseVideo(v);
+          resolve(data);
+        };
+        const timer = setTimeout(() => done(null), 15_000);
+        v.onerror = () => done(null);
+        v.onloadeddata = () => done({ v, w: v.videoWidth, h: v.videoHeight });
+        v.src = url;
+      });
+      if (media) return media;
+    }
+    return strict ? {} : loadImage(c.thumb);
+  }
+  const media = await loadImage(c.url);
+  return strict || media.img ? media : loadImage(c.thumb);
+}
+
+function loadImage(url) {
+  if (!url) return Promise.resolve({});
+  return new Promise(resolve => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    const done = data => { clearTimeout(timer); img.onload = img.onerror = null; resolve(data); };
+    const timer = setTimeout(() => done({}), 15_000);
+    img.onload = () => done({ img, w: img.naturalWidth, h: img.naturalHeight });
+    img.onerror = () => done({});
+    img.src = url;
+  });
+}
+
+function seek(video, time) {
+  if (Math.abs(video.currentTime - time) < 0.01) return Promise.resolve(true);
+  return new Promise(resolve => {
+    const done = ok => { clearTimeout(timer); video.onseeked = null; resolve(ok); };
+    const timer = setTimeout(() => done(false), 6000);
+    video.onseeked = () => done(true);
+    video.currentTime = time;
+  });
+}
 
 function cover(ctx, el, w, h, W, H, scale, px, py) {
   if (!el || !w) { const g = ctx.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#1b2030'); g.addColorStop(1, '#07080c'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); return; }
@@ -92,7 +133,7 @@ const ARCHIVE = new Set(['Wikimedia', 'Library of Congress', 'Internet Archive']
 const pseudo = i => ((i * 2654435761) >>> 0) % 1000 / 1000;
 
 // style: profile from styles.js (look, grade, dissolve share, framed archive photos). subtitles: false or a look name.
-export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, canvas, subtitles = 'karaoke', style = { look: 'classic' }, limit = Infinity, fileHandle, onProgress }) {
+export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, canvas, subtitles = 'karaoke', style = { look: 'classic' }, limit = Infinity, fileHandle, strict = false, onProgress }) {
   await Promise.all(['700 80px Oswald', '800 40px Inter', ...FONTS].map(f => document.fonts.load(f).catch(() => {})));
   if (subtitles === true) subtitles = 'karaoke';
   const doc = style.look === 'doc', gr = style.grade || {};
@@ -104,60 +145,117 @@ export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, 
   let codec = null; for (const c of ['avc1.640028', 'avc1.4d0028', 'avc1.42002a']) { const r = await VideoEncoder.isConfigSupported({ codec: c, width: W, height: H, bitrate: W > 1300 ? 9e6 : 5e6, framerate: fps }).catch(() => ({})); if (r.supported) { codec = c; break; } }
   if (!codec) throw new Error('Браузер не умеет H.264. Откройте сайт в Google Chrome или Microsoft Edge.');
   const aac = (await AudioEncoder.isConfigSupported({ codec: 'mp4a.40.2', sampleRate: 48000, numberOfChannels: 2, bitrate: 192000 }).catch(() => ({}))).supported;
-  const target = fileHandle ? new FileSystemWritableFileStreamTarget(await fileHandle.createWritable()) : new ArrayBufferTarget();
+  const stream = fileHandle ? await fileHandle.createWritable() : null;
+  const target = stream ? new FileSystemWritableFileStreamTarget(stream) : new ArrayBufferTarget();
   const muxer = new Muxer({ target, video: { codec: 'avc', width: W, height: H }, audio: { codec: aac ? 'aac' : 'opus', sampleRate: 48000, numberOfChannels: 2 }, fastStart: fileHandle ? false : 'in-memory', firstTimestampBehavior: 'offset' });
   let err = null;
   const venc = new VideoEncoder({ output: (c, m) => muxer.addVideoChunk(c, m), error: e => (err = e) });
-  venc.configure({ codec, width: W, height: H, bitrate: W > 1300 ? 9e6 : 5e6, framerate: fps, latencyMode: 'quality' });
   const aenc = new AudioEncoder({ output: (c, m) => muxer.addAudioChunk(c, m), error: e => (err = e) });
-  aenc.configure({ codec: aac ? 'mp4a.40.2' : 'opus', sampleRate: 48000, numberOfChannels: 2, bitrate: 192000 });
-  const L = audio.getChannelData(0), R = audio.getChannelData(audio.numberOfChannels > 1 ? 1 : 0), aEnd = Math.min(L.length, Math.ceil(total * 48000)); let apos = 0;
-  const pushAudio = t => { const until = Math.min(aEnd, Math.ceil(t * 48000)); while (apos < until) { const n = Math.min(1024, until - apos), d = new Float32Array(n * 2); d.set(L.subarray(apos, apos + n), 0); d.set(R.subarray(apos, apos + n), n); const ad = new AudioData({ format: 'f32-planar', sampleRate: 48000, numberOfFrames: n, numberOfChannels: 2, timestamp: Math.round(apos * 1e6 / 48000), data: d }); aenc.encode(ad); ad.close(); apos += n; } };
+  let mediaOnScreen, next;
+  try {
+    venc.configure({ codec, width: W, height: H, bitrate: W > 1300 ? 9e6 : 5e6, framerate: fps, latencyMode: 'quality' });
+    aenc.configure({ codec: aac ? 'mp4a.40.2' : 'opus', sampleRate: 48000, numberOfChannels: 2, bitrate: 192000 });
+    const L = audio.getChannelData(0), R = audio.getChannelData(audio.numberOfChannels > 1 ? 1 : 0), aEnd = Math.min(L.length, Math.ceil(total * 48000)); let apos = 0;
+    const pushAudio = t => { const until = Math.min(aEnd, Math.ceil(t * 48000)); while (apos < until) { const n = Math.min(1024, until - apos), d = new Float32Array(n * 2); d.set(L.subarray(apos, apos + n), 0); d.set(R.subarray(apos, apos + n), n); const ad = new AudioData({ format: 'f32-planar', sampleRate: 48000, numberOfFrames: n, numberOfChannels: 2, timestamp: Math.round(apos * 1e6 / 48000), data: d }); aenc.encode(ad); ad.close(); apos += n; } };
 
-  const cuts = []; shots.forEach(s => (s.cuts || [{ media: null, t0: s.start, t1: s.end, from: 0 }]).forEach((c, k) => cuts.push({ ...c, shot: s, first: k === 0,
-    trans: doc ? (pseudo(cuts.length + 1) < (style.dissolve ?? 0.6) ? 'dissolve' : 'cut') : k === 0 && s.overlay?.type === 'chapter' ? 'fade' : k === 0 && ['whoosh', 'swish'].includes(s.sfx) ? 'whip' : 'cut' })));
-  let f = 0, started = performance.now();
-  const emit = (cut, m, ci) => {
-    const t = f / fps, p = (t - cut.t0) / Math.max(0.1, cut.t1 - cut.t0), dir = ci % 4;
-    ctx.filter = grade;
-    const isV = !!m.v, sc = isV ? 1.03 + 0.04 * p : 1.08 + 0.1 * p, px = isV ? 0 : [-.6, .6, 0, 0][dir] * (p - .5), py = isV ? 0 : [0, 0, -.6, .6][dir] * (p - .5);
-    const lt = t - cut.t0;
-    if (cut.trans === 'whip' && lt < 0.3 && f > 0) { const e = easeOut(lt / 0.3); ctx.save(); ctx.translate(W * (1 - e), 0); cover(ctx, m.v || m.img, m.w, m.h, W, H, sc, px, py); ctx.restore(); ctx.filter = 'blur(6px)'; ctx.drawImage(snap, -W * e, 0); }
-    else if (cut.framed) drawFramed(ctx, m, W, H, p);
-    else cover(ctx, m.v || m.img, m.w, m.h, W, H, sc, px, py);
-    ctx.filter = 'none'; vignette(ctx, W, H);
-    // cross-dissolve: the last picture of the previous cut fades out over the new one, still drifting slowly
-    if (cut.trans === 'dissolve' && lt < 0.7 && f > 0) { const e = easeOut(lt / 0.7), z = 1 + 0.015 * lt; ctx.save(); ctx.globalAlpha = 1 - e; ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(snap, -W / 2, -H / 2); ctx.restore(); }
-    if (cut.trans === 'fade' && lt < 0.45) { ctx.fillStyle = `rgba(0,0,0,${1 - lt / 0.45})`; ctx.fillRect(0, 0, W, H); }
-    if (f === cut.endF - 1) sctx.drawImage(canvas, 0, 0); // picture without graphics, for the next transition
-    if (doc) { for (const ov of overlays) if (t >= ov.t0 && t <= ov.t1) drawDoc(ctx, ov, t, W, H); }
-    else drawOverlay(ctx, cut.shot, t, W, H);
-    if (subtitles && subtitles !== 'none') drawSubs(ctx, cut.shot, t, W, H, subtitles);
-    const vf = new VideoFrame(canvas, { timestamp: Math.round(f * 1e6 / fps), duration: Math.round(1e6 / fps) });
-    venc.encode(vf, { keyFrame: f % (fps * 2) === 0 }); vf.close(); f++;
-    if (f % fps === 0) { pushAudio(f / fps); const el = (performance.now() - started) / 1000; onProgress?.(f / nFrames, `Кадр ${f}/${nFrames} · ${(f / fps / el).toFixed(2)}× скорость`); }
-  };
-  let next = cuts.length ? loadMedia(cuts[0].media || {}) : null;
-  for (let ci = 0; ci < cuts.length && f < nFrames && !err; ci++) {
-    const cut = cuts[ci], end = Math.min(nFrames, ci === cuts.length - 1 ? nFrames : Math.round(cut.t1 * fps));
-    const m = await next; next = ci + 1 < cuts.length ? loadMedia(cuts[ci + 1].media || {}) : null;
-    cut.endF = end; cut.framed = doc && style.framePhotos !== false && !m.v && m.img && ARCHIVE.has(cut.media?.source);
-    if (m.v) {
-      await seek(m.v, cut.from || 0);
-      // A clip shorter than its cut is played slower (down to 0.5×) instead of freezing on its last frame.
-      const avail = (Number.isFinite(m.v.duration) ? m.v.duration : Infinity) - m.v.currentTime, want = (end - f) / fps;
-      const rate = avail < want ? Math.max(0.5, avail / want) : 1; m.v.playbackRate = rate;
-      await new Promise(res => {
-        let done = false, timer; const base = m.v.currentTime, start = f;
-        const finish = () => { if (done) return; done = true; clearTimeout(timer); m.v.pause(); while (f < end) emit(cut, m, ci); res(); };
-        const step = (now, meta) => { if (done) return; clearTimeout(timer); while (f < end && (f - start) / fps * rate <= meta.mediaTime - base + 0.5 / fps) emit(cut, m, ci); if (f >= end) return finish(); timer = setTimeout(finish, 4000); m.v.requestVideoFrameCallback(step); };
-        m.v.onended = finish; timer = setTimeout(finish, 8000); m.v.requestVideoFrameCallback(step); m.v.play().catch(finish);
-      });
-      m.v.removeAttribute('src'); m.v.load();
-    } else while (f < end) { emit(cut, m, ci); if (venc.encodeQueueSize > 20) await new Promise(r => setTimeout(r, 15)); else if (f % 15 === 0) await new Promise(r => setTimeout(r, 0)); }
+    const cuts = []; shots.forEach((s, i) => (s.cuts?.length ? s.cuts : [{ media: null, t0: s.start, t1: s.end, from: 0 }]).forEach((c, k) => cuts.push({ ...c, shot: s, scene: i + 1, first: k === 0,
+      trans: doc ? (pseudo(cuts.length + 1) < (style.dissolve ?? 0.6) ? 'dissolve' : 'cut') : k === 0 && s.overlay?.type === 'chapter' ? 'fade' : k === 0 && ['whoosh', 'swish'].includes(s.sfx) ? 'whip' : 'cut' })));
+    let f = 0, started = performance.now();
+    const emit = (cut, m, ci) => {
+      const t = f / fps, p = (t - cut.t0) / Math.max(0.1, cut.t1 - cut.t0), dir = ci % 4;
+      ctx.filter = grade;
+      const isV = !!m.v, sc = isV ? 1.03 + 0.04 * p : 1.08 + 0.1 * p, px = isV ? 0 : [-.6, .6, 0, 0][dir] * (p - .5), py = isV ? 0 : [0, 0, -.6, .6][dir] * (p - .5);
+      const lt = t - cut.t0;
+      if (cut.trans === 'whip' && lt < 0.3 && f > 0) { const e = easeOut(lt / 0.3); ctx.save(); ctx.translate(W * (1 - e), 0); cover(ctx, m.v || m.img, m.w, m.h, W, H, sc, px, py); ctx.restore(); ctx.filter = 'blur(6px)'; ctx.drawImage(snap, -W * e, 0); }
+      else if (cut.framed) drawFramed(ctx, m, W, H, p);
+      else cover(ctx, m.v || m.img, m.w, m.h, W, H, sc, px, py);
+      ctx.filter = 'none'; vignette(ctx, W, H);
+      // cross-dissolve: the last picture of the previous cut fades out over the new one, still drifting slowly
+      if (cut.trans === 'dissolve' && lt < 0.7 && f > 0) { const e = easeOut(lt / 0.7), z = 1 + 0.015 * lt; ctx.save(); ctx.globalAlpha = 1 - e; ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(snap, -W / 2, -H / 2); ctx.restore(); }
+      if (cut.trans === 'fade' && lt < 0.45) { ctx.fillStyle = `rgba(0,0,0,${1 - lt / 0.45})`; ctx.fillRect(0, 0, W, H); }
+      if (f === cut.endF - 1) sctx.drawImage(canvas, 0, 0); // picture without graphics, for the next transition
+      if (doc) { for (const ov of overlays) if (t >= ov.t0 && t <= ov.t1) drawDoc(ctx, ov, t, W, H); }
+      else drawOverlay(ctx, cut.shot, t, W, H);
+      if (subtitles && subtitles !== 'none') drawSubs(ctx, cut.shot, t, W, H, subtitles);
+      const vf = new VideoFrame(canvas, { timestamp: Math.round(f * 1e6 / fps), duration: Math.round(1e6 / fps) });
+      try { venc.encode(vf, { keyFrame: f % (fps * 2) === 0 }); }
+      finally { vf.close(); }
+      f++;
+      if (f % fps === 0) { pushAudio(f / fps); const el = (performance.now() - started) / 1000; onProgress?.(f / nFrames, `Кадр ${f}/${nFrames} · ${(f / fps / el).toFixed(2)}× скорость`); }
+    };
+    next = cuts.length ? loadMedia(cuts[0].media || {}, strict) : null;
+    for (let ci = 0; ci < cuts.length && f < nFrames && !err; ci++) {
+      const cut = cuts[ci], end = Math.min(nFrames, ci === cuts.length - 1 ? nFrames : Math.round(cut.t1 * fps));
+      const m = await next;
+      mediaOnScreen = m;
+      next = end < nFrames && ci + 1 < cuts.length ? loadMedia(cuts[ci + 1].media || {}, strict) : null;
+      const invalid = reason => new Error(`Сцена ${cut.scene}: ${reason}. Замените кадр в раскадровке.`);
+      if (strict && !m.v && !m.img) throw invalid('исходник не открылся');
+      if (strict && (m.w < 640 || m.h < 360)) throw invalid('разрешение исходника ниже 640×360');
+      cut.endF = end; cut.framed = doc && style.framePhotos !== false && !m.v && m.img && ARCHIVE.has(cut.media?.source);
+      if (m.v && f < end) {
+        const inPoint = cut.from || 0;
+        if (strict && inPoint >= m.v.duration) throw invalid('точка входа за пределами видео');
+        const found = await seek(m.v, inPoint);
+        if (strict && !found) throw invalid('браузер не перешёл к выбранному фрагменту');
+        const avail = (Number.isFinite(m.v.duration) ? m.v.duration : Infinity) - m.v.currentTime;
+        const want = (end - f) / fps;
+        const maxSlowdown = strict ? 0.75 : 0.5;
+        if (strict && avail + 2 / fps < want * maxSlowdown) throw invalid('видео слишком короткое для выбранного фрагмента');
+        const rate = Math.max(maxSlowdown, Math.min(1, avail / want));
+        m.v.playbackRate = rate;
+        await new Promise((resolve, reject) => {
+          let done = false, timer, callback;
+          const base = m.v.currentTime, start = f;
+          const finish = error => {
+            if (done) return;
+            done = true;
+            clearTimeout(timer);
+            m.v.cancelVideoFrameCallback(callback);
+            m.v.onended = m.v.onerror = null;
+            m.v.pause();
+            if (strict && (error || end - f > 2)) {
+              reject(invalid('видео остановилось во время чтения'));
+              return;
+            }
+            while (f < end) emit(cut, m, ci);
+            resolve();
+          };
+          const step = (_now, meta) => {
+            if (done) return;
+            clearTimeout(timer);
+            try {
+              while (f < end && !err && (f - start) / fps * rate <= meta.mediaTime - base + 0.5 / fps) emit(cut, m, ci);
+            } catch (error) { return finish(error); }
+            if (err || f >= end) return finish(err);
+            timer = setTimeout(() => finish(true), 6000);
+            callback = m.v.requestVideoFrameCallback(step);
+          };
+          m.v.onended = () => finish();
+          m.v.onerror = () => finish(true);
+          timer = setTimeout(() => finish(true), 9000);
+          callback = m.v.requestVideoFrameCallback(step);
+          m.v.play().catch(() => finish(true));
+        });
+      } else while (f < end && !err) { emit(cut, m, ci); if (venc.encodeQueueSize > 20) await new Promise(r => setTimeout(r, 15)); else if (f % 15 === 0) await new Promise(r => setTimeout(r, 0)); }
+      if (m.v) releaseVideo(m.v);
+      mediaOnScreen = null;
+    }
+    if (err) throw err;
+    if (f !== nFrames) throw new Error('Таймлайн закончился раньше рендера.');
+    pushAudio(total);
+    await Promise.all([venc.flush(), aenc.flush()]);
+    if (err) throw err;
+    muxer.finalize();
+    if (stream) { await stream.close(); return null; }
+    return new Blob([target.buffer], { type: 'video/mp4' });
+  } catch (error) {
+    if (stream) await stream.abort().catch(() => {});
+    throw error;
+  } finally {
+    if (mediaOnScreen?.v) releaseVideo(mediaOnScreen.v);
+    if (next) void next.then(m => { if (m.v && m !== mediaOnScreen) releaseVideo(m.v); });
+    if (venc.state !== 'closed') venc.close();
+    if (aenc.state !== 'closed') aenc.close();
   }
-  if (err) throw err;
-  pushAudio(total); await venc.flush(); await aenc.flush(); muxer.finalize();
-  if (fileHandle) { await target.stream?.close?.(); return null; }
-  return new Blob([target.buffer], { type: 'video/mp4' });
 }
