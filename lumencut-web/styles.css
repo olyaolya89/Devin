@@ -53,3 +53,12 @@ dialog::backdrop{background:#000a}
 @media(max-width:740px){header{align-items:flex-start;flex-direction:column;gap:8px;padding:10px 14px}nav{flex-wrap:wrap}nav button{padding:7px 9px}main{padding:12px}}
 
 .ref-mode{margin-top:12px}
+
+.scene-meaning{margin:8px 0 12px;padding:8px 12px;border-left:2px solid var(--acc);background:#0e1118}
+.scene-meaning b{display:block;font-size:13px;color:var(--mut);margin-bottom:3px}
+
+.research-panel{margin-top:14px;border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+.research-panel summary{cursor:pointer;font-weight:700}
+.research-scenes{display:grid;gap:8px;max-height:16rem;overflow:auto}
+.research-scenes label.research-scene{align-items:flex-start;padding:6px 0}
+.research-scene small{display:block;color:var(--mut);margin-top:3px}

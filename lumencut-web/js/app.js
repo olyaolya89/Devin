@@ -6,6 +6,7 @@ import { limits } from './sources.js';
 import { transcribe } from './ai.js';
 import { mixAudio, decodeFile, to16kMono } from './audio.js';
 import { renderVideo } from './render.js';
+import { researchScenes } from './research.js';
 import { auditProduction, creditsFor, importProduction, LIVE_TARGET, PRODUCTION_FORMAT, publicUrl } from './production.js';
 
 const $ = s => document.querySelector(s);
@@ -52,7 +53,7 @@ function tab(name) {
 const K = { pexels: 'k_pexels', pixabay: 'k_pixabay', gemini: 'k_gemini', model: 'k_model' };
 function loadSettings() { const c = cfg(); for (const [k, id] of Object.entries(K)) if (c[k]) $('#' + id).value = c[k]; $('#k_wikimedia').checked = c.wikimedia !== false; for (const k of ['nasa', 'archive', 'loc']) $('#k_' + k).checked = c[k] !== false; $('#k_clip').checked = c.clip !== false; $('#k_video').checked = c.preferVideo !== false; keysInfo(); }
 function keysInfo() { const c = cfg(); $('#keysInfo').textContent = `Pexels: ${c.pexels ? '✓' : '—'} · Pixabay: ${c.pixabay ? '✓' : '—'} · Gemini: ${c.gemini ? '✓' : '—'} (ключи хранятся только в этом браузере)`; }
-$('#saveKeys').onclick = () => { const c = {}; for (const [k, id] of Object.entries(K)) c[k] = $('#' + id).value.trim(); c.wikimedia = $('#k_wikimedia').checked; for (const k of ['nasa', 'archive', 'loc']) c[k] = $('#k_' + k).checked; c.clip = $('#k_clip').checked; c.preferVideo = $('#k_video').checked; localStorage.setItem('lumencut.settings', JSON.stringify(c)); keysInfo(); };
+$('#saveKeys').onclick = () => { const c = { planMode: cfg().planMode }; for (const [k, id] of Object.entries(K)) c[k] = $('#' + id).value.trim(); c.wikimedia = $('#k_wikimedia').checked; for (const k of ['nasa', 'archive', 'loc']) c[k] = $('#k_' + k).checked; c.clip = $('#k_clip').checked; c.preferVideo = $('#k_video').checked; localStorage.setItem('lumencut.settings', JSON.stringify(c)); keysInfo(); };
 loadSettings();
 
 // style (from a reference video, a saved file, or a built-in preset)
@@ -101,7 +102,7 @@ const noEmb = (k, v) => (k === 'emb' ? undefined : v);
 const projectData = () => ({
   script: S.script, shots: S.shots, topic: S.topic, style: S.style,
   boardLook: S.boardLook, boardStyle: S.boardStyle, boardVoice: S.boardVoice,
-  boardVoiceFile: S.boardVoiceFile, importedPlan: S.importedPlan
+  boardVoiceFile: S.boardVoiceFile, importedPlan: S.importedPlan, boardPlanner: S.boardPlanner
 });
 const persist = () => {
   try { localStorage.setItem('lumencut.project', JSON.stringify(projectData(), noEmb)); }
@@ -143,7 +144,7 @@ function openProject(data, showBoard) {
   if (!data || typeof data !== 'object') throw new Error('Нужен JSON проекта или монтажного плана.');
   if (data.format === PRODUCTION_FORMAT) {
     const plan = importProduction(data);
-    Object.assign(S, plan, { boardStyle: 'discovery', boardLook: 'doc', boardVoice: null, boardVoiceFile: plan.voiceFile, importedPlan: true });
+    Object.assign(S, plan, { boardStyle: 'discovery', boardLook: 'doc', boardVoice: null, boardVoiceFile: plan.voiceFile, importedPlan: true, boardPlanner: null });
     applyStyle(STYLES.discovery);
   } else {
     if (typeof data.script !== 'string' || !Array.isArray(data.shots) ||
@@ -152,13 +153,14 @@ function openProject(data, showBoard) {
     }
     Object.assign(S, {
       script: data.script, shots: data.shots, topic: data.topic, boardLook: data.boardLook,
-      boardStyle: data.boardStyle, boardVoice: data.boardVoice, boardVoiceFile: data.boardVoiceFile, importedPlan: data.importedPlan
+      boardStyle: data.boardStyle, boardVoice: data.boardVoice, boardVoiceFile: data.boardVoiceFile, importedPlan: data.importedPlan, boardPlanner: data.boardPlanner
     });
     if (data.style?.look) applyStyle(data.style);
   }
   selectedSlots.clear();
   $('#script').value = data.draftScript ?? S.script;
   updatePlanEstimate();
+  updateResearch();
   drawBoard();
   if (showBoard) {
     persist();
@@ -176,22 +178,91 @@ $('#loadProj').onchange = async e => {
   finally { setWorking(false); e.target.value = ''; }
 };
 
-function updatePlanEstimate() {
-  const gemini = $('#planMode').value === 'gemini';
-  const count = Math.ceil(splitShots($('#script').value.trim()).length / 25);
-  $('#planEstimate').textContent = !gemini ? '' : !cfg().gemini ? 'Добавьте ключ Gemini в настройках.' :
-    `До ${count} ${count === 1 ? 'запроса' : 'запросов'} · результаты повторного запуска берутся из кэша вкладки`;
+function syncPlanMode() {
+  const settings = cfg();
+  $('#planMode').value = ['gemini', 'local'].includes(settings.planMode)
+    ? settings.planMode : settings.gemini ? 'gemini' : 'local';
+  updatePlanEstimate();
 }
-$('#script').addEventListener('input', updatePlanEstimate);
-$('#planMode').addEventListener('change', updatePlanEstimate);
-$('#saveKeys').addEventListener('click', updatePlanEstimate);
+
+function updatePlanEstimate() {
+  const gemini = $('#planMode').value === 'gemini', hasKey = !!cfg().gemini;
+  const count = Math.ceil(splitShots($('#script').value.trim()).length / 25);
+  let message = hasKey ? '' : 'Для смыслового плана Gemini добавьте ключ в настройках.';
+  if (gemini && hasKey) {
+    message = count
+      ? `До ${count} ${count === 1 ? 'запроса' : 'запросов'} после запуска подбора`
+      : 'Один запрос на группу до 25 сцен после запуска подбора.';
+  }
+  $('#planEstimate').textContent = message;
+}
+
+$('#script').addEventListener('input', () => {
+  updatePlanEstimate();
+  updateResearch();
+});
+$('#planMode').addEventListener('change', () => {
+  localStorage.setItem('lumencut.settings', JSON.stringify({ ...cfg(), planMode: $('#planMode').value }));
+  updatePlanEstimate();
+});
+$('#saveKeys').addEventListener('click', syncPlanMode);
+syncPlanMode();
+
+let researchScript, researchDraft = [], showAllScenes = false;
+const researchSelection = new Set();
+
+function updateResearch() {
+  const script = $('#script').value.trim();
+  if (script !== researchScript) {
+    researchScript = script;
+    researchDraft = researchScenes(script);
+    researchSelection.clear();
+    for (const scene of researchDraft) if (scene.reasons.length) researchSelection.add(scene.number);
+  }
+  const suggested = researchDraft.filter(scene => scene.reasons.length);
+  $('#researchSummary').textContent = suggested.length
+    ? `Подбор ключевых кадров с Codex · предложено ${suggested.length}`
+    : 'Подбор ключевых кадров с Codex';
+  $('#researchMore').hidden = suggested.length === researchDraft.length || !suggested.length;
+  $('#researchMore').textContent = showAllScenes ? 'Показать предложенные сцены' : 'Показать все сцены';
+  $('#researchDownload').disabled = !researchSelection.size;
+  if (!$('#researchPanel').open) return;
+
+  const visible = showAllScenes || !suggested.length ? researchDraft : researchDraft.filter(scene =>
+    scene.reasons.length || researchSelection.has(scene.number));
+  $('#researchScenes').innerHTML = visible.length ? visible.map(scene => `<label class="research-scene">
+    <input type="checkbox" data-research-scene="${scene.number}" ${researchSelection.has(scene.number) ? 'checked' : ''}>
+    <span><b>Сцена ${scene.number}</b> · ${esc(scene.narration)}
+      ${scene.reasons.length ? `<small>${esc([...scene.reasons, ...scene.subjects].join(' · '))}</small>` : ''}
+    </span></label>`).join('') : '<p class="muted">Вставьте текст сценария, чтобы выбрать сцены.</p>';
+}
+
+$('#researchPanel').addEventListener('toggle', updateResearch);
+$('#researchMore').onclick = () => { showAllScenes = !showAllScenes; updateResearch(); };
+$('#researchScenes').addEventListener('change', event => {
+  const number = Number(event.target.dataset.researchScene);
+  if (!number) return;
+  if (event.target.checked) researchSelection.add(number);
+  else researchSelection.delete(number);
+  $('#researchDownload').disabled = !researchSelection.size;
+});
+$('#researchDownload').onclick = () => {
+  const packet = {
+    format: 'lumencut.research', version: 1,
+    script: researchScript, style: S.style.name, maxCutSeconds: S.style.cut.max,
+    scenes: researchDraft.filter(scene => researchSelection.has(scene.number))
+  };
+  const blob = new Blob([JSON.stringify(packet, null, 2)], { type: 'application/json' });
+  download(blob, 'lumencut-codex-research.json');
+};
 
 async function makeStoryboard() {
   if (working) return false;
   setWorking(true);
   $('#log').textContent = '';
   try {
-    const c = plannerSettings(), script = $('#script').value.trim();
+    const c = plannerSettings(), script = $('#script').value.trim(), mode = $('#planMode').value;
+    if (mode === 'gemini' && !c.gemini) throw new Error('Добавьте ключ Gemini в настройках и нажмите «Сохранить».');
     let shots = splitShots(script);
     if (!shots.length) throw new Error('Вставьте текст сценария.');
     if (!c.pexels && !c.pixabay) log('Поиск идёт по открытым источникам. Ключи Pexels и Pixabay расширят выбор стоковых кадров.');
@@ -212,11 +283,15 @@ async function makeStoryboard() {
     if (st.cut.min) shots = mergeShort(shots, st.cut.min, st.cut.max + (c.production ? 0 : 1));
     prog('#progress', 0.25);
     let plan;
-    if ($('#planMode').value === 'gemini' && c.gemini) {
+    if (mode === 'gemini') {
       try { plan = await geminiPlan(c.gemini, c.model, shots, status, st); }
-      catch (error) { log(`Gemini: ${error.message}. Продолжаю локально.`); }
-    } else log('План строится локально. Запросов Gemini: 0.');
-    plan ||= heuristicPlan(shots, st);
+      catch (error) {
+        throw new Error(`Смысловой план не получен (${error.message}). Проверьте доступ к Gemini в настройках или выберите локальный план.`);
+      }
+    } else {
+      log('План строится локально. Запросов Gemini: 0.');
+      plan = heuristicPlan(shots, st);
+    }
     prog('#progress', 0.4);
     limits.onLimit = src => log(`Достигнут лимит ${src}. Продолжаю с доступными источниками.`);
     await gatherCandidates(plan.shots, c, 1920, status);
@@ -229,7 +304,7 @@ async function makeStoryboard() {
     log(missing ? `Нужны дополнительные материалы для сцен: ${missing}.` : 'Для каждой сцены найден кадр.');
     Object.assign(S, {
       script, shots: plan.shots, topic: plan.topic, boardStyle: st.id, boardLook: st.look,
-      boardVoice: S.voiceKey || null, boardVoiceFile: S.voiceName, importedPlan: false
+      boardVoice: S.voiceKey || null, boardVoiceFile: S.voiceName, importedPlan: false, boardPlanner: mode
     });
     selectedSlots.clear();
     persist();
@@ -244,7 +319,8 @@ async function makeStoryboard() {
 $('#go').onclick = async () => { if (await makeStoryboard()) tab('board'); };
 $('#auto').onclick = async () => {
   if (working) return;
-  const reuse = S.shots.length && !staleReason();
+  const needsSemanticPlan = $('#planMode').value === 'gemini' && !S.importedPlan && S.boardPlanner !== 'gemini';
+  const reuse = S.shots.length && !staleReason() && !needsSemanticPlan;
   if (!reuse && !(await makeStoryboard())) return;
   if (isProduction()) {
     const audit = productionAudit();
@@ -344,6 +420,7 @@ function drawBoard() {
     </div><div>
       <div class="t">Сцена ${i + 1} · ${fmt(s.start)}–${fmt(s.end)}</div><div class="txt">${esc(s.text)}</div>
       ${issues ? `<ul class="issues">${issues.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}
+      ${s.meaning && s.meaning !== s.text ? `<p class="scene-meaning"><b>Смысл реплики</b><span>${esc(s.meaning)}</span></p>` : ''}
       <div class="f">
         <label class="wide">Что показать<input data-k="visual" value="${visual}"></label>
         <label class="wide">Поисковые запросы через |<input data-k="queries" value="${esc((s.queries || []).join(' | '))}"></label>
@@ -551,6 +628,7 @@ $('#full').onclick = () => doRender(Infinity);
 $('#toRender').onclick = () => tab('render');
 
 applyStyle(S.style, false);
+updateResearch();
 if (saved) {
   try { openProject(saved, false); }
   catch (error) { log(`Не удалось открыть сохранённый проект: ${error.message}`); }
