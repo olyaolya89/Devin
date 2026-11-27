@@ -42,7 +42,11 @@ const prog = (el, p) => { $(el + ' i').style.width = `${Math.round(p * 100)}%`; 
 let lastMsg = ''; const status = m => { const pct = m.match(/(\d+)%$/); if (pct && +pct[1] % 25 !== 0) return; if (m !== lastMsg) { lastMsg = m; log(m); } };
 
 document.querySelectorAll('nav button').forEach(b => b.onclick = () => tab(b.dataset.tab));
-function tab(name) { document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.tab === name)); document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.id === 'tab-' + name)); }
+function tab(name) {
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.id === 'tab-' + name));
+  if (name !== 'board') document.querySelectorAll('#board video').forEach(video => video.pause());
+}
 
 // settings
 const K = { pexels: 'k_pexels', pixabay: 'k_pixabay', gemini: 'k_gemini', model: 'k_model' };

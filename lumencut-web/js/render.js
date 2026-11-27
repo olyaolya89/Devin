@@ -204,7 +204,7 @@ export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, 
         if (strict && avail + 2 / fps < want * maxSlowdown) throw invalid('видео слишком короткое для выбранного фрагмента');
         const rate = Math.max(maxSlowdown, Math.min(1, avail / want));
         m.v.playbackRate = rate;
-        await new Promise((resolve, reject) => {
+        const played = await new Promise((resolve, reject) => {
           let done = false, timer, callback;
           const base = m.v.currentTime, start = f;
           const finish = error => {
@@ -214,12 +214,12 @@ export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, 
             m.v.cancelVideoFrameCallback(callback);
             m.v.onended = m.v.onerror = null;
             m.v.pause();
-            if (strict && (error || end - f > 2)) {
-              reject(invalid('видео остановилось во время чтения'));
-              return;
-            }
-            while (f < end) emit(cut, m, ci);
-            resolve();
+            if (error instanceof Error) return reject(error);
+            if (strict && (error || end - f > 2)) return resolve(false);
+            try {
+              while (f < end) emit(cut, m, ci);
+              resolve(true);
+            } catch (error) { reject(error); }
           };
           const step = (_now, meta) => {
             if (done) return;
@@ -237,6 +237,20 @@ export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, 
           callback = m.v.requestVideoFrameCallback(step);
           m.v.play().catch(() => finish(true));
         });
+        if (!played) {
+          // A stalled playback callback can happen even with a fully decoded
+          // local file. Read the remaining source frames at their exact times.
+          onProgress?.(f / nFrames, `Сцена ${cut.scene}: считываю оставшиеся кадры…`);
+          const seekEnd = Number.isFinite(m.v.duration) ? Math.max(inPoint, m.v.duration - 1 / fps) : Infinity;
+          for (; f < end && !err;) {
+            const time = Math.min(seekEnd, inPoint + (f / fps - cut.t0) * rate);
+            if (m.v.error || !(await seek(m.v, Math.max(inPoint, time)))) {
+              throw invalid('браузер перестал читать исходник');
+            }
+            emit(cut, m, ci);
+            if (venc.encodeQueueSize > 20) await new Promise(r => setTimeout(r, 15));
+          }
+        }
       } else while (f < end && !err) { emit(cut, m, ci); if (venc.encodeQueueSize > 20) await new Promise(r => setTimeout(r, 15)); else if (f % 15 === 0) await new Promise(r => setTimeout(r, 0)); }
       if (m.v) releaseVideo(m.v);
       mediaOnScreen = null;
