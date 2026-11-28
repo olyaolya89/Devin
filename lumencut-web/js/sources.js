@@ -105,19 +105,19 @@ export async function loc(q) {
 // Same query from different scenes is answered once (also saves the Pexels/Pixabay hourly limits).
 const cache = new Map();
 export function searchAll(settings, q, W, qr = 0) {
-  const key = [W, qr, settings.pexels, settings.pixabay, settings.wikimedia, settings.nasa, settings.archive, settings.loc, settings.production, q.toLowerCase().trim()].join('|');
+  const key = [W, qr, settings.pexels, settings.pixabay, settings.wikimedia, settings.nasa, settings.archive, settings.loc, settings.production, settings.exactSubject, q.toLowerCase().trim()].join('|');
   if (!cache.has(key)) cache.set(key, searchFresh(settings, q, W, qr).catch(e => { cache.delete(key); throw e; }));
   return cache.get(key);
 }
 async function searchFresh(settings, q, W, qr) {
-  const tasks = [pexels(settings.pexels, q, W, qr === 0), pixabay(settings.pixabay, q, W)];
+  const tasks = settings.exactSubject ? [] : [pexels(settings.pexels, q, W, qr === 0), pixabay(settings.pixabay, q, W)];
   if (settings.wikimedia !== false) {
     if (settings.production) tasks.push(wikimedia(q, 'video'), wikimedia(q, 'bitmap'));
     else tasks.push(wikimedia(q));
   }
   if (settings.nasa !== false && qr < 2) tasks.push(nasa(q));
-  if (!settings.production && settings.archive !== false && qr === 0) tasks.push(archive(q));
-  if (!settings.production && settings.loc !== false && qr === 0) tasks.push(loc(q));
+  if ((!settings.production || settings.exactSubject) && settings.archive !== false && qr === 0) tasks.push(archive(q));
+  if ((!settings.production || settings.exactSubject) && settings.loc !== false && qr === 0) tasks.push(loc(q));
   const res = await Promise.allSettled(tasks);
   const media = res.flatMap(r => r.status === 'fulfilled' ? r.value : []);
   return media;

@@ -1,6 +1,7 @@
 // Browser renderer: canvas motion graphics + WebCodecs H.264/AAC → MP4 (no server, no ffmpeg).
 import { Muxer, ArrayBufferTarget, FileSystemWritableFileStreamTarget } from '../vendor/mp4-muxer.mjs';
 import { buildOverlays, drawDoc, drawFramed, FONTS } from './gfx.js';
+import { MEDIA_CONTEXTS, mediaContext } from './production.js';
 
 const YEL = '#FFD400';
 const easeBack = x => { const c = 1.9; x = Math.min(1, Math.max(0, x)); return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
@@ -130,13 +131,33 @@ function drawSubs(ctx, s, t, W, H, look = 'karaoke') {
 function vignette(ctx, W, H) { const g = ctx.createRadialGradient(W / 2, H / 2, H * 0.45, W / 2, H / 2, H * 0.95); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.45)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
 
 const ARCHIVE = new Set(['Wikimedia', 'Library of Congress', 'Internet Archive']);
+const EN_CAPTIONS = { stock: 'ILLUSTRATIVE FOOTAGE', archive: 'ARCHIVE', reconstruction: 'RECONSTRUCTION', graphic: 'DIAGRAM' };
 const pseudo = i => ((i * 2654435761) >>> 0) % 1000 / 1000;
+
+function drawMediaCaption(ctx, label, W, H) {
+  if (!label) return;
+  const unit = W / 1920, x = 58 * unit, y = H * 0.095, pad = 14 * unit;
+  ctx.save();
+  ctx.font = `700 ${29 * unit}px Inter, Arial, sans-serif`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(12,18,25,0.9)';
+  rrect(ctx, x, y - 23 * unit, ctx.measureText(label).width + pad * 2, 46 * unit, 4 * unit);
+  ctx.fillStyle = '#db9c63';
+  ctx.fillRect(x, y - 23 * unit, 3 * unit, 46 * unit);
+  ctx.fillStyle = '#f6f7f8';
+  ctx.fillText(label, x + pad, y);
+  ctx.restore();
+}
 
 // style: profile from styles.js (look, grade, dissolve share, framed archive photos). subtitles: false or a look name.
 export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, canvas, subtitles = 'karaoke', style = { look: 'classic' }, limit = Infinity, fileHandle, strict = false, onProgress }) {
   await Promise.all(['700 80px Oswald', '800 40px Inter', ...FONTS].map(f => document.fonts.load(f).catch(() => {})));
   if (subtitles === true) subtitles = 'karaoke';
   const doc = style.look === 'doc', gr = style.grade || {};
+  const production = style.id === 'discovery';
+  const spoken = shots.map(s => s.text).join(' ');
+  const russian = (spoken.match(/[а-яё]/gi) || []).length > (spoken.match(/[a-z]/gi) || []).length;
   const grade = `contrast(${gr.contrast ?? 1.07}) saturate(${gr.sat ?? 1.06}) brightness(${gr.bright ?? 1})${gr.warm ? ` sepia(${gr.warm})` : ''}`;
   const overlays = doc ? await buildOverlays(shots, W, H) : [];
   const total = Math.min(audio.duration, limit), nFrames = Math.ceil(total * fps);
@@ -160,6 +181,14 @@ export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, 
 
     const cuts = []; shots.forEach((s, i) => (s.cuts?.length ? s.cuts : [{ media: null, t0: s.start, t1: s.end, from: 0 }]).forEach((c, k) => cuts.push({ ...c, shot: s, scene: i + 1, first: k === 0,
       trans: doc ? (pseudo(cuts.length + 1) < (style.dissolve ?? 0.6) ? 'dissolve' : 'cut') : k === 0 && s.overlay?.type === 'chapter' ? 'fade' : k === 0 && ['whoosh', 'swish'].includes(s.sfx) ? 'whip' : 'cut' })));
+    if (production) for (const [i, cut] of cuts.entries()) {
+      const context = mediaContext(cut.media);
+      const labels = russian ? MEDIA_CONTEXTS : EN_CAPTIONS;
+      const label = context && context !== 'exact' ? (context === 'stock' && cut.media?.kind === 'image' && !russian
+        ? 'ILLUSTRATIVE IMAGE' : labels[context].toUpperCase()) : '';
+      cut.caption = [label, cut.media?.caption].filter(Boolean).join('  ·  ');
+      if (cut.caption !== cuts[i - 1]?.caption && i > 0) cut.trans = 'cut';
+    }
     let f = 0, started = performance.now();
     const emit = (cut, m, ci) => {
       const t = f / fps, p = (t - cut.t0) / Math.max(0.1, cut.t1 - cut.t0), dir = ci % 4;
@@ -167,16 +196,17 @@ export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, 
       const isV = !!m.v, sc = isV ? 1.03 + 0.04 * p : 1.08 + 0.1 * p, px = isV ? 0 : [-.6, .6, 0, 0][dir] * (p - .5), py = isV ? 0 : [0, 0, -.6, .6][dir] * (p - .5);
       const lt = t - cut.t0;
       if (cut.trans === 'whip' && lt < 0.3 && f > 0) { const e = easeOut(lt / 0.3); ctx.save(); ctx.translate(W * (1 - e), 0); cover(ctx, m.v || m.img, m.w, m.h, W, H, sc, px, py); ctx.restore(); ctx.filter = 'blur(6px)'; ctx.drawImage(snap, -W * e, 0); }
-      else if (cut.framed) drawFramed(ctx, m, W, H, p);
+      else if (cut.framed) drawFramed(ctx, m, W, H, p, production);
       else cover(ctx, m.v || m.img, m.w, m.h, W, H, sc, px, py);
       ctx.filter = 'none'; vignette(ctx, W, H);
       // cross-dissolve: the last picture of the previous cut fades out over the new one, still drifting slowly
       if (cut.trans === 'dissolve' && lt < 0.7 && f > 0) { const e = easeOut(lt / 0.7), z = 1 + 0.015 * lt; ctx.save(); ctx.globalAlpha = 1 - e; ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(snap, -W / 2, -H / 2); ctx.restore(); }
       if (cut.trans === 'fade' && lt < 0.45) { ctx.fillStyle = `rgba(0,0,0,${1 - lt / 0.45})`; ctx.fillRect(0, 0, W, H); }
       if (f === cut.endF - 1) sctx.drawImage(canvas, 0, 0); // picture without graphics, for the next transition
-      if (doc) { for (const ov of overlays) if (t >= ov.t0 && t <= ov.t1) drawDoc(ctx, ov, t, W, H); }
+      if (doc) { for (const ov of overlays) if (t >= ov.t0 && t <= ov.t1) drawDoc(ctx, ov, t, W, H, production); }
       else drawOverlay(ctx, cut.shot, t, W, H);
       if (subtitles && subtitles !== 'none') drawSubs(ctx, cut.shot, t, W, H, subtitles);
+      if (cut.caption) drawMediaCaption(ctx, cut.caption, W, H);
       const vf = new VideoFrame(canvas, { timestamp: Math.round(f * 1e6 / fps), duration: Math.round(1e6 / fps) });
       try { venc.encode(vf, { keyFrame: f % (fps * 2) === 0 }); }
       finally { vf.close(); }
@@ -192,7 +222,8 @@ export async function renderVideo({ shots, audio, W = 1920, H = 1080, fps = 30, 
       const invalid = reason => new Error(`Сцена ${cut.scene}: ${reason}. Замените кадр в раскадровке.`);
       if (strict && !m.v && !m.img) throw invalid('исходник не открылся');
       if (strict && (m.w < 640 || m.h < 360)) throw invalid('разрешение исходника ниже 640×360');
-      cut.endF = end; cut.framed = doc && style.framePhotos !== false && !m.v && m.img && ARCHIVE.has(cut.media?.source);
+      cut.endF = end; cut.framed = doc && style.framePhotos !== false && !m.v && m.img &&
+        (production ? mediaContext(cut.media) === 'archive' : ARCHIVE.has(cut.media?.source));
       if (m.v && f < end) {
         const inPoint = cut.from || 0;
         if (strict && inPoint >= m.v.duration) throw invalid('точка входа за пределами видео');

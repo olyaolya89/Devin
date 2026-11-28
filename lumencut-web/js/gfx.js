@@ -143,13 +143,14 @@ function title(ctx, ov, t, W, H, u) {
   shadow(ctx, u, 36, 0.6, 4); ctx.fillStyle = '#fff'; ctx.fillText(txt, W / 2 + sp / 2, H * 0.5);
 }
 
-function lowerthird(ctx, ov, t, W, H, u) {
+function lowerthird(ctx, ov, t, W, H, u, production) {
   const { o } = ov, lt = t - ov.t0, ttl = String(o.text || '').toUpperCase(), sub = String(o.sub || '').toUpperCase();
   setFont(ctx, 800, 40 * u, MONT, 0.5 * u); const tw = ctx.measureText(ttl).width;
   setFont(ctx, 600, 17 * u, MONT, 2 * u); const sw = sub ? ctx.measureText(sub).width : 0;
   const pad = 30 * u, bw = Math.max(tw, sw) + pad * 2 + 6 * u, bh = sub ? 106 * u : 76 * u, y = H * 0.72;
+  if (production) ctx.translate(W * 0.03, 0);
   const g = Math.min(easeOut(lt / 0.45), easeOut((ov.t1 - t) / 0.4));
-  ctx.fillStyle = 'rgba(6,6,6,0.9)'; ctx.fillRect(0, y, bw * g, bh); ctx.fillStyle = '#f2c230'; ctx.fillRect(0, y, 6 * u, bh * Math.min(1, g * 1.6));
+  ctx.fillStyle = 'rgba(6,6,6,0.9)'; ctx.fillRect(0, y, bw * g, bh); ctx.fillStyle = production ? '#db9c63' : '#f2c230'; ctx.fillRect(0, y, 6 * u, bh * Math.min(1, g * 1.6));
   ctx.beginPath(); ctx.rect(0, y, bw * g, bh); ctx.clip();
   ctx.globalAlpha = Math.min(easeOut((lt - 0.25) / 0.4), easeOut((ov.t1 - t) / 0.3));
   setFont(ctx, 800, 40 * u, MONT, 0.5 * u); ctx.fillStyle = '#fff'; ctx.fillText(ttl, 6 * u + pad, y + (sub ? 50 : 52) * u);
@@ -293,14 +294,26 @@ function statement(ctx, ov, t, W, H, u) {
 
 const DRAW = { counter, stat, year, title, lowerthird, infocard, panel, checklist, chart, map, name, statement };
 export const FULLSCREEN = new Set(['chart', 'map', 'statement']);
-export function drawDoc(ctx, ov, t, W, H) {
+export function drawDoc(ctx, ov, t, W, H, production = false) {
   const f = DRAW[ov.o.type]; if (!f || t < ov.t0 || t > ov.t1) return;
   ctx.save(); ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-  try { f(ctx, ov, t, W, H, W / 1920); } catch (e) { console.warn('graphic', ov.o.type, e); } finally { ctx.restore(); }
+  try { f(ctx, ov, t, W, H, W / 1920, production); } catch (e) { console.warn('graphic', ov.o.type, e); } finally { ctx.restore(); }
 }
 
 // Archival still (Wikimedia, Library of Congress, Internet Archive) as in the reference: a soft-edged photo floating on navy.
-export function drawFramed(ctx, m, W, H, p) {
+export function drawFramed(ctx, m, W, H, p, production = false) {
+  if (production) {
+    ctx.fillStyle = '#101923';
+    ctx.fillRect(0, 0, W, H);
+    const fit = Math.min(W * 0.85 / m.w, H * 0.76 / m.h) * (1 + 0.035 * easeOut(p));
+    const w = m.w * fit, h = m.h * fit, x = (W - w) / 2, y = (H - h) / 2 + H * 0.025;
+    ctx.fillStyle = '#72808c';
+    ctx.fillRect(x - 2, y - 2, w + 4, h + 4);
+    ctx.drawImage(m.img, x, y, w, h);
+    ctx.fillStyle = '#db9c63';
+    ctx.fillRect(x - 2, y - 2, W * 0.038, 4);
+    return;
+  }
   const bg = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.7); bg.addColorStop(0, '#1a2535'); bg.addColorStop(1, '#070b12'); ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
   if (!m.img || !m.w) return;
   if (!m.framed || m.framed.width !== Math.round(W * 0.66)) {
