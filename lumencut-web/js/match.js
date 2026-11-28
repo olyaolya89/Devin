@@ -12,7 +12,8 @@ export async function gatherCandidates(shots, settings, W, onProgress) {
   const worker = async () => {
     while (cursor < shots.length) {
       const s = shots[cursor++];
-      const lists = await Promise.all((settings.production && !settings.wideSearch ? s.queries.slice(0, 1) : s.queries.slice(0, 3)).map((q, qr) => searchAll(settings, q, W, qr).then(r => r.map(c => ({ ...c, qr }))).catch(() => [])));
+      const querySettings = settings.production && s.subject ? { ...settings, exactSubject: true } : settings;
+      const lists = await Promise.all((settings.production && !settings.wideSearch ? s.queries.slice(0, 1) : s.queries.slice(0, 3)).map((q, qr) => searchAll(querySettings, q, W, qr).then(r => r.map(c => ({ ...c, qr }))).catch(() => [])));
       const m = new Map(); for (const c of lists.flat()) if (!m.has(c.id) || m.get(c.id).qr > c.qr) m.set(c.id, c);
       s.candidates = [...m.values()];
       onProgress?.(`Поиск кадров: ${++done}/${shots.length}`);
@@ -67,7 +68,7 @@ export async function pickMedia(shots, settings, onProgress, preUsed = [], preEm
     };
     s.picks = [];
     // Second, relaxed pass only fills long scenes, so a single clip is not stretched far past 5 s.
-    for (const strict of [true, false]) for (const c of pool) {
+    if (!settings.production || !s.subject) for (const strict of [true, false]) for (const c of pool) {
       if (s.picks.length >= need) break;
       if (s.picks.includes(c) || !ok(c, strict)) continue;
       s.picks.push(c); usedIds.add(c.id); usedIds.add(c.url); if (c.emb) usedEmb.push({ v: c.emb });
@@ -79,7 +80,7 @@ export async function pickMedia(shots, settings, onProgress, preUsed = [], preEm
 
 // Scenes that got fewer clips than they need: search wider (the visual description, the meaning, the story topic) and pick again.
 export async function refillShort(all, settings, topic, onProgress) {
-  const short = all.filter(s => (s.picks?.length || 0) < cutsNeeded(s));
+  const short = all.filter(s => (!settings.production || !s.subject) && (s.picks?.length || 0) < cutsNeeded(s));
   if (!short.length) return 0;
   const words = t => String(t || '').split(/\s+/).filter(w => w.length > 2).slice(0, 5).join(' ');
   for (const s of short) {

@@ -7,7 +7,7 @@ import { transcribe } from './ai.js';
 import { mixAudio, decodeFile, to16kMono } from './audio.js';
 import { renderVideo } from './render.js';
 import { researchScenes } from './research.js';
-import { auditProduction, creditsFor, importProduction, LIVE_TARGET, PRODUCTION_FORMAT, publicUrl } from './production.js';
+import { auditProduction, creditsFor, importProduction, LIVE_TARGET, MEDIA_CONTEXTS, mediaContext, PRODUCTION_FORMAT, publicUrl, reviewPacket } from './production.js';
 
 const $ = s => document.querySelector(s);
 const S = { script: '', shots: [], topic: '', voice: null, voiceName: '', style: loadStyle(), musicTrack: null };
@@ -102,7 +102,7 @@ const noEmb = (k, v) => (k === 'emb' ? undefined : v);
 const projectData = () => ({
   script: S.script, shots: S.shots, topic: S.topic, style: S.style,
   boardLook: S.boardLook, boardStyle: S.boardStyle, boardVoice: S.boardVoice,
-  boardVoiceFile: S.boardVoiceFile, importedPlan: S.importedPlan, boardPlanner: S.boardPlanner
+  boardVoiceFile: S.boardVoiceFile, importedPlan: S.importedPlan, boardPlanner: S.boardPlanner, boardTiming: S.boardTiming
 });
 const persist = () => {
   try { localStorage.setItem('lumencut.project', JSON.stringify(projectData(), noEmb)); }
@@ -144,7 +144,7 @@ function openProject(data, showBoard) {
   if (!data || typeof data !== 'object') throw new Error('Нужен JSON проекта или монтажного плана.');
   if (data.format === PRODUCTION_FORMAT) {
     const plan = importProduction(data);
-    Object.assign(S, plan, { boardStyle: 'discovery', boardLook: 'doc', boardVoice: null, boardVoiceFile: plan.voiceFile, importedPlan: true, boardPlanner: null });
+    Object.assign(S, plan, { boardStyle: 'discovery', boardLook: 'doc', boardVoice: null, boardVoiceFile: plan.voiceFile, importedPlan: true, boardPlanner: null, boardTiming: 'imported' });
     applyStyle(STYLES.discovery);
   } else {
     if (typeof data.script !== 'string' || !Array.isArray(data.shots) ||
@@ -153,7 +153,7 @@ function openProject(data, showBoard) {
     }
     Object.assign(S, {
       script: data.script, shots: data.shots, topic: data.topic, boardLook: data.boardLook,
-      boardStyle: data.boardStyle, boardVoice: data.boardVoice, boardVoiceFile: data.boardVoiceFile, importedPlan: data.importedPlan, boardPlanner: data.boardPlanner
+      boardStyle: data.boardStyle, boardVoice: data.boardVoice, boardVoiceFile: data.boardVoiceFile, importedPlan: data.importedPlan, boardPlanner: data.boardPlanner, boardTiming: data.boardTiming
     });
     if (data.style?.look) applyStyle(data.style);
   }
@@ -180,15 +180,17 @@ $('#loadProj').onchange = async e => {
 
 function syncPlanMode() {
   const settings = cfg();
-  $('#planMode').value = ['gemini', 'local'].includes(settings.planMode)
-    ? settings.planMode : settings.gemini ? 'gemini' : 'local';
+  $('#planMode').value = settings.planMode === 'codex' ? 'codex' : 'local';
   updatePlanEstimate();
 }
 
 function updatePlanEstimate() {
   const gemini = $('#planMode').value === 'gemini', hasKey = !!cfg().gemini;
   const count = Math.ceil(splitShots($('#script').value.trim()).length / 25);
-  let message = hasKey ? '' : 'Для смыслового плана Gemini добавьте ключ в настройках.';
+  let message = $('#planMode').value === 'codex'
+    ? 'Склейки по озвучке и задание для Codex. Запросов Gemini: 0.'
+    : 'Локальный подбор. Запросов Gemini: 0.';
+  if (gemini && !hasKey) message = 'Для смыслового плана Gemini добавьте ключ в настройках.';
   if (gemini && hasKey) {
     message = count
       ? `До ${count} ${count === 1 ? 'запроса' : 'запросов'} после запуска подбора`
@@ -202,7 +204,7 @@ $('#script').addEventListener('input', () => {
   updateResearch();
 });
 $('#planMode').addEventListener('change', () => {
-  localStorage.setItem('lumencut.settings', JSON.stringify({ ...cfg(), planMode: $('#planMode').value }));
+  localStorage.setItem('lumencut.settings', JSON.stringify({ ...cfg(), planMode: $('#planMode').value === 'codex' ? 'codex' : 'local' }));
   updatePlanEstimate();
 });
 $('#saveKeys').addEventListener('click', syncPlanMode);
@@ -265,13 +267,16 @@ async function makeStoryboard() {
     if (mode === 'gemini' && !c.gemini) throw new Error('Добавьте ключ Gemini в настройках и нажмите «Сохранить».');
     let shots = splitShots(script);
     if (!shots.length) throw new Error('Вставьте текст сценария.');
-    if (!c.pexels && !c.pixabay) log('Поиск идёт по открытым источникам. Ключи Pexels и Pixabay расширят выбор стоковых кадров.');
+    if (mode !== 'codex' && !c.pexels && !c.pixabay) log('Поиск идёт по открытым источникам. Ключи Pexels и Pixabay расширят выбор стоковых кадров.');
     log(`Сцен до синхронизации: ${shots.length}`);
     prog('#progress', 0.05);
+    let timing = 'estimated';
     if (S.voice) {
       try {
         const words = await transcribe(await to16kMono(S.voice), status);
+        if (!words.length) throw new Error('слова не распознаны');
         shots = alignTiming(shots, words, S.voice.duration);
+        timing = 'whisper';
         log(`Тайминг по голосу: ${words.length} слов распознано`);
       } catch (error) {
         log(`Whisper: ${error.message}. Время оценено по словам, проверьте склейки на черновике.`);
@@ -293,18 +298,21 @@ async function makeStoryboard() {
       plan = heuristicPlan(shots, st);
     }
     prog('#progress', 0.4);
-    limits.onLimit = src => log(`Достигнут лимит ${src}. Продолжаю с доступными источниками.`);
-    await gatherCandidates(plan.shots, c, 1920, status);
-    prog('#progress', 0.7);
-    await pickMedia(plan.shots, c, status);
-    prog('#progress', 0.9);
-    await refillShort(plan.shots, c, plan.topic, status);
+    if (mode !== 'codex') {
+      limits.onLimit = src => log(`Достигнут лимит ${src}. Продолжаю с доступными источниками.`);
+      await gatherCandidates(plan.shots, c, 1920, status);
+      prog('#progress', 0.7);
+      await pickMedia(plan.shots, c, status);
+      prog('#progress', 0.9);
+      await refillShort(plan.shots, c, plan.topic, status);
+    }
     prog('#progress', 1);
-    const missing = plan.shots.filter(s => s.picks.length < cutsNeeded(s)).length;
-    log(missing ? `Нужны дополнительные материалы для сцен: ${missing}.` : 'Для каждой сцены найден кадр.');
+    const missing = plan.shots.filter(s => (s.picks?.length || 0) < cutsNeeded(s)).length;
+    log(mode === 'codex' ? 'Тайминг готов. Скачайте задание в раскадровке.' :
+      missing ? `Нужны дополнительные материалы для сцен: ${missing}.` : 'Для каждой сцены найден кадр.');
     Object.assign(S, {
       script, shots: plan.shots, topic: plan.topic, boardStyle: st.id, boardLook: st.look,
-      boardVoice: S.voiceKey || null, boardVoiceFile: S.voiceName, importedPlan: false, boardPlanner: mode
+      boardVoice: S.voiceKey || null, boardVoiceFile: S.voiceName, importedPlan: false, boardPlanner: mode, boardTiming: timing
     });
     selectedSlots.clear();
     persist();
@@ -322,6 +330,7 @@ $('#auto').onclick = async () => {
   const needsSemanticPlan = $('#planMode').value === 'gemini' && !S.importedPlan && S.boardPlanner !== 'gemini';
   const reuse = S.shots.length && !staleReason() && !needsSemanticPlan;
   if (!reuse && !(await makeStoryboard())) return;
+  if (S.boardPlanner === 'codex' && !reuse) { tab('board'); return; }
   if (isProduction()) {
     const audit = productionAudit();
     if (audit.issues.size || audit.global.length || !reuse) {
@@ -371,6 +380,12 @@ function setSub(o, v) {
 }
 function slotFor(i) { return selectedSlots.get(i) ?? 0; }
 function productionAudit() { return auditProduction(S.shots, { files, voice: S.voice, maxCut: S.style.cut.max }); }
+$('#reviewDownload').onclick = () => {
+  const packet = reviewPacket({
+    shots: S.shots, topic: S.topic, voiceFile: S.boardVoiceFile || S.voiceName, timing: S.boardTiming || 'unknown'
+  }, productionAudit());
+  download(new Blob([JSON.stringify(packet, null, 2)], { type: 'application/json' }), 'lumencut-review.json');
+};
 function localAssets() {
   return new Map(S.shots.flatMap(s => (s.picks || []).filter(p => p.file).map(p => [p.file, p])));
 }
@@ -381,11 +396,14 @@ function drawBoard() {
   const audit = isProduction() && S.shots.length ? productionAudit() : null;
   $('#boardInfo').textContent = S.shots.length ? `${S.shots.length} сцен · ${fmt(S.shots.at(-1).end)}${S.topic ? ' · ' + S.topic : ''}` : 'Раскадровки ещё нет';
   $('#productionStatus').innerHTML = audit ? [
-    `<p>Реальная съёмка: <b>${prettyPercent(audit.liveShare)}</b> таймлайна.${audit.liveShare < LIVE_TARGET ? ' Для документального ритма ориентир — от 50%.' : ''}</p>`,
-    audit.issues.size ? `<p class="issue">Нужно проверить сцен: ${audit.issues.size}.</p>` : '',
+    `<p>Реальная съёмка: <b>${prettyPercent(audit.liveShare)}</b> таймлайна. Ориентир — ${prettyPercent(LIVE_TARGET)}–65%.</p>`,
+    audit.liveShare < LIVE_TARGET && S.shots.at(-1).end >= 60 ? '<p class="issue">Мало движущихся кадров. Для современного материала ищите съёмку самого места, действия или результата.</p>' : '',
+    `<p>Готово сцен: <b>${audit.reviewed} из ${S.shots.length}</b>.</p>`,
+    S.boardTiming === 'estimated' ? '<p class="issue">Тайминг приблизительный. Сверьте склейки с озвучкой.</p>' : '',
     ...audit.global.map(m => `<p class="issue">${esc(m)}</p>`),
     !audit.issues.size && !audit.global.length ? '<p>Монтажный план готов к экспорту. Исходники будут проверены при чтении.</p>' : ''
   ].join('') : '';
+  $('#reviewDownload').hidden = !S.shots.length || (!isProduction() && S.boardPlanner !== 'codex');
   $('#toRender').hidden = !S.shots.length;
   const needed = localAssets(), missing = [...needed.keys()].filter(name => !files.has(name));
   $('#mediaBundleLabel').hidden = !needed.size;
@@ -404,6 +422,11 @@ function drawBoard() {
       return `<div class="asset-slot${j === active ? ' active' : ''}">${visual}
         <button data-act="slot" data-slot="${j}" aria-pressed="${j === active}">Кадр ${j + 1}${cut ? ' · ' + fmt(cut.t0) + '–' + fmt(cut.t1) : ''}</button>
         <div class="muted">${esc([p.source, p.author, p.license].filter(Boolean).join(' · '))}</div>
+        ${isProduction() ? `<label>Что показывает кадр<select data-k="context" data-slot="${j}">
+          <option value="">Укажите тип</option>${Object.entries(MEDIA_CONTEXTS).map(([key, label]) =>
+            `<option value="${key}" ${mediaContext(p) === key ? 'selected' : ''}>${label}</option>`).join('')}
+        </select></label>` : ''}
+        ${isProduction() ? `<label>Уточнение в кадре<input data-k="caption" data-slot="${j}" maxlength="72" value="${esc(p.caption)}" placeholder="Место, дата или материал"></label>` : ''}
         ${page ? `<a href="${esc(page)}" target="_blank" rel="noopener noreferrer">Первоисточник</a>` : ''}
         ${isProduction() && p.kind === 'video' ? `<label>Начало фрагмента, с<input type="number" min="0" step="0.1" data-k="inpoint" data-slot="${j}" value="${Number(cut?.from) || 0}"></label>` : ''}
       </div>`;
@@ -425,7 +448,7 @@ function drawBoard() {
         <label class="wide">Что показать<input data-k="visual" value="${visual}"></label>
         <label class="wide">Поисковые запросы через |<input data-k="queries" value="${esc((s.queries || []).join(' | '))}"></label>
         ${isProduction() ? `<label class="wide">Точный человек, место или событие для этой сцены<input data-k="subject" value="${esc(s.subject)}"></label>
-          ${s.subject && s.picks?.length ? `<label class="wide"><input data-k="reviewed" type="checkbox" ${s.reviewed ? 'checked' : ''}> Кадры соответствуют объекту и времени в сценарии</label>` : ''}` : ''}
+          ${s.picks?.length ? `<label class="wide"><input data-k="reviewed" type="checkbox" ${s.reviewed ? 'checked' : ''}> Кадры и графика соответствуют озвучке, источники и права проверены</label>` : ''}` : ''}
         <label>Графика<select data-k="otype">${opt(doc ? DOC_OVERLAYS : OVERLAYS, type)}</select></label>
         <label>Текст графики<input data-k="otext" value="${esc(doc && ['counter', 'stat'].includes(type) ? s.overlay?.value ?? s.overlay?.text : s.overlay?.text)}"></label>
         ${doc ? `<label class="wide">Подпись или пункты через |<input data-k="osub" value="${esc(subOf(s.overlay))}"></label>` : ''}
@@ -444,17 +467,26 @@ $('#board').addEventListener('change', e => {
   const card = e.target.closest('.shot');
   if (!card || working) return;
   const i = +card.dataset.i, s = S.shots[i], k = e.target.dataset.k, v = e.target.value;
-  if (k === 'visual') s.visual = v;
+  if (k === 'visual') { s.visual = v; s.reviewed = false; }
   if (k === 'queries') s.queries = v.split('|').map(x => x.trim()).filter(Boolean);
   if (k === 'sfx') s.sfx = v;
   if (k === 'mood') s.mood = v;
   if (k === 'subject') { s.subject = v.trim(); s.reviewed = false; }
   if (k === 'reviewed') s.reviewed = e.target.checked;
+  if (['context', 'caption'].includes(k) && s.cuts?.[e.target.dataset.slot]) {
+    const slot = +e.target.dataset.slot;
+    const media = { ...s.cuts[slot].media, [k]: v.trim() };
+    if (k === 'context') delete media.footage;
+    s.cuts[slot].media = media;
+    s.picks[slot] = media;
+    s.reviewed = false;
+  }
   if (k === 'inpoint' && s.cuts?.[e.target.dataset.slot]) {
     s.cuts[e.target.dataset.slot].from = Math.max(0, Number(v) || 0);
     s.reviewed = false;
   }
   if (k === 'otype' || k === 'otext') {
+    s.reviewed = false;
     s.overlay = { ...(S.style.look === 'doc' ? toDoc(s.overlay, i) : s.overlay || {}), [k === 'otype' ? 'type' : 'text']: v };
     if (['number', 'counter', 'stat'].includes(s.overlay.type)) {
       const n = Number(String(s.overlay.text ?? s.overlay.value).replace(/[^\d.-]/g, ''));
@@ -462,9 +494,9 @@ $('#board').addEventListener('change', e => {
     }
     if (s.overlay.type === 'statement' && k === 'otype' && !s.overlay.text) s.overlay.text = s.text.split(/\s+/).slice(0, 12).join(' ');
   }
-  if (k === 'osub') setSub(s.overlay ||= { type: 'none' }, v);
+  if (k === 'osub') { setSub(s.overlay ||= { type: 'none' }, v); s.reviewed = false; }
   persist();
-  if (['subject', 'reviewed', 'inpoint', 'otype'].includes(k)) drawBoard();
+  if (['subject', 'reviewed', 'inpoint', 'otype', 'context', 'caption', 'visual', 'otext', 'osub'].includes(k)) drawBoard();
 });
 
 function selectMedia(i, media) {
@@ -497,7 +529,7 @@ $('#assetForm').addEventListener('submit', e => {
   }
   try {
     const media = { id: 'local:' + file.name, file: file.name, kind, author, license,
-      page: publicUrl(inputPage), source: 'Локальный файл', footage: $('#assetIllustration').checked ? 'illustration' : 'live' };
+      page: publicUrl(inputPage), source: 'Локальный файл', context: $('#assetContext').value };
     selectMedia(attachScene, media);
     bindFile(file);
     drawBoard();

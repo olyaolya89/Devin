@@ -1,8 +1,21 @@
 import { cleanOverlay, DOC_OVERLAYS, MOODS } from './plan.js';
 
 export const PRODUCTION_FORMAT = 'lumencut.production';
-export const LIVE_TARGET = 0.5;
+export const LIVE_TARGET = 0.55;
 const EPS = 0.025;
+
+export const MEDIA_CONTEXTS = {
+  exact: 'Точный кадр', stock: 'Иллюстративный кадр', archive: 'Архив',
+  reconstruction: 'Реконструкция', graphic: 'Схема'
+};
+
+export function mediaContext(media) {
+  if (Object.hasOwn(MEDIA_CONTEXTS, media?.context)) return media.context;
+  if (media?.context === '') return '';
+  if (media?.footage === 'illustration') return 'reconstruction';
+  if (['Pexels', 'Pixabay'].includes(media?.source)) return 'stock';
+  return '';
+}
 
 export function publicUrl(value) {
   try {
@@ -28,7 +41,7 @@ function importMedia(input, label) {
   return {
     id: file ? 'local:' + file : url, file, url, kind,
     thumb: publicUrl(input.thumb), page, source, author, license, licenseUrl: publicUrl(input.licenseUrl),
-    tags: text(input.tags), footage: input.footage === 'illustration' ? 'illustration' : 'live',
+    tags: text(input.tags), context: mediaContext(input), caption: text(input.caption, 72),
     duration: Number.isFinite(input.duration) && input.duration > 0 ? input.duration : undefined
   };
 }
@@ -70,13 +83,16 @@ export function importProduction(input) {
 
 export function auditProduction(shots, { files, voice, maxCut = 5 }) {
   const issues = new Map(), used = new Set();
-  let live = 0, end = 0;
+  let live = 0, reviewed = 0, end = 0;
   for (const [i, s] of shots.entries()) {
     const errors = [];
     const cuts = s.cuts || [];
-    if (!Number.isFinite(s.end) || s.end <= s.start || Math.abs(s.start - end) > EPS) errors.push('проверьте время сцены');
+    if (![s.start, s.end].every(Number.isFinite) || s.end <= s.start || Math.abs(s.start - end) > EPS) errors.push('проверьте время сцены');
     end = s.end;
-    if (s.subject && !s.reviewed) errors.push(`подтвердите точный кадр для «${s.subject}»`);
+    if (cuts.length && !s.reviewed) errors.push('проверьте смысл сцены, выбранные фрагменты, подписи и права');
+    if (s.subject && !cuts.some(c => ['exact', 'archive'].includes(mediaContext(c.media)))) {
+      errors.push(`нужен проверенный кадр для «${s.subject}»`);
+    }
     let cursor = s.start;
     for (const c of cuts) {
       const p = c.media, length = c.t1 - c.t0;
@@ -85,27 +101,54 @@ export function auditProduction(shots, { files, voice, maxCut = 5 }) {
       if (length > maxCut + EPS) errors.push(`добавьте кадр: текущий дольше ${maxCut} с`);
       if (!p?.author || !p?.license) errors.push('укажите автора и лицензию');
       if (!p) continue;
+      const context = mediaContext(p);
+      if (!context) errors.push('укажите, что показывает кадр');
+      if (!['image', 'video'].includes(p.kind)) errors.push('проверьте тип исходника');
+      if (p.kind === 'video' && (!Number.isFinite(c.from) || c.from < 0 ||
+          (Number.isFinite(p.duration) && c.from + length * 0.75 > p.duration + EPS))) errors.push('проверьте точку входа и длину видео');
       if (p.file ? !files.has(p.file) : !publicUrl(p.url)) errors.push(p.file ? `прикрепите «${p.file}»` : 'нужна прямая ссылка на кадр');
       const key = p.file || p.url;
       if ((p.id && used.has(p.id)) || (key && used.has(key))) errors.push('замените повторяющийся кадр');
       if (p.id) used.add(p.id);
       if (key) used.add(key);
-      if (p.kind === 'video' && p.footage !== 'illustration' && Number.isFinite(length) && length > 0) live += length;
+      if (p.kind === 'video' && ['exact', 'stock', 'archive'].includes(context) && Number.isFinite(length) && length > 0) live += length;
     }
     if (!cuts.length) errors.push('добавьте кадр');
     else if (Math.abs(cursor - s.end) > EPS) errors.push('закройте пропуск в конце сцены');
     if (errors.length) issues.set(i, [...new Set(errors)]);
+    else reviewed++;
   }
   const global = [];
   if (!voice) global.push('Загрузите озвучку для финального MP4.');
   else if (Math.abs(voice.duration - end) > 0.1) global.push('Длительность озвучки не совпадает с монтажным планом.');
-  return { issues, global, liveShare: end > 0 ? Math.min(1, live / end) : 0 };
+  return { issues, global, reviewed, liveShare: end > 0 ? Math.min(1, live / end) : 0 };
+}
+
+export function reviewPacket({ shots, topic, voiceFile, timing }, audit) {
+  return {
+    format: 'lumencut.review', version: 1, topic, voiceFile, timing,
+    liveTarget: LIVE_TARGET, liveShare: audit.liveShare, global: audit.global,
+    shots: shots.map((s, i) => ({
+      number: i + 1, start: s.start, end: s.end, text: s.text,
+      wt: s.wt, wordEnd: s.wordEnd, meaning: s.meaning, visual: s.visual,
+      subject: s.subject, queries: s.queries, mood: s.mood, overlay: s.overlay,
+      reviewed: s.reviewed === true, issues: audit.issues.get(i) || [],
+      cuts: (s.cuts || []).map(({ t0, t1, from, media }) => ({
+        t0, t1, from,
+        media: media && {
+          kind: media.kind, file: media.file, url: publicUrl(media.url), page: publicUrl(media.page),
+          source: media.source, author: media.author, license: media.license, licenseUrl: publicUrl(media.licenseUrl),
+          context: mediaContext(media), caption: media.caption, duration: media.duration
+        }
+      }))
+    }))
+  };
 }
 
 export function creditsFor(shots) {
   return [...new Map(shots.flatMap(s => s.picks || []).map(p => {
     const url = publicUrl(p.page) || publicUrl(p.url);
     const license = [p.license, publicUrl(p.licenseUrl)].filter(Boolean).join(' · ');
-    return [p.id, [p.source, p.author, license, url || p.file].filter(Boolean).join(' — ')];
+    return [p.id || p.file || url, [p.source, p.author, license, url || p.file].filter(Boolean).join(' — ')];
   })).values()].join('\n');
 }

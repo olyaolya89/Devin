@@ -14,7 +14,7 @@
 <section id="tab-project" class="tab on">
   <div class="card"><h2>Сценарий и озвучка</h2><textarea id="script" placeholder="Вставьте английский текст озвучки."></textarea>
   <div class="row"><label class="file">🎙 Озвучка (MP3/WAV из ElevenLabs и т.п.)<input type="file" id="voice" accept=".mp3,.wav,.m4a,.aac,.ogg,.opus,.flac,.webm,audio/*"></label><span id="voiceInfo" class="muted">Для черновика можно начать с текста. Для финального фильма нужна озвучка.</span></div>
-  <div class="row"><label>План кадров <select id="planMode"><option value="gemini">Gemini · смысловой план</option><option value="local">Локально · поиск по тексту</option></select></label><span id="planEstimate" class="muted" aria-live="polite"></span></div>
+  <div class="row"><label>План кадров <select id="planMode"><option value="local">Локально · поиск по тексту</option><option value="codex">Тайминг для Codex · без поиска</option><option value="gemini">Gemini · смысловой план</option></select></label><span id="planEstimate" class="muted" aria-live="polite"></span></div>
   <div class="row"><button id="auto" class="primary">🎬 Сделать готовое видео</button><button id="go">Подобрать кадры</button><button id="saveProj">Сохранить проект</button><label class="file small">Открыть проект или монтажный план<input type="file" id="loadProj" accept=".json"></label></div>
   <details id="researchPanel" class="research-panel">
     <summary id="researchSummary">Подбор ключевых кадров с Codex</summary>
@@ -39,6 +39,7 @@
     <div id="productionStatus" aria-live="polite"></div>
     <div class="row">
       <label class="file small" id="mediaBundleLabel" hidden>Прикрепить файлы из монтажного плана<input type="file" id="mediaBundle" multiple accept="video/*,image/*,.mp4,.webm,.jpg,.jpeg,.png,.webp"></label>
+      <button id="reviewDownload" hidden>Скачать задание для Codex</button>
       <button id="toRender" class="primary" hidden>Перейти к экспорту</button>
     </div>
     <p id="mediaBundleInfo" class="muted" hidden></p>
@@ -52,7 +53,11 @@
     <label>Автор<input id="assetAuthor" required maxlength="200"></label>
     <label>Лицензия или разрешение<input id="assetLicense" required maxlength="200" placeholder="Например, CC BY 4.0 или собственная съёмка"></label>
     <label>Страница источника<input id="assetPage" type="url" placeholder="https://"></label>
-    <label><input id="assetIllustration" type="checkbox"> Видео представляет собой иллюстрацию или реконструкцию</label>
+    <label>Что показывает кадр <select id="assetContext" required>
+      <option value="">Выберите тип</option><option value="exact">Точный объект или событие</option><option value="stock">Иллюстративная съёмка / фото</option>
+      <option value="archive">Архивный материал</option><option value="reconstruction">Реконструкция</option>
+      <option value="graphic">Карта, схема или анимация</option>
+    </select></label>
     <div class="row"><button id="assetCancel" type="button">Отмена</button><button class="primary">Использовать кадр</button></div>
     <p id="assetError" class="muted" aria-live="polite"></p>
   </form>
@@ -79,8 +84,8 @@
   <label>Модель Gemini <input id="k_model" value="gemini-flash-latest"></label>
   <label><input type="checkbox" id="k_wikimedia" checked> Wikimedia Commons — исторические фото/видео (только свободные лицензии)</label>
   <label><input type="checkbox" id="k_nasa" checked> NASA — космос, наука, техника (общественное достояние)</label>
-  <label><input type="checkbox" id="k_archive" checked> Internet Archive — кинохроника для других стилей</label>
-  <label><input type="checkbox" id="k_loc" checked> Library of Congress — исторические фото для других стилей</label>
+  <label><input type="checkbox" id="k_archive" checked> Internet Archive — кинохроника</label>
+  <label><input type="checkbox" id="k_loc" checked> Library of Congress — исторические фото</label>
   <label><input type="checkbox" id="k_clip" checked> Смысловой подбор CLIP (нейросеть в браузере, ~150 МБ один раз)</label>
   <label><input type="checkbox" id="k_video" checked> Предпочитать видео, а не фото</label>
   <div class="row"><button id="saveKeys" class="primary">Сохранить</button><span id="keysInfo" class="muted">Ключи хранятся только в этом браузере.</span></div>
