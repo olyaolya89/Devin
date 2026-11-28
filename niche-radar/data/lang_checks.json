@@ -84,28 +84,48 @@
     "checked_at": "2026-11-26"
   },
   "collectibles|en": {
-    "channels": 5,
-    "videos": 5,
+    "channels": 2,
+    "videos": 2,
     "query": "most valuable antiques ranked",
-    "checked_at": "2026-11-15"
+    "language_verified": true,
+    "market_verified": true,
+    "language": "en",
+    "region_code": "NZ",
+    "raw_videos": 5,
+    "checked_at": "2026-11-28"
   },
   "true_crime|en": {
-    "channels": 4,
-    "videos": 5,
+    "channels": 1,
+    "videos": 1,
     "query": "unsolved mystery documentary animated map",
-    "checked_at": "2026-11-15"
+    "language_verified": true,
+    "market_verified": true,
+    "language": "en",
+    "region_code": "NZ",
+    "raw_videos": 7,
+    "checked_at": "2026-11-28"
   },
   "relocation|en": {
-    "channels": 44,
-    "videos": 50,
+    "channels": 20,
+    "videos": 23,
     "query": "best countries to live and work 2026",
-    "checked_at": "2026-11-15"
+    "language_verified": true,
+    "market_verified": true,
+    "language": "en",
+    "region_code": "NZ",
+    "raw_videos": 50,
+    "checked_at": "2026-11-28"
   },
   "nostalgia|en": {
-    "channels": 27,
-    "videos": 50,
+    "channels": 16,
+    "videos": 38,
     "query": "britain in the 70s nostalgia",
-    "checked_at": "2026-11-15"
+    "language_verified": true,
+    "market_verified": true,
+    "language": "en",
+    "region_code": "NZ",
+    "raw_videos": 50,
+    "checked_at": "2026-11-28"
   },
   "science|ru": {
     "channels": 0,
@@ -126,16 +146,26 @@
     "checked_at": "2026-11-16"
   },
   "jewelry|en": {
-    "channels": 45,
-    "videos": 50,
+    "channels": 13,
+    "videos": 14,
     "query": "jewelry history explained",
-    "checked_at": "2026-11-16"
+    "language_verified": true,
+    "market_verified": true,
+    "language": "en",
+    "region_code": "NZ",
+    "raw_videos": 47,
+    "checked_at": "2026-11-28"
   },
   "disasters|en": {
-    "channels": 44,
-    "videos": 50,
+    "channels": 17,
+    "videos": 23,
     "query": "natural disasters explained",
-    "checked_at": "2026-11-16"
+    "language_verified": true,
+    "market_verified": true,
+    "language": "en",
+    "region_code": "NZ",
+    "raw_videos": 50,
+    "checked_at": "2026-11-28"
   },
   "lifehacks|en": {
     "channels": 32,
@@ -682,5 +712,27 @@
     "region_code": "JP",
     "raw_videos": 0,
     "checked_at": "2026-11-27"
+  },
+  "history|ko": {
+    "channels": 3,
+    "videos": 3,
+    "query": "잊혀진 한국 역사 다큐멘터리",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "ko",
+    "region_code": "KR",
+    "raw_videos": 7,
+    "checked_at": "2026-11-28"
+  },
+  "engineering|ko": {
+    "channels": 1,
+    "videos": 1,
+    "query": "한국 대형 건설 프로젝트 기술 이야기",
+    "language_verified": true,
+    "market_verified": true,
+    "language": "ko",
+    "region_code": "KR",
+    "raw_videos": 1,
+    "checked_at": "2026-11-28"
   }
 }
